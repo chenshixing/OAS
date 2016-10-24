@@ -1,7 +1,7 @@
 {
   "name": "react-antd-boilerplate",
   "version": "1.0.0",
-  "description": "React + Antd 前端项目模板（支持IE8+）",
+  "description": "OAS系统融资定制版用户端v1.0",
   "main": "config/webpack.dev",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.dev --progress --colors --inline --hot --open",

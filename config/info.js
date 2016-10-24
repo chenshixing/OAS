@@ -3,7 +3,7 @@
 */
 module.exports = {
     app: {
-        title: "项目模板",
+        title: "E+互联网供应链",
         description: "",
         keywords: ""
     }
