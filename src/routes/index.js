@@ -164,15 +164,6 @@ const routes = {
         })
       }
     },
-    // 404
-    {
-      path: '*',
-      getComponent(nextState, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('PAGES/404').default);
-        });
-      }
-    },
     // 账户管理首页
     {
       path: 'accountManagement/home',
@@ -208,7 +199,17 @@ const routes = {
           cb(null, require('PAGES/accountManagement/resetTradingPassword').default);
         });
       }
+    },
+    // 404
+    {
+      path: '*',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/404').default);
+        });
+      }
     }
+
 
   ]
 };
