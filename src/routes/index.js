@@ -170,15 +170,24 @@ const routes = {
             });
           }
         },
-        // 账户管理基本信息
+        // 账户管理基本信息（个人）
         {
-          path: 'accountManagement/basicInformation',
+          path: 'accountManagement/basicInformation/personal',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/basicInformation').default);
+              cb(null, require('PAGES/accountManagement/basicInformation/personal').default);
             });
           }
         },
+          // 账户管理基本信息（公司）
+          {
+              path: 'accountManagement/basicInformation/company',
+              getComponent(nextState, cb) {
+                  require.ensure([], (require) => {
+                      cb(null, require('PAGES/accountManagement/basicInformation/company').default);
+                  });
+              }
+          },
         // 账户管理修改密码
         {
           path: 'accountManagement/resetPassword',
