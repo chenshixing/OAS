@@ -23,15 +23,6 @@ const routes = {
       }
     },
     /***************核身页面 ***************/
-      // 个人核身引导页
-      {
-          path: 'personalValidate/guide',
-          getComponent(nextState, cb) {
-              require.ensure([], (require) => {
-                  cb(null, require('PAGES/personalValidate/guide').default)
-              })
-          }
-      },
       // 个人核身-step1
       {
           path: 'personalValidate/step1',
@@ -65,15 +56,6 @@ const routes = {
           getComponent(nextState, cb) {
               require.ensure([], (require) => {
                   cb(null, require('PAGES/personalValidate/step4').default)
-              })
-          }
-      },
-      // 企业核身引导页
-      {
-          path: 'companyValidate/guide',
-          getComponent(nextState, cb) {
-              require.ensure([], (require) => {
-                  cb(null, require('PAGES/companyValidate/guide').default)
               })
           }
       },

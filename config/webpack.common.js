@@ -65,7 +65,8 @@ module.exports = {
       UTILS: path.join(SRC_PATH, 'utils'),
       MIXINS: path.join(SRC_PATH, 'utils/mixins'),
       PAGES: path.join(SRC_PATH, 'pages'),
-      COM: path.join(SRC_PATH, 'components')
+      COM: path.join(SRC_PATH, 'components'),
+      BCOM: path.join(SRC_PATH, 'business_components')
     }
   },
   plugins: [
