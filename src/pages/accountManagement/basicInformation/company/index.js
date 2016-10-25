@@ -5,10 +5,10 @@ import React from 'react';
 import { Alert } from 'antd';
 
 // 页面
-export default class BasicInformation extends React.Component {
+export default class Company extends React.Component {
   render() {
     return (
-      <div>基本信息</div>
+      <div>公司信息</div>
     );
   }
 }
