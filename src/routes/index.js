@@ -30,7 +30,44 @@ const routes = {
           cb(null, require('PAGES/404').default);
         });
       }
+    },
+    // 账户管理首页
+    {
+      path: 'accountManagement/home',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/accountManagement/home').default);
+        });
+      }
+    },
+    // 账户管理基本信息
+    {
+      path: 'accountManagement/basicInformation',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/accountManagement/basicInformation').default);
+        });
+      }
+    },
+    // 账户管理修改密码
+    {
+      path: 'accountManagement/resetPassword',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/accountManagement/resetPassword').default);
+        });
+      }
+    },
+    // 账户管理修改交易密码
+    {
+      path: 'accountManagement/resetTradingPassword',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/accountManagement/resetTradingPassword').default);
+        });
+      }
     }
+
   ]
 };
 
