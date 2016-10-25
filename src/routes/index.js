@@ -22,6 +22,24 @@ const routes = {
         })
       }
     },
+      // 注册
+      {
+          path: 'userRegister',
+          getComponent(nextState, cb) {
+              require.ensure([], (require) => {
+                  cb(null, require('PAGES/userRegister').default);
+              });
+          }
+      },
+      //登录
+      {
+          path: 'userLogin',
+          getComponent(nextState, cb) {
+              require.ensure([], (require) => {
+                  cb(null, require('PAGES/userLogin').default);
+              });
+          }
+      },
     // 404
     {
       path: '*',
@@ -31,6 +49,9 @@ const routes = {
         });
       }
     }
+
+
+
   ]
 };
 
