@@ -59,6 +59,15 @@ const routes = {
               })
           }
       },
+      // 核身信息补充提示页(企业)
+      {
+          path: 'companyValidate/tips/supplement',
+          getComponent(nextState, cb) {
+              require.ensure([], (require) => {
+                  cb(null, require('PAGES/companyValidate/tips/supplement/index.js').default)
+              })
+          }
+      },
       // 企业核身-step1
       {
           path: 'companyValidate/step1',
