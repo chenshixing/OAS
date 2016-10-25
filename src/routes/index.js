@@ -22,6 +22,7 @@ const routes = {
         })
       }
     },
+    /***************核身页面 ***************/
       // 个人核身引导页
       {
           path: 'personalValidate/guide',
@@ -146,24 +147,7 @@ const routes = {
               })
           }
       },
-    // test
-    {
-      path: 'test',
-      getComponent(nextState, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('PAGES/test').default)
-        })
-      }
-    },
-    // test2
-    {
-      path: 'test2',
-      getComponent(nextState, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('PAGES/test2').default)
-        })
-      }
-    },
+    /***************核身页面 end ***************/
     /*************** 账户管理 ***************/
     // 账户管理首页
     {
@@ -202,6 +186,25 @@ const routes = {
       }
     },
     /***************账户管理 end ***************/
+    /***************测试页面 ***************/
+    {
+      path: 'test',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/test').default)
+        })
+      }
+    },
+    // test2
+    {
+      path: 'test2',
+      getComponent(nextState, cb) {
+        require.ensure([], (require) => {
+          cb(null, require('PAGES/test2').default)
+        })
+      }
+    },
+    /***************测试页面 end ***************/
     // 404
     {
       path: '*',
