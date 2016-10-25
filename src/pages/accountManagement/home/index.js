@@ -16,7 +16,9 @@ export default class Home extends React.Component {
                     <Link to="/accountManagement/home">账户管理首页</Link>
                 </p>
                 <p>
-                    <Link to="/accountManagement/basicInformation">账户管理基本信息</Link>
+                    <Link to="/accountManagement/basicInformation/personal">账户管理基本信息个人</Link>
+                    <br />
+                    <Link to="/accountManagement/basicInformation/company">账户管理基本信息公司</Link>
                 </p>
                 <p>
                     <Link to="/accountManagement/resetPassword">账户管理修改密码</Link>
