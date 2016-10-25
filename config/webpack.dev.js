@@ -8,7 +8,7 @@ const commonConfig = require('./webpack.common');
 // WDS
 const utils = require('./utils');
 const HOST = utils.getIP();
-const PORT = 8080;
+const PORT = 8090;
 
 module.exports = Object.assign(commonConfig, {
     devtool: 'eval', // 'cheap-source-map'
