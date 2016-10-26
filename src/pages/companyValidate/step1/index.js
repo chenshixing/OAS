@@ -1,13 +1,15 @@
 /**
  * 企业核身step1
- * yongquan.wu
+ * limit
  */
 // react 相关库
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { Link } from 'react-router';
+
 // antd 组件
-import { Form, Input, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, message } from 'antd';
+import { Table, Form, Input, Select, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, message } from 'antd';
 const createForm = Form.create;
 const Step = Steps.Step;
 const RadioGroup = Radio.Group;
@@ -17,6 +19,12 @@ import ruleType from 'UTILS/ruleType';
 // 页面组件
 import Frame from 'COM/form/frame';
 
+// 城市静态数据
+const provinceData = ['浙江', '江苏'];
+const cityData = {
+  浙江: ['杭州', '宁波', '温州'],
+  江苏: ['南京', '苏州', '镇江'],
+};
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -24,19 +32,57 @@ class CompanyValidate extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            visible:false,
             loading:false,
             data:{
                 companyName:'钱途互联',
                 businessLicenseType:'common',
-                isLongEndTimeChange:false
-            }
+                isLongEndTimeChange:false,
+                accountVerificationType:'bond',
+            },
+            cities: cityData[provinceData[0]],
+            secondCity: cityData[provinceData[0]][0],
+            dataSource : [{
+              key: '1',
+              name: '中金支付有限公司客户备付金',
+              bank: '招商银行',
+              account: '1109 0799 6610 999',
+              branch: '北京分行宣武门支行'
+            }],
+            columns : [{
+              title: '账户名称',
+              dataIndex: 'name',
+              key: 'name',
+            }, {
+              title: '开户行',
+              dataIndex: 'bank',
+              key: 'bank',
+            }, {
+              title: '银行账号',
+              dataIndex: 'account',
+              key: 'account',
+            }, {
+              title: '分支行',
+              dataIndex: 'branch',
+              key: 'branch',
+            }],
         }
 
         this.showModal=this.showModal.bind(this);
         this.handleOk=this.handleOk.bind(this);
-        this.handleCancel=this.handleCancel.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
+    }
+
+    handleProvinceChange(value) {
+        this.setState({
+          cities: cityData[value],
+          secondCity: cityData[value][0],
+        });
+    }
+
+    onSecondCityChange(value) {
+        this.setState({
+            secondCity: value,
+        });
     }
 
     showModal() {
@@ -62,12 +108,9 @@ class CompanyValidate extends React.Component {
     handleOk() {
         this.setState({ loading: true });
         setTimeout(() => {
-            this.setState({ loading: false, visible: false });
+            this.setState({ loading: false });
             window.location.href='/#/companyValidate/step2-1?_k=REPLACE';
         }, 3000);
-    }
-    handleCancel() {
-        this.setState({ visible: false });
     }
 
 
@@ -75,6 +118,16 @@ class CompanyValidate extends React.Component {
         console.log('radio checked', e.target.value);
         let data=this.state.data;
         data.businessLicenseType=e.target.value;
+        this.setState({
+            data: data
+        });
+    }
+
+    onAccountVerificationTypeChange(e) {
+        console.log('radio checked', e.target.value);
+        let data=this.state.data;
+        if(data.accountVerificationType === e.target.value){ return false;}
+        data.accountVerificationType=e.target.value;
         this.setState({
             data: data
         });
@@ -229,6 +282,9 @@ class CompanyValidate extends React.Component {
         const { getFieldProps } = this.props.form;
         const displayTypeCommon=this.state.data.businessLicenseType =='common' ? 'block' : 'none';
         const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
+
+        const provinceOptions = provinceData.map(province => <Option key={province}>{province}</Option>);
+        const cityOptions = this.state.cities.map(city => <Option key={city}>{city}</Option>);
         return (
             <div>
                 <Steps size="default" current={0} className="fn-mb-30">
@@ -238,6 +294,7 @@ class CompanyValidate extends React.Component {
                     <Step title="提交结果" />
                 </Steps>
                 <Frame title="企业信息" small="（请务必和证件上的资料保持一致）" className="abc">
+                    {/*企业信息*/}
                     <Form horizontal className="fn-mt-30">
                         <FormItem
                             label="企业名称"
@@ -304,163 +361,145 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <div style={{display:displayTypeCommon}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="税务登记证号"
-                            >
-                                <Input {...getFieldProps('taxRegistryNumber')} type="text"/>
-                            </FormItem>
+                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                            填写人信息
+                            <small className="viceText-FontColor"> (请务必与授权书的资料保持一致。)</small>
                         </div>
 
                         <FormItem
+                            label="您的姓名"
                             {...formItemLayout}
-                            label="银行开户许可证号"
+                            required
                         >
-                            <Input {...getFieldProps('bankAccountLicenseNumber')} type="text"/>
+                            <Input type="text"/>
+                        </FormItem>
+
+                        <FormItem
+                            label="常用手机号码"
+                            {...formItemLayout}
+                            help="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
+                            required
+                        >
+                            <Input type="text"/>
+                        </FormItem>
+
+                        <FormItem
+                            label="联系邮箱"
+                            {...formItemLayout}
+                        >
+                            <Input type="text"/>
                         </FormItem>
 
                         <FormItem
                             {...formItemLayout}
-                            label="财政登记证号"
+                            label=" 填写人的身份"
+                            required
                         >
-                            <Input {...getFieldProps('financeRegisterNumber')} type="text"/>
+                            <RadioGroup>
+                                <Radio value="agent">我是委托代理人</Radio>
+                                <Radio value="corporation">我是法定代表人</Radio>
+                            </RadioGroup>
+
                         </FormItem>
 
+                        {/*填写企业对公账户*/}
+                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                            填写企业对公账户
+                        </div>
+
+                        <FormItem
+                          {...formItemLayout}
+                          label="账户名称"
+                        >
+                          <p className="ant-form-text" id="userName" name="userName">广东亿达有限公司</p>
+                        </FormItem>
+
+                        <FormItem
+                            label="银行账号"
+                            {...formItemLayout}
+                            required
+                        >
+                            <Input type="text" placeholder="请输入银行账号"/>
+                        </FormItem>
+
+                        <FormItem
+                          label="所在省"
+                          {...formItemLayout}
+                        required
+                        >
+                          <div>
+                            <Select defaultValue={provinceData[0]} style={{ width: 90 }} onChange={this.handleProvinceChange.bind(this)}>
+                              {provinceOptions}
+                            </Select>
+                            <Select value={this.state.secondCity} className="fn-ml-10" style={{ width: 90 }} onChange={this.onSecondCityChange.bind(this)}>
+                              {cityOptions}
+                            </Select>
+                          </div>
+                        </FormItem>
+
+                        <FormItem
+                          label="开户行"
+                          {...formItemLayout}
+                        required
+                        >
+                          <Select size="large" defaultValue="">
+                            <Option value="0">中国工商银行</Option>
+                            <Option value="1">中国农业银行</Option>
+                            <Option value="2">中国银行</Option>
+                            <Option value="3">中国建设银行</Option>
+                            <Option value="4">交通银行</Option>
+                          </Select>
+                        </FormItem>
+
+                        <FormItem
+                          label="分支行"
+                          {...formItemLayout}
+                        required
+                        >
+                          <Select size="large" defaultValue="">
+                            <Option value="0">招商银行广州分行天河支行</Option>
+                            <Option value="1">招商银行广州分行人民中路支行</Option>
+                            <Option value="2">招商银行广州分行五羊支行</Option>
+                          </Select>
+                        </FormItem>
 
                         <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            企业证件扫描件
-                            <small className="viceText-FontColor"> (请提供原件照片或彩色扫描件（正副本均可）)</small>
+                            对公账户验证
                         </div>
 
                         <FormItem
                             {...formItemLayout}
-                            label=" 营业执照"
+                            label="请选择验证方式"
                             required
                         >
-                            <Upload {...upLoadProps} {...getFieldProps('businessLicense',rules.businessLicense)} >
-                                <Button type="ghost">
-                                    <Icon type="upload" /> 点击上传
-                                </Button>
-                            </Upload>
+                            <RadioGroup {...getFieldProps('accountVerificationType',{ initialValue: this.state.data.accountVerificationType })} onChange={this.onAccountVerificationTypeChange.bind(this)}>
+                                <Radio value="bond">线下支付小额验证金核验</Radio>
+                                <Radio value="information">线下提交账户资料核验</Radio>
+                            </RadioGroup>
+
                         </FormItem>
 
-                        <div style={{display:displayTypeCommon}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label=" 组织机构代码证"
-                                required
-                            >
-                                <Upload {...upLoadProps} {...getFieldProps('organizationCodeLicense',rules.organizationCodeLicense)} >
-                                    <Button type="ghost">
-                                        <Icon type="upload" /> 点击上传
-                                    </Button>
-                                </Upload>
-
-                            </FormItem>
-
-                            <FormItem
-                                {...formItemLayout}
-                                label=" 税务登记证"
-                            >
-                                <Upload {...upLoadProps} {...getFieldProps('taxRegistryLicense',rules.taxRegistryLicense)} >
-                                    <Button type="ghost">
-                                        <Icon type="upload" /> 点击上传
-                                    </Button>
-                                </Upload>
-                            </FormItem>
-                        </div>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 银行开户许可证"
-                        >
-                            <Upload {...upLoadProps} {...getFieldProps('bankAccountLicense',rules.bankAccountLicense)} >
-                                <Button type="ghost">
-                                    <Icon type="upload" /> 点击上传
-                                </Button>
-                            </Upload>
-                        </FormItem>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label="上传文件要求 "
-                        >
-                            <ul>
-                                <li>证件必须在有效期内且年检章齐全（当年成立的公司可无年检章）。</li>
-                                <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
-                            </ul>
-                        </FormItem>
-
-                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            其它信息
-                            <small className="viceText-FontColor"> (请提供原件照片或彩色扫描件)</small>
-                        </div>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 企业征信查询授权书"
-                            required
-                        >
-                            <Upload {...upLoadProps} {...getFieldProps('enterpriseCreditAuthorization',rules.enterpriseCreditAuthorization)}>
-                                <Button type="ghost">
-                                    <Icon type="upload" /> 点击上传
-                                </Button>
-                            </Upload>
-                        </FormItem>
                         <Row>
-                            <Col span="8"></Col>
-                            <Col span="12" className="ant-form-item">
-                                <ul>
-                                    <li>请点击下载 <a href="">企业征信查询授权书</a>，打印填写并签盖公司公章。</li>
-                                    <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
-                                </ul>
+                            <Col offset={1} span={22} className="fn-pa-20" style={{border:'1px solid #e8e8e8'}}>
+                                <Row style={{display:this.state.data.accountVerificationType == 'bond' ? 'block' : 'none'}}>
+                                    <Col offset={1} span={22}>
+                                        <p>请在48小时以内，通过网上银行或银行柜台，使用您的对公账户向下面的指定账户支付 0.10元 验证金 。</p>
+                                        <Table className="fn-mt-15" dataSource={this.state.dataSource} columns={this.state.columns} pagination={false}/>
+                                        <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
+                                        <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
+                                    </Col>
+                                </Row>
+                                <Row style={{display:this.state.data.accountVerificationType == 'information' ? 'block' : 'none'}}>
+                                    <Col offset={1} span={22}>
+                                        <p>需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</p>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
 
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 企业法定代表人身份证明书"
-                            required
-                        >
-                            <Upload {...upLoadProps} {...getFieldProps('representativeCertificate',rules.representativeCertificate)}>
-                                <Button type="ghost">
-                                    <Icon type="upload" /> 点击上传
-                                </Button>
-                            </Upload>
-                        </FormItem>
-                        <Row>
-                            <Col span="8"></Col>
-                            <Col span="12" className="ant-form-item">
-                                <ul>
-                                    <li>请点击下载 <a href="">企业法定代表人身份证明书</a> ，打印填写并签盖公司公章。</li>
-                                    <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
-                                </ul>
-                            </Col>
-                        </Row>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 企业章程"
-                        >
-                            <Upload {...upLoadProps} {...getFieldProps('incorporationArticles',rules.incorporationArticles)}>
-                                <Button type="ghost">
-                                    <Icon type="upload" /> 点击上传
-                                </Button>
-                            </Upload>
-                        </FormItem>
-                        <Row>
-                            <Col span="8"></Col>
-                            <Col span="12" className="ant-form-item">
-                                <ul>
-                                    <li>支持格式jpg、jpeg、png、bmp、doc、docx、pdf，不超过10M。</li>
-                                </ul>
-                            </Col>
-                        </Row>
-
-                        <Row style={{ marginTop: 30 }}>
-                            <Col span="12" offset="8">
-                                <Button type="primary" size="large" htmlType="submit" onClick={this.showModal}>确认无误，下一步</Button>
+                        <Row className="fn-mt-30">
+                            <Col span="12" offset="6" className="text-align-center">
+                                <Link className="ant-btn ant-btn-primary ant-btn-lg" to="/companyValidate/step2">下一步</Link>
                             </Col>
                         </Row>
 
@@ -468,67 +507,6 @@ class CompanyValidate extends React.Component {
                     </Form>
 
                 </Frame>
-                <Modal ref="modal"
-                       visible={this.state.visible}
-                       style={{ top: 150 }}
-                       title="信息确认" onOk={this.handleOk} onCancel={this.handleCancel}
-                       footer={[
-                        <Button key="back" type="ghost" size="large" onClick={this.handleCancel}>返回修改</Button>,
-                        <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleOk}>
-                          确定
-                        </Button>,
-                      ]}
-                >
-                    <FormItem
-                        {...formItemLayout}
-                        label="企业名称"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.companyName}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="营业执照类型"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.businessLicenseType == 'common' ? '普通营业执照' : '多证合一营业执照'}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="营业执照注册号"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.businessLicenseRegistrationNumber}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="营业执照到期日"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.isLongEndTimeChange ? '长期' : this.state.data.endTime}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="组织机构代码"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.organizationCode}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="税务登记证号"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.taxRegistryNumber}</p>
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="银行开户许可证核准号"
-                        style={{marginBottom:'7px'}}
-                    >
-                        <p className="ant-form-text">{this.state.data.bankAccountLicenseNumber}</p>
-                    </FormItem>
-                </Modal>
             </div>
 
         );

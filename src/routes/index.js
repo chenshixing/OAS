@@ -146,53 +146,21 @@ const routes = {
             })
           }
         },
-        // 企业核身-step2-1
-        {
-          path: 'companyValidate/step2-1',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step2/step2-1.js').default)
-            })
-          }
-        },
-        // 企业核身-step2-2
-        {
-          path: 'companyValidate/step2-2',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step2/step2-2.js').default)
-            })
-          }
-        },
         // 企业核身-step2
         {
-          path: 'companyValidate/step2-2',
+          path: 'companyValidate/step2',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step2/step2-2').default)
+              cb(null, require('PAGES/companyValidate/step2/index.js').default)
             })
           }
         },
         // 企业核身-step3
         {
-          path: 'companyValidate/step3-1',
+          path: 'companyValidate/step3',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step3/step3-1').default)
-            })
-          }
-        }, {
-          path: 'companyValidate/step3-2',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step3/step3-2').default)
-            })
-          }
-        }, {
-          path: 'companyValidate/step3-3',
-          getComponent(nextState, cb) {
-            require.ensure([], (require) => {
-              cb(null, require('PAGES/companyValidate/step3/step3-3').default)
+              cb(null, require('PAGES/companyValidate/step3/index.js').default)
             })
           }
         },

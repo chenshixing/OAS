@@ -1,28 +1,80 @@
 /**
- * 个人核身step4
- * xing
+ * 企业核身step4
+ * limit
  */
 // react 相关库
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
-import codeimg from 'ASSETS/images/code.png'
-
-
 // antd 组件
-import { Alert, Steps, Button } from 'antd';
+import { Table, Alert, Steps, Button, Row, Col } from 'antd';
 const Step = Steps.Step;
 
-// 页面组件
-import Frame from 'COM/form/frame';
-
-
+//  本页组件
+import Content from './content';
+import Status from './status';
 
 // 页面组件（导出）
 export default class PersonalValidate extends React.Component {
+    static propTypes = {
+        className: PropTypes.string,
+    };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            data : {
+                tableColumns : [{
+                  title: '认证类型',
+                  dataIndex: 'type',
+                  key: 'type',
+                }, {
+                  title: '认证内容',
+                  dataIndex: 'content',
+                  key: 'content',
+                }, {
+                  title: '认证状态',
+                  dataIndex: 'status',
+                  key: 'status',
+                }]
+            }
+        }
+    }
 
     render() {
+        let identityData = [
+            {
+                type : 'agent',
+                name : '李彤',
+                number : '1234 5678',
+            },
+            {
+                type : 'corporation',
+                name : '文静',
+                number : '1234 5678',
+            }
+        ];
+        let dataSource = [{
+          key: '0',
+          type: '身份实名认证',
+          content: <Content data={identityData} type="identity"/>,
+          status: <Status data={identityData} type="identity"/>
+        },{
+          key: '1',
+          type: '企业对公账户认证',
+          content: <Content type="bond"/>,
+          status: <Status type="bond"/>
+        },{
+          key: '2',
+          type: '企业对公账户认证',
+          content: <Content type="information"/>,
+          status: <Status type="information"/>
+        },,{
+          key: '3',
+          type: '企业资料补充',
+          content: <Content type="supplement"/>,
+          status: <Status type="supplement"/>
+        },];
         return (
             <div>
                 <Steps size="big" current={3} className="fn-mb-30">
@@ -32,22 +84,26 @@ export default class PersonalValidate extends React.Component {
                     <Step title="提交结果" />
                 </Steps>
                 <div className="form-frame">
-                    <div style={{ width: '58%', margin: '0 auto',marginTop:30 }}>
-                        <Alert message="审核申请已提交，小额验证金请在 47:59:59 内完成支付"
-                               description="我们将尽快完成审核，结果将以短信通知您。
-                                如需修改信息请联系客服电话：400-106-6698。"
+                    <Row className="fn-mt-30">
+                        <Col offset={1} span={22}>
+                            <Alert message="请根据您的实际情况尽快完成以下认证内容："
+                               description="1.身份实名认证；2.企业对公账户认证；3.企业资料补充"
                                type="info"
                                showIcon
-                        />
-                        <div className="text-align-center fn-mt-30">
-                            <Button type="primary">返回首页</Button>
-                        </div>
-                    </div>
+                            />
 
-
+                            <Table className="fn-mt-15" dataSource={dataSource} columns={this.state.data.tableColumns} pagination={false}/>
+                        </Col>
+                    </Row>
+                    <Row className="fn-mt-30">
+                        <Col offset="8" span="8" className="text-align-center">
+                            <Button type="primary">已完成认证</Button>
+                        </Col>
+                    </Row>
                 </div>
             </div>
 
         );
     }
 }
+
