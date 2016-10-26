@@ -13,7 +13,7 @@ import './style.less';
 import React from 'react';
 
 // antd 组件
-import { Tabs , Alert ,Form, Input, Button, Checkbox, Radio, Tooltip, Icon } from 'antd';
+import { Tabs , Alert ,Form, Input, Button, Checkbox, Radio, Tooltip, Icon, } from 'antd';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -33,6 +33,8 @@ class Login extends React.Component {
             date: '',
         };
     }
+
+
 
   render() {
       const { getFieldProps } = this.props.form;
@@ -59,7 +61,7 @@ class Login extends React.Component {
                             <div className="login-content">
                                 <Tabs type="card">
                                     <TabPane tab="个人用户" key="1">
-
+                                        <Alert message="仅支持IE8以上版本的浏览器，请切换浏览器！" type="warning" showIcon />
                                         <Form horizontal>
                                             <FormItem
                                                 {...formItemLayout}
@@ -85,19 +87,18 @@ class Login extends React.Component {
                                                 label="验证码"
                                             >
                                                 <InputGroup className="ant-search-input">
-                                                    <Input {...getFieldProps('vCode')} />
+                                                    <Input {...getFieldProps('vCode')} style={{ width: 80 }}/>
                                                     <div className="ant-input-group-wrap">
-
-                                                        <img className="ant-search-btn" src={vcode}/>
+                                                        <img className="ant-search-btn vcode" src={vcode}/>
                                                     </div>
                                                 </InputGroup>
                                             </FormItem>
 
-                                            <FormItem wrapperCol={{ span: 16, offset: 7 }} style={{ marginTop: 24 }}>
+                                            <FormItem wrapperCol={{ span: 16, offset: 8 }} style={{ marginTop: 24}}>
                                                 <Button type="primary" htmlType="submit">登录</Button>
                                             </FormItem>
 
-                                            <FormItem wrapperCol={{ span: 12, offset: 7 }}>
+                                            <FormItem wrapperCol={{ span: 12, offset: 8 }}>
                                                 <a href="#">新用户注册</a>
                                                 <a href="#" className="float-right">忘记密码</a>
                                             </FormItem>
@@ -107,6 +108,7 @@ class Login extends React.Component {
 
                                     </TabPane>
                                     <TabPane tab="企业用户" key="2">
+                                        <Alert message="仅支持IE8以上版本的浏览器，请切换浏览器！" type="warning" showIcon />
                                         <Form horizontal>
                                             <FormItem
                                                 {...formItemLayout}
@@ -136,16 +138,16 @@ class Login extends React.Component {
                                                 <InputGroup className="ant-search-input">
                                                     <Input {...getFieldProps('vCode')} />
                                                     <div className="ant-input-group-wrap">
-                                                        <img className="ant-search-btn" src="./images/vcode.png"/>
+                                                        <img className="ant-search-btn vcode" src={vcode}/>
                                                     </div>
                                                 </InputGroup>
                                             </FormItem>
 
-                                            <FormItem wrapperCol={{ span: 16, offset: 7 }} style={{ marginTop: 24 }}>
+                                            <FormItem wrapperCol={{ span: 16, offset: 8 }} style={{ marginTop: 24 }}>
                                                 <Button type="primary" htmlType="submit">登录</Button>
                                             </FormItem>
 
-                                            <FormItem wrapperCol={{ span: 12, offset: 7 }}>
+                                            <FormItem wrapperCol={{ span: 12, offset: 8 }}>
                                                 <a href="#">新用户注册</a>
                                                 <a href="#" className="float-right">忘记密码</a>
                                             </FormItem>
