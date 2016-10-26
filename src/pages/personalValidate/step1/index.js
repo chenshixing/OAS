@@ -80,13 +80,6 @@ class PersonalValidate extends React.Component {
                     {required:true, message: '身份证号码不能为空'},
                     ruleType('id-card')
                 ]
-            },
-            personalCreditAuthorization:{
-                rules:[
-                    {required:true, type: 'array', message: '请上传个人征信查询授权书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
             }
         };
 
@@ -149,29 +142,6 @@ class PersonalValidate extends React.Component {
                             required
                         >
                             <p className="ant-form-text">{phoneNumber}</p> <br/>
-                        </FormItem>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label="个人征信查询授权书"
-                            required
-                            validateStatus={this.state.upLoadStatus}
-                        >
-                            <Upload name="logo" {...upLoadProps} {...getFieldProps('personalCreditAuthorization',rules.personalCreditAuthorization)}>
-                                    <Button type="ghost">
-                                        <Icon type="upload" /> 点击上传
-                                    </Button>
-                                </Upload>
-                        </FormItem>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label="上传文件要求 "
-                        >
-                            <ul>
-                                <li>下载<a href="#"> 个人征信查询授权书</a>，打印填写并签名，上传原件照片或彩色扫描件。</li>
-                                <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
-                            </ul>
                         </FormItem>
 
                         <Row style={{ marginTop: 30 }}>

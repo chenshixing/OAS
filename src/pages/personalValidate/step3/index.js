@@ -105,7 +105,7 @@ class PersonalValidate extends React.Component {
                         <Form horizontal className="fn-mt-30">
                             <FormItem
                                 {...formItemLayout}
-                                label="登录密码"
+                                label="设置交易密码"
                                 required
                             >
                                 <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" />
@@ -113,7 +113,7 @@ class PersonalValidate extends React.Component {
 
                             <FormItem
                                 {...formItemLayout}
-                                label="确认密码"
+                                label="确认交易密码"
                                 required
                             >
                                 <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off" />
