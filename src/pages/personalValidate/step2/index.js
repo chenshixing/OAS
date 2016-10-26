@@ -6,11 +6,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import codeimg from 'ASSETS/images/code.png'
+import codeimg from 'ASSETS/images/code.png';
+
+import { Link } from 'react-router';
 
 
 // antd 组件
-import { Alert, Steps, Button, Modal } from 'antd';
+import { Alert, Steps, Button, Modal, Row, Col } from 'antd';
 const Step = Steps.Step;
 
 // 页面组件
@@ -57,69 +59,34 @@ export default class PersonalValidate extends React.Component {
     render() {
         return (
             <div>
-                <Steps size="large" current={1} className="fn-mb-30">
+                <Steps size="default" current={1} className="fn-mb-30">
                     <Step title="填写基本信息" />
                     <Step title="实名认证" />
                     <Step title="设置交易密码" />
                     <Step title="提交结果" />
                 </Steps>
-                <div className="form-frame">
-                    <div style={{ width: '50%', margin: '0 auto',marginTop:30 }}>
-                        <Alert message="实名认证邀请已发送，请下载APP完成认证。"
-                               description=" "
-                               type="warning"
-                               showIcon
-                        />
-                        <table className="table ant-alert-warning">
-                            <tbody>
-                                <tr>
-                                    <th width="30%">真实姓名</th>
-                                    <td width="70%"><b className="fs-16">{this.state.data.realName}</b></td>
-                                </tr>
-                                <tr>
-                                    <th>身份识别码</th>
-                                    <td>{this.state.data.identityCode}</td>
-                                </tr>
-                                <tr>
-                                    <th>手机号码</th>
-                                    <td>{this.state.data.phoneNumber}</td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-                        <table className=" table qr-code fn-mt-40">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <div className="fn-pa-10 text-align-center code-border">
-                                        <div className="pic"><img src={codeimg}/></div>
-                                        <p className="fn-mb-5">扫描二维码即可下载</p>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="code-right lh-28">
-                                        <h3>E+实名认证APP</h3>
-                                        <p>支持iPhone及Android，三步完成认证</p>
-                                        <p>1.上传身份证 &nbsp; 2.人脸识别 &nbsp; 3.银行卡验证</p>
-                                    </div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div className="text-align-center fn-mt-30">
-                            <Button type="primary" size="large" onClick={this.handleNext.bind(this)}>下一步</Button>
-                            <a href="/#/personalValidate/step1?_k=REPLACE" className="link-standard fn-pl-20">信息有误，返回修改</a>
-                        </div>
-                    </div>
-                </div>
-                <Modal title="温馨提示" visible={this.state.visible}
-                       onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}
-                       cancelText="稍后认证，下一步" okText="马上认证"
-                >
-                    <p>您的实名认证未完成，请尽快完成。</p>
-                </Modal>
+                <Frame title="实名认证" className="">
+                    <Row className="fn-mt-30">
+                        <Col span={12} offset={6}>
+                            <p>
+                                姓名：{this.state.data.realName}，您的身份识别码已发送到手机133****1234。
+                                <Link to='/'>没有收到短信，重新发送</Link>
+                            </p>
+                            <p>
+                                请下载实名认证APP完成认证。
+                                <Link to='/'>详细操作步骤</Link>
+                            </p>
+                        </Col>
+                    </Row>
+                    <Row className="text-align-center fn-mt-30">
+                        <p>扫描二维码下载实名认证APP，支持IOS和安卓</p>
+                        <div className="pic"><img src={codeimg}/></div>
+                    </Row>
+                    <Row className="text-align-center fn-mt-30">
+                        <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button type="primary">已完成认证</Button></p>
+                    </Row>
+                </Frame>
             </div>
-
         );
     }
 }
