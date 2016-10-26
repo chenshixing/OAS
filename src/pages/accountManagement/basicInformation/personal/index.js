@@ -4,7 +4,7 @@ import './style.less';
 import React from 'react';
 
 // antd 组件
-import {Button,Icon} from 'antd';
+import {Button,Icon,Tag} from 'antd';
 
 // 页面
 export default class Personal extends React.Component {
@@ -13,8 +13,9 @@ export default class Personal extends React.Component {
             <div>
                 <div>
                     <div className="account-manage-wrap">
-                        <h3>下午好，广东亿达有限公司
-                            <span className="primary-text fs-12 fn-pl-10 fn-pr-10 fn-pt-5 fn-pb-5 fn-ml-10">企业用户</span>
+                        <h3>
+                            <span className="fn-mr-10">下午好，李彤</span>
+                            <Tag color="blue">个人用户</Tag>
                         </h3>
 
                         <div className="alert alert-warning fn-mt-10">
@@ -76,6 +77,22 @@ export default class Personal extends React.Component {
                                     <td colSpan={2}>
                                         <a href="javascript:;" className="link-standard">
                                             重新发送验证短信</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="text-align-center fs-20">
+                                        <Icon type="check" />
+                                    </td>
+                                    <td>
+                                        <h3>
+                                            证件资料
+                                        </h3>
+                                    </td>
+                                    <td colSpan={4}>
+                                        如资料有变更，请及时更新。
+                                    </td>
+                                    <td className="text-align-right">
+                                        <Button type="primary"><Icon type="edit" />修改</Button>
                                     </td>
                                 </tr>
                                 <tr>

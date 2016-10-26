@@ -211,12 +211,30 @@ const routes = {
             });
           }
         },
-        // 账户管理修改交易密码
+        // 账户管理修改交易密码 步骤1
         {
-          path: 'accountManagement/resetTradingPassword',
+          path: 'accountManagement/resetTradingPassword/Steps1',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetTradingPassword').default);
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps1').default);
+            });
+          }
+        },
+        // 账户管理修改交易密码 步骤2
+        {
+          path: 'accountManagement/resetTradingPassword/Steps2',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps2').default);
+            });
+          }
+        },
+        // 账户管理修改交易密码 步骤3
+        {
+          path: 'accountManagement/resetTradingPassword/Steps3',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps3').default);
             });
           }
         },
