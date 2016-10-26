@@ -47,6 +47,33 @@ const routes = {
               }
           },
         /***************核身页面 ***************/
+        // 审核中提示页(企业)
+        {
+            path: 'personalValidate/tips/check',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    cb(null, require('PAGES/personalValidate/tips/check/index.js').default)
+                })
+            }
+        },
+        // 核身信息补充提示页(企业)
+        {
+            path: 'personalValidate/tips/supplement',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    cb(null, require('PAGES/personalValidate/tips/supplement/index.js').default)
+                })
+            }
+        },
+        // 核审核不通过提示页(企业)
+        {
+            path: 'personalValidate/tips/disapproval',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    cb(null, require('PAGES/personalValidate/tips/disapproval/index.js').default)
+                })
+            }
+        },
         // 个人核身-step1
         {
           path: 'personalValidate/step1',
@@ -82,6 +109,15 @@ const routes = {
               cb(null, require('PAGES/personalValidate/step4').default)
             })
           }
+        },
+        // 审核中提示页(企业)
+        {
+            path: 'companyValidate/tips/check',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    cb(null, require('PAGES/companyValidate/tips/check/index.js').default)
+                })
+            }
         },
         // 核身信息补充提示页(企业)
         {
