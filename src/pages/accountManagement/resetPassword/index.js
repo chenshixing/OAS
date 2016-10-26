@@ -18,25 +18,20 @@ class ResetPassword extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
-                console.log('Errors in form!!!');
                 return;
             }
-            console.log('Submit!!!');
-            console.log(values);
         });
     }
 
     checkPass(rule, value, callback) {
-        const { validateFields } = this.props.form;
         if(value) {
-            validateFields(['confirmPassword'], {force: true});
+            this.props.form.validateFields(['confirmPassword'], {force: true});
         }
         callback();
     }
 
     checkConfirmPass(rule, value, callback) {
-        const { getFieldValue } = this.props.form;
-        if(value && value !== getFieldValue('password')) {
+        if(value && value !== this.props.form.getFieldValue('password')) {
             callback('两次输入密码不一致！');
         } else {
             callback();
@@ -49,7 +44,7 @@ class ResetPassword extends React.Component {
             wrapperCol: {span: 8},
         };
         const {getFieldProps} = this.props.form; //用于和表单进行双向绑定
-        const oldPasswdProps = getFieldProps(' oldPassword', { //原登录密码
+        const oldPasswdProps = getFieldProps('oldPassword', { //原登录密码
             rules: [
                 {required: true, whitespace: true, message: '请输入原登录密码'},
             ],
