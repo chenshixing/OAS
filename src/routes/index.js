@@ -92,6 +92,15 @@ const routes = {
                 })
             }
         },
+        // 核审核不通过提示页(企业)
+        {
+            path: 'companyValidate/tips/disapproval',
+            getComponent(nextState, cb) {
+                require.ensure([], (require) => {
+                    cb(null, require('PAGES/companyValidate/tips/disapproval/index.js').default)
+                })
+            }
+        },
         // 企业核身-step1
         {
           path: 'companyValidate/step1',
