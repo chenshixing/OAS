@@ -1,10 +1,10 @@
 // react 相关库
 import React from 'react';
 import classNames from 'classNames';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
+
 // 页面组件
 import Frame from 'COM/form/frame';
-
 // antd 组件
 import {
     Alert,
@@ -13,7 +13,7 @@ import {
     Form,
     Input,
     Col,
-    Row
+    Row,
 } from 'antd';
 const Step = Steps.Step;
 const createForm = Form.create;
@@ -124,12 +124,8 @@ class Steps2 extends React.Component {
     render() {
         const {getFieldProps} = this.props.form;
         const formItemLayout = {
-            labelCol: {
-                span: 6
-            },
-            wrapperCol: {
-                span: 18
-            }
+            labelCol: { span: 8 },
+            wrapperCol: { span: 12 },
         };
         const passProps = getFieldProps('pass', {
             rules: [
@@ -172,36 +168,26 @@ class Steps2 extends React.Component {
                     <Step title="重置交易密码"/>
                     <Step title="重置成功"/>
                 </Steps>
-                <Frame title="重置交易密码" small="（用于对融资申请、修改账号信息等操作，请勿与登录密码一致）">
+                <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
-                        <Row>
-                            <Col span="18">
-                                <FormItem {...formItemLayout} label="密码">
-                                    <Input {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
-                                </FormItem>
-                            </Col>
-                            <Col span="6">
-                                {this.state.passBarShow
-                                    ? this.renderPassStrengthBar('pass')
-                                    : null}
-                            </Col>
-                        </Row>
+                        <FormItem {...formItemLayout} label="设置交易密码">
+                            <Input {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
+                            {this.state.passBarShow
+                                ? this.renderPassStrengthBar('pass')
+                                : null}
+                        </FormItem>
+
+
+                        <FormItem {...formItemLayout} label="确认交易密码">
+                            <Input {...rePassProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="rePass"/>
+                            {this.state.rePassBarShow
+                                ? this.renderPassStrengthBar('rePass')
+                                : null}
+                        </FormItem>
 
                         <Row>
-                            <Col span="18">
-                                <FormItem {...formItemLayout} label="确认密码">
-                                    <Input {...rePassProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="rePass"/>
-                                </FormItem>
-                            </Col>
-                            <Col span="6">
-                                {this.state.rePassBarShow
-                                    ? this.renderPassStrengthBar('rePass')
-                                    : null}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="18">
-                                <Col span="18" offset="6">
+                            <Col span="16">
+                                <Col span="8" offset="12">
                                     <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
                                     <Link to="/accountManagement/resetTradingPassword/Steps3">提交</Link>
                                 </Col>
