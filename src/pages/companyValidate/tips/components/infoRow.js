@@ -5,6 +5,9 @@ import {Link} from 'react-router';
 // antd 组件
 import { Row, Col, Button, Table} from 'antd';
 
+//	业务组件
+import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
+
 //	样式
 import './style.less';
 
@@ -16,6 +19,8 @@ class InfoRow extends Component {
     constructor(props) {
         super(props);
         this.state = Object.assign({},this.props,{
+        	identityVisible : false,	//	用于实名认证弹窗
+        	supplementVisible : false,	//	用于手机APP提交弹窗
         	basic : {
         		name : '企业基本资料',
         		status : {
@@ -80,6 +85,34 @@ class InfoRow extends Component {
         });
     }
 
+    showIdentityModal() {
+	    this.setState({
+	      identityVisible: true,
+	    });
+	    console.log(this);
+	}
+
+	closeIdentityModal() {
+	    this.setState({
+	      identityVisible: false,
+	    });
+	    console.log(this);
+	}
+
+	showSupplementModal() {
+	    this.setState({
+	      supplementVisible: true,
+	    });
+	    console.log(this);
+	}
+
+	closeSupplementModal() {
+	    this.setState({
+	      supplementVisible: false,
+	    });
+	    console.log(this);
+	}
+
     basic(){
 		return (
 			<Col span={12}>
@@ -95,13 +128,14 @@ class InfoRow extends Component {
     		return false;
     	}
     	/*审核不通过可以修改认证资料*/
-    	let editButton = this.state.pageType === "disapproval" ? <Link to='/' className="fn-ml-20">修改资料</Link> : "";
+    	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editBasic' className="fn-ml-20">修改资料</Link> : "";
     	return (
     		<Col span={12}>
 				<Row>
 					<Col span={12}><Link to='/'>重新发送验证短信</Link>{editButton}</Col>
-                    <Col span={12}><Link to='/'>如何实名认证？</Link></Col>
+                    <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
 				</Row>
+				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
 			</Col>
     	);
     }
@@ -120,7 +154,8 @@ class InfoRow extends Component {
     	}
     	return (
     		<Col span={12}>
-				你可以 <Link to='/'>线上提交</Link> 或者使用 <Link to='/'>手机APP提交</Link> 。
+				你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)}>手机APP提交</Button> 。
+				<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
 			</Col>
     	);
     }
@@ -136,7 +171,7 @@ class InfoRow extends Component {
                 <p>请在 <span className="warning-FontColor fs-26">47:59:59</span> 内完成支付</p>
                 <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
                 <Table dataSource={tableInfo.dataSource} columns={tableInfo.columns} pagination={false}/>
-                <p>如对公账户信息有误，请点击 <Link to='/'>修改对公账户</Link>。</p>
+                <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
             </Col>
     	)
     }
