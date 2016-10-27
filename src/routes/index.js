@@ -200,6 +200,15 @@ const routes = {
             })
           }
         },
+        //  提交结果(企业)
+        {
+          path: 'companyValidate/result',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/companyValidate/editRealName/result').default)
+            })
+          }
+        },
         /***************核身页面 end ***************/
         /*************** 账户管理 ***************/
         // 账户管理首页

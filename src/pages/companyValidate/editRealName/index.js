@@ -139,7 +139,7 @@ class EditRealName extends Component {
 
                     <Row className="fn-mt-30">
                         <Col span="12" offset="6" className="text-align-center">
-                            <Link className="ant-btn ant-btn-primary ant-btn-lg" to="/">下一步</Link>
+                            <Link className="ant-btn ant-btn-primary ant-btn-lg" to="/companyValidate/result">下一步</Link>
                         </Col>
                     </Row>
 
