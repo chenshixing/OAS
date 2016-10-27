@@ -20,6 +20,7 @@ const Step = Steps.Step;
 const FormItem = Form.Item;
 
 import codeimg from 'ASSETS/images/code.png';
+import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
 // 页面身份验证
 export default class RealNameAuthentication extends React.Component {
@@ -28,7 +29,8 @@ export default class RealNameAuthentication extends React.Component {
         this.state = {
             visible: false,
             data: this.props.data,
-            isValidation:this.props.isValidation
+            isValidation:this.props.isValidation,
+    		identityVisible : false,
         }
 
     }
@@ -52,6 +54,20 @@ export default class RealNameAuthentication extends React.Component {
         console.log(e);
         this.setState({visible: false});
     }
+    showIdentityModal() {
+	    this.setState({
+	      identityVisible: true,
+	    });
+	    console.log(this);
+	}
+
+	closeIdentityModal() {
+	    this.setState({
+	      identityVisible: false,
+	    });
+	    console.log(this);
+	}
+
 
     render() {
         return (
@@ -81,7 +97,8 @@ export default class RealNameAuthentication extends React.Component {
                             </p>
                             <p>
                                 请下载实名认证APP完成认证。
-                                <Link to='/'>详细操作步骤</Link>
+                                <Button type="primary" onClick={this.showIdentityModal.bind(this)}>查看详细操作步骤</Button>
+                                <IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
                             </p>
                         </Col>
                     </Row>
