@@ -47,13 +47,24 @@ export default class PersonalValidate extends React.Component {
                 type : 'agent',
                 name : '李彤',
                 number : '1234 5678',
+                passed : false,
             },
             {
                 type : 'corporation',
                 name : '文静',
                 number : '1234 5678',
+                passed : false,
             }
         ];
+        let accountData1 = {
+            passed : false,
+        }
+        let accountData2 = {
+            passed : false,
+        }
+        let supplementData = {
+            passed : false,
+        }
         let dataSource = [{
           key: '0',
           type: '身份实名认证',
@@ -63,17 +74,17 @@ export default class PersonalValidate extends React.Component {
           key: '1',
           type: '企业对公账户认证',
           content: <Content type="bond"/>,
-          status: <Status type="bond"/>
+          status: <Status data={accountData1} type="bond"/>
         },{
           key: '2',
           type: '企业对公账户认证',
           content: <Content type="information"/>,
-          status: <Status type="information"/>
+          status: <Status data={accountData2} type="information"/>
         },,{
           key: '3',
           type: '企业资料补充',
           content: <Content type="supplement"/>,
-          status: <Status type="supplement"/>
+          status: <Status data={supplementData} type="supplement"/>
         },];
         return (
             <div>

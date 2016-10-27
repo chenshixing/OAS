@@ -23,7 +23,7 @@ export default class Content extends Component{
         super(props);
         this.state = Object.assign({},this.props,{
 			identityVisible : false,
-			supplementVisible : true
+			supplementVisible : false
         });
 
     }
