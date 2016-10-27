@@ -134,7 +134,7 @@ export default class Content extends Component{
 	    		<div>
 		    		<p>点击下载以下资料，打印填写并加盖公章：<a href="javaScript:void(0);">企业法定代表人身份证明书</a>、<a href="javaScript:void(0);">承诺函及授权委托书</a>。</p>
 		    		<p>登录实名认证APP上传营业执照、组织机构代码证（多证合一营业执照可不提供）、企业法定代表人身份证明书、承诺函及授权委托书。<Button type="primary" onClick={this.showSupplementModal.bind(this)}>查看详细操作步骤</Button></p>
-		    		<p>您还可以点击这里<Link to="/">线上提交</Link> 。</p>
+		    		<p>您还可以点击这里<Link to="/companyValidate/documentUpload">线上提交</Link> 。</p>
 	    		</div>
 	    		<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
     		</div>

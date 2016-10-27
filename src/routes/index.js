@@ -182,6 +182,14 @@ const routes = {
             })
           }
         },
+        {
+          path: 'companyValidate/documentUpload',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/companyValidate/documentUpload/index').default)
+            })
+          }
+        },
         /***************核身页面 end ***************/
         /*************** 账户管理 ***************/
         // 账户管理首页
