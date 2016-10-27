@@ -39,11 +39,11 @@ export default class Steps1 extends React.Component {
                 realName: 'xxx',
                 identityCode: '12345',
                 phoneNumber: '15999872092',
-                //是否发送
-                isSend:false,
-                //是否验证
-                isValidation:true
             },
+            //是否发送
+            isSend:false,
+            //是否验证
+            isValidation:false
         }
     }
     handleNext() {
@@ -64,26 +64,30 @@ export default class Steps1 extends React.Component {
     handleSend(){
         //进入实名验证
 
-        this.state.data.isSend = true;
+        this.state.isSend = true;
         this.forceUpdate();
     }
     render() {
         return (
             <div>
+
                 {/*StepsBar 步骤1*/}
                 <StepsBar/>
 
                 {/*Authenticate 验证身份*/}
                 {/* RealNameAuthentication 实名认证 */}
                 {
-                    !this.state.data.isSend
+                    !this.state.isSend
                     ?
                     <Authenticate
 
                         handleSend={this.handleSend.bind(this)}
                     />
                     :
-                    <RealNameAuthentication data={this.state.data} />
+                    <RealNameAuthentication
+                        data={this.state.data}
+                        isValidation={this.state.isValidation}
+                    />
                 }
             </div>
         );

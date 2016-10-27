@@ -27,14 +27,15 @@ export default class RealNameAuthentication extends React.Component {
         super(props)
         this.state = {
             visible: false,
-            data: this.props.data
+            data: this.props.data,
+            isValidation:this.props.isValidation
         }
 
     }
     handleRealNameComplete() {
-        if (this.state.data.isValidation == true) {
+        if (this.state.isValidation == true) {
             window.location.href = '/#/accountManagement/resetTradingPassword/Steps2';
-        } else if (this.state.data.isValidation == false) {
+        } else if (this.state.isValidation == false) {
             this.setState({visible: true});
         }
     }
@@ -61,7 +62,7 @@ export default class RealNameAuthentication extends React.Component {
                     onOk={this.handleOk.bind(this)}
                     onCancel={this.handleCancel.bind(this)}
                     okText="朕前去完善资料"
-                    cancelText="容妾身再考虑一下嘛"
+                    cancelText="妾身再考虑一下"
                     wrapClassName="vertical-center-modal"
                     >
                     <p>
