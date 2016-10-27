@@ -266,6 +266,32 @@ const routes = {
           }
         },
         /***************账户管理 end ***************/
+        /***************重置登录密码 start *************/
+        {
+          path: 'resetPassword/step1',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step1').default);
+            });
+          }
+        },
+        {
+          path: 'resetPassword/step2-1',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step2').default);
+            });
+          }
+        },
+        {
+          path: 'resetPassword/step2-2',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step2/step2-2').default);
+            });
+          }
+        },
+        /***************重置登录密码 end ***************/
         // 404
         {
           path: '*',

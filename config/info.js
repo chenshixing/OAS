@@ -3,7 +3,7 @@
 */
 module.exports = {
     app: {
-        title: "E+互联网供应链",
+        title: "OAS大账户",
         description: "",
         keywords: ""
     }
