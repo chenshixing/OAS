@@ -11,7 +11,7 @@ import { Link } from 'react-router';
 import './style.less';
 
 import codeimg from 'ASSETS/images/code.png';
-import SupplementModal from './modal';
+import { IdentityModal, SupplementModal } from './modal';
 
 
 export default class Content extends Component{
@@ -22,12 +22,27 @@ export default class Content extends Component{
     constructor(props) {
         super(props);
         this.state = Object.assign({},this.props,{
-			supplementVisible : true
+			identityVisible : false,
+			supplementVisible : false
         });
 
     }
 
-    showSupplementModal() {
+    showIdentityModal() {
+	    this.setState({
+	      identityVisible: true,
+	    });
+	    console.log(this);
+	}
+
+	closeIdentityModal() {
+	    this.setState({
+	      identityVisible: false,
+	    });
+	    console.log(this);
+	}
+
+	showSupplementModal() {
 	    this.setState({
 	      supplementVisible: true,
 	    });
@@ -54,18 +69,18 @@ export default class Content extends Component{
                         <Row key={index} className="row doubleLine">
                             <Col span={24}>
                                 <p>
-                                    {name[item.type]}：{item.name}，您的身份识别码为{item.number}，请扫描以下二维码下载APP进行<br />
+                                    {name[item.type]}：<strong>{item.name}</strong>，您的身份识别码为<span className="red">{item.number}</span>，请扫描以下二维码下载APP进行<br />
                                     实名认证。
                                     <Tooltip placement="top" title={<QRCode />} >
                                     	<a href="javaScript:void(0);">鼠标指向这里显示二维码。</a>
                                     </Tooltip>
-                                    <Button type="primary" onClick={this.showSupplementModal.bind(this)}>查看详细操作步骤</Button>
+                                    <Button type="primary" onClick={this.showIdentityModal.bind(this)}>查看详细操作步骤</Button>
                                 </p>
                             </Col>
                         </Row>
                     )
                 })}
-				<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
+				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
             </div>
         )
     }
@@ -98,7 +113,7 @@ export default class Content extends Component{
     	return(
     		<Row>
                 <Col offset={1} span={22}>
-                    <p>请在48小时以内，通过网上银行或银行柜台，使用您的对公账户向下面的指定账户支付 0.10元 验证金 。</p>
+                    <p>请在<span className="red">48小时</span>以内，通过<span className="red">网上银行</span>或<span className="red">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="red">0.10元</span>验证金 。</p>
                     <Table className="fn-mt-15" dataSource={dataSource} columns={columns} pagination={false}/>
                     <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
                     <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
@@ -116,9 +131,12 @@ export default class Content extends Component{
     supplement(){
     	return(
     		<div>
-	    		<p>点击下载以下资料，打印填写并加盖公章：<a href="javaScript:void(0);">企业法定代表人身份证明书</a>、<a href="javaScript:void(0);">承诺函及授权委托书</a>。</p>
-	    		<p>登录实名认证APP上传营业执照、组织机构代码证（多证合一营业执照可不提供）；企业法定代表人身份证明书、承诺函及授权委托书。<Button type="primary">查看详细操作步骤</Button></p>
-	    		<p>您还可以点击这里<Link to="/">线上提交</Link> 。</p>
+	    		<div>
+		    		<p>点击下载以下资料，打印填写并加盖公章：<a href="javaScript:void(0);">企业法定代表人身份证明书</a>、<a href="javaScript:void(0);">承诺函及授权委托书</a>。</p>
+		    		<p>登录实名认证APP上传营业执照、组织机构代码证（多证合一营业执照可不提供）、企业法定代表人身份证明书、承诺函及授权委托书。<Button type="primary" onClick={this.showSupplementModal.bind(this)}>查看详细操作步骤</Button></p>
+		    		<p>您还可以点击这里<Link to="/companyValidate/documentUpload">线上提交</Link> 。</p>
+	    		</div>
+	    		<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
     		</div>
     	)
     }
