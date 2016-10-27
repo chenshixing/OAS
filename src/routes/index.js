@@ -173,7 +173,7 @@ const routes = {
             })
           }
         },
-        // 修改基本信息
+        // 修改基本信息(企业)
         {
           path: 'companyValidate/editBasic',
           getComponent(nextState, cb) {
@@ -182,11 +182,21 @@ const routes = {
             })
           }
         },
+        //  证件资料上传(企业)
         {
           path: 'companyValidate/documentUpload',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               cb(null, require('PAGES/companyValidate/documentUpload/index').default)
+            })
+          }
+        },
+        //  修改实名认证(企业)
+        {
+          path: 'companyValidate/editRealName',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/companyValidate/editRealName/index').default)
             })
           }
         },
