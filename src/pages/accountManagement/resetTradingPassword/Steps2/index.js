@@ -5,6 +5,12 @@ import {Link} from 'react-router';
 
 // 页面组件
 import Frame from 'COM/form/frame';
+
+//自己内容组件
+import StepsBar from './StepsBar';
+// 自定义验证 rule
+import ruleType from 'UTILS/ruleType';
+
 // antd 组件
 import {
     Alert,
@@ -138,9 +144,7 @@ class Steps2 extends React.Component {
                     min: 8,
                     max: 20,
                     message: '请输入8-20位字符'
-                }, {
-                    validator: this.checkPass.bind(this)
-                }
+                }, ruleType('en-num')
             ],
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
@@ -164,11 +168,8 @@ class Steps2 extends React.Component {
 
         return (
             <div>
-                <Steps size="big" current={1} className="fn-mb-30">
-                    <Step title="验证身份"/>
-                    <Step title="重置交易密码"/>
-                    <Step title="重置成功"/>
-                </Steps>
+                {/*步骤*/}
+                <StepsBar />
                 <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem {...formItemLayout} label="设置交易密码">

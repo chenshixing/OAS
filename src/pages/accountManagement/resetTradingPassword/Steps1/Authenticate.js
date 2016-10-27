@@ -13,7 +13,9 @@ const FormItem = Form.Item;
 
 // 页面身份验证
 export default class Authenticate extends React.Component {
-
+    constructor(props){
+        super(props)
+    }
     handleSend(){
         this.props.handleSend()
     }
@@ -38,7 +40,7 @@ export default class Authenticate extends React.Component {
                         <label>133****1234</label>
                     </FormItem>
                     <FormItem wrapperCol={{ span: 8, offset: 10 }} style={{ marginTop: 24 }}>
-                        <Button type="primary" htmlType="submit" onClick={this.handleSend.bind(this)}>发送身份识别码至手机</Button>
+                        <Button type="primary"  onClick={this.handleSend.bind(this)}>发送身份识别码至手机</Button>
                         <Link to="/accountManagement/resetTradingPassword/Steps2">发送身份识别码至手机</Link>
                     </FormItem>
 
