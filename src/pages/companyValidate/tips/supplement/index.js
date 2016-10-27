@@ -11,6 +11,9 @@ import { Row, Col, Icon, Button} from 'antd';
 //  样式
 import  '../style.less';
 
+//  业务组件
+import InfoRow from '../components/infoRow';
+
 class Supplement extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -18,9 +21,29 @@ class Supplement extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            pageType : 'supplement'
+        }
     }
 
     render() {
+        let basicData = {
+          passed : true
+        };
+        let corporationData = {
+          name : '李彤',
+          passed : false
+        };
+        let bondData = {
+          name : '文静',
+          passed : true
+        };
+        let informationData = {
+          passed : true
+        };
+        let accountData = {
+          passed : true
+        };
         return (
             <div className="tipsBox">
                 <Row className="tipsRow">
@@ -34,26 +57,15 @@ class Supplement extends Component {
                     </div>
                 </Row>
                 <Row className="tipsRow">
-                    <Row className="infoRow">
-                        <Col span={6}>企业基本资料</Col>
-                        <Col span={6}><span className="success-FontColor1">已提交</span></Col>
-                    </Row>
-                    <Row className="infoRow">
-                        <Col span={6}>法定代表人认证：李彤</Col>
-                        <Col span={6}><span className="error-FontColor1">待认证</span></Col>
-                    </Row>
-                    <Row className="infoRow">
-                        <Col span={6}>委托代理人认证：文静</Col>
-                        <Col span={6}><span className="success-FontColor1">已认证</span></Col>
-                    </Row>
-                    <Row className="infoRow">
-                        <Col span={6}>证件资料上传</Col>
-                        <Col span={6}><span className="success-FontColor1">已提交</span>/<span className="error-FontColor1">待提交资料</span></Col>
-                    </Row>
-                    <Row className="infoRow">
-                        <Col span={6}>对公账户验证</Col>
-                        <Col span={6}><span className="success-FontColor1">已认证</span>/<span className="error-FontColor1">未收到验证金</span>/<span className="error-FontColor1">待提交资料</span></Col>
-                    </Row>
+                    <InfoRow type="basic" pageType={ this.state.pageType } data={ basicData } />
+
+                    <InfoRow type="corporation" pageType={ this.state.pageType } data={ corporationData } />
+
+                    <InfoRow type="bond" pageType={ this.state.pageType } data={ bondData } />
+
+                    <InfoRow type="information" pageType={ this.state.pageType } data={ informationData } />
+
+                    <InfoRow type="account" pageType={ this.state.pageType } data={ accountData } />
                 </Row>
                 <Row className="tipsRow pl-50">
                     <p>如您想更换账号，请点击 <Link to='/'>重新登录</Link>。</p>
