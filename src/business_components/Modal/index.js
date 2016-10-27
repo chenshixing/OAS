@@ -62,6 +62,7 @@ class IdentityModal extends Component {
 	          ]}
 	          width="700"
 	          className="step4-modal"
+               wrapClassName="vertical-center-modal"
 	        >
 	          <h4>如何实名认证？</h4>
 	          <Row className="fn-mt-20">
@@ -155,6 +156,7 @@ class SupplementModal extends Component {
 	          ]}
 	          width="700"
 	          className="step4-modal"
+              wrapClassName="vertical-center-modal"
 	        >
 	          <h4>如何补充企业资料？</h4>
 	          <Row className="fn-mt-20">

@@ -10,6 +10,7 @@ import codeimg from 'ASSETS/images/code.png';
 
 import { Link } from 'react-router';
 
+import { IdentityModal } from 'BCOM/Modal/index';
 
 // antd 组件
 import { Alert, Steps, Button, Modal, Row, Col } from 'antd';
@@ -25,7 +26,7 @@ export default class PersonalValidate extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            visible: false,
+            identityVisible: false,
             data:{
                 realName:'xxx',
                 identityCode:'12345',
@@ -34,26 +35,18 @@ export default class PersonalValidate extends React.Component {
         }
     }
 
-    handleNext(){
+    showIdentityModal() {
         this.setState({
-            visible: true,
+          identityVisible: true,
         });
+        console.log(this);
     }
-    //马上认证
-    handleOk() {
+
+    closeIdentityModal() {
         this.setState({
-            visible: false,
+          identityVisible: false,
         });
-    }
-    //稍后认证，下一步
-    handleCancel(e) {
-        this.setState({
-            visible: false,
-        });
-        console.log('e.target',e.target);
-        if(e.target.tagName.toLowerCase()=='span' && e.target.className==''){
-            window.location.href='/#/personalValidate/step3?_k=REPLACE';
-        }
+        console.log(this);
     }
 
     render() {
@@ -74,7 +67,7 @@ export default class PersonalValidate extends React.Component {
                             </p>
                             <p>
                                 请下载实名认证APP完成认证。
-                                <Link to='/'>详细操作步骤</Link>
+                                <Button type="primary" onClick={this.showIdentityModal.bind(this)}>详细操作步骤</Button>
                             </p>
                         </Col>
                     </Row>
@@ -86,6 +79,7 @@ export default class PersonalValidate extends React.Component {
                         <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button type="primary">已完成认证</Button></p>
                     </Row>
                 </Frame>
+                <IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
             </div>
         );
     }

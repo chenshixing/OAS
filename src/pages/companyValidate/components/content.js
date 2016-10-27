@@ -11,7 +11,7 @@ import { Link } from 'react-router';
 import './style.less';
 
 import codeimg from 'ASSETS/images/code.png';
-import { IdentityModal, SupplementModal } from './modal';
+import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
 
 export default class Content extends Component{
@@ -69,7 +69,7 @@ export default class Content extends Component{
                         <Row key={index} className="row doubleLine">
                             <Col span={24}>
                                 <p>
-                                    {name[item.type]}：<strong>{item.name}</strong>，您的身份识别码为<span className="red">{item.number}</span>，请扫描以下二维码下载APP进行<br />
+                                    {name[item.type]}：<strong>{item.name}</strong>，您的身份识别码为<span className="warning-FontColor">{item.number}</span>，请扫描以下二维码下载APP进行<br />
                                     实名认证。
                                     <Tooltip placement="top" title={<QRCode />} >
                                     	<a href="javaScript:void(0);">鼠标指向这里显示二维码。</a>
@@ -113,7 +113,7 @@ export default class Content extends Component{
     	return(
     		<Row>
                 <Col offset={1} span={22}>
-                    <p>请在<span className="red">48小时</span>以内，通过<span className="red">网上银行</span>或<span className="red">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="red">0.10元</span>验证金 。</p>
+                    <p>请在<span className="warning-FontColor">48小时</span>以内，通过<span className="warning-FontColor">网上银行</span>或<span className="warning-FontColor">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="warning-FontColor">0.10元</span>验证金 。</p>
                     <Table className="fn-mt-15" dataSource={dataSource} columns={columns} pagination={false}/>
                     <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
                     <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>

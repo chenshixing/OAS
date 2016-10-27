@@ -10,9 +10,9 @@ import ReactDOM from 'react-dom';
 import { Table, Alert, Steps, Button, Row, Col } from 'antd';
 const Step = Steps.Step;
 
-//  本页组件
-import Content from './content';
-import Status from './status';
+//  业务组件
+import Content from '../components/content';
+import Status from '../components/status';
 
 // 页面组件（导出）
 export default class PersonalValidate extends React.Component {
