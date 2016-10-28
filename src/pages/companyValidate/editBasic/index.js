@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 
 // antd 组件
-import { Table, Form, Input, Select, Button, Upload, Icon,  Radio, DatePicker, Checkbox, Row, Col, Modal, Cascader, message } from 'antd';
+import { Table, Form, Input, Select, Button, Upload, Icon,  Radio, DatePicker, Checkbox, Row, Col, Cascader, message } from 'antd';
 const createForm = Form.create;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
@@ -36,14 +36,11 @@ class CompanyValidate extends React.Component {
         super(props);
         this.state={
             loading:false,
-            display : 'block',
-            visible : false,
             data:{
                 companyName:'钱途互联',
                 businessLicenseType:'common',
                 isLongEndTimeChange:false,
                 accountVerificationType:'bond',
-                fillType : 'agent',
             },
             dataSource : [{
               key: '1',
@@ -71,40 +68,7 @@ class CompanyValidate extends React.Component {
             }],
         }
 
-        this.showModal=this.showModal.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
-    }
-
-    onFillTypeChange(e) {
-        console.log('radio checked', e.target.value);
-        let display = e.target.value == "agent" ? "block" : "none";
-        if(this.state.display == display){ return false;}
-        if(e.target.value == "corporation"){
-            this.showModal();
-        }else{
-            let state = this.state;
-            state.display = display;
-            state.data.fillType = 'agent';
-            this.setState(state);
-        }
-    }
-
-    showModal() {
-        this.setState({
-          visible: true,
-        });
-    }
-
-    handleOk() {
-        let state = this.state;
-        state.display = 'none';
-        state.visible = false;
-        state.data.fillType = 'corporation';
-        this.setState(state);
-    }
-
-    handleCancel() {
-        this.setState({ visible: false });
     }
 
     onBusinessLicenseTypeChange(e) {
@@ -162,11 +126,8 @@ class CompanyValidate extends React.Component {
         // 根据营业执照类型类型选择验证机制
         const rulesBusiness = this.state.data.businessLicenseType == 'common' ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
-        //  根据填写人身份选择验证机制
-        const rulesFill = this.state.data.fillType == 'agent' ? formValidation.rulesAgent : {};
-
         // 根据不同类型选择验证机制
-        const rules = Object.assign({},formValidation.rulesBase,rulesBusiness,rulesFill);
+        const rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
 
         //  营业执照到期日选择了长期则设置为不必填
         rules.endTime.rules[0].required=!this.state.data.isLongEndTimeChange;
@@ -267,76 +228,6 @@ class CompanyValidate extends React.Component {
                         </FormItem>
                     </div>
 
-                    <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                        填写人信息
-                        <small className="viceText-FontColor"> (请务必与授权书的资料保持一致。)</small>
-                    </div>
-
-                    <FormItem
-                        label="您的姓名"
-                        {...formItemLayout}
-                        required
-                    >
-                        <Input {...getFieldProps('name',rules.name)} type="text"/>
-                    </FormItem>
-
-                    <FormItem
-                        label="常用手机号码"
-                        {...formItemLayout}
-                        extra="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
-                        required
-                    >
-                        <Input {...getFieldProps('cellPhone',rules.cellPhone)} type="text"/>
-                    </FormItem>
-
-                    <FormItem
-                        label="联系邮箱"
-                        {...formItemLayout}
-                    >
-                        <Input type="text" {...getFieldProps('email',rules.email)} />
-                    </FormItem>
-
-                    <FormItem
-                        {...formItemLayout}
-                        label=" 填写人的身份"
-                        required
-                    >
-                        <RadioGroup {...getFieldProps('fillType',{ initialValue: this.state.data.fillType })} onChange={ this.onFillTypeChange.bind(this) }>
-                            <Radio value="agent">我是委托代理人</Radio>
-                            <Radio value="corporation">我是法定代表人</Radio>
-                        </RadioGroup>
-
-                    </FormItem>
-
-                    <div style={{display:this.state.display}}>
-                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            法定代表人信息
-                            <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
-                        </div>
-
-                        <FormItem
-                            label="法定代表人姓名"
-                            {...formItemLayout}
-                            required
-                        >
-                            <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
-                        </FormItem>
-
-                        <FormItem
-                            label="常用手机号码"
-                            {...formItemLayout}
-                        >
-                            <Input {...getFieldProps('corporationCellPhone',rules.corporationCellPhone)} type="text" />
-                        </FormItem>
-
-                        <FormItem
-                            label="联系邮箱"
-                            {...formItemLayout}
-                        >
-                            <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
-                        </FormItem>
-                    </div>
-
                     {/*填写企业对公账户*/}
                     <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
                         填写企业对公账户
@@ -429,18 +320,6 @@ class CompanyValidate extends React.Component {
                             <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
                         </Col>
                     </Row>
-
-                    <Modal ref="modal"
-                      visible={this.state.visible}
-                      title="提示" onCancel={this.handleCancel.bind(this)}
-                      footer={[
-                        <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
-                          我知道了
-                        </Button>,
-                      ]}
-                    >
-                      <h4>您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。</h4>
-                    </Modal>
                 </Form>
 
             </Frame>
