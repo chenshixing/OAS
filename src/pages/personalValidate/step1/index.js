@@ -5,7 +5,6 @@
 // react 相关库
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 // antd 组件
 import { Form, Input, Button, Upload, Icon, Steps, Row, Col, Modal,message } from 'antd';
 const Step = Steps.Step;
@@ -15,6 +14,7 @@ const FormItem = Form.Item;
 import Frame from 'COM/form/frame';
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
+import {helper} from 'UTILS';
 
 
 // 页面组件（导出）
@@ -55,9 +55,13 @@ class PersonalValidate extends React.Component {
     handleOk(e) {
         e.preventDefault();
         this.setState({ loading: true });
+        console.log(this.props)
         setTimeout(() => {
             this.setState({ loading: false, visible: false });
-            window.location.href='/#/personalValidate/step2?_k=REPLACE';
+            // window.location.href='/#/personalValidate/step2?_k=REPLACE';
+            this.props.history.push({
+                pathname: '/personalValidate/step2'
+            })
         }, 3000);
     }
     handleCancel() {
@@ -105,9 +109,6 @@ class PersonalValidate extends React.Component {
                 }
             }
         };
-        //手机号码隐藏处理
-        const reg = new RegExp("(\\d{3})(\\d{5})(\\d{3})");
-        const phoneNumber = this.state.data.phoneNumber.replace(reg,"$1*****$3");
 
         return (
             <div>
@@ -141,7 +142,7 @@ class PersonalValidate extends React.Component {
                             help="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码"
                             required
                         >
-                            <p className="ant-form-text">{phoneNumber}</p> <br/>
+                            <p className="ant-form-text">{helper.hidenPhoneNumber(this.state.data.phoneNumber)}</p> <br/>
                         </FormItem>
 
                         <Row style={{ marginTop: 30 }}>

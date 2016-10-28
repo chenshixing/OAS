@@ -18,6 +18,7 @@ const Step = Steps.Step;
 
 // 页面组件
 import Frame from 'COM/form/frame';
+import {helper} from 'UTILS';
 
 
 
@@ -39,14 +40,18 @@ export default class PersonalValidate extends React.Component {
         this.setState({
           identityVisible: true,
         });
-        console.log(this);
+        console.log('showIdentityModal..');
     }
 
     closeIdentityModal() {
         this.setState({
           identityVisible: false,
         });
-        console.log(this);
+        console.log('closeIdentityModal..');
+    }
+
+    handleNextClick(){
+        
     }
 
     render() {
@@ -62,7 +67,7 @@ export default class PersonalValidate extends React.Component {
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p>
-                                姓名：{this.state.data.realName}，您的身份识别码已发送到手机133****1234。
+                                姓名：{this.state.data.realName}，您的身份识别码已发送到手机{helper.hidenPhoneNumber(this.state.data.phoneNumber)}。
                                 <Link to='/'>没有收到短信，重新发送</Link>
                             </p>
                             <p>
@@ -76,7 +81,7 @@ export default class PersonalValidate extends React.Component {
                         <div className="pic"><img src={codeimg}/></div>
                     </Row>
                     <Row className="text-align-center fn-mt-30">
-                        <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button type="primary">已完成认证</Button></p>
+                        <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button onClick={this.handleNextClick.bind(this)} type="primary">已完成认证</Button></p>
                     </Row>
                 </Frame>
                 <IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
