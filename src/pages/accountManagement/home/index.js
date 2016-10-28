@@ -7,7 +7,25 @@ import {Alert, Tag, Card,Row,Col,Icon} from 'antd';
 
 // 页面
 export default class Home extends React.Component {
+    constructor(props){
+        super(props)
+        this.state={
+            data:{}
+        }
+    }
+    componentDidMount(){
+        this.loadData();
+    }
+    loadData(){
+        fetch('/api/home/getLastLoginTime').then(res => res.json()).then(res => {
+            let loadData = res;
+            this.setState({
+                data:loadData
+            })
+        })
+    }
     render() {
+        console.log(this)
         return (
             <div style={{minHeight:"700px"}}>
                 <div className="fn-pa-20">
@@ -41,7 +59,7 @@ export default class Home extends React.Component {
                     <div className="alert alert-warning fn-mt-10">
                         企业账户管理
                         <span className="fn-plr-10">|</span>
-                        上次登录时间：2016-10-20 13:30
+                        上次登录时间：{this.state.data.data}
                     </div>
                 </div>
 
