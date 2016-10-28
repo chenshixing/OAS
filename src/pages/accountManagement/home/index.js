@@ -2,6 +2,10 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+//less
+import './style.less'
+
+
 // antd 组件
 import {
     Alert,
@@ -62,7 +66,7 @@ export default class Home extends React.Component {
                 minHeight: "700px"
             }}>
 
-                <Modal title="添加业务" visible={this.state.visible} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
+                <Modal title="添加业务" visible={this.state.visible} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} wrapClassName="vertical-center-modal">
 
                     <Row>
                         <Col span={4} offset={6}>
