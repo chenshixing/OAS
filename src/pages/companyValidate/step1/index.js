@@ -16,7 +16,7 @@ const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 
 //  表单验证配置
-import formValidation from './formValidation';
+import formValidation from '../components/formValidation';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -207,7 +207,7 @@ class CompanyValidate extends React.Component {
                     <Step title="企业安全验证" />
                     <Step title="提交结果" />
                 </Steps>
-                <Frame title="企业信息" small="（请务必和证件上的资料保持一致）" className="abc">
+                <Frame title="企业信息" small="（请务必和证件上的资料保持一致）">
                     {/*企业信息*/}
                     <Form horizontal className="fn-mt-30">
                         <FormItem

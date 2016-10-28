@@ -1,5 +1,5 @@
 /**
- * 修改基本信息（企业）
+ * 修改基本信息(企业)
  * limit
  */
 // react 相关库
@@ -9,38 +9,42 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 
 // antd 组件
-import { Table, Form, Input, Select, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, message } from 'antd';
+import { Table, Form, Input, Select, Button, Upload, Icon,  Radio, DatePicker, Checkbox, Row, Col, Modal, Cascader, message } from 'antd';
 const createForm = Form.create;
-const Step = Steps.Step;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-// 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+
+//  表单验证配置
+import formValidation from '../components/formValidation';
 // 页面组件
 import Frame from 'COM/form/frame';
 
 // 城市静态数据
-const provinceData = ['浙江', '江苏'];
-const cityData = {
-  浙江: ['杭州', '宁波', '温州'],
-  江苏: ['南京', '苏州', '镇江'],
-};
+const address = [{
+  value: 'zhejiang',
+  label: '浙江',
+  children: [{
+    value: 'hangzhou',
+    label: '杭州',
+  }],
+}];
 
 // 页面组件（导出）
-class EditBasic extends React.Component {
+class CompanyValidate extends React.Component {
 
     constructor(props){
         super(props);
         this.state={
             loading:false,
+            display : 'block',
+            visible : false,
             data:{
                 companyName:'钱途互联',
                 businessLicenseType:'common',
                 isLongEndTimeChange:false,
                 accountVerificationType:'bond',
+                fillType : 'agent',
             },
-            cities: cityData[provinceData[0]],
-            secondCity: cityData[provinceData[0]][0],
             dataSource : [{
               key: '1',
               name: '中金支付有限公司客户备付金',
@@ -68,51 +72,40 @@ class EditBasic extends React.Component {
         }
 
         this.showModal=this.showModal.bind(this);
-        this.handleOk=this.handleOk.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
     }
 
-    handleProvinceChange(value) {
-        this.setState({
-          cities: cityData[value],
-          secondCity: cityData[value][0],
-        });
-    }
-
-    onSecondCityChange(value) {
-        this.setState({
-            secondCity: value,
-        });
+    onFillTypeChange(e) {
+        console.log('radio checked', e.target.value);
+        let display = e.target.value == "agent" ? "block" : "none";
+        if(this.state.display == display){ return false;}
+        if(e.target.value == "corporation"){
+            this.showModal();
+        }else{
+            let state = this.state;
+            state.display = display;
+            state.data.fillType = 'agent';
+            this.setState(state);
+        }
     }
 
     showModal() {
-        //validateFieldsAndScroll:与 validateFields 相似，但校验完后，如果校验不通过的菜单域不在可见范围内，则自动滚动进可见范围
-        this.props.form.validateFieldsAndScroll((errors, values) => {
-            if(!errors){
-                //let values=this.props.form.getFieldsValue();
-                if(!values.isLongEndTime){
-                    values.endTime=values.endTime.toLocaleDateString(); // 或其它格式
-                }
-                let data=this.state.data;
-                Object.assign(data,values);
-                this.setState({
-                    visible: true,
-                    data:data
-                });
-                console.log('Submit!!!');
-                console.log('state:',this.state.data);
-            }
+        this.setState({
+          visible: true,
         });
-
     }
+
     handleOk() {
-        this.setState({ loading: true });
-        setTimeout(() => {
-            this.setState({ loading: false });
-            window.location.href='/#/companyValidate/step2-1?_k=REPLACE';
-        }, 3000);
+        let state = this.state;
+        state.display = 'none';
+        state.visible = false;
+        state.data.fillType = 'corporation';
+        this.setState(state);
     }
 
+    handleCancel() {
+        this.setState({ visible: false });
+    }
 
     onBusinessLicenseTypeChange(e) {
         console.log('radio checked', e.target.value);
@@ -150,110 +143,32 @@ class EditBasic extends React.Component {
         return e && e.fileList;
     }
 
-    render() {
-        let rules={};
-        // 表单校验-common
-        const rulesCommon = {
-            businessLicenseRegistrationNumber: {
-                rules: [
-                    {required: true, message: '营业执照注册号不能为空'},
-                ]
-            },
-            endTime:{
-                rules:[
-                    {required: true, type: 'object', message: '营业执照到期日不能为空'},
-                ]
-            },
-            organizationCode:{
-                rules:[
-                    {required: true, message: '组织机构代码证不能为空'},
-                ]
-            },
-            businessLicense:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传营业执照'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            organizationCodeLicense:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传组织机构代码证'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            taxRegistryLicense:{
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            bankAccountLicense:{
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            enterpriseCreditAuthorization:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传企业征信查询授权书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            representativeCertificate:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传企业法定代表人身份证明书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            incorporationArticles:{
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            }
-        };
-        // 表单校验-multiple
-        const rulesMultiple = {
-            unifiedSocialCreditCode: {
-                rules: [
-                    {required: true, message: '统一社会信用代码不能为空'},
-                ]
-            },
-            endTime:{
-                rules:[
-                    {required: true, type: 'object', message: '营业执照到期日不能为空'},
-                ]
-            },
-            businessLicense:{
-                rules:[
-                    {required: true,type: 'array', message: '请上传营业执照'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile,
-            },
-            bankAccountLicense:{
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            enterpriseCreditAuthorization:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传企业征信查询授权书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            representativeCertificate:{
-                rules:[
-                    {required: true, type: 'array', message: '请上传企业法定代表人身份证明书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            incorporationArticles:{
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            }
-        };
+    next(){
+        // 表单校验
+        this.props.form.validateFieldsAndScroll((errors, values) => {
+          if (errors) {
+            console.log(errors);
+            return false;
+          }
+          console.log("passed");
+          console.log(values);
+          //    验证通过TODO
+        });
+    }
 
-        this.state.data.businessLicenseType =='common' ? rules=rulesCommon : rules=rulesMultiple;
+    render() {
+        // 表单校验
+
+        // 根据营业执照类型类型选择验证机制
+        const rulesBusiness = this.state.data.businessLicenseType == 'common' ? formValidation.rulesCommon : formValidation.rulesMultiple;
+
+        //  根据填写人身份选择验证机制
+        const rulesFill = this.state.data.fillType == 'agent' ? formValidation.rulesAgent : {};
+
+        // 根据不同类型选择验证机制
+        const rules = Object.assign({},formValidation.rulesBase,rulesBusiness,rulesFill);
+
+        //  营业执照到期日选择了长期则设置为不必填
         rules.endTime.rules[0].required=!this.state.data.isLongEndTimeChange;
 
         const upLoadProps = {
@@ -283,226 +198,255 @@ class EditBasic extends React.Component {
         const displayTypeCommon=this.state.data.businessLicenseType =='common' ? 'block' : 'none';
         const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
 
-        const provinceOptions = provinceData.map(province => <Option key={province}>{province}</Option>);
-        const cityOptions = this.state.cities.map(city => <Option key={city}>{city}</Option>);
         return (
-                <Frame title="企业信息" small="（请务必和证件上的资料保持一致）" className="abc">
-                    {/*企业信息*/}
-                    <Form horizontal className="fn-mt-30">
-                        <FormItem
-                            label="企业名称"
-                            {...formItemLayout}
-                            required
-                        >
-                            <p className="ant-form-text">{this.state.data.companyName}</p>
-                        </FormItem>
+            <Frame title="企业信息" small="（请务必和证件上的资料保持一致）">
+                {/*企业信息*/}
+                <Form horizontal className="fn-mt-30">
+                    <FormItem
+                        label="企业名称"
+                        {...formItemLayout}
+                        required
+                    >
+                        <p className="ant-form-text">{this.state.data.companyName}</p>
+                    </FormItem>
 
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 营业执照类型"
-                            required
-                        >
-                            <RadioGroup {...getFieldProps('businessLicenseType',{ initialValue: this.state.data.businessLicenseType })} onChange={this.onBusinessLicenseTypeChange.bind(this)}>
-                                <Radio value="common">普通营业执照</Radio>
-                                <Radio value="multiple">多证合一营业执照</Radio>
-                            </RadioGroup>
+                    <FormItem
+                        {...formItemLayout}
+                        label=" 营业执照类型"
+                        required
+                    >
+                        <RadioGroup {...getFieldProps('businessLicenseType',{ initialValue: this.state.data.businessLicenseType })} onChange={this.onBusinessLicenseTypeChange.bind(this)}>
+                            <Radio value="common">普通营业执照</Radio>
+                            <Radio value="multiple">多证合一营业执照</Radio>
+                        </RadioGroup>
 
-                        </FormItem>
+                    </FormItem>
 
-                        <div style={{display:displayTypeCommon}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="营业执照注册号"
-                                required
-                            >
-                                <Input {...getFieldProps('businessLicenseRegistrationNumber',rules.businessLicenseRegistrationNumber)} type="text"/>
-                            </FormItem>
-                        </div>
-
-                        <div style={{display:displayTypeMultiple}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="统一社会信用代码"
-                                required
-                            >
-                                <Input {...getFieldProps('unifiedSocialCreditCode',rules.unifiedSocialCreditCode)} type="text"/>
-                            </FormItem>
-                        </div>
-
+                    <div style={{display:displayTypeCommon}}>
                         <FormItem
                             {...formItemLayout}
-                            label=" 营业执照到期日"
+                            label="营业执照注册号"
                             required
                         >
-                            <Col span="8">
-                                <FormItem>
-                                    <DatePicker {...getFieldProps('endTime',rules.endTime)} disabled={this.state.data.isLongEndTimeChange} />
-                                </FormItem>
-                            </Col>
-                            <Col span="5">
-                                <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})}>长期</Checkbox>
-                            </Col>
+                            <Input {...getFieldProps('businessLicenseRegistrationNumber',rules.businessLicenseRegistrationNumber)} type="text"/>
                         </FormItem>
+                    </div>
 
-                        <div style={{display:displayTypeCommon}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="组织机构代码"
-                                required
-                            >
-                                <Input {...getFieldProps('organizationCode',rules.organizationCode)} type="text"/>
+                    <div style={{display:displayTypeMultiple}}>
+                        <FormItem
+                            {...formItemLayout}
+                            label="统一社会信用代码"
+                            required
+                        >
+                            <Input {...getFieldProps('unifiedSocialCreditCode',rules.unifiedSocialCreditCode)} type="text"/>
+                        </FormItem>
+                    </div>
+
+                    <FormItem
+                        {...formItemLayout}
+                        label=" 营业执照到期日"
+                        required
+                    >
+                        <Col span="8">
+                            <FormItem>
+                                <DatePicker {...getFieldProps('endTime',rules.endTime)} disabled={this.state.data.isLongEndTimeChange} />
                             </FormItem>
-                        </div>
+                        </Col>
+                        <Col span="5">
+                            <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})}>长期</Checkbox>
+                        </Col>
+                    </FormItem>
 
+                    <div style={{display:displayTypeCommon}}>
+                        <FormItem
+                            {...formItemLayout}
+                            label="组织机构代码"
+                            required
+                        >
+                            <Input {...getFieldProps('organizationCode',rules.organizationCode)} type="text"/>
+                        </FormItem>
+                    </div>
+
+                    <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                        填写人信息
+                        <small className="viceText-FontColor"> (请务必与授权书的资料保持一致。)</small>
+                    </div>
+
+                    <FormItem
+                        label="您的姓名"
+                        {...formItemLayout}
+                        required
+                    >
+                        <Input {...getFieldProps('name',rules.name)} type="text"/>
+                    </FormItem>
+
+                    <FormItem
+                        label="常用手机号码"
+                        {...formItemLayout}
+                        extra="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
+                        required
+                    >
+                        <Input {...getFieldProps('cellPhone',rules.cellPhone)} type="text"/>
+                    </FormItem>
+
+                    <FormItem
+                        label="联系邮箱"
+                        {...formItemLayout}
+                    >
+                        <Input type="text" {...getFieldProps('email',rules.email)} />
+                    </FormItem>
+
+                    <FormItem
+                        {...formItemLayout}
+                        label=" 填写人的身份"
+                        required
+                    >
+                        <RadioGroup {...getFieldProps('fillType',{ initialValue: this.state.data.fillType })} onChange={ this.onFillTypeChange.bind(this) }>
+                            <Radio value="agent">我是委托代理人</Radio>
+                            <Radio value="corporation">我是法定代表人</Radio>
+                        </RadioGroup>
+
+                    </FormItem>
+
+                    <div style={{display:this.state.display}}>
                         <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            填写人信息
-                            <small className="viceText-FontColor"> (请务必与授权书的资料保持一致。)</small>
+                            法定代表人信息
+                            <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
                         </div>
 
                         <FormItem
-                            label="您的姓名"
+                            label="法定代表人姓名"
                             {...formItemLayout}
                             required
                         >
-                            <Input type="text"/>
+                            <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
                         </FormItem>
 
                         <FormItem
                             label="常用手机号码"
                             {...formItemLayout}
-                            help="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
-                            required
                         >
-                            <Input type="text"/>
+                            <Input {...getFieldProps('corporationCellPhone',rules.corporationCellPhone)} type="text" />
                         </FormItem>
 
                         <FormItem
                             label="联系邮箱"
                             {...formItemLayout}
                         >
-                            <Input type="text"/>
+                            <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
                         </FormItem>
+                    </div>
 
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 填写人的身份"
-                            required
-                        >
-                            <RadioGroup>
-                                <Radio value="agent">我是委托代理人</Radio>
-                                <Radio value="corporation">我是法定代表人</Radio>
-                            </RadioGroup>
+                    {/*填写企业对公账户*/}
+                    <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                        填写企业对公账户
+                    </div>
 
-                        </FormItem>
+                    <FormItem
+                      {...formItemLayout}
+                      label="账户名称"
+                    >
+                      <p className="ant-form-text" id="userName" name="userName">广东亿达有限公司</p>
+                    </FormItem>
 
-                        {/*填写企业对公账户*/}
-                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            填写企业对公账户
-                        </div>
-
-                        <FormItem
-                          {...formItemLayout}
-                          label="账户名称"
-                        >
-                          <p className="ant-form-text" id="userName" name="userName">广东亿达有限公司</p>
-                        </FormItem>
-
-                        <FormItem
-                            label="银行账号"
-                            {...formItemLayout}
-                            required
-                        >
-                            <Input type="text" placeholder="请输入银行账号"/>
-                        </FormItem>
-
-                        <FormItem
-                          label="所在省"
-                          {...formItemLayout}
+                    <FormItem
+                        label="银行账号"
+                        {...formItemLayout}
                         required
-                        >
-                          <div>
-                            <Select defaultValue={provinceData[0]} style={{ width: 90 }} onChange={this.handleProvinceChange.bind(this)}>
-                              {provinceOptions}
-                            </Select>
-                            <Select value={this.state.secondCity} className="fn-ml-10" style={{ width: 90 }} onChange={this.onSecondCityChange.bind(this)}>
-                              {cityOptions}
-                            </Select>
-                          </div>
-                        </FormItem>
+                    >
+                        <Input type="text" {...getFieldProps('bankAccount',rules.bankAccount)} placeholder="请输入银行账号"/>
+                    </FormItem>
 
-                        <FormItem
-                          label="开户行"
-                          {...formItemLayout}
+                    <FormItem
+                      label="开户行"
+                      {...formItemLayout}
+                    required
+                    >
+                      <Select {...getFieldProps('bank',rules.bank)} size="large" defaultValue="">
+                        <Option value="0">中国工商银行</Option>
+                        <Option value="1">中国农业银行</Option>
+                        <Option value="2">中国银行</Option>
+                        <Option value="3">中国建设银行</Option>
+                        <Option value="4">交通银行</Option>
+                      </Select>
+                    </FormItem>
+
+                    <FormItem
+                      {...formItemLayout}
+                      label="所在省市"
+                    >
+                      <Cascader {...getFieldProps('address',rules.address)} options={address} placeholder="请选择" />
+                    </FormItem>
+
+                    <FormItem
+                      label="分支行"
+                      {...formItemLayout}
+                      required
+                    >
+                      <Select {...getFieldProps('branch',rules.branch)} size="large" defaultValue="">
+                        <Option value="0">招商银行广州分行天河支行</Option>
+                        <Option value="1">招商银行广州分行人民中路支行</Option>
+                        <Option value="2">招商银行广州分行五羊支行</Option>
+                      </Select>
+                    </FormItem>
+
+                    <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                        对公账户验证
+                    </div>
+
+                    <FormItem
+                        {...formItemLayout}
+                        label="请选择验证方式"
                         required
-                        >
-                          <Select size="large" defaultValue="">
-                            <Option value="0">中国工商银行</Option>
-                            <Option value="1">中国农业银行</Option>
-                            <Option value="2">中国银行</Option>
-                            <Option value="3">中国建设银行</Option>
-                            <Option value="4">交通银行</Option>
-                          </Select>
-                        </FormItem>
+                    >
+                        <RadioGroup {...getFieldProps('accountVerificationType',{ initialValue: this.state.data.accountVerificationType })} onChange={this.onAccountVerificationTypeChange.bind(this)}>
+                            <Radio value="bond">线下支付小额验证金核验</Radio>
+                            <Radio value="information">线下提交账户资料核验</Radio>
+                        </RadioGroup>
 
-                        <FormItem
-                          label="分支行"
-                          {...formItemLayout}
-                        required
-                        >
-                          <Select size="large" defaultValue="">
-                            <Option value="0">招商银行广州分行天河支行</Option>
-                            <Option value="1">招商银行广州分行人民中路支行</Option>
-                            <Option value="2">招商银行广州分行五羊支行</Option>
-                          </Select>
-                        </FormItem>
+                    </FormItem>
 
-                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                            对公账户验证
-                        </div>
+                    <Row>
+                        <Col offset={1} span={22} className="fn-pa-20" style={{border:'1px solid #e8e8e8'}}>
+                            <Row style={{display:this.state.data.accountVerificationType == 'bond' ? 'block' : 'none'}}>
+                                <Col offset={1} span={22}>
+                                    <p>请在<span className="warning-FontColor">48小时</span>以内，通过<span className="warning-FontColor">网上银行</span>或<span className="warning-FontColor">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="warning-FontColor">0.10元</span>验证金 。</p>
+                                    <Table className="fn-mt-15" dataSource={this.state.dataSource} columns={this.state.columns} pagination={false}/>
+                                    <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
+                                    <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
+                                </Col>
+                            </Row>
+                            <Row style={{display:this.state.data.accountVerificationType == 'information' ? 'block' : 'none'}}>
+                                <Col offset={1} span={22}>
+                                    <p>需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</p>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
 
-                        <FormItem
-                            {...formItemLayout}
-                            label="请选择验证方式"
-                            required
-                        >
-                            <RadioGroup {...getFieldProps('accountVerificationType',{ initialValue: this.state.data.accountVerificationType })} onChange={this.onAccountVerificationTypeChange.bind(this)}>
-                                <Radio value="bond">线下支付小额验证金核验</Radio>
-                                <Radio value="information">线下提交账户资料核验</Radio>
-                            </RadioGroup>
+                    <Row className="fn-mt-30">
+                        <Col span="12" offset="6" className="text-align-center">
+                            <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
+                        </Col>
+                    </Row>
 
-                        </FormItem>
+                    <Modal ref="modal"
+                      visible={this.state.visible}
+                      title="提示" onCancel={this.handleCancel.bind(this)}
+                      footer={[
+                        <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
+                          我知道了
+                        </Button>,
+                      ]}
+                    >
+                      <h4>您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。</h4>
+                    </Modal>
+                </Form>
 
-                        <Row>
-                            <Col offset={1} span={22} className="fn-pa-20" style={{border:'1px solid #e8e8e8'}}>
-                                <Row style={{display:this.state.data.accountVerificationType == 'bond' ? 'block' : 'none'}}>
-                                    <Col offset={1} span={22}>
-                                        <p>请在48小时以内，通过网上银行或银行柜台，使用您的对公账户向下面的指定账户支付 0.10元 验证金 。</p>
-                                        <Table className="fn-mt-15" dataSource={this.state.dataSource} columns={this.state.columns} pagination={false}/>
-                                        <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
-                                        <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
-                                    </Col>
-                                </Row>
-                                <Row style={{display:this.state.data.accountVerificationType == 'information' ? 'block' : 'none'}}>
-                                    <Col offset={1} span={22}>
-                                        <p>需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</p>
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
+            </Frame>
 
-                        <Row className="fn-mt-30">
-                            <Col span="12" offset="6" className="text-align-center">
-                                <Button type="primary">提交</Button>
-                                <Link to="/" className="fn-ml-20">暂不修改</Link>
-                            </Col>
-                        </Row>
-
-
-                    </Form>
-
-                </Frame>
         );
     }
 }
 
-export default createForm()(EditBasic);
+export default createForm()(CompanyValidate);
