@@ -59,7 +59,7 @@ export default (url, data, showLoading, pending) => {
                     showLoading && State.hideLoading();
 
                     // 业务code特定处理
-                    if(res.isSuccess) {
+                    if( res.code == 200 ) {
                         resolve(res);
                     } else {
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
@@ -67,8 +67,9 @@ export default (url, data, showLoading, pending) => {
                         reject(res);
 
                         // 代码提示错误
-                        if(res.code === 998)
-                            throw new Error(`错误代码：${res.ResultCode}, 原因：${res.Message}`);
+                        if( res.code == 500 ){
+                            throw new Error(`错误代码：${res.code}, 原因：${res.message}`);
+                        }
                     }
                 })
                 .catch(err=> {
