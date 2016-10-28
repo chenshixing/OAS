@@ -13,8 +13,8 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
-// 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+// 自定义验证 rule 及 fetch 方法
+import { ruleType, fetch } from 'UTILS';
 
 // 页面
 class Reg extends React.Component {
@@ -48,7 +48,14 @@ class Reg extends React.Component {
     }
   }
   getVerifyCode() {
-    //获取验证码
+    // 获取验证码
+    fetch('/common/smsAutoCode', {
+      body: {
+        "mobile": 13888888888
+      }
+    }).then(res => {
+      alert(res);
+    });
   }
   render() {
     const { getFieldProps } = this.props.form;
