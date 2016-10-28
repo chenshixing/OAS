@@ -133,10 +133,10 @@ export default class Company extends React.Component {
                                         <h3>银行账户</h3>
                                     </td>
                                     <td colSpan={4}>
-                                        默认账户：招商银行 | 6220********1234。
+                                        默认账户：招商银行 | 622012346220123462201234。
                                     </td>
                                     <td className="text-align-right">
-                                        
+
                                     </td>
                                 </tr>
                             </table>

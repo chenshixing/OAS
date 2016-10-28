@@ -20,7 +20,7 @@ class ResetPassword extends React.Component {
             if (!!errors) {
                 return;
             }
-            window.location.href="/#/accountManagement/resetPassword/Steps2/?_k=REPLACE"
+            window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
         });
     }
 
