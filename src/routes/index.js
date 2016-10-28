@@ -240,10 +240,18 @@ const routes = {
           },
         // 账户管理修改密码
         {
-          path: 'accountManagement/resetPassword',
+          path: 'accountManagement/resetPassword/Steps1',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetPassword').default);
+              cb(null, require('PAGES/accountManagement/resetPassword/Steps1').default);
+            });
+          }
+        },
+        {
+          path: 'accountManagement/resetPassword/Steps2',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/accountManagement/resetPassword/Steps2').default);
             });
           }
         },
