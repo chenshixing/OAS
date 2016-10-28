@@ -284,6 +284,7 @@ const routes = {
             });
           }
         },
+        /*
         {
           path: 'resetPassword/step2-1',
           getComponent(nextState, cb) {
@@ -300,6 +301,7 @@ const routes = {
             });
           }
         },
+        */
         /***************重置登录密码 end ***************/
         // 404
         {
