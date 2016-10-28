@@ -47,7 +47,7 @@ const routes = {
               }
           },
         /***************核身页面 ***************/
-        // 审核中提示页(企业)
+        // 审核中提示页(个人)
         {
             path: 'personalValidate/tips/check',
             getComponent(nextState, cb) {
@@ -56,7 +56,7 @@ const routes = {
                 })
             }
         },
-        // 核身信息补充提示页(企业)
+        // 核身信息补充提示页(个人)
         {
             path: 'personalValidate/tips/supplement',
             getComponent(nextState, cb) {
@@ -65,7 +65,7 @@ const routes = {
                 })
             }
         },
-        // 核审核不通过提示页(企业)
+        // 核审核不通过提示页(个人)
         {
             path: 'personalValidate/tips/disapproval',
             getComponent(nextState, cb) {

@@ -33,11 +33,14 @@ class CompanyValidate extends React.Component {
         super(props);
         this.state={
             loading:false,
+            display : 'block',
+            visible : false,
             data:{
                 companyName:'钱途互联',
                 businessLicenseType:'common',
                 isLongEndTimeChange:false,
                 accountVerificationType:'bond',
+                fillType : 'agent',
             },
             cities: cityData[provinceData[0]],
             secondCity: cityData[provinceData[0]][0],
@@ -68,8 +71,39 @@ class CompanyValidate extends React.Component {
         }
 
         this.showModal=this.showModal.bind(this);
-        this.handleOk=this.handleOk.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
+    }
+
+    onFillTypeChange(e) {
+        console.log('radio checked', e.target.value);
+        let display = e.target.value == "agent" ? "block" : "none";
+        if(this.state.display == display){ return false;}
+        if(e.target.value == "corporation"){
+            this.showModal();
+        }else{
+            let state = this.state;
+            state.display = display;
+            state.data.fillType = 'agent';
+            this.setState(state);
+        }
+    }
+
+    showModal() {
+        this.setState({
+          visible: true,
+        });
+    }
+
+    handleOk() {
+        let state = this.state;
+        state.display = 'none';
+        state.visible = false;
+        state.data.fillType = 'corporation';
+        this.setState(state);
+    }
+
+    handleCancel() {
+        this.setState({ visible: false });
     }
 
     handleProvinceChange(value) {
@@ -84,35 +118,6 @@ class CompanyValidate extends React.Component {
             secondCity: value,
         });
     }
-
-    showModal() {
-        //validateFieldsAndScroll:与 validateFields 相似，但校验完后，如果校验不通过的菜单域不在可见范围内，则自动滚动进可见范围
-        this.props.form.validateFieldsAndScroll((errors, values) => {
-            if(!errors){
-                //let values=this.props.form.getFieldsValue();
-                if(!values.isLongEndTime){
-                    values.endTime=values.endTime.toLocaleDateString(); // 或其它格式
-                }
-                let data=this.state.data;
-                Object.assign(data,values);
-                this.setState({
-                    visible: true,
-                    data:data
-                });
-                console.log('Submit!!!');
-                console.log('state:',this.state.data);
-            }
-        });
-
-    }
-    handleOk() {
-        this.setState({ loading: true });
-        setTimeout(() => {
-            this.setState({ loading: false });
-            window.location.href='/#/companyValidate/step2-1?_k=REPLACE';
-        }, 3000);
-    }
-
 
     onBusinessLicenseTypeChange(e) {
         console.log('radio checked', e.target.value);
@@ -395,12 +400,41 @@ class CompanyValidate extends React.Component {
                             label=" 填写人的身份"
                             required
                         >
-                            <RadioGroup>
+                            <RadioGroup {...getFieldProps('fillType',{ initialValue: this.state.data.fillType })} onChange={ this.onFillTypeChange.bind(this) }>
                                 <Radio value="agent">我是委托代理人</Radio>
                                 <Radio value="corporation">我是法定代表人</Radio>
                             </RadioGroup>
 
                         </FormItem>
+
+                        <div style={{display:this.state.display}}>
+                            <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                                法定代表人信息
+                                <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
+                            </div>
+
+                            <FormItem
+                                label="法定代表人姓名"
+                                {...formItemLayout}
+                                required
+                            >
+                                <Input type="text" />
+                            </FormItem>
+
+                            <FormItem
+                                label="常用手机号码"
+                                {...formItemLayout}
+                            >
+                                <Input type="text" />
+                            </FormItem>
+
+                            <FormItem
+                                label="联系邮箱"
+                                {...formItemLayout}
+                            >
+                                <Input type="text" />
+                            </FormItem>
+                        </div>
 
                         {/*填写企业对公账户*/}
                         <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
@@ -503,7 +537,17 @@ class CompanyValidate extends React.Component {
                             </Col>
                         </Row>
 
-
+                        <Modal ref="modal"
+                          visible={this.state.visible}
+                          title="提示" onCancel={this.handleCancel.bind(this)}
+                          footer={[
+                            <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
+                              我知道了
+                            </Button>,
+                          ]}
+                        >
+                          <h4>您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。</h4>
+                        </Modal>
                     </Form>
 
                 </Frame>
