@@ -51,10 +51,10 @@ export default class Personal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr className="align-top">
-                                    <td rowSpan={3}  className="text-align-center fs-20">
+                                    <td rowSpan={2}  className="text-align-center fs-20">
                                         <Icon type="cross" />
                                     </td>
-                                    <td rowSpan={3}>
+                                    <td rowSpan={2}>
                                         <h3 className="fn-pt-10">实名认证</h3>
                                     </td>
                                     <td className="noborder" colSpan={5}>
@@ -62,16 +62,7 @@ export default class Personal extends React.Component {
                                     </td>
                                 </tr>
                                 <tr className="noborder align-top">
-                                    <td className="text-align-right">经办人：</td>
-                                    <td className="heading-FontColor">**敏</td>
-                                    <td className="error-FontColor1">未认证</td>
-                                    <td colSpan={2}>
-                                        <a href="javascript:;" className="link-standard">
-                                            重新发送验证短信</a>
-                                    </td>
-                                </tr>
-                                <tr className="align-top">
-                                    <td className="text-align-right">法人代表人</td>
+                                    <td className="text-align-right">姓名：</td>
                                     <td className="heading-FontColor">**敏</td>
                                     <td className="error-FontColor1">未认证</td>
                                     <td colSpan={2}>
@@ -146,13 +137,13 @@ export default class Personal extends React.Component {
                                         <Icon type="check" />
                                     </td>
                                     <td>
-                                        <h3>银行账户</h3>
+                                        <h3>对公账户</h3>
                                     </td>
                                     <td colSpan={4}>
-                                        已添加 3 个银行账户。默认账户：招商银行 | 6220********1234。
+                                        默认账户：招商银行 | 6220********1234。
                                     </td>
                                     <td className="text-align-right">
-                                        <Button type="primary">管理</Button>
+
                                     </td>
                                 </tr>
                             </table>

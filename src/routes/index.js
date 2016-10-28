@@ -213,6 +213,14 @@ const routes = {
         /*************** 账户管理 ***************/
         // 账户管理首页
         {
+          path: 'accountManagement',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/accountManagement/home').default);
+            });
+          }
+        },
+        {
           path: 'accountManagement/home',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
@@ -220,24 +228,15 @@ const routes = {
             });
           }
         },
-        // 账户管理基本信息（个人）
+        // 账户管理基本信息
         {
-          path: 'accountManagement/basicInformation/personal',
+          path: 'accountManagement/basicInformation',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/basicInformation/personal').default);
+              cb(null, require('PAGES/accountManagement/basicInformation').default);
             });
           }
         },
-          // 账户管理基本信息（公司）
-          {
-              path: 'accountManagement/basicInformation/company',
-              getComponent(nextState, cb) {
-                  require.ensure([], (require) => {
-                      cb(null, require('PAGES/accountManagement/basicInformation/company').default);
-                  });
-              }
-          },
         // 账户管理修改密码
         {
           path: 'accountManagement/resetPassword/Steps1',
