@@ -45,7 +45,7 @@ class Steps2 extends React.Component {
                 console.log('Errors in form!!!');
                 return;
             }
-            window.location.href="/#/accountManagement/resetTradingPassword/Steps3?_k=aam5lv"
+            window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
             console.log('Submit!!!');
             console.log(values);
         });

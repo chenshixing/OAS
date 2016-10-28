@@ -109,10 +109,10 @@ export default class Home extends React.Component {
                         <Link to="/accountManagement/basicInformation">账户管理基本信息</Link>
                     </p>
                     <p>
-                        <Link to="/accountManagement/resetPassword/Steps1">账户管理修改密码</Link>
+                        <Link to="/accountManagement/resetPassword/step1">账户管理修改密码</Link>
                     </p>
                     <p>
-                        <Link to="/accountManagement/resetTradingPassword/Steps1">账户管理修改交易密码</Link>
+                        <Link to="/accountManagement/resetTradingPassword/step1">账户管理修改交易密码</Link>
                     </p>
                 </div>
 

@@ -67,7 +67,7 @@ export default (url, data, showLoading, pending) => {
                         reject(res);
 
                         // 代码提示错误
-                        if(res.ResultCode === 998)
+                        if(res.code === 998)
                             throw new Error(`错误代码：${res.ResultCode}, 原因：${res.Message}`);
                     }
                 })

@@ -239,45 +239,45 @@ const routes = {
         },
         // 账户管理修改密码
         {
-          path: 'accountManagement/resetPassword/Steps1',
+          path: 'accountManagement/resetPassword/step1',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetPassword/Steps1').default);
+              cb(null, require('PAGES/accountManagement/resetPassword/step1').default);
             });
           }
         },
         {
-          path: 'accountManagement/resetPassword/Steps2',
+          path: 'accountManagement/resetPassword/step2',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetPassword/Steps2').default);
+              cb(null, require('PAGES/accountManagement/resetPassword/step2').default);
             });
           }
         },
         // 账户管理修改交易密码 步骤1
         {
-          path: 'accountManagement/resetTradingPassword/Steps1',
+          path: 'accountManagement/resetTradingPassword/step1',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps1').default);
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/step1').default);
             });
           }
         },
         // 账户管理修改交易密码 步骤2
         {
-          path: 'accountManagement/resetTradingPassword/Steps2',
+          path: 'accountManagement/resetTradingPassword/step2',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps2').default);
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/step2').default);
             });
           }
         },
         // 账户管理修改交易密码 步骤3
         {
-          path: 'accountManagement/resetTradingPassword/Steps3',
+          path: 'accountManagement/resetTradingPassword/step3',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/accountManagement/resetTradingPassword/Steps3').default);
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/step3').default);
             });
           }
         },
