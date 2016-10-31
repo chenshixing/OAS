@@ -17,32 +17,62 @@ class DocumentUpload extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            fileList : []
+        }
+    }
+
+    handleChange(info) {
+        let fileList = info.fileList;
+
+        // 1. 上传列表数量的限制
+        //    只显示最近上传的一个，旧的会被新的顶掉
+        fileList = fileList.slice(-2);
+
+        // 2. 读取远程路径并显示链接
+        fileList = fileList.map((file) => {
+          if (file.response) {
+            // 组件会将 file.url 作为链接进行展示
+            file.url = file.response.url;
+          }
+          return file;
+        });
+
+        // 3. 按照服务器返回信息筛选成功上传的文件
+        fileList = fileList.filter((file) => {
+          if (file.response) {
+            return file.response.status === 'success';
+          }
+          return true;
+        });
+
+        this.setState({ fileList });
     }
 
     render() {
     	let rules={
-    		businessLicense:{
+    		Registration:{
                 rules:[
                     {required: true, type: 'array', message: '请上传营业执照'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            organizationCodeLicense:{
+            OrgInsCode:{
                 rules:[
                     {required: true, type: 'array', message: '请上传组织机构代码证'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            representativeCertificate:{
+            IdentityProof:{
                 rules:[
                     {required: true, type: 'array', message: '请上传企业法定代表人身份证明书'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            promiseCertificate:{
+            DeletegatePromiseLetter:{
                 rules:[
                     {required: true, type: 'array', message: '请上传承诺函及授权委托书'},
                 ],
@@ -58,20 +88,14 @@ class DocumentUpload extends Component {
 
         const upLoadProps = {
             name: 'file',
-            action: '/api/upload.do',
+            action: '/api/common/fileupload',
             headers: {
                 authorization: 'authorization-text',
             },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            }
+            data: {
+                "userId": "123"
+            },
+            onChange: this.handleChange.bind(this),
         };
 
         const { getFieldProps } = this.props.form;
@@ -85,7 +109,7 @@ class DocumentUpload extends Component {
 	                    label="营业执照"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} {...getFieldProps('businessLicense',rules.businessLicense)} >
+	                    <Upload {...upLoadProps} fileList={this.state.fileList} {...getFieldProps('Registration',rules.Registration)} >
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -97,7 +121,7 @@ class DocumentUpload extends Component {
 	                    label="组织机构代码证"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} {...getFieldProps('organizationCodeLicense',rules.businessLicense)} >
+	                    <Upload {...upLoadProps} {...getFieldProps('OrgInsCode',rules.OrgInsCode)} >
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -124,7 +148,7 @@ class DocumentUpload extends Component {
                         label=" 企业法定代表人身份证明书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('representativeCertificate',rules.representativeCertificate)}>
+                        <Upload {...upLoadProps} {...getFieldProps('IdentityProof',rules.IdentityProof)}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -146,7 +170,7 @@ class DocumentUpload extends Component {
                         label="承诺函及授权委托书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('promiseCertificate',rules.representativeCertificate)}>
+                        <Upload {...upLoadProps} {...getFieldProps('DeletegatePromiseLetter',rules.DeletegatePromiseLetter)}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
