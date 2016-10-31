@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { Link } from 'react-router';
 // antd 组件
-import { Form, Button, Upload, Row, Col, Icon} from 'antd';
+import { Form, Button, Upload, Row, Col, Icon, message} from 'antd';
 
 // 页面组件
 import Frame from 'COM/form/frame';
@@ -23,6 +23,7 @@ class DocumentUpload extends Component {
     }
 
     handleChange(info) {
+        console.log(info)
         let fileList = info.fileList;
 
         // 1. 上传列表数量的限制
@@ -49,32 +50,36 @@ class DocumentUpload extends Component {
         this.setState({ fileList });
     }
 
+    submit(){
+        console.log(this.props.form.getFieldsValue());
+    }
+
     render() {
     	let rules={
     		Registration:{
                 rules:[
-                    {required: true, type: 'array', message: '请上传营业执照'},
+                    {required: true, message: '请上传营业执照'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
             OrgInsCode:{
                 rules:[
-                    {required: true, type: 'array', message: '请上传组织机构代码证'},
+                    {required: true, message: '请上传组织机构代码证'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
             IdentityProof:{
                 rules:[
-                    {required: true, type: 'array', message: '请上传企业法定代表人身份证明书'},
+                    {required: true, message: '请上传企业法定代表人身份证明书'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
             DeletegatePromiseLetter:{
                 rules:[
-                    {required: true, type: 'array', message: '请上传承诺函及授权委托书'},
+                    {required: true, message: '请上传承诺函及授权委托书'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
@@ -95,7 +100,17 @@ class DocumentUpload extends Component {
             data: {
                 "userId": "123"
             },
-            onChange: this.handleChange.bind(this),
+            onChange(info) {
+                console.log(info);
+                if (info.file.status !== 'uploading') {
+                  console.log(info.file, info.fileList);
+                }
+                if (info.file.status === 'done') {
+                  message.success(`${info.file.name} 上传成功。`);
+                } else if (info.file.status === 'error') {
+                  message.error(`${info.file.name} 上传失败。`);
+                }
+            },
         };
 
         const { getFieldProps } = this.props.form;
@@ -109,7 +124,7 @@ class DocumentUpload extends Component {
 	                    label="营业执照"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} fileList={this.state.fileList} {...getFieldProps('Registration',rules.Registration)} >
+	                    <Upload {...upLoadProps} fileList={this.state.fileList} {...getFieldProps('Registration')}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -121,7 +136,7 @@ class DocumentUpload extends Component {
 	                    label="组织机构代码证"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} {...getFieldProps('OrgInsCode',rules.OrgInsCode)} >
+	                    <Upload {...upLoadProps} {...getFieldProps('OrgInsCode')}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -148,7 +163,7 @@ class DocumentUpload extends Component {
                         label=" 企业法定代表人身份证明书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('IdentityProof',rules.IdentityProof)}>
+                        <Upload {...upLoadProps} {...getFieldProps('IdentityProof')}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -170,7 +185,7 @@ class DocumentUpload extends Component {
                         label="承诺函及授权委托书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('DeletegatePromiseLetter',rules.DeletegatePromiseLetter)}>
+                        <Upload {...upLoadProps} {...getFieldProps('DeletegatePromiseLetter')}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -189,7 +204,7 @@ class DocumentUpload extends Component {
 
                     <Row style={{ marginTop: 30 }}>
                         <Col span="12" offset="8">
-                            <Button type="primary">提交</Button>
+                            <Button type="primary" onClick={ this.submit.bind(this) }>提交</Button>
                             <Link to="/" className="fn-ml-20">暂不修改</Link>
                         </Col>
                     </Row>
