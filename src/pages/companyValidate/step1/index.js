@@ -24,7 +24,7 @@ import Frame from 'COM/form/frame';
 import { fetch } from 'UTILS';
 
 // 城市静态数据
-const province = [
+const provinces = [
     {
     B_BankAreaID: "11",
     AreaName: "北京市",
@@ -52,7 +52,7 @@ const province = [
     }
 ];
 
-const city = [
+const cities = [
     {
       "B_BankAreaID": "5810",
       "AreaName": "广州市",
@@ -177,8 +177,8 @@ class CompanyValidate extends React.Component {
                 fillType : 'agent',
                 provinces : [],
                 cities : [],
-                province : null,
-                city : null
+                province : "",
+                city : ""
             },
             dataSource : [{
               key: '1',
@@ -211,12 +211,15 @@ class CompanyValidate extends React.Component {
     }
 
     componentDidMount() {
+        let me = this;
         let data = this.state.data;
         fetch('/bank/provinces').then(res => {
             if(res.code == 200){
                 data.provinces = res.data;
+                data.province = res.data[0].B_BankAreaID;
+                me.onProvinceChange(data.province);
                 console.log(data.provinces);
-                this.setState({
+                me.setState({
                     data : data
                 });
             }
@@ -224,6 +227,7 @@ class CompanyValidate extends React.Component {
     }
 
     onProvinceChange(value){
+        console.log(value);
         let data = this.state.data;
         data.province = value;
         this.setState({
@@ -326,7 +330,6 @@ class CompanyValidate extends React.Component {
     }
 
     render() {
-        console.log(this)
         // 表单校验
 
         // 根据营业执照类型类型选择验证机制
@@ -376,7 +379,7 @@ class CompanyValidate extends React.Component {
         const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
 
         //  省市数据
-        const provinceOptions = this.state.data.provinces.map(province => <Option value={province.B_BankAreaID} key={province.B_BankAreaID}>{province.AreaName}</Option>);
+        const provinceOptions = provinces.map(province => <Option value={province.B_BankAreaID} key={province.B_BankAreaID}>{province.AreaName}</Option>);
         const cityOptions = this.state.data.cities.map(city => <Option value={city.B_BankAreaID} key={city.B_BankAreaID}>{city.AreaName}</Option>);
 
         return (
@@ -564,14 +567,12 @@ class CompanyValidate extends React.Component {
                           label="所在省市"
                           required
                         >
-                            <div>
-                                <Select placeholder="请选择省份" value={ this.state.data.province } {...getFieldProps('province',rules.province)} style={{ width: 274 }} onChange={ this.onProvinceChange.bind(this) }>
-                                    {provinceOptions}
-                                </Select>
-                                <Select placeholder="请选择城市" className="fn-ml-20" value={ this.state.data.city } {...getFieldProps('city',rules.city)} style={{ width: 274 }}>
-                                    {cityOptions}
-                                </Select>
-                            </div>
+                            <Select placeholder="请选择省份" value={ this.state.data.province } style={{ width: 274 }} onChange={ this.onProvinceChange.bind(this) }>
+                                {provinceOptions}
+                            </Select>
+                            <Select placeholder="请选择城市" className="fn-ml-20" value={ this.state.data.city } {...getFieldProps('city',rules.city)} style={{ width: 274 }}>
+                                {cityOptions}
+                            </Select>
                         </FormItem>
 
                         <FormItem
