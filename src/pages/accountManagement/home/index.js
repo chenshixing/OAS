@@ -28,7 +28,11 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: {},
+            data: {
+                name:"",
+                lastLoginTime:"",
+                getUserServiceList:[]
+            },
             isInviteCode: false
         }
     }
@@ -36,8 +40,31 @@ export default class Home extends React.Component {
         this.loadData();
     }
     loadData() {
-        fetch('/home/getLastLoginTime').then(res => {
-          this.setState({data: res})
+        //用户简单信息
+        // fetch('/user/getLoginUserSimpleInfo').then(res => {
+        //     console.log(res)
+        //     this.setState(res)
+        // });
+        //
+        // fetch('/user/getUserServiceList').then(res => {
+        //     console.log(res)
+        //     this.setState(res)
+        // });
+        //
+
+        let p1 = fetch('/user/getLoginUserSimpleInfo');
+
+        let p2 = fetch('/user/getUserServiceList');
+
+        Promise.all([p1, p2]).then(values => {
+          console.log(values);
+          let getLoginUserSimpleInfo = values[0]
+          let getUserServiceList = values[1]
+          this.state.data = getLoginUserSimpleInfo.data
+          this.state.data.getUserServiceList = getUserServiceList.data
+          this.forceUpdate();
+        }).catch(reason => {
+          console.log(reason)
         });
     }
     handleAddBusiness() {
@@ -59,8 +86,27 @@ export default class Home extends React.Component {
         }
         console.log(`selected ${value}`);
     }
+    //个人用户或者企业用户
+    templateUserType(item){
+        let items = {
+            1:<Tag color="blue">个人用户</Tag>,
+            2:<Tag color="blue">企业用户</Tag>
+        };
+        return items[item]
+    }
+    //个人账户管理或者企业账户管理
+    templateUserTypeManagement(item){
+        let items = {
+            1:<Link to="/accountManagement/basicInformation">个人账户管理</Link>,
+            2:<Link to="/accountManagement/basicInformation">企业账户管理</Link>
+        };
+        return items[item]
+    }
     render() {
         console.log(this)
+
+        let {getUserServiceList=[]} = this.state.data
+
         return (
             <div style={{
                 minHeight: "700px"
@@ -121,15 +167,22 @@ export default class Home extends React.Component {
                         padding: 0
                     }}>
                         <h3 className="ant-card-head-title">
-                            <span className="fn-mr-10">下午好，广东亿达有限公司</span>
-                            <Tag color="blue">企业用户</Tag>
+                            <span className="fn-mr-10">{this.state.data.name}</span>
+                            {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
+                            {
+                                this.templateUserType(this.state.data.userType)
+                            }
+
                         </h3>
                     </div>
 
                     <div className="alert alert-warning fn-mt-10">
-                        企业账户管理
+                        {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
+                        {
+                            this.templateUserTypeManagement(this.state.data.userType)
+                        }
                         <span className="fn-plr-10">|</span>
-                        上次登录时间：{this.state.data.data}
+                        上次登录时间：{this.state.data.lastLoginTime}
                     </div>
                 </div>
 
@@ -143,23 +196,18 @@ export default class Home extends React.Component {
                     </div>
 
                     <Row>
-                        <Link to="/accountManagement/home">
-                            <Col span="6">
-                                <Card>曲江秦汉唐文化票据融资</Card>
-                            </Col>
-                        </Link>
 
-                        <Link to="/accountManagement/home">
-                            <Col span="6">
-                                <Card>内蒙古圣牧高科应收账款融资</Card>
-                            </Col>
-                        </Link>
-
-                        <Link to="/accountManagement/home">
-                            <Col span="6">
-                                <Card>长江汽车应收账款融资</Card>
-                            </Col>
-                        </Link>
+                        {
+                            getUserServiceList.map((item,index)=>{
+                                return (
+                                    <a href={item.serviceURL}>
+                                        <Col span="6">
+                                            <Card>{item.serviceChannelName}</Card>
+                                        </Col>
+                                    </a>
+                                )
+                            })
+                        }
 
                         <a href="javascript:;" onClick={this.handleAddBusiness.bind(this)}>
                             <Col span="6">

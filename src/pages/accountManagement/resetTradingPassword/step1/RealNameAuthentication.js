@@ -48,7 +48,7 @@ export default class RealNameAuthentication extends React.Component {
     }
     handleOk() {
 
-        window.location.href = '/#/personalValidate/step1?_k=x8v39c';
+        //window.location.href = '/#/personalValidate/step1?_k=x8v39c';
         console.log('点击了确定，然后跳转去完善资料');
         this.setState({visible: false});
     }
@@ -76,7 +76,17 @@ export default class RealNameAuthentication extends React.Component {
     render() {
         return (
             <div>
-                <Modal title="钱途互联提示" visible={this.state.visible} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} okText="朕前去完善资料" cancelText="妾身再考虑一下" wrapClassName="vertical-center-modal">
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk.bind(this)}
+                    onCancel={this.handleCancel.bind(this)}
+                    footer={[
+          	            <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
+          	              我知道了
+          	            </Button>,
+                    ]}
+                    wrapClassName="vertical-center-modal">
                     <p>
                         <span className="ant-exclamation-circle">
                             <Icon type="exclamation-circle"/>
