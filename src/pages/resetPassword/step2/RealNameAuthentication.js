@@ -38,7 +38,7 @@ export default class RealNameAuthentication extends React.Component {
     }
     handleRealNameComplete() {
         if (this.state.isValidation == true) {
-            window.location.href = '/#/accountManagement/resetTradingPassword/Steps2';
+            window.location.href = '/#/resetPassword/step3';
         } else if (this.state.isValidation == false) {
             this.setState({visible: true});
         }
@@ -101,7 +101,7 @@ export default class RealNameAuthentication extends React.Component {
                         <p>
                             实名认证成功后页面自动跳转，如没有跳转请点击
                             <Button type="primary" className="fn-ml-10" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
-                            <Link type="primary" className="fn-ml-10" to='/#/resetPassword/step3?_k=epg72d'>已完成认证</Link>
+                            <Link type="primary" className="fn-ml-10" to='/resetPassword/step3'>已完成认证</Link>
                         </p>
                     </Row>
                 </Frame>

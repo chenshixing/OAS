@@ -28,7 +28,7 @@ function noop() {
     return false;
 }
 // 页面
-class Steps2 extends React.Component {
+class Step3 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,9 +45,7 @@ class Steps2 extends React.Component {
                 console.log('Errors in form!!!');
                 return;
             }
-            window.location.href="/#/accountManagement/resetTradingPassword/Steps3?_k=aam5lv"
-            console.log('Submit!!!');
-            console.log(values);
+            window.location.href="/#/accountManagement/resetTradingPassword/Steps3"
         });
     }
 
@@ -191,7 +189,7 @@ class Steps2 extends React.Component {
                             <Col span="16">
                                 <Col span="8" offset="12">
                                     <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
-                                    <Link to="/resetPassword/Steps3">提交</Link>
+                                    <Link to="/resetPassword/step4">提交</Link>
                                 </Col>
                             </Col>
                         </Row>
@@ -201,4 +199,4 @@ class Steps2 extends React.Component {
         );
     }
 }
-export default createForm()(Steps2);
+export default createForm()(Step3);

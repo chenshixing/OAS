@@ -28,12 +28,15 @@ import {
     Col
 } from 'antd';
 const Step = Steps.Step;
+const createForm = Form.create;
 const FormItem = Form.Item;
 // 页面
-export default class Steps1 extends React.Component {
+class Step2 extends React.Component {
+//export default class Step2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            loading: false,
             visible: false,
             //虚假数据
             data: {
@@ -61,14 +64,20 @@ export default class Steps1 extends React.Component {
         this.setState({visible: false});
         console.log('e.target', e.target);
         if (e.target.tagName.toLowerCase() == 'span' && e.target.className == '') {
-            window.location.href = '/#/personalValidate/step3?_k=REPLACE';
+            window.location.href = '/#/resetPassword/step3';
         }
     }
     handleSend(){
         //进入实名验证
-
         this.state.isSend = true;
         this.forceUpdate();
+        if (!this.state.isReviewed) {
+            this.setState({ loading: true });
+            setTimeout(() => {
+                this.setState({ loading: false});
+                window.location.href='/#/resetPassword/step3';
+            }, 10000);
+        }
     }
     render() {
         return (
@@ -84,9 +93,10 @@ export default class Steps1 extends React.Component {
                     this.state.isReviewed ?
                         (!this.state.isSend ? <Authenticate handleSend={this.handleSend.bind(this)} /> : <RealNameAuthentication data={this.state.data} isValidation={this.state.isValidation} />)
                     :
-                        <UnreviewedAuthenticate handleSend={this.handleSend.bind(this)} />
+                        <UnreviewedAuthenticate loading={this.state.loading} handleSend={this.handleSend.bind(this)} />
                 }
             </div>
         );
     }
 }
+export default createForm()(Step2);
