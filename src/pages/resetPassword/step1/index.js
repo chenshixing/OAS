@@ -5,6 +5,7 @@
 // react 相关库
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Link} from 'react-router';
 
 // antd 组件
 import { Form, Input, Button, Steps, Radio, Row, Col, Modal, message } from 'antd';
@@ -35,8 +36,6 @@ class CompanyValidate extends React.Component {
 
     handleNext() {
         this.props.form.validateFields((errors, values) => {
-            console.log(errors);
-            console.log(values);
             if(!errors){
                 this.setState({ loading: true });
                 setTimeout(() => {
@@ -47,7 +46,7 @@ class CompanyValidate extends React.Component {
         });
     }
     onBusinessLicenseTypeChange(e) {
-        console.log('radio checked', e.target.value);
+        this.props.form.resetFields()
         let data=this.state.data;
         data.businessLicenseType=e.target.value;
         this.setState({
@@ -155,7 +154,8 @@ class CompanyValidate extends React.Component {
                         <Row style={{ marginTop: 30 }}>
                             <Col span="12" offset="8">
                                 <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleNext}>下一步 </Button>
-                                <a href="/#/userRegister?_k=REPLACE" className="link-standard fn-pl-20">重新登录</a>
+                                <Link type="primary" className="fn-ml-10" to='/#/resetPassword/step2-2'>下一步（审核不通过）</Link>
+                                <Link to="/userRegister?_k=REPLACE" className="link-standard fn-pl-20">重新登录</Link>
                             </Col>
                         </Row>
                         {/*<div className="text-align-center fn-mt-30">

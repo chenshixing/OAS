@@ -33,8 +33,11 @@ const rulesBase = {
             {required: true, message: '开户行不能为空'},
         ]
     },
-    address:{
-        rules: [{ required: true, type: 'array', message: '所在省市不能为空'}],
+    province:{
+        rules: [{ required: true, message: '所在省份不能为空'}],
+    },
+    city:{
+        rules: [{ required: true, message: '所在城市不能为空'}],
     },
     branch:{
         rules:[

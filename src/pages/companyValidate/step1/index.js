@@ -14,21 +14,151 @@ const createForm = Form.create;
 const Step = Steps.Step;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-
+const Option = Select.Option;
 //  表单验证配置
 import formValidation from '../components/formValidation';
 // 页面组件
 import Frame from 'COM/form/frame';
 
+//  引入fetch
+import { fetch } from 'UTILS';
+
 // 城市静态数据
-const address = [{
-  value: 'zhejiang',
-  label: '浙江',
-  children: [{
-    value: 'hangzhou',
-    label: '杭州',
-  }],
-}];
+const provinces = [
+    {
+    B_BankAreaID: "11",
+    AreaName: "北京市",
+    ParentID: "0"
+    },
+    {
+    B_BankAreaID: "12",
+    AreaName: "天津市",
+    ParentID: "0"
+    },
+    {
+    B_BankAreaID: "13",
+    AreaName: "河北省",
+    ParentID: "0"
+    },
+    {
+    B_BankAreaID: "44",
+    AreaName: "广东省",
+    ParentID: "0"
+    },
+    {
+    B_BankAreaID: "65",
+    AreaName: "新疆维吾尔自治区",
+    ParentID: "0"
+    }
+];
+
+const cities = [
+    {
+      "B_BankAreaID": "5810",
+      "AreaName": "广州市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5820",
+      "AreaName": "韶关市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5840",
+      "AreaName": "深圳市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5850",
+      "AreaName": "珠海市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5860",
+      "AreaName": "汕头市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5865",
+      "AreaName": "揭阳市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5869",
+      "AreaName": "潮州市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5880",
+      "AreaName": "佛山市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5890",
+      "AreaName": "江门市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5910",
+      "AreaName": "湛江市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5920",
+      "AreaName": "茂名市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5930",
+      "AreaName": "肇庆市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5937",
+      "AreaName": "云浮市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5950",
+      "AreaName": "惠州市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5960",
+      "AreaName": "梅州市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5970",
+      "AreaName": "汕尾市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5980",
+      "AreaName": "河源市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "5990",
+      "AreaName": "阳江市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "6010",
+      "AreaName": "清远市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "6020",
+      "AreaName": "东莞市",
+      "ParentID": "44"
+    },
+    {
+      "B_BankAreaID": "6030",
+      "AreaName": "中山市",
+      "ParentID": "44"
+    }
+];
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -45,6 +175,10 @@ class CompanyValidate extends React.Component {
                 isLongEndTimeChange:false,
                 accountVerificationType:'bond',
                 fillType : 'agent',
+                provinces : [],
+                cities : [],
+                province : "",
+                city : ""
             },
             dataSource : [{
               key: '1',
@@ -74,6 +208,44 @@ class CompanyValidate extends React.Component {
 
         this.showModal=this.showModal.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
+    }
+
+    componentDidMount() {
+        let me = this;
+        let data = this.state.data;
+        fetch('/bank/provinces').then(res => {
+            if(res.code == 200){
+                data.provinces = res.data;
+                data.province = res.data[0].B_BankAreaID;
+                me.onProvinceChange(data.province);
+                console.log(data.provinces);
+                me.setState({
+                    data : data
+                });
+            }
+        });
+    }
+
+    onProvinceChange(value){
+        console.log(value);
+        let data = this.state.data;
+        data.province = value;
+        this.setState({
+            data : data
+        });
+        console.log(data);
+        fetch('/bank/citys',{
+            body:{
+                provinceId : value
+            }
+        }).then(res => {
+            if(res.code == 200){
+                data.cities = res.data;
+                this.setState({
+                    data : data
+                });
+            }
+        });
     }
 
     onFillTypeChange(e) {
@@ -195,9 +367,20 @@ class CompanyValidate extends React.Component {
             labelCol: { span: 8 },
             wrapperCol: { span: 12 },
         };
+
+        const cascadeLayout = {
+            labelCol: { span: 8 },
+            wrapperCol: { span: 4 },
+        }
+
+
         const { getFieldProps } = this.props.form;
         const displayTypeCommon=this.state.data.businessLicenseType =='common' ? 'block' : 'none';
         const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
+
+        //  省市数据
+        const provinceOptions = provinces.map(province => <Option value={province.B_BankAreaID} key={province.B_BankAreaID}>{province.AreaName}</Option>);
+        const cityOptions = this.state.data.cities.map(city => <Option value={city.B_BankAreaID} key={city.B_BankAreaID}>{city.AreaName}</Option>);
 
         return (
             <div>
@@ -368,7 +551,7 @@ class CompanyValidate extends React.Component {
                         <FormItem
                           label="开户行"
                           {...formItemLayout}
-                        required
+                          required
                         >
                           <Select {...getFieldProps('bank',rules.bank)} size="large" defaultValue="">
                             <Option value="0">中国工商银行</Option>
@@ -382,8 +565,14 @@ class CompanyValidate extends React.Component {
                         <FormItem
                           {...formItemLayout}
                           label="所在省市"
+                          required
                         >
-                          <Cascader {...getFieldProps('address',rules.address)} options={address} placeholder="请选择" />
+                            <Select placeholder="请选择省份" value={ this.state.data.province } style={{ width: 274 }} onChange={ this.onProvinceChange.bind(this) }>
+                                {provinceOptions}
+                            </Select>
+                            <Select placeholder="请选择城市" className="fn-ml-20" value={ this.state.data.city } {...getFieldProps('city',rules.city)} style={{ width: 274 }}>
+                                {cityOptions}
+                            </Select>
                         </FormItem>
 
                         <FormItem
