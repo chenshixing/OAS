@@ -58,12 +58,12 @@ class PersonalValidate extends React.Component {
         console.log(this.props)
         setTimeout(() => {
             this.setState({ loading: false, visible: false });
-            // window.location.href='/#/personalValidate/step2?_k=REPLACE';
             this.props.history.push({
                 pathname: '/personalValidate/step2'
             })
         }, 3000);
     }
+
     handleCancel() {
         this.setState({ visible: false });
     }
@@ -73,6 +73,10 @@ class PersonalValidate extends React.Component {
             return e;
         }
         return e && e.fileList;
+    }
+
+    componentDidMount(){
+        
     }
 
     render() {
@@ -90,24 +94,6 @@ class PersonalValidate extends React.Component {
         const formItemLayout = {
             labelCol: { span: 8 },
             wrapperCol: { span: 12 },
-        };
-
-        const upLoadProps = {
-            name: 'file',
-            action: '/api/upload.do',
-            headers: {
-                authorization: 'authorization-text',
-            },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} 上传成功！`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} 上传失败！`);
-                }
-            }
         };
 
         return (
