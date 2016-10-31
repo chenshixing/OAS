@@ -307,6 +307,14 @@ const routes = {
             });
           }
         },
+        {
+          path: 'resetPassword/step4',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step4').default);
+            });
+          }
+        },
         /***************重置登录密码 end ***************/
         // 404
         {

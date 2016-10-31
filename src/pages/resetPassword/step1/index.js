@@ -40,7 +40,7 @@ class CompanyValidate extends React.Component {
                 this.setState({ loading: true });
                 setTimeout(() => {
                     this.setState({ loading: false});
-                    window.location.href='/#/resetPassword/step2-1?_k=REPLACE';
+                    window.location.href='/#/resetPassword/step2';
                 }, 1000);
             }
         });
@@ -154,8 +154,8 @@ class CompanyValidate extends React.Component {
                         <Row style={{ marginTop: 30 }}>
                             <Col span="12" offset="8">
                                 <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleNext}>下一步 </Button>
-                                <Link type="primary" className="fn-ml-10" to='/#/resetPassword/step2-2'>下一步（审核不通过）</Link>
-                                <Link to="/userRegister?_k=REPLACE" className="link-standard fn-pl-20">重新登录</Link>
+                                <Link type="primary" className="fn-ml-10" to='/resetPassword/step2'>下一步（审核不通过）</Link>
+                                <Link to="/userRegister" className="link-standard fn-pl-20">重新登录</Link>
                             </Col>
                         </Row>
                         {/*<div className="text-align-center fn-mt-30">

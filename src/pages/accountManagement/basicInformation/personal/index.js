@@ -47,7 +47,9 @@ export default class Personal extends React.Component {
                                         您的基本信息已完善。如资料有变更，请及时更新，这将有助于加快您的业务申请进度。
                                     </td>
                                     <td className="text-align-right">
-                                        <Button type="primary"><Icon type="edit" />修改</Button>
+                                        {/*
+                                            <Button type="primary"><Icon type="edit" />修改</Button>
+                                        */}
                                     </td>
                                 </tr>
                                 <tr className="align-top">

@@ -29,7 +29,7 @@ import {
 const Step = Steps.Step;
 const FormItem = Form.Item;
 // 页面
-export default class Steps1 extends React.Component {
+export default class Step2 extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
