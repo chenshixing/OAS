@@ -23,143 +23,6 @@ import Frame from 'COM/form/frame';
 //  引入fetch
 import { fetch } from 'UTILS';
 
-// 城市静态数据
-const provinces = [
-    {
-    B_BankAreaID: "11",
-    AreaName: "北京市",
-    ParentID: "0"
-    },
-    {
-    B_BankAreaID: "12",
-    AreaName: "天津市",
-    ParentID: "0"
-    },
-    {
-    B_BankAreaID: "13",
-    AreaName: "河北省",
-    ParentID: "0"
-    },
-    {
-    B_BankAreaID: "44",
-    AreaName: "广东省",
-    ParentID: "0"
-    },
-    {
-    B_BankAreaID: "65",
-    AreaName: "新疆维吾尔自治区",
-    ParentID: "0"
-    }
-];
-
-const cities = [
-    {
-      "B_BankAreaID": "5810",
-      "AreaName": "广州市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5820",
-      "AreaName": "韶关市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5840",
-      "AreaName": "深圳市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5850",
-      "AreaName": "珠海市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5860",
-      "AreaName": "汕头市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5865",
-      "AreaName": "揭阳市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5869",
-      "AreaName": "潮州市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5880",
-      "AreaName": "佛山市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5890",
-      "AreaName": "江门市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5910",
-      "AreaName": "湛江市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5920",
-      "AreaName": "茂名市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5930",
-      "AreaName": "肇庆市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5937",
-      "AreaName": "云浮市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5950",
-      "AreaName": "惠州市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5960",
-      "AreaName": "梅州市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5970",
-      "AreaName": "汕尾市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5980",
-      "AreaName": "河源市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "5990",
-      "AreaName": "阳江市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "6010",
-      "AreaName": "清远市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "6020",
-      "AreaName": "东莞市",
-      "ParentID": "44"
-    },
-    {
-      "B_BankAreaID": "6030",
-      "AreaName": "中山市",
-      "ParentID": "44"
-    }
-];
-
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
@@ -175,10 +38,17 @@ class CompanyValidate extends React.Component {
                 isLongEndTimeChange:false,
                 accountVerificationType:'bond',
                 fillType : 'agent',
+                bankAccount : '',
                 provinces : [],
                 cities : [],
-                province : "",
-                city : ""
+                bank : undefined,
+                province : undefined,
+                city : undefined,
+                cityPlaceHolder : "请先选择省份",
+                cityDisabled : true,
+                branchDisabled : true,
+                branchPlaceHolder : "请先选择开户行和所在城市",
+                branches : []
             },
             dataSource : [{
               key: '1',
@@ -211,14 +81,16 @@ class CompanyValidate extends React.Component {
     }
 
     componentDidMount() {
+        this.provinceInit();
+    }
+
+    provinceInit(){
         let me = this;
         let data = this.state.data;
         fetch('/bank/provinces').then(res => {
             if(res.code == 200){
                 data.provinces = res.data;
-                data.province = res.data[0].B_BankAreaID;
-                me.onProvinceChange(data.province);
-                console.log(data.provinces);
+                // console.log(data.provinces);
                 me.setState({
                     data : data
                 });
@@ -226,14 +98,32 @@ class CompanyValidate extends React.Component {
         });
     }
 
-    onProvinceChange(value){
-        console.log(value);
-        let data = this.state.data;
-        data.province = value;
-        this.setState({
-            data : data
+    onBankAccountChange(e){
+        let me = this;
+        let data = me.state.data;
+        data.bankAccount = e.target.value;
+        fetch('/bank/cardNumber',{
+            body:{
+              "cardNumber": data.bankAccount
+            }
+        }).then(res => {
+            if(res.code == 200){
+                data.bank = res.data.B_BankID;
+                console.log(data);
+                me.setState({
+                    data : data
+                });
+                me.props.form.setFieldsValue({
+                    bank : data.bank
+                });
+            }
         });
-        console.log(data);
+    }
+
+    onProvinceChange(value){
+        let me = this;
+        let data = me.state.data;
+        data.province = value;
         fetch('/bank/citys',{
             body:{
                 provinceId : value
@@ -241,11 +131,49 @@ class CompanyValidate extends React.Component {
         }).then(res => {
             if(res.code == 200){
                 data.cities = res.data;
-                this.setState({
+                data.cityPlaceHolder = "请选择城市";
+                data.cityDisabled = false;
+                console.log(data.cities);
+                me.setState({
                     data : data
                 });
             }
         });
+    }
+
+    onBankChange(value){
+        let data = this.state.data;
+        data.bank = value;
+        console.log(data);
+        this._getBranch();
+    }
+
+    onCityChange(value){
+        let data = this.state.data;
+        data.city = value;
+        this._getBranch();
+    }
+
+    _getBranch(){
+        let me = this;
+        let data = me.state.data;
+        if( data.bank && data.city ){
+            fetch('/bank/branchlist',{
+                body:{
+                  "bankId": data.bank,
+                  "cityId": data.city
+                }
+            }).then(res => {
+                if(res.code == 200){
+                    data.branches = res.data;
+                    data.branchPlaceHolder = "请选择分支行";
+                    data.branchDisabled = false;
+                    me.setState({
+                        data : data
+                    });
+                }
+            });
+        }
     }
 
     onFillTypeChange(e) {
@@ -321,6 +249,7 @@ class CompanyValidate extends React.Component {
         this.props.form.validateFieldsAndScroll((errors, values) => {
           if (errors) {
             console.log(errors);
+            console.log(values);
             return false;
           }
           console.log("passed");
@@ -330,6 +259,7 @@ class CompanyValidate extends React.Component {
     }
 
     render() {
+        // console.log("limit");
         // 表单校验
 
         // 根据营业执照类型类型选择验证机制
@@ -368,19 +298,9 @@ class CompanyValidate extends React.Component {
             wrapperCol: { span: 12 },
         };
 
-        const cascadeLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 4 },
-        }
-
-
         const { getFieldProps } = this.props.form;
         const displayTypeCommon=this.state.data.businessLicenseType =='common' ? 'block' : 'none';
         const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
-
-        //  省市数据
-        const provinceOptions = provinces.map(province => <Option value={province.B_BankAreaID} key={province.B_BankAreaID}>{province.AreaName}</Option>);
-        const cityOptions = this.state.data.cities.map(city => <Option value={city.B_BankAreaID} key={city.B_BankAreaID}>{city.AreaName}</Option>);
 
         return (
             <div>
@@ -545,7 +465,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                            <Input type="text" {...getFieldProps('bankAccount',rules.bankAccount)} placeholder="请输入银行账号"/>
+                            <Input type="text" {...getFieldProps('bankAccount',Object.assign({},rules.bankAccount,{ onChange: this.onBankAccountChange.bind(this) }))} placeholder="请输入银行账号"/>
                         </FormItem>
 
                         <FormItem
@@ -553,7 +473,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select {...getFieldProps('bank',rules.bank)} size="large" defaultValue="">
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bank',Object.assign({},rules.bank,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
                             <Option value="0">中国工商银行</Option>
                             <Option value="1">中国农业银行</Option>
                             <Option value="2">中国银行</Option>
@@ -564,14 +484,29 @@ class CompanyValidate extends React.Component {
 
                         <FormItem
                           {...formItemLayout}
-                          label="所在省市"
+                          label="所在省份"
                           required
                         >
-                            <Select placeholder="请选择省份" value={ this.state.data.province } style={{ width: 274 }} onChange={ this.onProvinceChange.bind(this) }>
-                                {provinceOptions}
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('province',Object.assign({},rules.province,{ onChange: this.onProvinceChange.bind(this) }))} >
+                                { this.state.data.provinces.map( (item,index) => {
+                                    return (
+                                        <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
+                                    );
+                                })}
                             </Select>
-                            <Select placeholder="请选择城市" className="fn-ml-20" value={ this.state.data.city } {...getFieldProps('city',rules.city)} style={{ width: 274 }}>
-                                {cityOptions}
+                        </FormItem>
+
+                        <FormItem
+                          {...formItemLayout}
+                          label="所在城市"
+                          required
+                        >
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('city',Object.assign({},rules.city,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.cityDisabled }>
+                                { this.state.data.cities.map( (item,index) => {
+                                    return (
+                                        <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
+                                    );
+                                })}
                             </Select>
                         </FormItem>
 
@@ -580,10 +515,12 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select {...getFieldProps('branch',rules.branch)} size="large" defaultValue="">
-                            <Option value="0">招商银行广州分行天河支行</Option>
-                            <Option value="1">招商银行广州分行人民中路支行</Option>
-                            <Option value="2">招商银行广州分行五羊支行</Option>
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branch',rules.branch)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.state.data.branchDisabled } >
+                            { this.state.data.branches.map( (item,index) => {
+                                return (
+                                    <Option value={ item.BranchBankCode } key={ index }>{ item.BranchBankName }</Option>
+                                );
+                            }) }
                           </Select>
                         </FormItem>
 
