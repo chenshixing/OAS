@@ -6,9 +6,20 @@ import { Button, Form, Input } from 'antd';
 import ruleType from 'UTILS/ruleType';
 // 页面
 import Frame from 'COM/form/frame';
+
+
+//fetch
+import { fetch } from 'UTILS';
+
+
 class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
+        this.state={
+            oldPasswdProps:"",
+            passwdProps:"",
+            confirmPasswordProps:"",
+        }
     }
 
     componentDidMount() {
@@ -20,7 +31,18 @@ class ResetPassword extends React.Component {
             if (!!errors) {
                 return;
             }
-            window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
+
+            fetch('/user/modifyLoginPwd',{
+                body:{
+                    oldPasswdProps:this.state.oldPasswdProps,
+                    passwdProps:this.state.passwdProps,
+                    confirmPasswordProps:this.state.confirmPasswordProps,
+                }
+            }).then(res => {
+                console.log(res)
+                //this.setState(res)
+                window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
+            });
         });
     }
 
@@ -49,6 +71,12 @@ class ResetPassword extends React.Component {
             rules: [
                 {required: true, whitespace: true, message: '请输入原登录密码'},
             ],
+            onChange: (e) => {
+                this.setState({
+                    oldPasswdProps:e.target.value
+                })
+                console.log('原密码：', e.target.value);
+            }
         });
         const passwdProps = getFieldProps('password', {//新登录密码
             rules: [
@@ -56,12 +84,24 @@ class ResetPassword extends React.Component {
                 {validator: this.checkPass.bind(this)},
                 ruleType('en-num')
             ],
+            onChange: (e) => {
+                this.setState({
+                    passwdProps:e.target.value
+                })
+                console.log('新登录密码：', e.target.value);
+            }
         });
         const confirmPasswordProps = getFieldProps('confirmPassword', {//确认新登录密码
             rules: [
                 {required: true, message: '请再次输入密码'},
                 {validator: this.checkConfirmPass.bind(this)},
             ],
+            onChange: (e) => {
+                this.setState({
+                    confirmPasswordProps:e.target.value
+                })
+                console.log('确认新登录密码：', e.target.value);
+            }
         });
         return (
             <Frame title="修改登录密码" small="  避免使用有规律的数字或字母，请勿与交易密码一致。">
