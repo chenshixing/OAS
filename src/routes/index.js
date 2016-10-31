@@ -291,9 +291,8 @@ const routes = {
             });
           }
         },
-        /*
         {
-          path: 'resetPassword/step2-1',
+          path: 'resetPassword/step2',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
               cb(null, require('PAGES/resetPassword/step2').default);
@@ -301,14 +300,13 @@ const routes = {
           }
         },
         {
-          path: 'resetPassword/step2-2',
+          path: 'resetPassword/step3',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/resetPassword/step2/step2-2').default);
+              cb(null, require('PAGES/resetPassword/step3').default);
             });
           }
         },
-        */
         /***************重置登录密码 end ***************/
         // 404
         {
