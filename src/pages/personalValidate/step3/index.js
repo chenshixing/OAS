@@ -33,23 +33,18 @@ class PersonalValidate extends React.Component {
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
-                console.log('Errors in form!!!');
+                console.log('Errors in form!!!',errors);
                 return;
             }
             console.log('Submit!!!');
             console.log(values);
             //todo ajax submit...
-            window.location.href='/#/personalValidate/step4?_k=REPLACE';
+            // window.location.href='/#/personalValidate/step4?_k=REPLACE';
+            this.props.history.push({
+                pathname:'personalValidate/step4'
+            });
         });
     }
-
-    //checkPassWord(rule, value, callback) {
-    //    const { validateFields } = this.props.form;
-    //    if (value) {
-    //        validateFields(['rePassword'], { force: true });
-    //    }
-    //    callback();
-    //}
 
     checkPassWordAgain(rule, value, callback) {
         const { getFieldValue } = this.props.form;
@@ -66,6 +61,15 @@ class PersonalValidate extends React.Component {
         console.log('pwd:',getFieldError('password'));
         if (value && !getFieldError('password')) {
             validateFields(['rePassword'], { force: true });
+        }
+    }
+
+    validateAgreement(rule,value,callback){
+        console.log('请阅读并同意协议:',value);
+        if(value=='false'){
+            callback('请阅读并同意协议')
+        }else{
+            callback();
         }
     }
 
@@ -86,6 +90,11 @@ class PersonalValidate extends React.Component {
                     {required: true, message: '请再次输入密码'},
                     {validator: this.checkPassWordAgain.bind(this)}
                 ]
+            },
+            agreement:{
+                initialValue: false, 
+                valuePropName: 'checked',
+                rules:[{validator: this.validateAgreement.bind(this)}],
             }
         };
         const formItemLayout = {
@@ -118,16 +127,16 @@ class PersonalValidate extends React.Component {
                             >
                                 <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off" />
                             </FormItem>
+                            
                             <Row>
                                 <Col span="24">
                                     <Col span="12" offset="8">
-                                        <Checkbox {...getFieldProps('agreement',{ initialValue: false, valuePropName: 'checked' })} >我已阅读并同意
+                                        <Checkbox {...getFieldProps('agreement',rules.agreement)} >我已阅读并同意
                                                 <a href="">《数字证书服务协议》</a>
                                         </Checkbox>
                                     </Col>
                                 </Col>
                             </Row>
-
                             <Row className="fn-mt-30">
                                 <Col span="24">
                                     <Col span="12" offset="8">

@@ -18,6 +18,7 @@ const Step = Steps.Step;
 
 // 页面组件
 import Frame from 'COM/form/frame';
+import {helper} from 'UTILS';
 
 
 
@@ -28,7 +29,7 @@ export default class PersonalValidate extends React.Component {
         this.state={
             identityVisible: false,
             data:{
-                realName:'xxx',
+                realName:'钱途无量',
                 identityCode:'12345',
                 phoneNumber:'15999872092'
             }
@@ -39,14 +40,34 @@ export default class PersonalValidate extends React.Component {
         this.setState({
           identityVisible: true,
         });
-        console.log(this);
     }
 
     closeIdentityModal() {
         this.setState({
           identityVisible: false,
         });
-        console.log(this);
+    }
+
+    //手动点击下一步
+    handleNextClick(){
+        this.props.history.push({
+            pathname:'/personalValidate/step3'
+        })
+
+        //未验证提醒
+        // Modal.info({
+        //     title: '实名认证提示',
+        //     content: (
+        //     <div>
+        //         <p>您的实名认证未完成，请尽快完成。</p>
+        //     </div>
+        //     ),
+        //     onOk() {},
+        // });
+    }
+
+    componentDidMount(){
+        
     }
 
     render() {
@@ -62,12 +83,12 @@ export default class PersonalValidate extends React.Component {
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p>
-                                姓名：{this.state.data.realName}，您的身份识别码已发送到手机133****1234。
-                                <Link to='/'>没有收到短信，重新发送</Link>
+                                姓名： <span className='name'>{this.state.data.realName}</span>，您的身份识别码已发送到手机{helper.hidenPhoneNumber(this.state.data.phoneNumber)}。
+                                <a href='javascript:void(0)'>没有收到短信，重新发送</a>
                             </p>
-                            <p>
+                            <p className='fn-mt-10'>
                                 请下载实名认证APP完成认证。
-                                <Button type="primary" onClick={this.showIdentityModal.bind(this)}>详细操作步骤</Button>
+                                <Button type="primary" className='fn-ml-5' onClick={this.showIdentityModal.bind(this)}>详细操作步骤</Button>
                             </p>
                         </Col>
                     </Row>
@@ -76,7 +97,7 @@ export default class PersonalValidate extends React.Component {
                         <div className="pic"><img src={codeimg}/></div>
                     </Row>
                     <Row className="text-align-center fn-mt-30">
-                        <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button type="primary">已完成认证</Button></p>
+                        <p>实名认证成功后页面自动跳转，如没有跳转请点击 <Button className='fn-ml-5' onClick={this.handleNextClick.bind(this)} type="primary">已完成认证</Button></p>
                     </Row>
                 </Frame>
                 <IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
