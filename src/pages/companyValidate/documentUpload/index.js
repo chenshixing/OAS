@@ -23,18 +23,17 @@ class DocumentUpload extends Component {
     }
 
     handleChange(info) {
-        console.log(info)
         let fileList = info.fileList;
 
         // 1. 上传列表数量的限制
         //    只显示最近上传的一个，旧的会被新的顶掉
-        fileList = fileList.slice(-2);
+        fileList = fileList.slice(-1);
 
         // 2. 读取远程路径并显示链接
         fileList = fileList.map((file) => {
           if (file.response) {
             // 组件会将 file.url 作为链接进行展示
-            file.url = file.response.url;
+            file.url = file.response.data.imgSmallUrl;
           }
           return file;
         });
@@ -42,7 +41,7 @@ class DocumentUpload extends Component {
         // 3. 按照服务器返回信息筛选成功上传的文件
         fileList = fileList.filter((file) => {
           if (file.response) {
-            return file.response.status === 'success';
+            return file.response.code == '200';
           }
           return true;
         });
@@ -51,7 +50,7 @@ class DocumentUpload extends Component {
     }
 
     submit(){
-        console.log(this.props.form.getFieldsValue());
+        console.log(this.refs);
     }
 
     render() {
@@ -100,17 +99,18 @@ class DocumentUpload extends Component {
             data: {
                 "userId": "123"
             },
-            onChange(info) {
-                console.log(info);
-                if (info.file.status !== 'uploading') {
-                  console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                  message.success(`${info.file.name} 上传成功。`);
-                } else if (info.file.status === 'error') {
-                  message.error(`${info.file.name} 上传失败。`);
-                }
-            },
+            // onChange(info) {
+            //     console.log(info);
+            //     if (info.file.status !== 'uploading') {
+            //       console.log(info.file, info.fileList);
+            //     }
+            //     if (info.file.status === 'done') {
+            //       message.success(`${info.file.name} 上传成功。`);
+            //     } else if (info.file.status === 'error') {
+            //       message.error(`${info.file.name} 上传失败。`);
+            //     }
+            // },
+            onChange : this.handleChange.bind(this)
         };
 
         const { getFieldProps } = this.props.form;
@@ -124,7 +124,7 @@ class DocumentUpload extends Component {
 	                    label="营业执照"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} fileList={this.state.fileList} {...getFieldProps('Registration')}>
+	                    <Upload {...upLoadProps} fileList={this.state.fileList} ref="Registration">
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -136,7 +136,7 @@ class DocumentUpload extends Component {
 	                    label="组织机构代码证"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} {...getFieldProps('OrgInsCode')}>
+	                    <Upload {...upLoadProps} ref="OrgInsCode">
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -163,7 +163,7 @@ class DocumentUpload extends Component {
                         label=" 企业法定代表人身份证明书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('IdentityProof')}>
+                        <Upload {...upLoadProps} ref="IdentityProof">
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -185,7 +185,7 @@ class DocumentUpload extends Component {
                         label="承诺函及授权委托书"
                         required
                     >
-                        <Upload {...upLoadProps} {...getFieldProps('DeletegatePromiseLetter')}>
+                        <Upload {...upLoadProps} ref="DeletegatePromiseLetter">
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
