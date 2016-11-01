@@ -8,6 +8,9 @@ import { Row, Col, Button, Table} from 'antd';
 //	业务组件
 import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
+//  引入fetch
+import { fetch } from 'UTILS';
+
 //	样式
 import './style.less';
 
@@ -48,6 +51,29 @@ class InfoRow extends Component {
         			0 : '待提交',
         			1 : '已提交'
         		},
+                map : {
+                    Registration : {
+                        name : '营业执照',
+                        span : 4,
+                    },
+                    OrgInsCode : {
+                        name : '组织机构代码证',
+                        span : 5,
+                    },
+                    SocialCredit : {
+                        name : '社会信用证代码证',
+                        span : 9,
+                    },
+                    IdentityProof : {
+                        name : '企业法人身份证明书',
+                        span : 7,
+                    },
+                    DeletegatePromiseLetter : {
+                        name : '承诺函及授权委托书',
+                        span : 8,
+                    },
+                },
+                lackFiles : [],
         	},
         	account : {
         		name : '对公账户验证',
@@ -83,6 +109,26 @@ class InfoRow extends Component {
         		}
         	}
         });
+    }
+
+    componentDidMount() {
+        this.getPaperInfoStatus();
+    }
+
+    getPaperInfoStatus(){
+        if(this.props.type === "information" && !this.props.data.passed){
+            let me = this;
+            let information = this.state.information;
+            fetch('/paper/PaperInfoStatus').then(res => {
+                if(res.code == 200){
+                    information.lackFiles = res.data.lackFiles;
+                    console.log(information.lackFiles);
+                    me.setState({
+                        information : information
+                    })
+                }
+            });
+        }
     }
 
     showIdentityModal() {
@@ -149,12 +195,33 @@ class InfoRow extends Component {
     }
 
     information(){
+        let information = this.state.information;
     	if(this.state.data.passed){
     		return false;
     	}
     	return (
     		<Col span={12}>
-				你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)}>手机APP提交</Button> 。
+                <Row>
+                    <Col span={24}>
+                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)}>手机APP提交</Button> 。
+                    </Col>
+                </Row>
+                { !information.lackFiles.length ? "" :
+                    <div>
+                        <Row>
+                            <Col span={24}>以下资料未上传：</Col>
+                        </Row>
+                        <Row>
+                            {
+                                information.lackFiles.map( (item,index) => {
+                                   return (
+                                        <Col span={information.map[item.fileKey].span} key={index}><span className="fn-mr-5">&bull;</span>{information.map[item.fileKey].name}</Col>
+                                   );
+                                })
+                            }
+                        </Row>
+                    </div>
+                }
 				<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
 			</Col>
     	);
