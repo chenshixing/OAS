@@ -8,6 +8,8 @@ import { Row, Col, Button, Table} from 'antd';
 //	业务组件
 import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
+import CountDown from './countDown';
+
 //  引入fetch
 import { fetch } from 'UTILS';
 
@@ -235,7 +237,7 @@ class InfoRow extends Component {
     	let tableInfo = this.state[this.state.type].tableInfo;
     	return (
     		<Col span={12} className="tableCol">
-                <p>请在 <span className="warning-FontColor fs-26">47:59:59</span> 内完成支付</p>
+                <p>请在 <CountDown /> 内完成支付</p>
                 <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
                 <Table dataSource={tableInfo.dataSource} columns={tableInfo.columns} pagination={false}/>
                 <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
