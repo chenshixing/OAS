@@ -16,7 +16,9 @@ import {
     Icon,
     Modal,
     Select,
-    Input
+    Input,
+    notification,
+    Button
 } from 'antd';
 const Option = Select.Option;
 
@@ -33,7 +35,7 @@ export default class Home extends React.Component {
                 lastLoginTime:"",
                 getUserServiceList:[]
             },
-            isInviteCode: false
+            isInviteCode: true
         }
     }
     componentDidMount() {
@@ -72,7 +74,32 @@ export default class Home extends React.Component {
     }
     handleOk() {
         console.log('点击了确定');
+        if(this.state.isInviteCode){
+            console.log(this.state.inviteCodeValue)
+            fetch('/service/addService',{
+                body:{
+                    "inviteCode":this.state.inviteCodeValue
+                }
+            }).then(res => {
+                //console.log(res)
+                //this.setState(res)
+                //提示
+                this.openNotification(res)
+                //设置值为空
+                this.setState({
+                    inviteCodeValue:""
+                })
+            });
+            //console.log( this.state.inviteCodeValue )
+        }
         this.setState({visible: false});
+    }
+    openNotification(getRes){
+        console.log(getRes)
+        notification.open({
+            message: '提示',
+            description: "添加成功",
+        });
     }
     handleCancel(e) {
         console.log(e);
@@ -102,8 +129,16 @@ export default class Home extends React.Component {
         };
         return items[item]
     }
+    handleInviteCodeValue(e){
+        this.setState({
+            inviteCodeValue:e.target.value
+        })
+    }
+
     render() {
         console.log(this)
+
+
 
         let {getUserServiceList=[]} = this.state.data
 
@@ -112,8 +147,15 @@ export default class Home extends React.Component {
                 minHeight: "700px"
             }}>
 
-                <Modal title="添加业务" visible={this.state.visible} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} wrapClassName="vertical-center-modal">
-
+                <Modal
+                    title="添加业务"
+                    visible={this.state.visible}
+                    onOk={this.handleOk.bind(this)}
+                    onCancel={this.handleCancel.bind(this)}
+                    wrapClassName="vertical-center-modal"
+                >
+                    {/*好像不用做*/}
+                    {/*
                     <Row>
                         <Col span={4} offset={6}>
                             <label className="ant-form-item-label">请选择业务:</label>
@@ -129,6 +171,7 @@ export default class Home extends React.Component {
                             </Select>
                         </Col>
                     </Row>
+                    */}
                     {
                         this.state.isInviteCode
                         ?
@@ -137,7 +180,12 @@ export default class Home extends React.Component {
                                 <label className="ant-form-item-label">邀请码:</label>
                             </Col>
                             <Col span={8} offset={0}>
-                                <Input type="text" placeholder="请输入邀请码"/>
+                                <Input
+                                    type="text"
+                                    placeholder="请输入邀请码"
+                                    value={this.state.inviteCodeValue}
+                                    onChange={this.handleInviteCodeValue.bind(this)}
+                                    />
                             </Col>
                         </Row>
                         :
