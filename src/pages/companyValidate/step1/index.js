@@ -41,6 +41,7 @@ class CompanyValidate extends React.Component {
                 bankAccount : '',
                 provinces : [],
                 cities : [],
+                bankList : [],
                 bank : undefined,
                 province : undefined,
                 city : undefined,
@@ -81,7 +82,22 @@ class CompanyValidate extends React.Component {
     }
 
     componentDidMount() {
+        this.bankInit();
         this.provinceInit();
+    }
+
+    bankInit(){
+        let me = this;
+        let data = this.state.data;
+        fetch('/bank/banklist').then(res => {
+            if(res.code == 200){
+                data.bankList = res.data;
+                console.log(data.bankList);
+                me.setState({
+                    data : data
+                });
+            }
+        });
     }
 
     provinceInit(){
@@ -474,11 +490,11 @@ class CompanyValidate extends React.Component {
                           required
                         >
                           <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bank',Object.assign({},rules.bank,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
-                            <Option value="0">中国工商银行</Option>
-                            <Option value="1">中国农业银行</Option>
-                            <Option value="2">中国银行</Option>
-                            <Option value="3">中国建设银行</Option>
-                            <Option value="4">交通银行</Option>
+                            { this.state.data.bankList.map( (item,index) => {
+                                return (
+                                    <Option value={item.B_BankID} key={index}>{item.BankName}</Option>
+                                );
+                            })}
                           </Select>
                         </FormItem>
 
