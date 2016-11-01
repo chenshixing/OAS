@@ -92,7 +92,7 @@ class CompanyValidate extends React.Component {
         fetch('/bank/banklist').then(res => {
             if(res.code == 200){
                 data.bankList = res.data;
-                console.log(data.bankList);
+                // console.log(data.bankList);
                 me.setState({
                     data : data
                 });
@@ -125,7 +125,7 @@ class CompanyValidate extends React.Component {
         }).then(res => {
             if(res.code == 200){
                 data.bank = res.data.B_BankID;
-                console.log(data);
+                // console.log(data);
                 me.setState({
                     data : data
                 });
@@ -149,7 +149,7 @@ class CompanyValidate extends React.Component {
                 data.cities = res.data;
                 data.cityPlaceHolder = "请选择城市";
                 data.cityDisabled = false;
-                console.log(data.cities);
+                // console.log(data.cities);
                 me.setState({
                     data : data
                 });
@@ -160,7 +160,7 @@ class CompanyValidate extends React.Component {
     onBankChange(value){
         let data = this.state.data;
         data.bank = value;
-        console.log(data);
+        // console.log(data);
         this._getBranch();
     }
 
