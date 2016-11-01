@@ -28,10 +28,12 @@ export default (url, data, showLoading, pending) => {
 
     // fetch 规范中只有 post 才能设置 body 属性
     // 当为 get 方法时需拼接在 url 上
-    if(data && data['body']) {
+    if(data && data.body) {
 
         // 当有body传递时，强制设置为 post 方法
-        data['method'] = 'post';
+        data.method = 'post';
+        // 统一JSON字符串化
+        data.body = JSON.stringify(data.body)
     }
 
     // 合并配置
