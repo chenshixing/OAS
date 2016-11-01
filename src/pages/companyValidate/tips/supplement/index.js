@@ -53,7 +53,7 @@ class Supplement extends Component {
                     <div className="ant-col-18">
                         <h4>广东亿达有限公司</h4>
                         <p>您的认证资料未填写完，请尽快完成。<Button type="primary">继续填写</Button></p>
-                        <p>如需修改已提交信息，请点击<Link to='/'>重新认证</Link>。</p>
+                        <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1'>重新认证</Link>。</p>
                     </div>
                 </Row>
                 <Row className="tipsRow">
