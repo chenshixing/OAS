@@ -32,6 +32,7 @@ class CountDown extends Component {
 			});
 			if(state.time < 1000){
 				clearInterval(timer);
+				//	倒计时结束TODO
 			}
 		},1000);
 	}
