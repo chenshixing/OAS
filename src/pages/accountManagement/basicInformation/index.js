@@ -26,6 +26,8 @@ export default class BasicInformation extends React.Component {
                 getCompanyPaperInfoStatus:{},
                 getIsSetPayPassword:null,
                 getBindMobile:null,
+                getRelatedPersonInfo:[],
+
             }
         }
     }
@@ -41,10 +43,11 @@ export default class BasicInformation extends React.Component {
         let p3 = fetch('/user/getIsSetPayPassword');
         //获取对公账户验证状态(v0.9)
         let p4 = fetch('/user/getAccountCheckStatus');
-        //获取用户信息填写人（关系人）信息(v1.4)
+        //获取用户信息填写人（关系人）信息(v1.4) //实名认证
         let p5 = fetch('/user/getRelatedPersonInfo');
         //企业资料提交状态(v0.5)
         let p6 = fetch('/paper/getCompanyPaperInfoStatus');
+
 
         Promise.all([p1, p2,p3,p4,p5,p6]).then(values => {
           console.log(values);
