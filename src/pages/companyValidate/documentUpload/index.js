@@ -2,13 +2,16 @@ import React, { Component, PropTypes } from 'react';
 
 import { Link } from 'react-router';
 // antd 组件
-import { Form, Button, Upload, Row, Col, Icon, message} from 'antd';
+import { Form, Button, Upload, Row, Col, Icon, Modal, message} from 'antd';
 
 // 页面组件
 import Frame from 'COM/form/frame';
 
 const createForm = Form.create;
 const FormItem = Form.Item;
+
+//  引入fetch
+import { fetch } from 'UTILS';
 
 class DocumentUpload extends Component {
     static propTypes = {
@@ -18,16 +21,54 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fileList : []
+            limit : 5,
+            fileList : {
+                Registration : [],
+                OrgInsCode : [],
+                SocialCredit : [],
+                IdentityProof : [],
+                DeletegatePromiseLetter : []
+            },
         }
     }
 
-    handleChange(info) {
+    componentDidMount() {
+        this.loadData();
+    }
+
+    loadData(){
+        let me = this;
+        let fileList = me.state.fileList;
+        fetch('/paper/search',{
+            body : {
+                userId : 123
+            }
+        }).then(res => {
+            if(res.code == 200){
+                for( let prop in res.data){
+                    res.data[prop].map( (item,index) =>{
+                        let uid = prop + '_' + new Date()/1 + '_' + index;
+                        let file = {
+                            uid: uid,
+                            name: item.fileName,
+                            status: 'done',
+                            url: item.imgUrl,
+                            data: item
+                        }
+                        fileList[prop].push(file);
+                    })
+                }
+                me.setState({ fileList });
+            }
+        });
+    }
+
+    _getFileList(info){
         let fileList = info.fileList;
 
         // 1. 上传列表数量的限制
-        //    只显示最近上传的一个，旧的会被新的顶掉
-        fileList = fileList.slice(-1);
+        //    只显示最近上传的五个，旧的会被新的顶掉
+        fileList = fileList.slice(-5);
 
         // 2. 读取远程路径并显示链接
         fileList = fileList.map((file) => {
@@ -46,11 +87,116 @@ class DocumentUpload extends Component {
           return true;
         });
 
+        return fileList;
+    }
+
+    _warning(){
+        let me = this;
+        Modal.warning({
+            title: '图片最多上传' + me.state.limit + '张',
+            content: '请删除图片后再上传。',
+        });
+    }
+
+    socialCreditChange(info) {
+        if(info.fileList.length > this.state.limit){
+            //  已达五张上限
+            this._warning();
+            return false;
+        }
+
+        let fList = this._getFileList(info);
+        let fileList = this.state.fileList;
+        fileList.SocialCredit = fList;
+
+        this.setState({ fileList });
+    }
+
+    registrationChange(info) {
+        if(info.fileList.length > this.state.limit){
+            //  已达五张上限
+            this._warning();
+            return false;
+        }
+
+        let fList = this._getFileList(info);
+        let fileList = this.state.fileList;
+        fileList.Registration = fList;
+
+        this.setState({ fileList });
+    }
+
+    orgInsCodeChange(info) {
+        if(info.fileList.length > this.state.limit){
+            //  已达五张上限
+            this._warning();
+            return false;
+        }
+
+        let fList = this._getFileList(info);
+        let fileList = this.state.fileList;
+        fileList.OrgInsCode = fList;
+
+        this.setState({ fileList });
+    }
+
+    identityProofChange(info) {
+        if(info.fileList.length > this.state.limit){
+            //  已达五张上限
+            this._warning();
+            return false;
+        }
+
+        let fList = this._getFileList(info);
+        let fileList = this.state.fileList;
+        fileList.IdentityProof = fList;
+
+        this.setState({ fileList });
+    }
+
+    deletegatePromiseLetterChange(info) {
+        if(info.fileList.length > this.state.limit){
+            //  已达五张上限
+            this._warning();
+            return false;
+        }
+
+        let fList = this._getFileList(info);
+        let fileList = this.state.fileList;
+        fileList.DeletegatePromiseLetter = fList;
+
         this.setState({ fileList });
     }
 
     submit(){
-        console.log(this.refs);
+        let data = this._getSubmitData();
+        console.log(data);
+        fetch('/paper/save',{
+            body : {
+                uid : 123,
+                data : data
+            }
+        }).then(res => {
+            if(res.code == 200){
+                console.log(res);
+                //  提交成功TODO
+            }
+        });
+    }
+
+    _getSubmitData(){
+        let data = {};
+
+        let fileList = this.state.fileList;
+        for( let prop in fileList ){
+            data[prop] = [];
+            fileList[prop].map( (item,index) => {
+                let file = item.data ? item.data : item.response.data;
+                data[prop].push(file);
+            })
+        }
+
+        return data;
     }
 
     render() {
@@ -98,20 +244,24 @@ class DocumentUpload extends Component {
             },
             data: {
                 "userId": "123"
-            },
-            // onChange(info) {
-            //     console.log(info);
-            //     if (info.file.status !== 'uploading') {
-            //       console.log(info.file, info.fileList);
-            //     }
-            //     if (info.file.status === 'done') {
-            //       message.success(`${info.file.name} 上传成功。`);
-            //     } else if (info.file.status === 'error') {
-            //       message.error(`${info.file.name} 上传失败。`);
-            //     }
-            // },
-            onChange : this.handleChange.bind(this)
+            }
         };
+
+        const socialCreditUpLoadProps = Object.assign({},upLoadProps,{
+            onChange : this.socialCreditChange.bind(this)
+        });
+        const registrationUpLoadProps = Object.assign({},upLoadProps,{
+            onChange : this.registrationChange.bind(this)
+        });
+        const orgInsCodeUpLoadProps = Object.assign({},upLoadProps,{
+            onChange : this.orgInsCodeChange.bind(this)
+        });
+        const identityProofUpLoadProps = Object.assign({},upLoadProps,{
+            onChange : this.identityProofChange.bind(this)
+        });
+        const deletegatePromiseLetterUpLoadProps = Object.assign({},upLoadProps,{
+            onChange : this.deletegatePromiseLetterChange.bind(this)
+        });
 
         const { getFieldProps } = this.props.form;
 
@@ -124,7 +274,7 @@ class DocumentUpload extends Component {
 	                    label="营业执照"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} fileList={this.state.fileList} ref="Registration">
+	                    <Upload {...registrationUpLoadProps} fileList={this.state.fileList.Registration}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -136,7 +286,7 @@ class DocumentUpload extends Component {
 	                    label="组织机构代码证"
 	                    required
 	                >
-	                    <Upload {...upLoadProps} ref="OrgInsCode">
+	                    <Upload {...orgInsCodeUpLoadProps} fileList={this.state.fileList.OrgInsCode}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -163,7 +313,7 @@ class DocumentUpload extends Component {
                         label=" 企业法定代表人身份证明书"
                         required
                     >
-                        <Upload {...upLoadProps} ref="IdentityProof">
+                        <Upload {...identityProofUpLoadProps} fileList={this.state.fileList.IdentityProof}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -185,7 +335,7 @@ class DocumentUpload extends Component {
                         label="承诺函及授权委托书"
                         required
                     >
-                        <Upload {...upLoadProps} ref="DeletegatePromiseLetter">
+                        <Upload {...deletegatePromiseLetterUpLoadProps} fileList={this.state.fileList.DeletegatePromiseLetter}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
