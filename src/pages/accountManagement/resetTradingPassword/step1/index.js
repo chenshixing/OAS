@@ -28,6 +28,8 @@ import {
 } from 'antd';
 const Step = Steps.Step;
 const FormItem = Form.Item;
+
+import { fetch } from 'UTILS';
 // 页面
 export default class Steps1 extends React.Component {
     constructor(props) {
@@ -39,6 +41,8 @@ export default class Steps1 extends React.Component {
                 realName: 'xxx',
                 identityCode: '12345',
                 phoneNumber: '15999872092',
+                getLoginUserSimpleInfo:{},
+                getdesensitizemobile:{},
             },
             //是否发送
             isSend:false,
@@ -63,11 +67,41 @@ export default class Steps1 extends React.Component {
     }
     handleSend(){
         //进入实名验证
+        //发送短信验证码
+        fetch('/common/smsAutoCode',{
+            body:{
+                "businesstype": "register"
+            }
+        }).then(res=>{
+            this.state.isSend = true;
+            this.forceUpdate();
+        })
+    }
+    componentDidMount(){
+        this.loadData();
+    }
+    loadData(){
 
-        this.state.isSend = true;
-        this.forceUpdate();
+        //用户简单信息(v0.7)
+        let p1 = fetch('/user/getLoginUserSimpleInfo');
+        //获取姓名及脱敏手机号(v0.2)
+        let p2 = fetch('/user/getdesensitizemobile',{
+            body:{
+                "businesstype": 3
+            }
+        })
+
+        Promise.all([p1, p2]).then(values => {
+          console.log(values);
+          this.state.data.getLoginUserSimpleInfo = values[0].data
+          this.state.data.getdesensitizemobile = values[1].data
+          this.forceUpdate();
+        }).catch(reason => {
+          console.log(reason)
+        });
     }
     render() {
+        console.log(this)
         return (
             <div>
 
@@ -82,11 +116,12 @@ export default class Steps1 extends React.Component {
                     <Authenticate
 
                         handleSend={this.handleSend.bind(this)}
+                        {...this.state.data}
                     />
                     :
                     <RealNameAuthentication
-                        data={this.state.data}
                         isValidation={this.state.isValidation}
+                        {...this.state.data}
                     />
                 }
             </div>
