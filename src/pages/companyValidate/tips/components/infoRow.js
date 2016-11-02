@@ -9,7 +9,7 @@ import { Row, Col, Button, Table} from 'antd';
 import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
 import CountDown from './countDown';
-import Sms from './sms';
+import Sms from 'BCOM/Sms/index';
 
 //  引入fetch
 import { fetch } from 'UTILS';
@@ -157,15 +157,21 @@ class InfoRow extends Component {
     }
 
     _realName(){
-    	if(this.state.data.passed){
+        let data = this.state.data;
+    	if(data.passed){
     		return false;
     	}
     	/*审核不通过可以修改认证资料*/
     	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editBasic' className="fn-ml-20">修改资料</Link> : "";
+        let smsData = {
+            name: data.name,
+            identityCode: data.identityCode,
+            connectorType: data.connectorType
+        };
     	return (
     		<Col span={12}>
 				<Row>
-					<Col span={12}><Sms />{editButton}</Col>
+					<Col span={12}><Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>{editButton}</Col>
                     <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>

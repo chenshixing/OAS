@@ -2,6 +2,11 @@
 import ruleType from 'UTILS/ruleType';
 
 const rulesBase = {
+    companyName : {
+        rules:[
+            {required: true, message: '企业名称不能为空'},
+        ]
+    },
     endTime:{
         rules:[
             {required: true, type: 'object', message: '营业执照到期日不能为空'},
