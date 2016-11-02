@@ -11,6 +11,9 @@ import StepsBar from './StepsBar';
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
 
+
+import {fetch} from 'UTILS';
+
 // antd 组件
 import {
     Alert,
@@ -35,7 +38,9 @@ class Steps2 extends React.Component {
             passBarShow: false, // 是否显示密码强度提示条
             rePassBarShow: false,
             passStrength: 'L', // 密码强度
-            rePassStrength: 'L'
+            rePassStrength: 'L',
+            pwd:"",
+            conpwd:"",
         }
     }
     handleSubmit() {
@@ -45,9 +50,18 @@ class Steps2 extends React.Component {
                 console.log('Errors in form!!!');
                 return;
             }
-            window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
-            console.log('Submit!!!');
-            console.log(values);
+            fetch('/user/resetPwd',{
+                body:{
+                  "businesstype": 3,
+                  "pwd": this.state.pwd,
+                  "conpwd": this.state.conpwd
+                }
+            }).then(res => {
+
+                console.log(res)
+                //this.setState(res)
+                window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
+            });
         });
     }
 
@@ -148,6 +162,9 @@ class Steps2 extends React.Component {
             ],
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
+                this.setState({
+                    pwd:e.target.value
+                })
             }
         });
         const rePassProps = getFieldProps('rePass', {
@@ -163,7 +180,13 @@ class Steps2 extends React.Component {
                 }, {
                     validator: this.checkPass2.bind(this)
                 }
-            ]
+            ],
+            onChange: (e) => {
+                console.log('你的密码就是这样被盗的：', e.target.value);
+                this.setState({
+                    conpwd:e.target.value
+                })
+            }
         });
 
         return (
@@ -173,7 +196,7 @@ class Steps2 extends React.Component {
                 <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem {...formItemLayout} label="设置交易密码">
-                            <Input {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
+                            <Input  {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
                             {this.state.passBarShow
                                 ? this.renderPassStrengthBar('pass')
                                 : null}
@@ -191,7 +214,7 @@ class Steps2 extends React.Component {
                             <Col span="16">
                                 <Col span="8" offset="12">
                                     <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
-                                    <Link to="/accountManagement/resetTradingPassword/Steps3">提交</Link>
+                                    <Link to="/accountManagement/resetTradingPassword/Step3">提交</Link>
                                 </Col>
                             </Col>
                         </Row>
