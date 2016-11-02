@@ -49,7 +49,8 @@ class CompanyValidate extends React.Component {
                 cityDisabled : true,
                 branchDisabled : true,
                 branchPlaceHolder : "请先选择开户行和所在城市",
-                branches : []
+                branches : [],
+                companyName: ""
             },
             dataSource : [{
               key: '1',
@@ -111,6 +112,14 @@ class CompanyValidate extends React.Component {
                     data : data
                 });
             }
+        });
+    }
+
+    onCompanyNameChange(e){
+        let data = this.state.data;
+        data.companyName = e.target.value;
+        this.setState({
+            data : data
         });
     }
 
@@ -334,7 +343,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                            <p className="ant-form-text">{this.state.data.companyName}</p>
+                           <Input {...getFieldProps('companyName',Object.assign({},rules.companyName,{ onChange : this.onCompanyNameChange.bind(this) }))} />
                         </FormItem>
 
                         <FormItem
@@ -473,7 +482,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           label="账户名称"
                         >
-                          <p className="ant-form-text" id="userName" name="userName">广东亿达有限公司</p>
+                          <p className="ant-form-text" id="userName" name="userName">{ this.state.data.companyName }</p>
                         </FormItem>
 
                         <FormItem

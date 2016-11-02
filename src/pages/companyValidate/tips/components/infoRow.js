@@ -171,7 +171,7 @@ class InfoRow extends Component {
     	return (
     		<Col span={12}>
 				<Row>
-					<Col span={12}><Sms data={ smsData } businesstype={1}/>{editButton}</Col>
+					<Col span={12}><Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>{editButton}</Col>
                     <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>

@@ -69,7 +69,7 @@ class Sms extends Component {
 
     render() {
         return (
-            <Button type="primary" onClick={ this.sms.bind(this) }>重新发送验证短信</Button>
+            <Button type="primary" onClick={ this.sms.bind(this) }>{ this.props.children }</Button>
         );
     }
 }
