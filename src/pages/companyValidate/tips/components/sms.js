@@ -18,10 +18,10 @@ class Sms extends Component {
 
     sms() {
     	let me = this;
-		fetch('/common/smsAutoCode',{
+		fetch('/common/pinCode',{
 			body : {
-			  "mobile": 13888888888,
-			  "businesstype": "register"
+			  "businesstype": 1,
+			  "connectortype": 2
 			}
 		}).then(res => {
             if(res.code == 200){

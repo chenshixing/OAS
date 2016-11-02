@@ -8,7 +8,8 @@ class CountDown extends Component {
     constructor(props) {
         super(props);
         this.state = Object.assign({},this.props,{
-			time : 172800000,
+			// time : 172800000,
+			time : 5000,
 			timeDisplay: "",
         });
     }
@@ -27,13 +28,14 @@ class CountDown extends Component {
 			let state = me.state;
 			state.time -= 1000;
 			state.timeDisplay = me._getTimeDisplay();
-			me.setState({
-				state : state
-			});
 			if(state.time < 1000){
 				clearInterval(timer);
 				//	倒计时结束TODO
+				state.timeDisplay = undefined;
 			}
+			me.setState({
+				state : state
+			});
 		},1000);
 	}
 
@@ -55,9 +57,17 @@ class CountDown extends Component {
 	}
 
     render() {
-        return (
-            <span className="warning-FontColor fs-26">{ this.state.timeDisplay }</span>
-        );
+    	if(this.state.timeDisplay){
+    		return (
+	        	<p>
+	        		请在
+	        		<span className="warning-FontColor fs-26">{ this.state.timeDisplay }</span>
+	        		内完成支付
+	        	</p>
+	        )
+    	}else{
+			return (<strong className="warning-FontColor fs-16">超过约定时间，系统未收到小额验证金</strong>)
+    	}
     }
 }
 
