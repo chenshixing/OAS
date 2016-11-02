@@ -36,6 +36,10 @@ export default class Content extends Component{
         });
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps);
+    }
+
     identity(){
         let data = this.state.data;
         return (
