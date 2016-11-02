@@ -11,6 +11,7 @@ import 'ASSETS/less/main.less';
 import ruleType from 'UTILS/ruleType';
 // 页面组件
 import Frame from 'COM/form/frame';
+import AgreementModal from 'COM/agreementModal/index';
 
 // antd 组件
 import { Button, Form, Input, Checkbox, Steps, Row, Col } from 'antd';
@@ -26,7 +27,10 @@ function noop() {
 class PersonalValidate extends React.Component {
     constructor(props){
         super(props);
-        this.state={};
+        this.state={
+            agreementModalVisible:false,
+            agreementModalName:'',
+        };
 
     }
 
@@ -71,6 +75,26 @@ class PersonalValidate extends React.Component {
         }else{
             callback();
         }
+    }
+
+    openAgreementModal(name){
+        console.log('name',name)
+        this.setState({
+            agreementModalVisible:true,
+            agreementModalName:name
+        });
+    }
+
+    hideAgreementModal(){
+        this.setState({
+            agreementModalVisible:false
+        });
+    }
+
+    handleAgreement(){
+        this.setState({
+            agreementModalVisible:false
+        });
     }
 
     render(){
@@ -132,7 +156,7 @@ class PersonalValidate extends React.Component {
                                 <Col span="24">
                                     <Col span="12" offset="8">
                                         <Checkbox {...getFieldProps('agreement',rules.agreement)} >我已阅读并同意
-                                                <a href="">《数字证书服务协议》</a>
+                                                <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this,"《数字证书服务协议》")}>《数字证书服务协议》</a>
                                         </Checkbox>
                                     </Col>
                                 </Col>
@@ -147,6 +171,7 @@ class PersonalValidate extends React.Component {
                         </Form>
                     </div>
                 </Frame>
+                <AgreementModal name={this.state.agreementModalName} visible={ this.state.agreementModalVisible } onOk={this.handleAgreement.bind(this)} onCancel={this.hideAgreementModal.bind(this)} />
             </div>
         )
     }

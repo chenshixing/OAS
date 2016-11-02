@@ -29,6 +29,7 @@ class Check extends Component {
                     </div>
                     <div className="ant-col-18">
                         <h4>您好，李彤</h4>
+                        <p>您的认证资料未填写完，请尽快完成。<Button type='primary' size='small'>继续填写</Button></p>
                         <p>请尽快完成以下认证条件，如需修改信息请联系客服电话：400-106-6698。</p>
                     </div>
                 </Row>
