@@ -54,8 +54,9 @@ export default class Home extends React.Component {
         // });
         //
 
+        //用户简单信息(v0.7)
         let p1 = fetch('/user/getLoginUserSimpleInfo');
-
+        //返回用户服务列表(v0.3)
         let p2 = fetch('/user/getUserServiceList');
 
         Promise.all([p1, p2]).then(values => {
