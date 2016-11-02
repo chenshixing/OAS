@@ -20,16 +20,17 @@ export default class Authenticate extends React.Component {
         this.props.handleSend()
     }
     render() {
+        console.log(this)
         return (
             <Frame title="验证身份" small="（您的账户已实名认证，为了您的账户安全，请使用实名认证资料进行校验。）">
                 <Form horizontal className="fn-mt-30">
                     <FormItem
                         id="control-input"
-                        label="委托代理人"
+                        label={this.props.getLoginUserSimpleInfo.userType==1?"姓名":"委托代理人"}
                         labelCol={{span: 10}}
                         wrapperCol={{span: 12}}
                         >
-                        <label>李彤</label>
+                        <label>{this.props.getdesensitizemobile.name}</label>
                     </FormItem>
                     <FormItem
                         id="control-input"
@@ -37,7 +38,7 @@ export default class Authenticate extends React.Component {
                         labelCol={{span: 10}}
                         wrapperCol={{span: 12}}
                         >
-                        <label>133****1234</label>
+                        <label>{this.props.getdesensitizemobile.mobile}</label>
                     </FormItem>
                     <FormItem wrapperCol={{ span: 8, offset: 10 }} style={{ marginTop: 24 }}>
                         <Button type="primary"  onClick={this.handleSend.bind(this)}>发送身份识别码至手机</Button>

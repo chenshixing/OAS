@@ -14,14 +14,15 @@ import {
     Row,
     Col,
     Modal,
-    Icon
+    Icon,
+    message
 } from 'antd';
 const Step = Steps.Step;
 const FormItem = Form.Item;
 
 import codeimg from 'ASSETS/images/code.png';
 import {IdentityModal, SupplementModal} from 'BCOM/Modal/index';
-
+import {fetch} from 'UTILS';
 
 
 // 页面身份验证
@@ -68,8 +69,12 @@ export default class RealNameAuthentication extends React.Component {
 
     handleMessage() {
 
-        fetch('/api/home/getLastLoginTime').then(res => res.json()).then(res => {
-            alert(JSON.stringify(res));
+        fetch('/common/smsAutoCode',{
+            body:{
+                "businesstype": "register"
+            }
+        }).then(res=>{
+            message.success('验证码发送发送成功...');
         })
     }
 
@@ -98,7 +103,7 @@ export default class RealNameAuthentication extends React.Component {
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p>
-                                姓名：{this.state.data.realName}，您的身份识别码已发送到手机133****1234。
+                                姓名：{this.props.getdesensitizemobile.name}，您的身份识别码已发送到手机{this.props.getdesensitizemobile.mobile}。
                                 <a href='javascript:;' onClick={this.handleMessage.bind(this)}>没有收到短信，重新发送</a>
                             </p>
                             <p>
