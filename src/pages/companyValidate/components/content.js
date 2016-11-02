@@ -28,6 +28,10 @@ export default class Content extends Component{
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps);
+    }
+
     showIdentityModal() {
 	    this.setState({
 	      identityVisible: true,
