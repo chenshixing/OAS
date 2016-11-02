@@ -41,7 +41,7 @@ export default class Authenticate extends React.Component {
                     </FormItem>
                     <FormItem wrapperCol={{ span: 8, offset: 10 }} style={{ marginTop: 24 }}>
                         <Button type="primary"  onClick={this.handleSend.bind(this)}>发送身份识别码至手机</Button>
-                        <Link to="/accountManagement/resetTradingPassword/Steps2">发送身份识别码至手机</Link>
+                        <Link to="/accountManagement/resetTradingPassword/Step2">发送身份识别码至手机</Link>
                     </FormItem>
 
 
