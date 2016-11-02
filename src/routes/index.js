@@ -37,6 +37,15 @@ const routes = {
             })
           }
         },
+        // 业务错误页面
+        {
+          path: 'error',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/error').default)
+            })
+          }
+        },
           // 注册
           {
               path: 'userRegister',

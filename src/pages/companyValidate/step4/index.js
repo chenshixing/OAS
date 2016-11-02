@@ -14,6 +14,11 @@ const Step = Steps.Step;
 import Content from '../components/content';
 import Status from '../components/status';
 
+import Map from '../components/map';
+
+//  引入fetch
+import { fetch } from 'UTILS';
+
 // 页面组件（导出）
 export default class PersonalValidate extends React.Component {
     static propTypes = {
@@ -36,26 +41,41 @@ export default class PersonalValidate extends React.Component {
                   title: '认证状态',
                   dataIndex: 'status',
                   key: 'status',
-                }]
+                }],
+                identityData : []
             }
         }
     }
 
+    componentDidMount() {
+      this.identityDataInit();
+    }
+
+    identityDataInit(){
+      let me = this;
+      let data = me.state.data;
+      fetch('/user/getRelatedPersonInfo').then(res => {
+          if(res.code == 200){
+              res.data.map( (item,index) => {
+                if(Map.identityMap.checkPassType[item.checkPass]){
+                  return true;
+                }
+                let identityItem = {
+                  type : Map.identityMap.type[item.connectorType],
+                  name : item.realName,
+                  identityCode : item.identityCode,
+                  passed : Map.identityMap.checkPassType[item.checkPass]
+                }
+                data.identityData.push(identityItem);
+              });
+              me.setState({
+                data : data
+              });
+          }
+      });
+    }
+
     render() {
-        let identityData = [
-            {
-                type : 'agent',
-                name : '李彤',
-                number : '1234 5678',
-                passed : false,
-            },
-            {
-                type : 'corporation',
-                name : '文静',
-                number : '1234 5678',
-                passed : false,
-            }
-        ];
         let accountData1 = {
             passed : false,
         }
@@ -68,8 +88,8 @@ export default class PersonalValidate extends React.Component {
         let dataSource = [{
           key: '0',
           type: '身份实名认证',
-          content: <Content data={identityData} type="identity"/>,
-          status: <Status data={identityData} type="identity"/>
+          content: <Content data={this.state.data.identityData} type="identity"/>,
+          status: <Status data={this.state.data.identityData} type="identity"/>
         },{
           key: '1',
           type: '企业对公账户认证',

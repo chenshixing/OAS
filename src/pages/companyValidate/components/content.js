@@ -69,7 +69,7 @@ export default class Content extends Component{
                         <Row key={index} className="row doubleLine">
                             <Col span={24}>
                                 <p>
-                                    {name[item.type]}：<strong>{item.name}</strong>，您的身份识别码为<span className="warning-FontColor">{item.number}</span>，请扫描以下二维码下载APP进行<br />
+                                    {name[item.type]}：<strong>{item.name}</strong>，您的身份识别码为<span className="warning-FontColor">{item.identityCode}</span>，请扫描以下二维码下载APP进行<br />
                                     实名认证。
                                     <Tooltip placement="top" title={<QRCode />} >
                                     	<a href="javaScript:void(0);">鼠标指向这里显示二维码。</a>
