@@ -50,6 +50,8 @@ class TipsRow extends Component {
             res[0].data.map( (item,index) => {
               let userData = {
                 name : item.realName,
+                connectorType : item.connectorType,
+                identityCode : item.identityCode,
                 passed : Map.identityMap.passType[item.checkPass]
               }
               let dataType = Map.identityMap.type[item.connectorType];
