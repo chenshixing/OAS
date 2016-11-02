@@ -53,6 +53,140 @@ export default class basicBody extends React.Component {
         }
         return result
     }
+    /**
+     * items 数组的每一项
+     * type 个人/企业
+     * connectorType==3 个人姓名
+     * items.filter 全部都>0的时候，改变状态。
+     */
+    handleGetRelatedPersonInfoIconTemplate(items,type){
+        let p1 = "";
+        if(type===1){
+            p1 = items.map((item,index)=>{
+                if(item.connectorType==3){
+                    return (
+                        <div>
+                            {
+                                item.checkPass>0
+                                ?
+                                <Icon type="check"/>
+                                :
+                                <Icon type="cross" className="error-FontColor1" />
+                            }
+                        </div>
+                    )
+                }
+            })
+        }else if(type===2){
+
+            let result = items.every((item,index)=>{
+                return item.checkPass>0
+            })
+            if(result==true){
+                p1 = <Icon type="check"/>;
+            }else{
+                p1 = <Icon type="cross" className="error-FontColor1" />;
+            }
+            //console.log(p1,"filter")
+        }
+
+        return p1;
+    }
+    getRelatedPersonInfoTemplate(items,type){
+        let p1 = "";
+        if(type===1){
+            p1 = items.map((item,index)=>{
+                if(item.connectorType==3){
+                    return (
+                        <div>
+                            <span
+                                className="text-align-right"
+                                style={{width:150,display:"inline-block"}}
+                                >
+                                姓名：
+                            </span>
+                            <span
+                                className="heading-FontColor"
+                                style={{width:80,display:"inline-block"}}
+                                >
+                                {item.realName}
+                            </span>
+                            {
+                                item.checkPass>0
+                                ?
+                                <span
+                                    className="success-FontColor1"
+                                    style={{width:80,display:"inline-block"}}
+                                    >
+                                    已验证
+                                </span>
+                                :
+                                <span
+                                    className="error-FontColor1"
+                                    style={{width:80,display:"inline-block"}}
+                                    >
+                                    未认证
+                                </span>
+                            }
+
+                            <span colSpan={2}>
+                                <a href="javascript:;" className="link-standard">
+                                    重新发送验证短信</a>
+                            </span>
+                        </div>
+                    )
+                }
+            })
+        }else if(type===2){
+            p1 = items.map((item,index)=>{
+
+                    return (
+                        <div>
+                            <span
+                                className="text-align-right"
+                                style={{width:150,display:"inline-block"}}
+                                >
+                                姓名：
+                            </span>
+                            <span
+                                className="heading-FontColor"
+                                style={{width:80,display:"inline-block"}}
+                                >
+                                {item.realName}
+                            </span>
+                            {
+                                item.checkPass>0
+                                ?
+                                <span
+                                    className="success-FontColor1"
+                                    style={{width:80,display:"inline-block"}}
+                                    >
+                                    已验证
+                                </span>
+                                :
+                                <span
+                                    className="error-FontColor1"
+                                    style={{width:80,display:"inline-block"}}
+                                    >
+                                    未认证
+                                </span>
+                            }
+
+                            <span colSpan={2}>
+                                <a href="javascript:;" className="link-standard">
+                                    重新发送验证短信</a>
+                            </span>
+                        </div>
+                    )
+
+            })
+        }
+
+
+        return p1;
+    }
+
+
     render() {
         console.log(this)
         let {
@@ -73,6 +207,11 @@ export default class basicBody extends React.Component {
          const getBindMobileTemplate = this.handleGetBindMobileTemplate(getBindMobile);
          //对公账户
          const getAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getAccountCheckStatus);
+
+         //实名验证图标
+         let getRelatedPersonInfoIcon = this.handleGetRelatedPersonInfoIconTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
+         //实名验证内容
+         let getRelatedPersonInfoTemplate = this.getRelatedPersonInfoTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
         return (
             <div>
                 <div>
@@ -122,7 +261,27 @@ export default class basicBody extends React.Component {
                                 {/*实名认证*/}
                                 <tr className="align-top">
                                     <td rowSpan={2}  className="text-align-center fs-20">
-                                        <Icon type="cross" className="error-FontColor1" />
+                                        {getRelatedPersonInfoIcon}
+                                        {/*
+
+                                            getRelatedPersonInfo.map((item,index)=>{
+                                                if(item.connectorType==3){
+                                                    return (
+                                                        <div>
+
+                                                            {
+                                                                item.checkPass>0
+                                                                ?
+                                                                <Icon type="check"/>
+                                                                :
+                                                                <Icon type="cross" className="error-FontColor1" />
+                                                            }
+                                                        </div>
+                                                    )
+                                                }
+                                            })
+                                        */}
+
                                     </td>
                                     <td rowSpan={2}>
                                         <h3 className="fn-pt-10">实名认证</h3>
@@ -132,13 +291,12 @@ export default class basicBody extends React.Component {
                                     </td>
                                 </tr>
                                 <tr className="noborder align-top">
-                                    <td className="text-align-right">姓名：</td>
-                                    <td className="heading-FontColor">**敏</td>
-                                    <td className="error-FontColor1">未认证</td>
-                                    <td colSpan={2}>
-                                        <a href="javascript:;" className="link-standard">
-                                            重新发送验证短信</a>
+                                    <td>
+                                            {getRelatedPersonInfoTemplate}
+
+
                                     </td>
+
                                 </tr>
                                 <tr>
                                     <td className="text-align-center fs-20">
