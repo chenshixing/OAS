@@ -27,6 +27,7 @@ export default class BasicInformation extends React.Component {
                 getIsSetPayPassword:null,
                 getBindMobile:null,
                 getRelatedPersonInfo:[],
+                getCompanyAccountCheckStatus:[],
 
             }
         }
@@ -41,8 +42,8 @@ export default class BasicInformation extends React.Component {
         let p2 = fetch('/user/getBindMobile');
         //是否设置交易密码(v0.2)
         let p3 = fetch('/user/getIsSetPayPassword');
-        //获取对公账户验证状态(v0.9)
-        let p4 = fetch('/user/getAccountCheckStatus');
+        //获取对公账户验证状态(v0.9) getAccountCheckStatus
+        let p4 = fetch('/user/getCompanyAccountCheckStatus');
         //获取用户信息填写人（关系人）信息(v1.4) //实名认证
         let p5 = fetch('/user/getRelatedPersonInfo');
         //企业资料提交状态(v0.5)
@@ -54,7 +55,7 @@ export default class BasicInformation extends React.Component {
           this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getBindMobile = values[1].data
           this.state.data.getIsSetPayPassword = values[2].data
-          this.state.data.getAccountCheckStatus = values[3].data
+          this.state.data.getCompanyAccountCheckStatus = values[3].data
           this.state.data.getRelatedPersonInfo = values[4].data
           this.state.data.getCompanyPaperInfoStatus = values[5].data
           this.forceUpdate();

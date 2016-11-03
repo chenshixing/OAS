@@ -65,7 +65,7 @@ export default class basicBody extends React.Component {
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     return (
-                        <div>
+                        <div key={index}>
                             {
                                 item.checkPass>0
                                 ?
@@ -98,7 +98,7 @@ export default class basicBody extends React.Component {
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     return (
-                        <div>
+                        <div key={index}>
                             <span
                                 className="text-align-right"
                                 style={{width:150,display:"inline-block"}}
@@ -193,7 +193,7 @@ export default class basicBody extends React.Component {
             getLoginUserSimpleInfo,
             getBindMobile,
             getIsSetPayPassword,
-            getAccountCheckStatus,
+            getCompanyAccountCheckStatus,
             getRelatedPersonInfo,
             getCompanyPaperInfoStatus
          } = this.state.data;
@@ -206,7 +206,7 @@ export default class basicBody extends React.Component {
          //绑定手机
          const getBindMobileTemplate = this.handleGetBindMobileTemplate(getBindMobile);
          //对公账户
-         const getAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getAccountCheckStatus);
+         const getCompanyAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getCompanyAccountCheckStatus);
 
          //实名验证图标
          let getRelatedPersonInfoIcon = this.handleGetRelatedPersonInfoIconTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
@@ -290,30 +290,38 @@ export default class basicBody extends React.Component {
                                         <div className="fn-pt-15">您的实名认证信息：</div>
                                     </td>
                                 </tr>
+
                                 <tr className="noborder align-top">
                                     <td>
                                             {getRelatedPersonInfoTemplate}
-
-
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td className="text-align-center fs-20">
-                                        {getCompanyPaperInfoStatusTemplate}
-                                    </td>
-                                    <td>
-                                        <h3>
-                                            证件资料
-                                        </h3>
-                                    </td>
-                                    <td colSpan={4}>
-                                        如资料有变更，请及时更新。
-                                    </td>
-                                    <td className="text-align-right">
-                                        <Button type="primary"><Icon type="edit" />修改</Button>
                                     </td>
                                 </tr>
+                                {
+                                    getLoginUserSimpleInfo.userType==2
+                                    ?
+                                    <tr>
+
+                                            <td className="text-align-center fs-20">
+                                                {getCompanyPaperInfoStatusTemplate}
+                                            </td>
+                                            <td>
+                                                <h3>
+                                                    证件资料
+                                                </h3>
+                                            </td>
+                                            <td colSpan={4}>
+                                                如资料有变更，请及时更新。
+                                            </td>
+                                            <td className="text-align-right">
+                                                <Button type="primary"><Icon type="edit" />修改</Button>
+                                            </td>
+
+
+                                    </tr>
+                                    :
+                                    null
+                                }
+
                                 <tr>
                                     <td className="text-align-center fs-20">
                                         <Icon type="check" />
@@ -362,17 +370,25 @@ export default class basicBody extends React.Component {
                                 </tr>
                                 <tr className="noborder">
                                     <td className="text-align-center fs-20">
-                                        {getAccountCheckStatusTemplate}
+                                        {getCompanyAccountCheckStatusTemplate}
                                     </td>
                                     <td>
-                                        <h3>对公账户</h3>
+                                        <h3>
+                                            {
+                                                getLoginUserSimpleInfo.userType==1
+                                                ?
+                                                <span>银行账户</span>
+                                                :
+                                                <span>对公账户</span>
+                                            }
+                                        </h3>
                                     </td>
                                     <td colSpan={4}>
                                         默认账户：
                                         {
-                                            getAccountCheckStatus && getAccountCheckStatus.length>0
+                                            getCompanyAccountCheckStatus && getCompanyAccountCheckStatus.length>0
                                             ?
-                                            getAccountCheckStatus.map((item,index)=>{
+                                            getCompanyAccountCheckStatus.map((item,index)=>{
                                                 return (
                                                     <span key={index}>{item.bankName} | {item.cardNo}。</span>
                                                 )

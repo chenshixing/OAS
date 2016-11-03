@@ -18,6 +18,8 @@ const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
+import {Link} from 'react-router';
+
 // 页面组件
 //import Frame from 'COM/form/frame';
 
@@ -99,8 +101,8 @@ class Login extends React.Component {
                                             </FormItem>
 
                                             <FormItem wrapperCol={{ span: 12, offset: 8 }}>
-                                                <a href="#">新用户注册</a>
-                                                <a href="#" className="float-right">忘记密码</a>
+                                                <Link to="/userRegister">新用户注册</Link>
+                                                <Link to="/resetPassword/step1"><span className='float-right'>忘记密码</span></Link>
                                             </FormItem>
 
                                         </Form>
@@ -148,8 +150,8 @@ class Login extends React.Component {
                                             </FormItem>
 
                                             <FormItem wrapperCol={{ span: 12, offset: 8 }}>
-                                                <a href="#">新用户注册</a>
-                                                <a href="#" className="float-right">忘记密码</a>
+                                                <Link to="/userRegister">新用户注册</Link>
+                                                <Link to="/resetPassword/step1"><span className='float-right'>忘记密码</span></Link>
                                             </FormItem>
 
                                         </Form>

@@ -7,6 +7,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import codeimg from 'ASSETS/images/code.png';
+import classnames from 'classnames';
+import store from 'store';
+
+
 
 import { Link } from 'react-router';
 
@@ -28,12 +32,16 @@ export default class PersonalValidate extends React.Component {
         super(props);
         this.state={
             identityVisible: false,
+            isSendMsgDisabled:false,
+            btnSendText:'没有收到短信，重新发送',
             data:{
                 realName:'钱途无量',
                 identityCode:'12345',
                 phoneNumber:'15999872092'
             }
         }
+        
+        this.componentDidMount=this.componentDidMount.bind(this);
     }
 
     showIdentityModal() {
@@ -66,11 +74,47 @@ export default class PersonalValidate extends React.Component {
         // });
     }
 
+    //发送身份识别码
+    sendMsg(countNum){
+        if(this.state.isSendMsgDisabled) return;
+        var that=this;
+
+        countDown(countNum); 
+        function countDown(){
+            that.setState({
+                isSendMsgDisabled:true
+            });
+            
+            var count=countNum;
+            let timer = setInterval(()=>{
+                count--;
+                if(count>0){
+                    that.setState({
+                        btnSendText:`发送成功，${count}秒后可重新发送`
+                    });
+                store.set('counter_inPersonalValidateStep2',count);
+                }else{
+                    clearInterval(timer);
+                    that.setState({
+                        btnSendText:`没有收到短信，重新发送`,
+                        isSendMsgDisabled:false
+                    });
+                }
+            },1000)
+        }
+    }
+
     componentDidMount(){
-        
+        let countNum=parseInt(store.get('counter_inPersonalValidateStep2'));
+        if(countNum && countNum>0){
+            this.sendMsg(countNum);
+        }
     }
 
     render() {
+        const sendMsgCls=classnames({
+            color_gray:this.state.isSendMsgDisabled
+        });
         return (
             <div>
                 <Steps size="default" current={1} className="fn-mb-30">
@@ -84,7 +128,7 @@ export default class PersonalValidate extends React.Component {
                         <Col span={12} offset={6}>
                             <p>
                                 姓名： <span className='name'>{this.state.data.realName}</span>，您的身份识别码已发送到手机{helper.hidenPhoneNumber(this.state.data.phoneNumber)}。
-                                <a href='javascript:void(0)'>没有收到短信，重新发送</a>
+                                <a href='javascript:void(0)' onClick={this.sendMsg.bind(this,60)} className={sendMsgCls}>{this.state.btnSendText}</a>
                             </p>
                             <p className='fn-mt-10'>
                                 请下载实名认证APP完成认证。
