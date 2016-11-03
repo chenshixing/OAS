@@ -30,6 +30,10 @@ const Step = Steps.Step;
 const FormItem = Form.Item;
 
 import { fetch } from 'UTILS';
+
+let iTime = null;
+
+
 // 页面
 export default class Steps1 extends React.Component {
     constructor(props) {
@@ -75,11 +79,36 @@ export default class Steps1 extends React.Component {
         }).then(res=>{
             this.state.isSend = true;
             sessionStorage.setItem("isSend", this.state.isSend);
+            this.loadPaddingFetch(3000);
             this.forceUpdate();
         })
     }
     componentDidMount(){
         this.loadData();
+        //this.loadPaddingFetch();
+
+    }
+    //无限请求
+    loadPaddingFetch(time){
+        if(time){
+            time=time;
+        }else{
+            time=1;
+        }
+        //获取代理人或个人实名认证状态
+        if(this.state.isSend){
+            clearInterval(iTime);
+            iTime = setInterval(()=>{
+                fetch('/user/getAccountRealCheckStatus').then(res=>{
+                    if(res.code==200){
+                        window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
+                    }
+                })
+            },time)
+        }
+    }
+    componentWillUnmount(){
+        clearInterval(iTime);
     }
     loadData(){
 
