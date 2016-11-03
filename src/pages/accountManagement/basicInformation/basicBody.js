@@ -65,7 +65,7 @@ export default class basicBody extends React.Component {
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     return (
-                        <div>
+                        <div key={index}>
                             {
                                 item.checkPass>0
                                 ?
@@ -98,7 +98,7 @@ export default class basicBody extends React.Component {
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     return (
-                        <div>
+                        <div key={index}>
                             <span
                                 className="text-align-right"
                                 style={{width:150,display:"inline-block"}}
@@ -193,7 +193,7 @@ export default class basicBody extends React.Component {
             getLoginUserSimpleInfo,
             getBindMobile,
             getIsSetPayPassword,
-            getCompanytAccountCheckStatus,
+            getCompanyAccountCheckStatus,
             getRelatedPersonInfo,
             getCompanyPaperInfoStatus
          } = this.state.data;
@@ -206,7 +206,7 @@ export default class basicBody extends React.Component {
          //绑定手机
          const getBindMobileTemplate = this.handleGetBindMobileTemplate(getBindMobile);
          //对公账户
-         const getCompanytAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getCompanytAccountCheckStatus);
+         const getCompanyAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getCompanyAccountCheckStatus);
 
          //实名验证图标
          let getRelatedPersonInfoIcon = this.handleGetRelatedPersonInfoIconTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
@@ -362,7 +362,7 @@ export default class basicBody extends React.Component {
                                 </tr>
                                 <tr className="noborder">
                                     <td className="text-align-center fs-20">
-                                        {getCompanytAccountCheckStatusTemplate}
+                                        {getCompanyAccountCheckStatusTemplate}
                                     </td>
                                     <td>
                                         <h3>对公账户</h3>
@@ -370,9 +370,9 @@ export default class basicBody extends React.Component {
                                     <td colSpan={4}>
                                         默认账户：
                                         {
-                                            getCompanytAccountCheckStatus && getCompanytAccountCheckStatus.length>0
+                                            getCompanyAccountCheckStatus && getCompanyAccountCheckStatus.length>0
                                             ?
-                                            getCompanytAccountCheckStatus.map((item,index)=>{
+                                            getCompanyAccountCheckStatus.map((item,index)=>{
                                                 return (
                                                     <span key={index}>{item.bankName} | {item.cardNo}。</span>
                                                 )
