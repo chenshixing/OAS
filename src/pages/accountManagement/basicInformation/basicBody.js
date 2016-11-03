@@ -290,30 +290,38 @@ export default class basicBody extends React.Component {
                                         <div className="fn-pt-15">您的实名认证信息：</div>
                                     </td>
                                 </tr>
+
                                 <tr className="noborder align-top">
                                     <td>
                                             {getRelatedPersonInfoTemplate}
-
-
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td className="text-align-center fs-20">
-                                        {getCompanyPaperInfoStatusTemplate}
-                                    </td>
-                                    <td>
-                                        <h3>
-                                            证件资料
-                                        </h3>
-                                    </td>
-                                    <td colSpan={4}>
-                                        如资料有变更，请及时更新。
-                                    </td>
-                                    <td className="text-align-right">
-                                        <Button type="primary"><Icon type="edit" />修改</Button>
                                     </td>
                                 </tr>
+                                {
+                                    getLoginUserSimpleInfo.userType==2
+                                    ?
+                                    <tr>
+
+                                            <td className="text-align-center fs-20">
+                                                {getCompanyPaperInfoStatusTemplate}
+                                            </td>
+                                            <td>
+                                                <h3>
+                                                    证件资料
+                                                </h3>
+                                            </td>
+                                            <td colSpan={4}>
+                                                如资料有变更，请及时更新。
+                                            </td>
+                                            <td className="text-align-right">
+                                                <Button type="primary"><Icon type="edit" />修改</Button>
+                                            </td>
+
+
+                                    </tr>
+                                    :
+                                    null
+                                }
+
                                 <tr>
                                     <td className="text-align-center fs-20">
                                         <Icon type="check" />
@@ -365,7 +373,15 @@ export default class basicBody extends React.Component {
                                         {getCompanyAccountCheckStatusTemplate}
                                     </td>
                                     <td>
-                                        <h3>对公账户</h3>
+                                        <h3>
+                                            {
+                                                getLoginUserSimpleInfo.userType==1
+                                                ?
+                                                <span>银行账户</span>
+                                                :
+                                                <span>对公账户</span>
+                                            }
+                                        </h3>
                                     </td>
                                     <td colSpan={4}>
                                         默认账户：
