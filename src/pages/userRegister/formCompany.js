@@ -13,6 +13,8 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
+import { Link } from 'react-router';
+
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
 
@@ -179,7 +181,7 @@ class Reg extends React.Component {
         </FormItem>
         
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <p>已有账号？ <a href="#">直接登录</a></p>
+          <p>已有账号？ <Link to="/userLogin" >直接登录</Link></p>
         </FormItem>
       </Form>
     );

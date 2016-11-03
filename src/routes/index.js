@@ -25,7 +25,7 @@ const routes = {
           // 首页跳转
           path: '/',
           indexRoute: {
-            onEnter: (nextState, replace) => replace('', 'userRegister')
+            onEnter: (nextState, replace) => replace('', 'userLogin')
           },
         },
         // 首页

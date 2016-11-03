@@ -13,6 +13,8 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
+import {Link} from 'react-router';
+//  引入fetch
 // 自定义验证 rule 及 fetch 方法
 import { ruleType, fetch } from 'UTILS';
 
@@ -27,21 +29,35 @@ class Reg extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((errors, values) => {
-      
-      console.log('Submit!!!');
-      console.log(values);
+      if(!errors){
+          console.log('Submit!!!');
+          console.log(values);
+          let data=values;
+          data.userType=1;
+
+          fetch('/register/post',{
+            body:JSON.stringify(data)
+          }).then((res)=>{
+            if(res.code=='200'){
+              alert('注册成功');
+            }
+          })
+
+      }else{
+        console.log('请先填完必填信息再提交...');
+      }
     });
   }
   checkPassWord(rule, value, callback) {
     const { validateFields } = this.props.form;
     if (value) {
-      validateFields(['loginPasswordAgain'], { force: true });
+      validateFields(['conLoginPwd'], { force: true });
     }
     callback();
   }
   checkPassWordAgain(rule, value, callback) {
     const { getFieldValue } = this.props.form;
-    if (value && value !== getFieldValue('loginPassword')) {
+    if (value && value !== getFieldValue('loginPwd')) {
       callback('两次所填写的密码不一致，请重新输入');
     } else {
       callback();
@@ -62,12 +78,12 @@ class Reg extends React.Component {
 
     // 表单校验
     const rules = {
-      inviteCode: {
+      recommenderNo: {
         rules: [
           {required: true, message: '邀请码不能为空'},
         ]
       },
-      userName: {
+      realName: {
         rules: [
           {required: true, message: '真实姓名不能为空'},
           ruleType('cn')
@@ -78,14 +94,14 @@ class Reg extends React.Component {
           {required: true, message: '企业名不能为空'},
         ]
       },
-      accountId: {
+      userNo: {
         rules: [
           {required: true, message: '登录名不能为空'},
           {min: 4, max: 20, message: '请输入4-20位字符'},
           ruleType('en-num')
         ]
       },
-      loginPassword: {
+      loginPwd: {
         rules: [
           {required: true, message: '密码不能为空'},
           {min: 8, max: 20, message: '请输入8-20位字符'},
@@ -93,19 +109,19 @@ class Reg extends React.Component {
           ruleType('en-num')
         ]
       },
-      loginPasswordAgain: {
+      conLoginPwd: {
         rules: [
           {required: true, message: '请再次输入密码'},
           {validator: this.checkPassWordAgain.bind(this)}
         ]
       },
-      userMobile: {
+      mobile: {
         rules: [
           {required: true, message: '手机号码不能为空'},
           ruleType('mobile')
         ]
       },
-      vCode: {
+      smsCode: {
         rules: [
           {required: true, message: '短信验证码不能为空'}
         ]
@@ -125,7 +141,7 @@ class Reg extends React.Component {
           label="邀请码"
           required
         >
-          <Input {...getFieldProps('inviteCode', rules.inviteCode)} />
+          <Input {...getFieldProps('recommenderNo', rules.recommenderNo)} />
         </FormItem>
 
         <FormItem
@@ -133,7 +149,7 @@ class Reg extends React.Component {
           label="真实姓名"
           required
         >
-          <Input {...getFieldProps('userName', rules.userName)} />
+          <Input {...getFieldProps('realName', rules.realName)} />
         </FormItem>
 
         <FormItem
@@ -141,7 +157,7 @@ class Reg extends React.Component {
           label="登录名"
           required
         >
-          <Input placeholder="4-20个英文字母、数字" {...getFieldProps('accountId', rules.accountId)} />
+          <Input placeholder="4-20个英文字母、数字" {...getFieldProps('userNo', rules.userNo)} />
         </FormItem>
 
         <FormItem
@@ -149,7 +165,7 @@ class Reg extends React.Component {
           label="登录密码"
           required
         >
-          <Input type="password" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPassword', rules.loginPassword)} />
+          <Input type="password" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
         </FormItem>
 
         <FormItem
@@ -157,7 +173,7 @@ class Reg extends React.Component {
           label="确认密码"
           required
         >
-          <Input type="password" autoComplete="off" {...getFieldProps('loginPasswordAgain', rules.loginPasswordAgain)} />
+          <Input type="password" autoComplete="off" {...getFieldProps('conLoginPwd', rules.conLoginPwd)} />
         </FormItem>
 
         <FormItem
@@ -165,7 +181,7 @@ class Reg extends React.Component {
           label="手机号码"
           required
         >
-          <Input {...getFieldProps('userMobile', rules.userMobile)} />
+          <Input {...getFieldProps('mobile', rules.mobile)} />
         </FormItem>
 
         <FormItem
@@ -173,12 +189,11 @@ class Reg extends React.Component {
           label="短信验证码"
           required
         >
-          <InputGroup className="ant-search-input">
-            <Input {...getFieldProps('vCode', rules.vCode)} />
-            <div className="ant-input-group-wrap">
+          <Input {...getFieldProps('smsCode', rules.smsCode)} />
+          <div className="ant-input-group-wrap">
               <Button className="ant-search-btn" onClick={this.getVerifyCode.bind(this)}>获取验证码</Button>
             </div>
-          </InputGroup>
+          
           
         </FormItem>
 
@@ -187,7 +202,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <p>已有账号？ <a href="#">直接登录</a></p>
+          <p>已有账号？ <Link to="/userLogin" >直接登录</Link></p>
         </FormItem>
       </Form>
     );
