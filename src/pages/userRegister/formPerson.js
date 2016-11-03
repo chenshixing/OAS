@@ -34,9 +34,8 @@ class Reg extends React.Component {
           console.log(values);
           let data=values;
           data.userType=1;
-
           fetch('/register/post',{
-            body:JSON.stringify(data)
+            body:data
           }).then((res)=>{
             console.log('res:',res);
             if(res.code=='200'){
