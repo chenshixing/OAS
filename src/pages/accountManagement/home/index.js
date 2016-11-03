@@ -18,7 +18,8 @@ import {
     Select,
     Input,
     notification,
-    Button
+    Button,
+    message
 } from 'antd';
 const Option = Select.Option;
 
@@ -97,10 +98,7 @@ export default class Home extends React.Component {
     }
     openNotification(getRes){
         console.log(getRes)
-        notification.open({
-            message: '提示',
-            description: "添加成功",
-        });
+        message.success('添加成功');
     }
     handleCancel(e) {
         console.log(e);

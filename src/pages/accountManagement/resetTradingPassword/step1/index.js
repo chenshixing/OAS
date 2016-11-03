@@ -30,6 +30,10 @@ const Step = Steps.Step;
 const FormItem = Form.Item;
 
 import { fetch } from 'UTILS';
+
+let iTime = null;
+
+
 // 页面
 export default class Steps1 extends React.Component {
     constructor(props) {
@@ -43,6 +47,7 @@ export default class Steps1 extends React.Component {
                 phoneNumber: '15999872092',
                 getLoginUserSimpleInfo:{},
                 getdesensitizemobile:{},
+                getAccountRealCheckStatus:{}
             },
             //是否发送
             isSend:sessionStorage.getItem("isSend") || false,
@@ -75,11 +80,42 @@ export default class Steps1 extends React.Component {
         }).then(res=>{
             this.state.isSend = true;
             sessionStorage.setItem("isSend", this.state.isSend);
+            this.loadPaddingFetch();
             this.forceUpdate();
         })
     }
     componentDidMount(){
         this.loadData();
+        //this.loadPaddingFetch();
+        if(this.state.isSend){
+            this.loadPaddingFetch(3000);
+        }
+    }
+    //无限请求
+    loadPaddingFetch(time){
+        if(time){
+            time=time;
+        }else{
+            time=1;
+        }
+        //获取代理人或个人实名认证状态
+
+        clearInterval(iTime);
+        iTime = setInterval(()=>{
+            fetch('/user/getAccountRealCheckStatus').then(res=>{
+                if(res.code==200){
+                    //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
+                    //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+                    this.props.history.push({
+                        pathname: '/accountManagement/resetTradingPassword/step2'
+                    })
+                }
+            })
+        },time)
+
+    }
+    componentWillUnmount(){
+        clearInterval(iTime);
     }
     loadData(){
 
@@ -91,11 +127,14 @@ export default class Steps1 extends React.Component {
                 "businesstype": 3
             }
         })
+        //实名验证
+        let p3 = fetch('/user/getAccountRealCheckStatus');
 
-        Promise.all([p1, p2]).then(values => {
+        Promise.all([p1, p2,p3]).then(values => {
           console.log(values);
           this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getdesensitizemobile = values[1].data
+          this.state.data.getAccountRealCheckStatus = values[2].data
           this.forceUpdate();
         }).catch(reason => {
           console.log(reason)
@@ -123,6 +162,7 @@ export default class Steps1 extends React.Component {
                     <RealNameAuthentication
                         isValidation={this.state.isValidation}
                         {...this.state.data}
+                        handleSend={this.handleSend.bind(this)}
                     />
                 }
             </div>

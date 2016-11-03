@@ -23,6 +23,30 @@ import Frame from 'COM/form/frame';
 //  引入fetch
 import { fetch } from 'UTILS';
 
+//  扩展Date
+Date.prototype.format = function(format) {
+    var o = {
+        "M+": this.getMonth() + 1, //month 
+        "d+": this.getDate(), //day 
+        "h+": this.getHours(), //hour 
+        "m+": this.getMinutes(), //minute 
+        "s+": this.getSeconds(), //second 
+        "q+": Math.floor((this.getMonth() + 3) / 3), //quarter 
+        "S": this.getMilliseconds() //millisecond 
+    }
+
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+}
+
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
@@ -34,23 +58,25 @@ class CompanyValidate extends React.Component {
             visible : false,
             data:{
                 companyName:'钱途互联',
-                businessLicenseType:'common',
-                isLongEndTimeChange:false,
-                accountVerificationType:'bond',
-                fillType : 'agent',
-                bankAccount : '',
+                companyPaperType:"2",
+                isLongEndTime:false,
+                validateType:'OffLinePayAuth',
+                writerType : '1',
                 provinces : [],
                 cities : [],
                 bankList : [],
-                bank : undefined,
-                province : undefined,
-                city : undefined,
                 cityPlaceHolder : "请先选择省份",
                 cityDisabled : true,
                 branchDisabled : true,
                 branchPlaceHolder : "请先选择开户行和所在城市",
                 branches : [],
-                companyName: ""
+                companyName: "",
+                map : {
+                    bank : {},
+                    province : {},
+                    city: {},
+                    branch : {}
+                }
             },
             dataSource : [{
               key: '1',
@@ -94,6 +120,10 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 data.bankList = res.data;
                 // console.log(data.bankList);
+                //  配置映射表
+                data.bankList.map( (item,index) => {
+                    data.map.bank[item.B_BankID] = item.BankName;
+                });
                 me.setState({
                     data : data
                 });
@@ -108,6 +138,10 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 data.provinces = res.data;
                 // console.log(data.provinces);
+                //  配置映射表
+                data.provinces.map( (item,index) => {
+                    data.map.province[item.B_BankAreaID] = item.AreaName;
+                });
                 me.setState({
                     data : data
                 });
@@ -123,23 +157,24 @@ class CompanyValidate extends React.Component {
         });
     }
 
-    onBankAccountChange(e){
+    onCardNoChange(e){
         let me = this;
         let data = me.state.data;
-        data.bankAccount = e.target.value;
+        let cardNo = e.target.value;
+        if(cardNo.length < 4 || cardNo.length > 10){ return false; }
         fetch('/bank/cardNumber',{
             body:{
-              "cardNumber": data.bankAccount
+              "cardNumber": cardNo
             }
         }).then(res => {
             if(res.code == 200){
-                data.bank = res.data.B_BankID;
-                // console.log(data);
+                let bankId = res.data.B_BankID;
+                data.bankId = bankId;
                 me.setState({
                     data : data
                 });
                 me.props.form.setFieldsValue({
-                    bank : data.bank
+                    bankId : bankId
                 });
             }
         });
@@ -148,7 +183,6 @@ class CompanyValidate extends React.Component {
     onProvinceChange(value){
         let me = this;
         let data = me.state.data;
-        data.province = value;
         fetch('/bank/citys',{
             body:{
                 provinceId : value
@@ -159,6 +193,11 @@ class CompanyValidate extends React.Component {
                 data.cityPlaceHolder = "请选择城市";
                 data.cityDisabled = false;
                 // console.log(data.cities);
+
+                //  配置映射表
+                data.cities.map( (item,index) => {
+                    data.map.city[item.B_BankAreaID] = item.AreaName;
+                });
                 me.setState({
                     data : data
                 });
@@ -168,31 +207,37 @@ class CompanyValidate extends React.Component {
 
     onBankChange(value){
         let data = this.state.data;
-        data.bank = value;
+        data.bankId = value;
         // console.log(data);
         this._getBranch();
     }
 
     onCityChange(value){
         let data = this.state.data;
-        data.city = value;
+        data.cityId = value;
         this._getBranch();
     }
 
     _getBranch(){
         let me = this;
         let data = me.state.data;
-        if( data.bank && data.city ){
+        // console.log(data);
+        if( data.bankId && data.cityId ){
             fetch('/bank/branchlist',{
                 body:{
-                  "bankId": data.bank,
-                  "cityId": data.city
+                  "bankId": data.bankId,
+                  "cityId": data.cityId
                 }
             }).then(res => {
                 if(res.code == 200){
                     data.branches = res.data;
                     data.branchPlaceHolder = "请选择分支行";
                     data.branchDisabled = false;
+
+                    //  配置映射表
+                    data.branches.map( (item,index) => {
+                        data.map.branch[item.BranchBankCode] = item.BranchBankName;
+                    });
                     me.setState({
                         data : data
                     });
@@ -201,16 +246,16 @@ class CompanyValidate extends React.Component {
         }
     }
 
-    onFillTypeChange(e) {
+    onWriterTypeChange(e) {
         console.log('radio checked', e.target.value);
-        let display = e.target.value == "agent" ? "block" : "none";
+        let display = e.target.value == "1" ? "block" : "none";
         if(this.state.display == display){ return false;}
-        if(e.target.value == "corporation"){
+        if(e.target.value == "2"){
             this.showModal();
         }else{
             let state = this.state;
             state.display = display;
-            state.data.fillType = 'agent';
+            state.data.writerType = '1';
             this.setState(state);
         }
     }
@@ -225,7 +270,7 @@ class CompanyValidate extends React.Component {
         let state = this.state;
         state.display = 'none';
         state.visible = false;
-        state.data.fillType = 'corporation';
+        state.data.writerType = '2';
         this.setState(state);
     }
 
@@ -233,20 +278,20 @@ class CompanyValidate extends React.Component {
         this.setState({ visible: false });
     }
 
-    onBusinessLicenseTypeChange(e) {
+    onCompanyPaperTypeChange(e) {
         console.log('radio checked', e.target.value);
         let data=this.state.data;
-        data.businessLicenseType=e.target.value;
+        data.companyPaperType=e.target.value;
         this.setState({
             data: data
         });
     }
 
-    onAccountVerificationTypeChange(e) {
+    onValidateTypeChange(e) {
         console.log('radio checked', e.target.value);
         let data=this.state.data;
-        if(data.accountVerificationType === e.target.value){ return false;}
-        data.accountVerificationType=e.target.value;
+        if(data.validateType === e.target.value){ return false;}
+        data.validateType = e.target.value;
         this.setState({
             data: data
         });
@@ -255,10 +300,10 @@ class CompanyValidate extends React.Component {
     onLongEndTimeChange(e){
         console.log('e:',e.target.checked);
         let data=this.state.data;
-        data.isLongEndTimeChange=e.target.checked;
-        if(e.target.checked){
-            this.props.form.setFieldsValue({endTime:null});
-        }
+        data.isLongEndTime=e.target.checked;
+        // if(e.target.checked){
+        //     this.props.form.setFieldsValue({registrationExtendField2:""});
+        // }
         this.setState({data:data});
     }
 
@@ -269,18 +314,106 @@ class CompanyValidate extends React.Component {
         return e && e.fileList;
     }
 
+    //  点击下一步
     next(){
+        let me = this;
         // 表单校验
-        this.props.form.validateFieldsAndScroll((errors, values) => {
+        this.props.form.validateFieldsAndScroll((errors, data) => {
           if (errors) {
             console.log(errors);
-            console.log(values);
             return false;
           }
           console.log("passed");
-          console.log(values);
-          //    验证通过TODO
+          // console.log(data);
+          // 验证通过TODO
+          let submitData = me._getSubmitData(data);
+          me.submit(submitData);
         });
+    }
+
+    submit(submitData){
+        console.log(submitData);
+        fetch('/companyVerification/saveBasicInfo',{
+            body:{
+                submitData
+            }
+        }).then(res => {
+            if(res.code == 200){
+                //  提交成功TODO
+                console.log('next finish');
+                this.props.history.push('/companyValidate/step2');
+            }
+        });
+    }
+
+    //  获取提交数据
+    _getSubmitData(data){
+        let map = this.state.data.map;
+        let submitData = data;
+
+        //  添加银行账户相关的名称
+        submitData.bankName = map.bank[submitData.bankId];
+        submitData.provinceName = map.province[submitData.provinceId];
+        submitData.cityName = map.city[submitData.cityId];
+        submitData.branchBankName = map.branch[submitData.branchBankId];
+
+        // 证件类型
+        if(submitData.companyPaperType == 2){
+            //  普通营业执照TODO
+            delete submitData.socialCreditPaperNo;
+        }else if(submitData.companyPaperType == 3){
+            //  社会信用证TODO
+            delete submitData.registrationPaperNo;
+            delete submitData.orgInsCodePaperNo;
+        }
+
+        //  营业执照到期日
+        if(submitData.isLongEndTime){
+            submitData.registrationExtendField2 = "长期";
+        }else{
+            submitData.registrationExtendField2 = submitData.registrationExtendField2.format('yyyy-MM-dd');
+        }
+        delete submitData.isLongEndTime;
+
+        // 填写人类型
+        let client = client = {
+            name : submitData.name,
+            mobile : submitData.mobile,
+            email : submitData.email
+        };
+        let corperator = undefined;
+        if(submitData.writerType == 1){
+            //  委托代理人TODO
+            corperator = {
+                name : submitData.corporationName,
+                mobile : submitData.corporationMobile,
+                email : submitData.corporationEmail
+            };
+        }
+        let companyConnectorInfoDto = {
+            writerType : submitData.writerType,
+            client : client
+        }
+
+        if(corperator){
+            companyConnectorInfoDto.corperator = corperator;
+        }
+        submitData.companyConnectorInfoDto = companyConnectorInfoDto;
+        delete submitData.writerType;
+        delete submitData.name;
+        delete submitData.mobile;
+        delete submitData.email;
+        delete submitData.corporationName;
+        delete submitData.corporationMobile;
+        delete submitData.corporationEmail;
+
+        for (let prop in submitData){
+            if(submitData[prop] === undefined){
+                delete submitData[prop];
+            }
+        }
+
+        return submitData;
     }
 
     render() {
@@ -288,20 +421,20 @@ class CompanyValidate extends React.Component {
         // 表单校验
 
         // 根据营业执照类型类型选择验证机制
-        const rulesBusiness = this.state.data.businessLicenseType == 'common' ? formValidation.rulesCommon : formValidation.rulesMultiple;
+        const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         //  根据填写人身份选择验证机制
-        const rulesFill = this.state.data.fillType == 'agent' ? formValidation.rulesAgent : {};
+        const rulesFill = this.state.data.writerType == '1' ? formValidation.rulesAgent : {};
 
         // 根据不同类型选择验证机制
         const rules = Object.assign({},formValidation.rulesBase,rulesBusiness,rulesFill);
 
         //  营业执照到期日选择了长期则设置为不必填
-        rules.endTime.rules[0].required=!this.state.data.isLongEndTimeChange;
+        rules.registrationExtendField2.rules[0].required=!this.state.data.isLongEndTime;
 
         const upLoadProps = {
             name: 'file',
-            action: '/api/upload.do',
+            action: '/api/upload',
             headers: {
                 authorization: 'authorization-text',
             },
@@ -324,8 +457,8 @@ class CompanyValidate extends React.Component {
         };
 
         const { getFieldProps } = this.props.form;
-        const displayTypeCommon=this.state.data.businessLicenseType =='common' ? 'block' : 'none';
-        const displayTypeMultiple=this.state.data.businessLicenseType == 'multiple' ? 'block' : 'none';
+        const displayTypeCommon=this.state.data.companyPaperType == 2 ? 'block' : 'none';
+        const displayTypeMultiple=this.state.data.companyPaperType == 3 ? 'block' : 'none';
 
         return (
             <div>
@@ -351,9 +484,9 @@ class CompanyValidate extends React.Component {
                             label=" 营业执照类型"
                             required
                         >
-                            <RadioGroup {...getFieldProps('businessLicenseType',{ initialValue: this.state.data.businessLicenseType })} onChange={this.onBusinessLicenseTypeChange.bind(this)}>
-                                <Radio value="common">普通营业执照</Radio>
-                                <Radio value="multiple">多证合一营业执照</Radio>
+                            <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType })} onChange={this.onCompanyPaperTypeChange.bind(this)}>
+                                <Radio value="2">普通营业执照</Radio>
+                                <Radio value="3">多证合一营业执照</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -364,7 +497,7 @@ class CompanyValidate extends React.Component {
                                 label="营业执照注册号"
                                 required
                             >
-                                <Input {...getFieldProps('businessLicenseRegistrationNumber',rules.businessLicenseRegistrationNumber)} type="text"/>
+                                <Input {...getFieldProps('registrationPaperNo',rules.registrationPaperNo)} type="text"/>
                             </FormItem>
                         </div>
 
@@ -374,7 +507,7 @@ class CompanyValidate extends React.Component {
                                 label="统一社会信用代码"
                                 required
                             >
-                                <Input {...getFieldProps('unifiedSocialCreditCode',rules.unifiedSocialCreditCode)} type="text"/>
+                                <Input {...getFieldProps('socialCreditPaperNo',rules.socialCreditPaperNo)} type="text"/>
                             </FormItem>
                         </div>
 
@@ -385,7 +518,7 @@ class CompanyValidate extends React.Component {
                         >
                             <Col span="8">
                                 <FormItem>
-                                    <DatePicker {...getFieldProps('endTime',rules.endTime)} disabled={this.state.data.isLongEndTimeChange} />
+                                    <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={this.state.data.isLongEndTime} />
                                 </FormItem>
                             </Col>
                             <Col span="5">
@@ -399,7 +532,7 @@ class CompanyValidate extends React.Component {
                                 label="组织机构代码"
                                 required
                             >
-                                <Input {...getFieldProps('organizationCode',rules.organizationCode)} type="text"/>
+                                <Input {...getFieldProps('orgInsCodePaperNo',rules.orgInsCodePaperNo)} type="text"/>
                             </FormItem>
                         </div>
 
@@ -422,7 +555,7 @@ class CompanyValidate extends React.Component {
                             extra="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
                             required
                         >
-                            <Input {...getFieldProps('cellPhone',rules.cellPhone)} type="text"/>
+                            <Input {...getFieldProps('mobile',rules.mobile)} type="text"/>
                         </FormItem>
 
                         <FormItem
@@ -437,9 +570,9 @@ class CompanyValidate extends React.Component {
                             label=" 填写人的身份"
                             required
                         >
-                            <RadioGroup {...getFieldProps('fillType',{ initialValue: this.state.data.fillType })} onChange={ this.onFillTypeChange.bind(this) }>
-                                <Radio value="agent">我是委托代理人</Radio>
-                                <Radio value="corporation">我是法定代表人</Radio>
+                            <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType })} onChange={ this.onWriterTypeChange.bind(this) }>
+                                <Radio value="1">我是委托代理人</Radio>
+                                <Radio value="2">我是法定代表人</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -462,7 +595,7 @@ class CompanyValidate extends React.Component {
                                 label="常用手机号码"
                                 {...formItemLayout}
                             >
-                                <Input {...getFieldProps('corporationCellPhone',rules.corporationCellPhone)} type="text" />
+                                <Input {...getFieldProps('corporationMobile',rules.corporationMobile )} type="text" />
                             </FormItem>
 
                             <FormItem
@@ -490,7 +623,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                            <Input type="text" {...getFieldProps('bankAccount',Object.assign({},rules.bankAccount,{ onChange: this.onBankAccountChange.bind(this) }))} placeholder="请输入银行账号"/>
+                            <Input type="text" {...getFieldProps('cardNo',Object.assign({},rules.cardNo,{ onChange: this.onCardNoChange.bind(this) }))} placeholder="请输入银行账号"/>
                         </FormItem>
 
                         <FormItem
@@ -498,7 +631,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bank',Object.assign({},rules.bank,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bankId',Object.assign({},rules.bankId,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
                             { this.state.data.bankList.map( (item,index) => {
                                 return (
                                     <Option value={item.B_BankID} key={index}>{item.BankName}</Option>
@@ -512,7 +645,7 @@ class CompanyValidate extends React.Component {
                           label="所在省份"
                           required
                         >
-                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('province',Object.assign({},rules.province,{ onChange: this.onProvinceChange.bind(this) }))} >
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('provinceId',Object.assign({},rules.provinceId,{ onChange: this.onProvinceChange.bind(this) }))} >
                                 { this.state.data.provinces.map( (item,index) => {
                                     return (
                                         <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -526,7 +659,7 @@ class CompanyValidate extends React.Component {
                           label="所在城市"
                           required
                         >
-                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('city',Object.assign({},rules.city,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.cityDisabled }>
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('cityId',Object.assign({},rules.cityId,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.cityDisabled }>
                                 { this.state.data.cities.map( (item,index) => {
                                     return (
                                         <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -540,7 +673,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branch',rules.branch)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.state.data.branchDisabled } >
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branchBankId',rules.branchBankId)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.state.data.branchDisabled } >
                             { this.state.data.branches.map( (item,index) => {
                                 return (
                                     <Option value={ item.BranchBankCode } key={ index }>{ item.BranchBankName }</Option>
@@ -558,16 +691,16 @@ class CompanyValidate extends React.Component {
                             label="请选择验证方式"
                             required
                         >
-                            <RadioGroup {...getFieldProps('accountVerificationType',{ initialValue: this.state.data.accountVerificationType })} onChange={this.onAccountVerificationTypeChange.bind(this)}>
-                                <Radio value="bond">线下支付小额验证金核验</Radio>
-                                <Radio value="information">线下提交账户资料核验</Radio>
+                            <RadioGroup {...getFieldProps('validateType',{ initialValue: this.state.data.validateType })} onChange={this.onValidateTypeChange.bind(this)}>
+                                <Radio value="OffLinePayAuth">线下支付小额验证金核验</Radio>
+                                <Radio value="OffLineSubmitInfo">线下提交账户资料核验</Radio>
                             </RadioGroup>
 
                         </FormItem>
 
                         <Row>
                             <Col offset={1} span={22} className="fn-pa-20" style={{border:'1px solid #e8e8e8'}}>
-                                <Row style={{display:this.state.data.accountVerificationType == 'bond' ? 'block' : 'none'}}>
+                                <Row style={{display:this.state.data.validateType == 'OffLinePayAuth' ? 'block' : 'none'}}>
                                     <Col offset={1} span={22}>
                                         <p>请在<span className="warning-FontColor">48小时</span>以内，通过<span className="warning-FontColor">网上银行</span>或<span className="warning-FontColor">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="warning-FontColor">0.10元</span>验证金 。</p>
                                         <Table className="fn-mt-15" dataSource={this.state.dataSource} columns={this.state.columns} pagination={false}/>
@@ -575,7 +708,7 @@ class CompanyValidate extends React.Component {
                                         <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
                                     </Col>
                                 </Row>
-                                <Row style={{display:this.state.data.accountVerificationType == 'information' ? 'block' : 'none'}}>
+                                <Row style={{display:this.state.data.validateType == 'OffLineSubmitInfo' ? 'block' : 'none'}}>
                                     <Col offset={1} span={22}>
                                         <p>需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</p>
                                     </Col>
