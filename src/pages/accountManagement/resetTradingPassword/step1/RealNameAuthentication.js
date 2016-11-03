@@ -38,11 +38,11 @@ export default class RealNameAuthentication extends React.Component {
 
     }
     handleRealNameComplete() {
-        if (this.state.isValidation == true) {
-            window.location.href = '/#/accountManagement/resetTradingPassword/Steps2';
-        } else if (this.state.isValidation == false) {
-            this.setState({visible: true});
-        }
+        this.props.handleSend()
+        //window.location.href = '/#/accountManagement/resetTradingPassword/Step2';
+    }
+    handleNoRealNameComplete(){
+        message.error('您的实名认证未完成，请尽快完成。');
     }
     showModal() {
         this.setState({visible: true});
@@ -79,6 +79,8 @@ export default class RealNameAuthentication extends React.Component {
     }
 
     render() {
+        console.log(this)
+        let {getAccountRealCheckStatus} = this.props;
         return (
             <div>
                 <Modal
@@ -120,7 +122,14 @@ export default class RealNameAuthentication extends React.Component {
                     <Row className="text-align-center fn-mt-30">
                         <p>
                             实名认证成功后页面自动跳转，如没有跳转请点击
-                            <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
+                            {
+                                getAccountRealCheckStatus.checkStatus==1
+                                ?
+                                <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
+                                :
+                                <Button type="primary" onClick={this.handleNoRealNameComplete.bind(this)}>未验证</Button>
+                            }
+
                         </p>
                     </Row>
                 </Frame>

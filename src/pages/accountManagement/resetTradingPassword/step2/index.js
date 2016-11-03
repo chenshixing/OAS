@@ -214,7 +214,6 @@ class Steps2 extends React.Component {
                             <Col span="16">
                                 <Col span="8" offset="12">
                                     <Button type="primary" onClick={this.handleSubmit.bind(this)}>提交</Button>
-                                    <Link to="/accountManagement/resetTradingPassword/Step3">提交</Link>
                                 </Col>
                             </Col>
                         </Row>
