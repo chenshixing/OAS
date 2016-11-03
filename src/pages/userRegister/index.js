@@ -21,7 +21,16 @@ import FormCompany from './formCompany';
 
 // 页面
 export default class Reg extends React.Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
+  constructor(props){
+    super(props);
+    this.state={};
+  }
+  
   render() {
+    console.log('router context:',this);
     return (
       <Frame title="填写注册信息">
         <Tabs defaultActiveKey="1">

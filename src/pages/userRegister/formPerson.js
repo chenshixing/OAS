@@ -26,8 +26,13 @@ class Reg extends React.Component {
       date: '',
     };
   }
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
+  
   handleSubmit(e) {
     e.preventDefault();
+    var that=this;
     this.props.form.validateFields((errors, values) => {
       if(!errors){
           console.log('Submit!!!');
@@ -39,7 +44,12 @@ class Reg extends React.Component {
           }).then((res)=>{
             console.log('res:',res);
             if(res.code=='200'){
-              alert('注册成功');
+              // alert('注册成功');
+              console.log(that.context)
+              console.log('that:',that);
+              that.context.router.push({
+                pathname:'/userRegister/result'
+              });
             }
           })
 
