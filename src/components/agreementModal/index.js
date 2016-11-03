@@ -30,13 +30,16 @@ class AgreementModal extends React.Component{
 
     render(){
         return(
-            <Modal title={this.props.name} visible={this.props.visible} maskClosable={false}
-            onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} okText="已阅读并同意此协议"
-            >
-                <iframe src="http://www.tuicool.com/articles/InIJBfV" scrolling="yes" frameBorder="no" allowTransparency="true" style={{border: 'none', width: '100%', display: 'block', height: '100%', overflow: 'hidden'}} name="dialog-iframe1478073723066">
-                    
-                </iframe>
-            </Modal>
+            <div className='agreementModal'>
+                <Modal title={this.props.name} visible={this.props.visible} maskClosable={false}
+                onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)} okText="已阅读并同意此协议"
+                >
+                    <iframe src="http://www.tuicool.com/articles/InIJBfV" scrolling="yes" frameBorder="no" allowTransparency="true" style={{border: 'none', width: '100%', display: 'block', height: '100%', overflow: 'hidden'}} name="dialog-iframe1478073723066">
+                        
+                    </iframe>
+                </Modal>
+            </div>
+            
         )
     }
 

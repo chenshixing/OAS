@@ -38,6 +38,7 @@ class Reg extends React.Component {
           fetch('/register/post',{
             body:JSON.stringify(data)
           }).then((res)=>{
+            console.log('res:',res);
             if(res.code=='200'){
               alert('注册成功');
             }
