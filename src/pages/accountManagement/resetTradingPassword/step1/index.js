@@ -45,7 +45,7 @@ export default class Steps1 extends React.Component {
                 getdesensitizemobile:{},
             },
             //是否发送
-            isSend:false,
+            isSend:sessionStorage.getItem("isSend") || false,
             //是否验证
             isValidation:false
         }
@@ -74,6 +74,7 @@ export default class Steps1 extends React.Component {
             }
         }).then(res=>{
             this.state.isSend = true;
+            sessionStorage.setItem("isSend", this.state.isSend);
             this.forceUpdate();
         })
     }

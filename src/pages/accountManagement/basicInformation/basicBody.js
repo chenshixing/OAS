@@ -193,7 +193,7 @@ export default class basicBody extends React.Component {
             getLoginUserSimpleInfo,
             getBindMobile,
             getIsSetPayPassword,
-            getAccountCheckStatus,
+            getCompanytAccountCheckStatus,
             getRelatedPersonInfo,
             getCompanyPaperInfoStatus
          } = this.state.data;
@@ -206,7 +206,7 @@ export default class basicBody extends React.Component {
          //绑定手机
          const getBindMobileTemplate = this.handleGetBindMobileTemplate(getBindMobile);
          //对公账户
-         const getAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getAccountCheckStatus);
+         const getCompanytAccountCheckStatusTemplate = this.handleGetAccountCheckStatusTemplate(getCompanytAccountCheckStatus);
 
          //实名验证图标
          let getRelatedPersonInfoIcon = this.handleGetRelatedPersonInfoIconTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
@@ -362,7 +362,7 @@ export default class basicBody extends React.Component {
                                 </tr>
                                 <tr className="noborder">
                                     <td className="text-align-center fs-20">
-                                        {getAccountCheckStatusTemplate}
+                                        {getCompanytAccountCheckStatusTemplate}
                                     </td>
                                     <td>
                                         <h3>对公账户</h3>
@@ -370,9 +370,9 @@ export default class basicBody extends React.Component {
                                     <td colSpan={4}>
                                         默认账户：
                                         {
-                                            getAccountCheckStatus && getAccountCheckStatus.length>0
+                                            getCompanytAccountCheckStatus && getCompanytAccountCheckStatus.length>0
                                             ?
-                                            getAccountCheckStatus.map((item,index)=>{
+                                            getCompanytAccountCheckStatus.map((item,index)=>{
                                                 return (
                                                     <span key={index}>{item.bankName} | {item.cardNo}。</span>
                                                 )
