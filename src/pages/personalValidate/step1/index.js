@@ -12,9 +12,8 @@ const FormItem = Form.Item;
 
 // 页面组件
 import Frame from 'COM/form/frame';
-// 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
-import {helper} from 'UTILS';
+//引入 fetch ruleType helper
+import {helper,ruleType,fetch} from 'UTILS';
 
 
 // 页面组件（导出）
@@ -26,9 +25,9 @@ class PersonalValidate extends React.Component {
             loading:false,
             upLoadStatus:'error',
             data:{
-                userName:'唧唧复唧唧木兰当户织呀~',
+                userName:'',
                 IdCard:'',
-                phoneNumber:'15999872092'
+                phoneNumber:''
             }
         }
 
@@ -47,21 +46,25 @@ class PersonalValidate extends React.Component {
                     visible: true
                 });
             }
-            console.log('Submit!!!');
-            console.log(values);
+            
         });
     }
-
+    //提交数据
     handleOk(e) {
         e.preventDefault();
         this.setState({ loading: true });
-        console.log(this.props)
-        setTimeout(() => {
+        console.log('Submit!!!');
+        fetch('/personVerification/savePersonInfo',{body:{
+            "cardNumber":this.state.data.IdCard
+        }}).then((res)=>{
+            console.log(res);
             this.setState({ loading: false, visible: false });
-            this.props.history.push({
-                pathname: '/personalValidate/step2'
-            })
-        }, 3000);
+            if(res.code=='200'){
+                this.props.history.push({
+                    pathname: '/personalValidate/step2'
+                })
+            }
+        });
     }
 
     handleCancel() {
@@ -76,7 +79,22 @@ class PersonalValidate extends React.Component {
     }
 
     componentDidMount(){
+        this.initPage();
         
+    }
+
+    initPage(){
+        fetch('/personVerification/getPersonInfo').then((res)=>{
+            console.log(res);
+            if(res.code=='200'){
+                this.setState({
+                    data:{
+                        userName:res.data.name,
+                        phoneNumber:res.data.mobile
+                    }
+                });
+            }
+        });
     }
 
     render() {

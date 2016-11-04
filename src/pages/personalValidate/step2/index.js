@@ -22,7 +22,7 @@ const Step = Steps.Step;
 
 // 页面组件
 import Frame from 'COM/form/frame';
-import {helper} from 'UTILS';
+import {helper,fetch} from 'UTILS';
 
 
 
@@ -35,9 +35,9 @@ export default class PersonalValidate extends React.Component {
             isSendMsgDisabled:false,
             btnSendText:'没有收到短信，重新发送',
             data:{
-                realName:'钱途无量',
+                realName:'',
                 identityCode:'12345',
-                phoneNumber:'15999872092'
+                phoneNumber:''
             }
         }
         
@@ -79,7 +79,18 @@ export default class PersonalValidate extends React.Component {
         if(this.state.isSendMsgDisabled) return;
         var that=this;
 
-        countDown(countNum); 
+        fetch('/common/pinCode',{
+            body:{
+                "businesstype": 1,
+                "connectortype": 1
+            }
+        }).then((res)=>{
+            if(res.code=='200'){
+                console.log('身份识别码发送成功..');
+                countDown(countNum);
+            }
+        });
+
         function countDown(){
             that.setState({
                 isSendMsgDisabled:true
@@ -95,6 +106,7 @@ export default class PersonalValidate extends React.Component {
                 store.set('counter_inPersonalValidateStep2',count);
                 }else{
                     clearInterval(timer);
+                    store.set('counter_inPersonalValidateStep2',0);
                     that.setState({
                         btnSendText:`没有收到短信，重新发送`,
                         isSendMsgDisabled:false
@@ -105,10 +117,25 @@ export default class PersonalValidate extends React.Component {
     }
 
     componentDidMount(){
+        this.initPage();
         let countNum=parseInt(store.get('counter_inPersonalValidateStep2'));
         if(countNum && countNum>0){
             this.sendMsg(countNum);
         }
+    }
+    //页面信息初始化请求
+    initPage(){
+        fetch('/user/getdesensitizemobile',{body:{"businesstype": 1}}).then((res)=>{
+            console.log(res);
+            if(res.code=='200'){
+                this.setState({
+                    data:{
+                        realName:res.data.name,
+                        phoneNumber:res.data.mobile
+                    }
+                });
+            }
+        });
     }
 
     render() {

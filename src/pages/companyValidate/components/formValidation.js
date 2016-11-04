@@ -7,7 +7,7 @@ const rulesBase = {
             {required: true, message: '企业名称不能为空'},
         ]
     },
-    endTime:{
+    registrationExtendField2:{
         rules:[
             {required: true, type: 'object', message: '营业执照到期日不能为空'},
         ]
@@ -17,7 +17,7 @@ const rulesBase = {
             {required: true, message: '您的姓名不能为空'},
         ]
     },
-    cellPhone:{
+    mobile :{
         rules:[
             {required: true, message: '填写人常用手机号码不能为空'},
             ruleType('mobile')
@@ -28,7 +28,7 @@ const rulesBase = {
             ruleType('email')
         ]
     },
-    bankAccount:{
+    cardNo:{
         rules:[
             {required: true, message: '银行账号不能为空'},
         ]
@@ -38,25 +38,25 @@ const rulesBase = {
             {required: true, message: '开户行不能为空'},
         ]
     },
-    province:{
+    provinceId:{
         rules: [{ required: true, message: '所在省份不能为空'}],
     },
-    city:{
+    cityId:{
         rules: [{ required: true, message: '所在城市不能为空'}],
     },
-    branch:{
+    branchBankId:{
         rules:[
             {required: true, message: '分支行不能为空'},
         ]
     }
 }
 const rulesCommon = {
-    businessLicenseRegistrationNumber: {
+    registrationPaperNo: {
         rules: [
             {required: true, message: '营业执照注册号不能为空'},
         ]
     },
-    organizationCode:{
+    orgInsCodePaperNo:{
         rules:[
             {required: true, message: '组织机构代码证不能为空'},
         ]
@@ -64,7 +64,7 @@ const rulesCommon = {
 };
 
 const rulesMultiple = {
-    unifiedSocialCreditCode: {
+    socialCreditPaperNo: {
         rules: [
             {required: true, message: '统一社会信用代码不能为空'},
         ]
@@ -77,7 +77,7 @@ const rulesAgent = {
             {required: true, message: '法定代表人姓名不能为空'},
         ]
     },
-    corporationCellPhone: {
+    corporationMobile : {
         rules: [
             ruleType('mobile')
         ]

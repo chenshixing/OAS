@@ -28,6 +28,7 @@ class Reg extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    var that=this;
     this.props.form.validateFields((errors, values) => {
       if(!errors){
         
@@ -39,7 +40,10 @@ class Reg extends React.Component {
           }).then((res)=>{
             console.log('res:',res);
             if(res.code=='200'){
-              alert('注册成功');
+              // alert('注册成功');
+              that.props.history.push({
+                pathname:'/userRegister/result'
+              });
             }
           })
       }else{

@@ -28,7 +28,7 @@ const routes = {
             onEnter: (nextState, replace) => replace('', 'userLogin')
           },
         },
-        // 首页
+        // 用户注册页
         {
           path: 'userRegister',
           getComponent(nextState, cb) {
@@ -37,6 +37,16 @@ const routes = {
             })
           }
         },
+        // 用户注册页结果页
+        {
+          path: 'userRegister/result',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/userRegister/result').default)
+            })
+          }
+        },
+        
         // 业务错误页面
         {
           path: 'error',
