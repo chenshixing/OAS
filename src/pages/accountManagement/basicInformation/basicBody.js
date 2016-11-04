@@ -210,6 +210,29 @@ export default class basicBody extends React.Component {
 
         return p1;
     }
+    handleGetLoginCheckStatusTemplate(type){
+        //判断 获取登录后判断状态  银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+        //执行到的步骤，0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+        let iSuccess = (type.bankCheckStatus==1 && type.step==999);
+        let result = null;
+        if( iSuccess ){
+            result = (
+                <span>
+                    <span className="fn-mr-10"><Icon type="check" /></span>
+                    您已完成全部安全设置，请放心使用本系统的功能。
+                </span>
+            )
+
+        }else{
+            result = (
+                <span>
+                    <span className="error-FontColor1 fn-mr-10"><Icon type="cross" /></span>
+                    建议您完成全部安全设置，以保障账户及资金安全。
+                </span>
+            )
+        }
+        return result;
+    }
 
 
     render() {
@@ -220,8 +243,10 @@ export default class basicBody extends React.Component {
             getIsSetPayPassword,
             getCompanyAccountCheckStatus,
             getRelatedPersonInfo,
-            getCompanyPaperInfoStatus
+            getCompanyPaperInfoStatus,
+            getLoginCheckStatus
          } = this.state.data;
+
          //个人用户 或者 企业用户
          const userTypeTemplate = this.handleUserTypeTemplate(getLoginUserSimpleInfo.userType);
          //企业资料提交状态 证件资料
@@ -238,6 +263,8 @@ export default class basicBody extends React.Component {
          let getRelatedPersonInfoIcon = this.handleGetRelatedPersonInfoIconTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
          //实名验证内容
          let getRelatedPersonInfoTemplate = this.getRelatedPersonInfoTemplate(getRelatedPersonInfo,getLoginUserSimpleInfo.userType);
+
+         let getLoginCheckStatusTemplate = this.handleGetLoginCheckStatusTemplate(getLoginCheckStatus)
         return (
             <div>
                 <div>
@@ -251,7 +278,8 @@ export default class basicBody extends React.Component {
                         <div className="alert alert-warning fn-mt-10">
                             <i></i>
                             <em></em>
-                            建议您完成全部安全设置，以保障账户及资金安全。
+                            {getLoginCheckStatusTemplate}
+
                         </div>
                         <div className="cms-wrap-in fn-mt-30" style={{"borderTop": "none"}}>
                             <table className="table dashed account-table">
