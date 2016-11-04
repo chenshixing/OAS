@@ -186,18 +186,21 @@ export default class basicBody extends React.Component {
                                     已验证
                                 </span>
                                 :
-                                <span
-                                    className="error-FontColor1"
-                                    style={{width:80,display:"inline-block"}}
-                                    >
-                                    未认证
+                                <span>
+                                    <span
+                                        className="error-FontColor1"
+                                        style={{width:80,display:"inline-block"}}
+                                        >
+                                        未认证
+                                    </span>
+                                    <span colSpan={2}>
+                                        <a href="javascript:;" className="link-standard">
+                                            重新发送验证短信</a>
+                                    </span>
                                 </span>
                             }
 
-                            <span colSpan={2}>
-                                <a href="javascript:;" className="link-standard">
-                                    重新发送验证短信</a>
-                            </span>
+
                         </div>
                     )
 
@@ -338,7 +341,9 @@ export default class basicBody extends React.Component {
                                         修改更高级别的密码能提高帐号的安全性。
                                     </td>
                                     <td className="text-align-right">
-                                        <Button type="primary"><Icon type="edit" />修改</Button>
+                                        <Link className="ant-btn ant-btn-primary" to="/accountManagement/resetPassword/step1">
+                                            <Icon type="edit" />修改
+                                        </Link>
                                     </td>
                                 </tr>
                                 <tr>
