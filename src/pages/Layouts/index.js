@@ -26,8 +26,8 @@ export default class Index extends React.Component{
     }
     render() {
       return (
+          <Spin spinning={this.state.loading}>
           <div className="main-frm">
-            <Spin spinning={this.state.loading}>
             <Header />
             <div className="frame-wrap-bg">
               <div className="frame-wrap">
@@ -36,8 +36,8 @@ export default class Index extends React.Component{
               </div>
             </div>
             <Footer />
-            </Spin>
           </div>
+          </Spin>
       );
   }
 }
