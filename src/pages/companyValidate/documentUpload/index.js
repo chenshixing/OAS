@@ -23,11 +23,11 @@ class DocumentUpload extends Component {
         this.state = {
             limit : 5,
             fileList : {
-                Registration : [],
-                OrgInsCode : [],
-                SocialCredit : [],
-                IdentityProof : [],
-                DeletegatePromiseLetter : []
+                registration : [],
+                orgInsCode : [],
+                socialCredit : [],
+                identityProof : [],
+                deletegatePromiseLetter : []
             },
         }
     }
@@ -103,7 +103,7 @@ class DocumentUpload extends Component {
 
         let fList = this._getFileList(info);
         let fileList = this.state.fileList;
-        fileList.SocialCredit = fList;
+        fileList.socialCredit = fList;
 
         this.setState({ fileList });
     }
@@ -117,7 +117,7 @@ class DocumentUpload extends Component {
 
         let fList = this._getFileList(info);
         let fileList = this.state.fileList;
-        fileList.Registration = fList;
+        fileList.registration = fList;
 
         this.setState({ fileList });
     }
@@ -131,7 +131,7 @@ class DocumentUpload extends Component {
 
         let fList = this._getFileList(info);
         let fileList = this.state.fileList;
-        fileList.OrgInsCode = fList;
+        fileList.orgInsCode = fList;
 
         this.setState({ fileList });
     }
@@ -145,7 +145,7 @@ class DocumentUpload extends Component {
 
         let fList = this._getFileList(info);
         let fileList = this.state.fileList;
-        fileList.IdentityProof = fList;
+        fileList.identityProof = fList;
 
         this.setState({ fileList });
     }
@@ -159,7 +159,7 @@ class DocumentUpload extends Component {
 
         let fList = this._getFileList(info);
         let fileList = this.state.fileList;
-        fileList.DeletegatePromiseLetter = fList;
+        fileList.deletegatePromiseLetter = fList;
 
         this.setState({ fileList });
     }
@@ -197,28 +197,28 @@ class DocumentUpload extends Component {
 
     render() {
     	let rules={
-    		Registration:{
+    		registration:{
                 rules:[
                     {required: true, message: '请上传营业执照'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            OrgInsCode:{
+            orgInsCode:{
                 rules:[
                     {required: true, message: '请上传组织机构代码证'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            IdentityProof:{
+            identityProof:{
                 rules:[
                     {required: true, message: '请上传企业法定代表人身份证明书'},
                 ],
                 valuePropName: 'fileList',
                 normalize: this.normFile
             },
-            DeletegatePromiseLetter:{
+            deletegatePromiseLetter:{
                 rules:[
                     {required: true, message: '请上传承诺函及授权委托书'},
                 ],
@@ -270,7 +270,7 @@ class DocumentUpload extends Component {
 	                    label="营业执照"
 	                    required
 	                >
-	                    <Upload {...registrationUpLoadProps} fileList={this.state.fileList.Registration}>
+	                    <Upload {...registrationUpLoadProps} fileList={this.state.fileList.registration}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -282,7 +282,7 @@ class DocumentUpload extends Component {
 	                    label="组织机构代码证"
 	                    required
 	                >
-	                    <Upload {...orgInsCodeUpLoadProps} fileList={this.state.fileList.OrgInsCode}>
+	                    <Upload {...orgInsCodeUpLoadProps} fileList={this.state.fileList.orgInsCode}>
 	                        <Button type="ghost">
 	                            <Icon type="upload" /> 点击上传
 	                        </Button>
@@ -309,7 +309,7 @@ class DocumentUpload extends Component {
                         label=" 企业法定代表人身份证明书"
                         required
                     >
-                        <Upload {...identityProofUpLoadProps} fileList={this.state.fileList.IdentityProof}>
+                        <Upload {...identityProofUpLoadProps} fileList={this.state.fileList.identityProof}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
@@ -331,7 +331,7 @@ class DocumentUpload extends Component {
                         label="承诺函及授权委托书"
                         required
                     >
-                        <Upload {...deletegatePromiseLetterUpLoadProps} fileList={this.state.fileList.DeletegatePromiseLetter}>
+                        <Upload {...deletegatePromiseLetterUpLoadProps} fileList={this.state.fileList.deletegatePromiseLetter}>
                             <Button type="ghost">
                                 <Icon type="upload" /> 点击上传
                             </Button>
