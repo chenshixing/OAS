@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
 
 // antd 组件
-import { Table, Form, Input, Select, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, Cascader, message } from 'antd';
+import { Form, Input, Select, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, message } from 'antd';
 const createForm = Form.create;
 const Step = Steps.Step;
 const RadioGroup = Radio.Group;
@@ -20,11 +20,18 @@ import formValidation from '../components/formValidation';
 // 页面组件
 import Frame from 'COM/form/frame';
 
+//  业务组件
+import OffLinePayTable from '../components/offlinePayTable';
+
 //  引入fetch
 import { fetch } from 'UTILS';
 
 //  引入moment
 import moment from 'moment';
+
+//  引入store
+import store from 'store';
+
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -36,7 +43,7 @@ class CompanyValidate extends React.Component {
             display : 'block',
             visible : false,
             data:{
-                companyName:'钱途互联',
+                companyName: "",
                 companyPaperType:"2",
                 isLongEndTime:false,
                 validateType:'OffLinePayAuth',
@@ -49,83 +56,101 @@ class CompanyValidate extends React.Component {
                 branchDisabled : true,
                 branchPlaceHolder : "请先选择开户行和所在城市",
                 branches : [],
-                companyName: "",
                 map : {
                     bank : {},
                     province : {},
                     city: {},
                     branch : {}
                 }
-            },
-            dataSource : [{
-              key: '1',
-              name: '中金支付有限公司客户备付金',
-              bank: '招商银行',
-              account: '1109 0799 6610 999',
-              branch: '北京分行宣武门支行'
-            }],
-            columns : [{
-              title: '账户名称',
-              dataIndex: 'name',
-              key: 'name',
-            }, {
-              title: '开户行',
-              dataIndex: 'bank',
-              key: 'bank',
-            }, {
-              title: '银行账号',
-              dataIndex: 'account',
-              key: 'account',
-            }, {
-              title: '分支行',
-              dataIndex: 'branch',
-              key: 'branch',
-            }],
+            }
         }
 
-        this.showModal=this.showModal.bind(this);
         this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
     }
 
     componentDidMount() {
-        this.bankInit();
-        this.provinceInit();
+        this.loadData(this.dataRender.bind(this));
     }
 
-    bankInit(){
+    loadData(callBack){
         let me = this;
-        let data = this.state.data;
-        fetch('/bank/banklist').then(res => {
-            if(res.code == 200){
-                data.bankList = res.data;
-                // console.log(data.bankList);
-                //  配置映射表
-                data.bankList.map( (item,index) => {
-                    data.map.bank[item.B_BankID] = item.BankName;
-                });
-                me.setState({
-                    data : data
-                });
-            }
+        let data = me.state.data;
+        //  银行列表信息
+        let p1 = fetch('/bank/banklist');
+        //  省份列表信息
+        let p2 = fetch('/bank/provinces');
+
+        Promise.all([p1, p2]).then(res => {
+            // console.log(res);
+            data.bankList = res[0].data;
+            // console.log(data.bankList);
+
+            data.provinces = res[1].data;
+            // console.log(data.provinces);
+            //  配置映射表
+            data.bankList.map( (item,index) => {
+                data.map.bank[item.B_BankID] = item.BankName;
+            });
+            data.provinces.map( (item,index) => {
+                data.map.province[item.B_BankAreaID] = item.AreaName;
+            });
+
+            me.setState({
+                data : data
+            });
+
+            callBack && callBack(data);
+        }).catch(reason => {
+            console.log(reason)
         });
     }
 
-    provinceInit(){
+    dataRender(data){
         let me = this;
-        let data = this.state.data;
-        fetch('/bank/provinces').then(res => {
-            if(res.code == 200){
-                data.provinces = res.data;
-                // console.log(data.provinces);
-                //  配置映射表
-                data.provinces.map( (item,index) => {
-                    data.map.province[item.B_BankAreaID] = item.AreaName;
-                });
-                me.setState({
-                    data : data
-                });
-            }
+        let fieldsValue = store.get('cvs1FieldsValue');
+        if(!fieldsValue){ return false; }
+        // console.log(fieldsValue);
+        //  企业名称处理
+        data.companyName = fieldsValue.companyName;
+        //  营业执照类型处理
+        data.companyPaperType = fieldsValue.companyPaperType;
+        //  营业执照到期日处理
+        if(fieldsValue.registrationExtendField2){
+            fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
+        }
+        data.isLongEndTime = fieldsValue.isLongEndTime;
+        //  填写人的身份处理
+        data.writerType = fieldsValue.writerType;
+        let display = "block";
+        if(data.writerType == "2"){
+            //  法定代表人TODO
+            display = "none";
+        }
+        //  开户行处理
+        if(fieldsValue.bankId){
+            //  存在开户行时TODO
+            data.bankId = fieldsValue.bankId;
+        }else if(!fieldsValue.bankId && fieldsValue.cardNo){
+            //  不存在开户行而且存在银行账号时TODO
+            this.onCardNoChange(null,fieldsValue.cardNo);
+        }
+        //  所在省份处理
+        if(fieldsValue.provinceId){
+            this.onProvinceChange(fieldsValue.provinceId);
+        }
+
+        //  所在城市处理
+        if(fieldsValue.cityId){
+            data.cityId = fieldsValue.cityId;
+        }
+
+        this._getBranch();
+
+        me.setState({
+            display : display,
+            data : data
         });
+        this.props.form.setFieldsValue(fieldsValue);
     }
 
     onCompanyNameChange(e){
@@ -136,11 +161,11 @@ class CompanyValidate extends React.Component {
         });
     }
 
-    onCardNoChange(e){
+    onCardNoChange(e,value){
         let me = this;
         let data = me.state.data;
-        let cardNo = e.target.value;
-        if(cardNo.length < 4 || cardNo.length > 10){ return false; }
+        let cardNo = value ? value : e.target.value;
+        if(cardNo.length < 4){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
         fetch('/bank/cardNumber',{
             body:{
               "cardNumber": cardNo
@@ -230,31 +255,18 @@ class CompanyValidate extends React.Component {
         let display = e.target.value == "1" ? "block" : "none";
         if(this.state.display == display){ return false;}
         if(e.target.value == "2"){
-            this.showModal();
-        }else{
-            let state = this.state;
-            state.display = display;
-            state.data.writerType = '1';
-            this.setState(state);
+            this.warning();
         }
-    }
-
-    showModal() {
         this.setState({
-          visible: true,
+            display : display
         });
     }
 
-    handleOk() {
-        let state = this.state;
-        state.display = 'none';
-        state.visible = false;
-        state.data.writerType = '2';
-        this.setState(state);
-    }
-
-    handleCancel() {
-        this.setState({ visible: false });
+    warning() {
+      Modal.warning({
+        title: '提示',
+        content: '您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。',
+      });
     }
 
     onCompanyPaperTypeChange(e) {
@@ -296,10 +308,14 @@ class CompanyValidate extends React.Component {
     //  点击下一步
     next(){
         let me = this;
+        //  本地存储表单信息
+        let fieldsValue = this.props.form.getFieldsValue();
+        store.set('cvs1FieldsValue',fieldsValue);
         // 表单校验
         this.props.form.validateFieldsAndScroll((errors, data) => {
           if (errors) {
             console.log(errors);
+            console.log(data);
             return false;
           }
           console.log("passed");
@@ -320,7 +336,7 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 //  提交成功TODO
                 console.log('next finish');
-                // this.props.history.push('/companyValidate/step2');
+                this.props.history.push('/companyValidate/step2');
             }
         });
     }
@@ -463,7 +479,7 @@ class CompanyValidate extends React.Component {
                             label=" 营业执照类型"
                             required
                         >
-                            <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType })} onChange={this.onCompanyPaperTypeChange.bind(this)}>
+                            <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })}>
                                 <Radio value="2">普通营业执照</Radio>
                                 <Radio value="3">多证合一营业执照</Radio>
                             </RadioGroup>
@@ -501,7 +517,7 @@ class CompanyValidate extends React.Component {
                                 </FormItem>
                             </Col>
                             <Col span="5">
-                                <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})}>长期</Checkbox>
+                                <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})} checked={ this.state.data.isLongEndTime }>长期</Checkbox>
                             </Col>
                         </FormItem>
 
@@ -549,7 +565,7 @@ class CompanyValidate extends React.Component {
                             label=" 填写人的身份"
                             required
                         >
-                            <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType })} onChange={ this.onWriterTypeChange.bind(this) }>
+                            <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType, onChange: this.onWriterTypeChange.bind(this) })}>
                                 <Radio value="1">我是委托代理人</Radio>
                                 <Radio value="2">我是法定代表人</Radio>
                             </RadioGroup>
@@ -670,7 +686,7 @@ class CompanyValidate extends React.Component {
                             label="请选择验证方式"
                             required
                         >
-                            <RadioGroup {...getFieldProps('validateType',{ initialValue: this.state.data.validateType })} onChange={this.onValidateTypeChange.bind(this)}>
+                            <RadioGroup {...getFieldProps('validateType',{ initialValue: this.state.data.validateType , onChange : this.onValidateTypeChange.bind(this)})}>
                                 <Radio value="OffLinePayAuth">线下支付小额验证金核验</Radio>
                                 <Radio value="OffLineSubmitInfo">线下提交账户资料核验</Radio>
                             </RadioGroup>
@@ -681,10 +697,7 @@ class CompanyValidate extends React.Component {
                             <Col offset={1} span={22} className="fn-pa-20" style={{border:'1px solid #e8e8e8'}}>
                                 <Row style={{display:this.state.data.validateType == 'OffLinePayAuth' ? 'block' : 'none'}}>
                                     <Col offset={1} span={22}>
-                                        <p>请在<span className="warning-FontColor">48小时</span>以内，通过<span className="warning-FontColor">网上银行</span>或<span className="warning-FontColor">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="warning-FontColor">0.10元</span>验证金 。</p>
-                                        <Table className="fn-mt-15" dataSource={this.state.dataSource} columns={this.state.columns} pagination={false}/>
-                                        <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
-                                        <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
+                                        <OffLinePayTable />
                                     </Col>
                                 </Row>
                                 <Row style={{display:this.state.data.validateType == 'OffLineSubmitInfo' ? 'block' : 'none'}}>
@@ -700,18 +713,6 @@ class CompanyValidate extends React.Component {
                                 <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
                             </Col>
                         </Row>
-
-                        <Modal ref="modal"
-                          visible={this.state.visible}
-                          title="提示" onCancel={this.handleCancel.bind(this)}
-                          footer={[
-                            <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
-                              我知道了
-                            </Button>,
-                          ]}
-                        >
-                          <h4>您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。</h4>
-                        </Modal>
                     </Form>
 
                 </Frame>

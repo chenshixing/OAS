@@ -14,6 +14,9 @@ import Sms from 'BCOM/Sms/index';
 //  引入fetch
 import { fetch } from 'UTILS';
 
+//  引入线下支付小额验证金核验表格信息
+import offlinePayTableInfo from 'PAGES/companyValidate/components/offlinePayTableInfo';
+
 //	样式
 import './style.less';
 
@@ -83,32 +86,6 @@ class InfoRow extends Component {
         			0 : '未认证',
         			1 : '已认证'
         		},
-        		tableInfo : {
-        			dataSource : [{
-		              key: '1',
-		              name: '中金支付有限公司客户备付金',
-		              bank: '招商银行',
-		              account: '1109 0799 6610 999',
-		              branch: '北京分行宣武门支行'
-		            }],
-		            columns : [{
-		              title: '账户名称',
-		              dataIndex: 'name',
-		              key: 'name',
-		            }, {
-		              title: '开户行',
-		              dataIndex: 'bank',
-		              key: 'bank',
-		            }, {
-		              title: '银行账号',
-		              dataIndex: 'account',
-		              key: 'account',
-		            }, {
-		              title: '分支行',
-		              dataIndex: 'branch',
-		              key: 'branch',
-		            }]
-        		}
         	}
         });
     }
@@ -228,14 +205,12 @@ class InfoRow extends Component {
     	}
         let accountValidateType = accountData.accountValidateType;
         // console.log(accountValidateType);
-    	//	拿到表格的静态信息
-    	let tableInfo = this.state[this.state.type].tableInfo;
         if(accountValidateType === "bond"){
             return (
                 <Col span={12} className="tableCol">
                     <CountDown />
                     <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
-                    <Table dataSource={tableInfo.dataSource} columns={tableInfo.columns} pagination={false}/>
+                    <Table dataSource={offlinePayTableInfo.dataSource} columns={offlinePayTableInfo.columns} pagination={false}/>
                     <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
                 </Col>
             )
