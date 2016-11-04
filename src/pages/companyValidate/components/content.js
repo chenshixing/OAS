@@ -13,6 +13,9 @@ import './style.less';
 import codeimg from 'ASSETS/images/code.png';
 import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
+//  业务组件
+import OffLinePayTable from './offlinePayTable';
+
 
 export default class Content extends Component{
     static propTypes = {
@@ -90,37 +93,10 @@ export default class Content extends Component{
     }
 
     bond(){
-    	let dataSource = [{
-          key: '1',
-          name: '中金支付有限公司客户备付金',
-          bank: '招商银行',
-          account: '1109 0799 6610 999',
-          branch: '北京分行宣武门支行'
-        }];
-        let columns = [{
-          title: '账户名称',
-          dataIndex: 'name',
-          key: 'name',
-        }, {
-          title: '开户行',
-          dataIndex: 'bank',
-          key: 'bank',
-        }, {
-          title: '银行账号',
-          dataIndex: 'account',
-          key: 'account',
-        }, {
-          title: '分支行',
-          dataIndex: 'branch',
-          key: 'branch',
-        }];
     	return(
     		<Row>
                 <Col offset={1} span={22}>
-                    <p>请在<span className="warning-FontColor">48小时</span>以内，通过<span className="warning-FontColor">网上银行</span>或<span className="warning-FontColor">银行柜台</span>，使用您的对公账户向下面的指定账户支付<span className="warning-FontColor">0.10元</span>验证金 。</p>
-                    <Table className="fn-mt-15" dataSource={dataSource} columns={columns} pagination={false}/>
-                    <p className="fn-mt-15">若超时支付或公司名和对公账户开户名不一致，验证失败。</p>
-                    <p className="fn-mt-15">本平台不收取任何手续费，如产生手续费等，由发卡行收取。</p>
+                    <OffLinePayTable />
                 </Col>
             </Row>
     	)

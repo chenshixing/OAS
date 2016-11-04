@@ -38,7 +38,7 @@ class TipsRow extends Component {
         //  身份实名认证
         let p1 = fetch('/user/getRelatedPersonInfo');
         //  企业对公账户认证
-        let p2 = fetch('/user/getAccountCheckStatus');
+        let p2 = fetch('/user/getCompanyAccountCheckStatus');
         //  企业资料补充
         let p3 = fetch('/paper/getCompanyPaperInfoStatus');
 
