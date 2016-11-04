@@ -131,6 +131,14 @@ class CompanyValidate extends React.Component {
             //  关系人信息处理
             let companyConnectorInfoDto = res[1].data.companyConnectorInfoDto;
 
+            if(companyConnectorInfoDto.writerType == 1){
+                //  填写人为委托代理人TODO
+
+            }else if(companyConnectorInfoDto.writerType == 2){
+                //  填写人为法定代表人TODO
+
+            }
+
             me.setState({
                 data : data
             });
