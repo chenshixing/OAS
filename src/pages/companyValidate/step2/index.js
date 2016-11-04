@@ -152,6 +152,17 @@ class CompanyValidate extends React.Component {
         });
     }
 
+    next(){
+        fetch('/companyVerification/confirmBasicInfo',{
+            body : {}
+        }).then(res => {
+            if(res.code == 200){
+                //  提交成功TODO
+                this.props.history.push('/companyValidate/step3');
+            }
+        });
+    }
+
     render() {
         let data = this.state.data;
 
@@ -235,7 +246,7 @@ class CompanyValidate extends React.Component {
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">
-                                <Link className="ant-btn ant-btn-primary ant-btn-lg" to="/companyValidate/step3">下一步</Link>
+                                <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
                                 <Link to="/companyValidate/step1" className="fn-ml-20">信息有误，返回修改</Link>
                             </Col>
                         </Row>
