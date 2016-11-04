@@ -19,9 +19,16 @@ import {
     Input,
     notification,
     Button,
-    message
+    message,
+    Form
 } from 'antd';
 const Option = Select.Option;
+const createForm = Form.create;
+const FormItem = Form.Item;
+
+function noop() {
+  return false;
+}
 
 //fetch
 import { fetch } from 'UTILS';
@@ -84,8 +91,11 @@ export default class Home extends React.Component {
         this.setState({visible: true});
     }
     handleOk() {
-        console.log('点击了确定');
-        if(this.state.isInviteCode){
+        console.log(this.state.inviteCodeValue);
+        if(this.state.inviteCodeValue==undefined){
+            message.error("邀请码不能为空")
+            return
+        }else{
             console.log(this.state.inviteCodeValue)
             fetch('/service/addService',{
                 body:{
@@ -138,6 +148,7 @@ export default class Home extends React.Component {
         return items[item]
     }
     handleInviteCodeValue(e){
+
         this.setState({
             inviteCodeValue:e.target.value
         })
@@ -148,7 +159,9 @@ export default class Home extends React.Component {
 
 
 
-        let {getUserServiceList=[]} = this.state.data
+        let {getUserServiceList=[]} = this.state.data;
+
+
 
         return (
             <div style={{
@@ -194,6 +207,7 @@ export default class Home extends React.Component {
                                     value={this.state.inviteCodeValue}
                                     onChange={this.handleInviteCodeValue.bind(this)}
                                     />
+
                             </Col>
                         </Row>
                         :

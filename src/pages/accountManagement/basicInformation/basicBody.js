@@ -319,7 +319,10 @@ export default class basicBody extends React.Component {
                                                 如资料有变更，请及时更新。
                                             </td>
                                             <td className="text-align-right">
-                                                <Button type="primary"><Icon type="edit" />修改</Button>
+                                                <Link to="/companyValidate/documentUpload" className="ant-btn ant-btn-primary">
+                                                    <Icon type="edit" />
+                                                    修改
+                                                </Link>
                                             </td>
 
 
