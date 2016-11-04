@@ -3,6 +3,11 @@ import React from 'react';
 import {Link} from 'react-router';
 
 
+// 页面组件
+import Sms from 'BCOM/Sms/index';
+
+
+
 // antd 组件
 import {Button,Icon,Tag,message} from 'antd';
 
@@ -112,12 +117,17 @@ export default class basicBody extends React.Component {
     }
     //实名验证内容
     getRelatedPersonInfoTemplate(items,type){
+        let smsData = {};
         let p1 = "";
         if(type===1){
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
+                    smsData = {
+                        name: item.realName,
+                        identityCode: item.identityCode,
+                    }
                     return (
-                        <div key={index}>
+                        <div key={index} className="fn-mt-10">
                             <span
                                 className="text-align-right"
                                 style={{width:150,display:"inline-block"}}
@@ -140,7 +150,7 @@ export default class basicBody extends React.Component {
                                     已验证
                                 </span>
                                 :
-                                <span>
+                                <span  >
                                     <span
                                         className="error-FontColor1"
                                         style={{width:80,display:"inline-block"}}
@@ -148,8 +158,11 @@ export default class basicBody extends React.Component {
                                         未认证
                                     </span>
                                     <span colSpan={2}>
-                                        <a href="javascript:;" className="link-standard">
+                                        <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
+                                        {/*
+                                            <a href="javascript:;" className="link-standard">
                                             重新发送验证短信</a>
+                                        */}
                                     </span>
                                 </span>
                             }
@@ -161,14 +174,18 @@ export default class basicBody extends React.Component {
             })
         }else if(type===2){
             p1 = items.map((item,index)=>{
-
+                    smsData = {
+                        name: item.realName,
+                        identityCode: item.identityCode,
+                        connectorType: item.connectorType
+                    }
                     return (
-                        <div>
+                        <div key={index} className="fn-mt-10">
                             <span
                                 className="text-align-right"
                                 style={{width:150,display:"inline-block"}}
                                 >
-                                姓名：
+                                { item.connectorType == 2 ? "法定代表人" : "委托代理人"}姓名：
                             </span>
                             <span
                                 className="heading-FontColor"
@@ -194,8 +211,11 @@ export default class basicBody extends React.Component {
                                         未认证
                                     </span>
                                     <span colSpan={2}>
-                                        <a href="javascript:;" className="link-standard">
+                                        <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
+                                        {/*
+                                            <a href="javascript:;" className="link-standard">
                                             重新发送验证短信</a>
+                                        */}
                                     </span>
                                 </span>
                             }
