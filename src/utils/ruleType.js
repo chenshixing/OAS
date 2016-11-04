@@ -74,6 +74,23 @@ const dataType = {
     "id-card":{
         reg:/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
         errMsg: '身份证号码格式不正确'
+    },
+    "pfxPassword":{
+        reg: {
+            // 自定义 test 方法
+            test: function(value) {
+                const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[\W,_]+/];
+                let matchNum = 0;
+                regArr.map( (item,index) => {
+                    if(item.test(value)){
+                        matchNum++;
+                    }
+                });
+                let isMatch = matchNum >= 2 && value.length >= 8 && value.length <= 20;
+                return isMatch;
+            }
+        },
+        errMsg: '8-20位英文字母（区分大小写）、数字或符号组合'
     }
 };
 

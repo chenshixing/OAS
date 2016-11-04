@@ -11,6 +11,9 @@ const FormItem = Form.Item;
 // 页面组件
 import Frame from 'COM/form/frame';
 
+// 自定义验证 rule
+import ruleType from 'UTILS/ruleType';
+
 class CompanyValidate extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -74,7 +77,7 @@ class CompanyValidate extends Component {
             pfxPassword : {
                 rules:[
                     {required: true, message: '交易密码不能为空'},
-                    pfxPasswordRule
+                    ruleType('pfxPassword')
                 ]
             }
         };
