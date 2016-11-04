@@ -19,9 +19,16 @@ import {
     Input,
     notification,
     Button,
-    message
+    message,
+    Form
 } from 'antd';
 const Option = Select.Option;
+const createForm = Form.create;
+const FormItem = Form.Item;
+
+function noop() {
+  return false;
+}
 
 //fetch
 import { fetch } from 'UTILS';
@@ -60,12 +67,21 @@ export default class Home extends React.Component {
         //返回用户服务列表(v0.3)
         let p2 = fetch('/user/getUserServiceList');
 
-        Promise.all([p1, p2]).then(values => {
-          console.log(values);
-          let getLoginUserSimpleInfo = values[0]
-          let getUserServiceList = values[1]
-          this.state.data = getLoginUserSimpleInfo.data
-          this.state.data.getUserServiceList = getUserServiceList.data
+        //获取登录后判断状态
+        let p3 = fetch('/common/getLoginCheckStatus');
+
+        Promise.all([p1, p2,p3]).then(values => {
+          this.state.data = values[0].data
+          this.state.data.getUserServiceList = values[1].data
+          this.state.data.getLoginCheckStatus = values[2].data
+
+          //验证不通过，就跳转到验证页面
+          if(values[2].data.bankCheckStatus==1 && values[2].data.step==999){
+              return true
+          }else{
+              //this.props.history.push("/accountManagement/basicInformation")
+          }
+
           this.forceUpdate();
         }).catch(reason => {
           console.log(reason)
@@ -75,8 +91,11 @@ export default class Home extends React.Component {
         this.setState({visible: true});
     }
     handleOk() {
-        console.log('点击了确定');
-        if(this.state.isInviteCode){
+        console.log(this.state.inviteCodeValue);
+        if(this.state.inviteCodeValue==undefined){
+            message.error("邀请码不能为空")
+            return
+        }else{
             console.log(this.state.inviteCodeValue)
             fetch('/service/addService',{
                 body:{
@@ -129,6 +148,7 @@ export default class Home extends React.Component {
         return items[item]
     }
     handleInviteCodeValue(e){
+
         this.setState({
             inviteCodeValue:e.target.value
         })
@@ -139,7 +159,9 @@ export default class Home extends React.Component {
 
 
 
-        let {getUserServiceList=[]} = this.state.data
+        let {getUserServiceList=[]} = this.state.data;
+
+
 
         return (
             <div style={{
@@ -185,6 +207,7 @@ export default class Home extends React.Component {
                                     value={this.state.inviteCodeValue}
                                     onChange={this.handleInviteCodeValue.bind(this)}
                                     />
+
                             </Col>
                         </Row>
                         :

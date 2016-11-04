@@ -24,6 +24,9 @@ export default (url, data, showLoading, pending) => {
     if(showLoading === undefined && typeof data === 'boolean') {
         showLoading = data;
         data = {};
+    } else {
+        // 默认显示loading
+        showLoading = true;
     }
 
     // fetch 规范中只有 post 才能设置 body 属性
@@ -33,7 +36,7 @@ export default (url, data, showLoading, pending) => {
         // 当有body传递时，强制设置为 post 方法
         data.method = 'post';
         // 统一JSON字符串化
-        data.body = JSON.stringify(data.body)
+        data.body = JSON.stringify(data.body);
     }
 
     // 合并配置

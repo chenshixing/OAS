@@ -15,7 +15,7 @@ import { Button, Modal, Row, Col } from 'antd';
 
 
 //  引入fetch
-import { fetch } from 'UTILS';   
+import { fetch } from 'UTILS';
 
 class Sms extends Component {
     static propTypes = {
@@ -26,7 +26,11 @@ class Sms extends Component {
         super(props);
         this.state = Object.assign({},this.props,{});
     }
-
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            data:nextProps.data
+        })
+    }
     sms() {
     	let me = this;
 		fetch('/common/pinCode',{
@@ -68,6 +72,7 @@ class Sms extends Component {
     }
 
     render() {
+        console.log(this)
         return (
             <Button type="primary" onClick={ this.sms.bind(this) }>{ this.props.children }</Button>
         );

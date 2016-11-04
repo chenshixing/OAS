@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 
 // 页面组件
 import Frame from 'COM/form/frame';
-
+import Sms from 'BCOM/Sms/index';
 // antd 组件
 import {
     Form,
@@ -23,6 +23,7 @@ const FormItem = Form.Item;
 import codeimg from 'ASSETS/images/code.png';
 import {IdentityModal, SupplementModal} from 'BCOM/Modal/index';
 import {fetch} from 'UTILS';
+
 
 
 // 页面身份验证
@@ -80,7 +81,47 @@ export default class RealNameAuthentication extends React.Component {
 
     render() {
         console.log(this)
-        let {getAccountRealCheckStatus} = this.props;
+        let {getAccountRealCheckStatus,getRelatedPersonInfo,getLoginUserSimpleInfo} = this.props;
+
+        // let smsData = {
+        //     name: getRelatedPersonInfo.realName,
+        //     identityCode: getRelatedPersonInfo.identityCode,
+        //     connectorType: getRelatedPersonInfo.connectorType
+        // };
+        let smsData = {};
+
+        // 使用方式：
+        // 传入data和businesstype
+        // data : {
+        //     name: data.name,                        姓名
+        //     identityCode: data.identityCode,        身份识别码
+        //     connectorType: data.connectorType       关系人类型 （2：企业法人，3：经办人）（个人账户不用传，企业账户必须）
+        // };
+        if(getRelatedPersonInfo && getRelatedPersonInfo.length>0){
+            getRelatedPersonInfo.map((item,index)=>{
+
+                    if(getLoginUserSimpleInfo.userType==1){
+                        return (
+                            smsData = {
+                                name: item.realName,
+                                identityCode: item.identityCode,
+                            }
+                        )
+                    }else if(getLoginUserSimpleInfo.userType==2){
+                        return (
+                            smsData = {
+                                name: item.realName,
+                                identityCode: item.identityCode,
+                                connectorType: item.connectorType
+                            }
+                        )
+                    }
+
+            })
+        }
+
+
+
         return (
             <div>
                 <Modal
@@ -106,7 +147,8 @@ export default class RealNameAuthentication extends React.Component {
                         <Col span={12} offset={6}>
                             <p>
                                 姓名：{this.props.getdesensitizemobile.name}，您的身份识别码已发送到手机{this.props.getdesensitizemobile.mobile}。
-                                <a href='javascript:;' onClick={this.handleMessage.bind(this)}>没有收到短信，重新发送</a>
+                                <Sms data={ smsData } businesstype={3}>重新发送验证短信</Sms>
+                                {/*<a href='javascript:;' onClick={this.handleMessage.bind(this)}>没有收到短信，重新发送</a>*/}
                             </p>
                             <p>
                                 请下载实名认证APP完成认证。

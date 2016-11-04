@@ -35,10 +35,11 @@ export default class Reg extends React.Component {
       <Frame title="填写注册信息">
         <Tabs defaultActiveKey="1">
           <TabPane tab="个人用户" key="1">
+            <Alert message="真实姓名必须与身份证信息保持一致。" type="warning" showIcon />
             <FormPerson />
           </TabPane>
           <TabPane tab="企业用户" key="2">
-            <Alert message="您的企业名称与手机号，应与您提交的申请材料信息一致。" type="warning" showIcon />
+            <Alert message="您企业名称必须与提交的证件信息保持一致。" type="warning" showIcon />
             <FormCompany />
           </TabPane>
         </Tabs>

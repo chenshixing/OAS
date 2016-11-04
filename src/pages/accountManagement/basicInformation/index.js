@@ -28,8 +28,10 @@ export default class BasicInformation extends React.Component {
                 getBindMobile:null,
                 getRelatedPersonInfo:[],
                 getCompanyAccountCheckStatus:[],
+                getLoginCheckStatus:{}
 
-            }
+            },
+            history:this.props.history
         }
     }
     componentDidMount() {
@@ -48,16 +50,20 @@ export default class BasicInformation extends React.Component {
         let p5 = fetch('/user/getRelatedPersonInfo');
         //企业资料提交状态(v0.5)
         let p6 = fetch('/paper/getCompanyPaperInfoStatus');
+        //获取登录后判断状态
+        let p7 = fetch('/common/getLoginCheckStatus');
 
 
-        Promise.all([p1, p2,p3,p4,p5,p6]).then(values => {
-          console.log(values);
+        Promise.all([p1, p2,p3,p4,p5,p6,p7]).then(values => {
+          //console.log(values);
           this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getBindMobile = values[1].data
           this.state.data.getIsSetPayPassword = values[2].data
           this.state.data.getCompanyAccountCheckStatus = values[3].data
           this.state.data.getRelatedPersonInfo = values[4].data
           this.state.data.getCompanyPaperInfoStatus = values[5].data
+          this.state.data.getLoginCheckStatus = values[6].data
+          console.log(this.state.data.getLoginCheckStatus)
           this.forceUpdate();
         }).catch(reason => {
           console.log(reason)

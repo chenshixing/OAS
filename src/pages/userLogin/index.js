@@ -23,171 +23,72 @@ import {Link} from 'react-router';
 // 页面组件
 //import Frame from 'COM/form/frame';
 
-import vcode from 'ASSETS/images/vcode.png'
-import eaccountlogo from 'ASSETS/images/eaccountlogo.png'
+import eaccountlogo from 'ASSETS/images/eaccountlogo.png';
+
+import FormPerson from './formPerson';
+import FormCompany from './formCompany';
 
 
 // 页面
-class Login extends React.Component {
+export default class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             date: '',
         };
     }
-
-
-
-  render() {
-      const { getFieldProps } = this.props.form;
-
-      // 表单布局
-      const formItemLayout = {
-          labelCol: { span:8 },
-          wrapperCol: { span: 12 },
-      };
-    return (
-        <div className="login-page">
-            <div className="main-frm">
-                <div className="login-layerout">
-                    <div className="login-head-wrap">
-                        <div className="login-head-content">
-                            <a href="#" className="login-head-logo">
-                                <img src={eaccountlogo} />
-                            </a>
-                            <a href="###" className="login-admin default-FontColor">管理员登录</a>
-                        </div>
-                    </div>
-                    <div className="login-wrap">
-                        <div className="login-bg">
-                            <div className="login-content">
-                                <Tabs type="card">
-                                    <TabPane tab="个人用户" key="1">
-                                        <Alert message="仅支持IE8以上版本的浏览器，请切换浏览器！" type="warning" showIcon />
-                                        <Form horizontal>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="真实姓名"
-                                            >
-                                                <Input type="input" {...getFieldProps('userName')} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="登录名"
-                                            >
-                                                <Input type="input" {...getFieldProps('accountId')} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="登录密码"
-                                            >
-                                                <Input type="password" {...getFieldProps('loginPassword')} />
-                                            </FormItem>
-
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="验证码"
-                                            >
-                                                <InputGroup className="ant-search-input">
-                                                    <Input {...getFieldProps('vCode')} style={{ width: 80 }}/>
-                                                    <div className="ant-input-group-wrap">
-                                                        <img className="ant-search-btn vcode" src={vcode}/>
-                                                    </div>
-                                                </InputGroup>
-                                            </FormItem>
-
-                                            <FormItem wrapperCol={{ span: 16, offset: 8 }} style={{ marginTop: 24}}>
-                                                <Button type="primary" htmlType="submit">登录</Button>
-                                            </FormItem>
-
-                                            <FormItem wrapperCol={{ span: 12, offset: 8 }}>
-                                                <Link to="/userRegister">新用户注册</Link>
-                                                <Link to="/resetPassword/step1"><span className='float-right'>忘记密码</span></Link>
-                                            </FormItem>
-
-                                        </Form>
-
-
-                                    </TabPane>
-                                    <TabPane tab="企业用户" key="2">
-                                        <Alert message="仅支持IE8以上版本的浏览器，请切换浏览器！" type="warning" showIcon />
-                                        <Form horizontal>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="企业名称"
-                                            >
-                                                <Input {...getFieldProps('CompanyName')} />
-                                            </FormItem>
-
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="登录名"
-                                            >
-                                                <Input {...getFieldProps('accountId')} />
-                                            </FormItem>
-
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="登录密码"
-                                            >
-                                                <Input type="password" {...getFieldProps('loginPassword')} />
-                                            </FormItem>
-
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="验证码"
-                                            >
-                                                <InputGroup className="ant-search-input">
-                                                    <Input {...getFieldProps('vCode')} />
-                                                    <div className="ant-input-group-wrap">
-                                                        <img className="ant-search-btn vcode" src={vcode}/>
-                                                    </div>
-                                                </InputGroup>
-                                            </FormItem>
-
-                                            <FormItem wrapperCol={{ span: 16, offset: 8 }} style={{ marginTop: 24 }}>
-                                                <Button type="primary" htmlType="submit">登录</Button>
-                                            </FormItem>
-
-                                            <FormItem wrapperCol={{ span: 12, offset: 8 }}>
-                                                <Link to="/userRegister">新用户注册</Link>
-                                                <Link to="/resetPassword/step1"><span className='float-right'>忘记密码</span></Link>
-                                            </FormItem>
-
-                                        </Form>
-                                    </TabPane>
-                                </Tabs>
+    render() {
+        return (
+            <div className="login-page">
+                <div className="main-frm">
+                    <div className="login-layerout">
+                        <div className="login-head-wrap">
+                            <div className="login-head-content">
+                                <a href="#" className="login-head-logo">
+                                    <img src={eaccountlogo} />
+                                </a>
+                                <a href="###" className="login-admin default-FontColor">管理员登录</a>
                             </div>
+                        </div>
+                        <div className="login-wrap">
+                            <div className="login-bg">
+                                <div className="login-content">
+                                    <Tabs type="card">
+                                        <TabPane tab="个人用户" key="1">
+                                            <FormPerson />
+
+                                        </TabPane>
+                                        <TabPane tab="企业用户" key="2">
+                                            <FormCompany />
+                                        </TabPane>
+                                    </Tabs>
+                                </div>
 
 
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div className="main-footer clearfix">
+                        <div className="main-ft-inner">
+                            <div className="main-ft-bank"><span className="bank-bg bank-cmb"></span></div>
+                            <div className="main-ft-helper">
+                                <ul>
+                                    <li className="has-r-line">
+                                        <Icon type="message"  />
+                                        <a href="##">帮助中心</a>
+                                    </li>
+                                    <li className="tel has-r-line"><Icon type="phone" />客服热线<b>400-106-6698</b></li>
+                                    <li>粤ICP备 14098252号-2</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
-                <div className="main-footer clearfix">
-                    <div className="main-ft-inner">
-                        <div className="main-ft-bank"><span className="bank-bg bank-cmb"></span></div>
-                        <div className="main-ft-helper">
-                            <ul>
-                                <li className="has-r-line">
-                                    <Icon type="message"  />
-                                    <a href="##">帮助中心</a>
-                                </li>
-                                <li className="tel has-r-line"><Icon type="phone" />客服热线<b>400-106-6698</b></li>
-                                <li>粤ICP备 14098252号-2</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-
-        </div>
-
-
-    );
-  }
+        );
+    }
 }
-export default Form.create()(Login);
-
