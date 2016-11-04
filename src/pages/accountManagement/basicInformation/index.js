@@ -29,7 +29,8 @@ export default class BasicInformation extends React.Component {
                 getRelatedPersonInfo:[],
                 getCompanyAccountCheckStatus:[],
 
-            }
+            },
+            history:this.props.history
         }
     }
     componentDidMount() {
@@ -51,13 +52,14 @@ export default class BasicInformation extends React.Component {
 
 
         Promise.all([p1, p2,p3,p4,p5,p6]).then(values => {
-          console.log(values);
+          //console.log(values);
           this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getBindMobile = values[1].data
           this.state.data.getIsSetPayPassword = values[2].data
           this.state.data.getCompanyAccountCheckStatus = values[3].data
           this.state.data.getRelatedPersonInfo = values[4].data
           this.state.data.getCompanyPaperInfoStatus = values[5].data
+          console.log(this.state.data.getLoginCheckStatus)
           this.forceUpdate();
         }).catch(reason => {
           console.log(reason)

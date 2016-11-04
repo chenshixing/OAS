@@ -1,17 +1,21 @@
 // react 相关库
 import React from 'react';
+import {Link} from 'react-router';
+
 
 // antd 组件
-import {Button,Icon,Tag} from 'antd';
+import {Button,Icon,Tag,message} from 'antd';
+
 
 // 页面
 export default class basicBody extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            data:this.props.data
+            data:this.props.data,
         }
     }
+    //个人用户 或者 企业用户
     handleUserTypeTemplate(item){
         let items = {
             1:<Tag color="blue">个人用户</Tag>,
@@ -19,6 +23,7 @@ export default class basicBody extends React.Component {
         };
         return items[item]
     }
+    //企业资料提交状态 证件资料
     handleGetCompanyPaperInfoStatusTemplate(item){
         let items = {
             0:<Icon type="cross" className="error-FontColor1" />,
@@ -26,6 +31,7 @@ export default class basicBody extends React.Component {
         };
         return items[item]
     }
+    //交易密码
     handleGetIsSetPayPasswordTemplate(item){
         let result = null;
         if(item==true){
@@ -35,6 +41,16 @@ export default class basicBody extends React.Component {
         }
         return result
     }
+    //修改交易密码
+    handleGetIsSetPayPasswordTemplateEditor(isValida){
+
+        if(isValida===true){
+            this.props.history.push('/accountManagement/resetTradingPassword/step1')
+        }else{
+            message.error("您的实名认证未完成，完成后才可进行此操作。")
+        }
+    }
+    //绑定手机
     handleGetBindMobileTemplate(item){
         let result = null;
         if(item){
@@ -44,6 +60,7 @@ export default class basicBody extends React.Component {
         }
         return result
     }
+    //对公账户
     handleGetAccountCheckStatusTemplate(item){
         let result = null;
         if(item && item.length>0){
@@ -59,6 +76,7 @@ export default class basicBody extends React.Component {
      * connectorType==3 个人姓名
      * items.filter 全部都>0的时候，改变状态。
      */
+    //实名验证图标
     handleGetRelatedPersonInfoIconTemplate(items,type){
         let p1 = "";
         if(type===1){
@@ -92,6 +110,7 @@ export default class basicBody extends React.Component {
 
         return p1;
     }
+    //实名验证内容
     getRelatedPersonInfoTemplate(items,type){
         let p1 = "";
         if(type===1){
@@ -121,18 +140,21 @@ export default class basicBody extends React.Component {
                                     已验证
                                 </span>
                                 :
-                                <span
-                                    className="error-FontColor1"
-                                    style={{width:80,display:"inline-block"}}
-                                    >
-                                    未认证
+                                <span>
+                                    <span
+                                        className="error-FontColor1"
+                                        style={{width:80,display:"inline-block"}}
+                                        >
+                                        未认证
+                                    </span>
+                                    <span colSpan={2}>
+                                        <a href="javascript:;" className="link-standard">
+                                            重新发送验证短信</a>
+                                    </span>
                                 </span>
                             }
 
-                            <span colSpan={2}>
-                                <a href="javascript:;" className="link-standard">
-                                    重新发送验证短信</a>
-                            </span>
+
                         </div>
                     )
                 }
@@ -203,6 +225,7 @@ export default class basicBody extends React.Component {
          const getCompanyPaperInfoStatusTemplate = this.handleGetCompanyPaperInfoStatusTemplate(getCompanyPaperInfoStatus.status);
          //交易密码
          const getIsSetPayPasswordTemplate = this.handleGetIsSetPayPasswordTemplate(getIsSetPayPassword);
+
          //绑定手机
          const getBindMobileTemplate = this.handleGetBindMobileTemplate(getBindMobile);
          //对公账户
@@ -262,26 +285,6 @@ export default class basicBody extends React.Component {
                                 <tr className="align-top">
                                     <td rowSpan={2}  className="text-align-center fs-20">
                                         {getRelatedPersonInfoIcon}
-                                        {/*
-
-                                            getRelatedPersonInfo.map((item,index)=>{
-                                                if(item.connectorType==3){
-                                                    return (
-                                                        <div>
-
-                                                            {
-                                                                item.checkPass>0
-                                                                ?
-                                                                <Icon type="check"/>
-                                                                :
-                                                                <Icon type="cross" className="error-FontColor1" />
-                                                            }
-                                                        </div>
-                                                    )
-                                                }
-                                            })
-                                        */}
-
                                     </td>
                                     <td rowSpan={2}>
                                         <h3 className="fn-pt-10">实名认证</h3>
@@ -351,7 +354,12 @@ export default class basicBody extends React.Component {
                                         关联证书：保护账户资金安全，在修改资料、融资申请以及使用其他会员服务时，需要验证交易密码。
                                     </td>
                                     <td className="text-align-right">
-                                        <Button type="primary"><Icon type="edit" />修改</Button>
+                                        <Button
+                                            type="primary"
+                                            onClick={this.handleGetIsSetPayPasswordTemplateEditor.bind(this,getIsSetPayPassword)}
+                                            >
+                                            <Icon type="edit" />修改
+                                        </Button>
                                     </td>
                                 </tr>
                                 <tr>
