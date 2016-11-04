@@ -13,6 +13,8 @@ import React, { Component, PropTypes } from 'react';
 // antd 组件
 import { Button, Modal, Row, Col } from 'antd';
 
+//初始
+let iTime = null;
 
 //  引入fetch
 import { fetch } from 'UTILS';
@@ -24,7 +26,9 @@ class Sms extends Component {
 
     constructor(props) {
         super(props);
-        this.state = Object.assign({},this.props,{});
+        this.state = Object.assign({},this.props,{
+            timeGo:0
+        });
     }
     componentWillReceiveProps(nextProps){
         this.setState({
@@ -33,6 +37,7 @@ class Sms extends Component {
     }
     sms() {
     	let me = this;
+
 		fetch('/common/pinCode',{
 			body : {
 			  "businesstype": me.state.businesstype,
@@ -42,17 +47,32 @@ class Sms extends Component {
             if(res.code == 200){
             	// console.log(res);
                 //	重新发送验证码TODO
-				me.success();
+				me.success(60);
             }
         });
     }
 
-    success(){
+    success(timeGocountdown){
     	let me = this;
 		Modal.success({
 		    title: '实名认证邀请已发送，请尽快完成认证。',
 		    content: me._getSuccessContent()
 		});
+
+        clearInterval(iTime);
+        iTime = setInterval(()=>{
+            timeGocountdown--
+            if(timeGocountdown==0){
+                clearInterval(iTime);
+            }
+            this.setState({
+                timeGo:timeGocountdown
+            })
+        },1000)
+
+    }
+    componentWillUnmount(){
+        clearInterval(iTime);
     }
 
     _getSuccessContent(){
@@ -74,7 +94,10 @@ class Sms extends Component {
     render() {
         console.log(this)
         return (
-            <Button type="primary" onClick={ this.sms.bind(this) }>{ this.props.children }</Button>
+            <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) }>
+                { this.props.children }
+                {this.state.timeGo>0?this.state.timeGo+"秒":""}
+            </Button>
         );
     }
 }
