@@ -17,7 +17,7 @@ import { Link } from 'react-router';
 import { IdentityModal } from 'BCOM/Modal/index';
 
 // antd 组件
-import { Alert, Steps, Button, Modal, Row, Col } from 'antd';
+import { Alert, Steps, Button, Modal, Row, Col,message } from 'antd';
 const Step = Steps.Step;
 
 // 页面组件
@@ -42,6 +42,8 @@ export default class PersonalValidate extends React.Component {
         }
         
         this.componentDidMount=this.componentDidMount.bind(this);
+
+        this.timer=null;
     }
 
     showIdentityModal() {
@@ -58,20 +60,31 @@ export default class PersonalValidate extends React.Component {
 
     //手动点击下一步
     handleNextClick(){
-        this.props.history.push({
-            pathname:'/personalValidate/step3'
-        })
-
-        //未验证提醒
-        // Modal.info({
-        //     title: '实名认证提示',
-        //     content: (
-        //     <div>
-        //         <p>您的实名认证未完成，请尽快完成。</p>
-        //     </div>
-        //     ),
-        //     onOk() {},
-        // });
+        console.log('handleNextClick');
+        //查询是否已经实名验证
+        fetch('/user/getRelatedPersonInfo').then((res)=>{
+            if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
+                clearInterval(this.timer);
+                this.props.history.push({
+                    pathname:'/personalValidate/step3'
+                });
+            }else{
+                //未验证提醒
+                console.log('未验证提醒');
+                Modal.info({
+                    title: '实名认证提示',
+                    content: (
+                    <div>
+                        <p>您的实名认证未完成，请尽快完成。</p>
+                    </div>
+                    ),
+                    onOk() {},
+                });
+            }
+        },(res)=>{
+            // fetch error
+            message.error(res.message, 3)
+        });
     }
 
     //发送身份识别码
@@ -103,10 +116,10 @@ export default class PersonalValidate extends React.Component {
                     that.setState({
                         btnSendText:`发送成功，${count}秒后可重新发送`
                     });
-                store.set('counter_inPersonalValidateStep2',count);
+                // store.set('counter_inPersonalValidateStep2',count);
                 }else{
                     clearInterval(timer);
-                    store.set('counter_inPersonalValidateStep2',0);
+                    // store.set('counter_inPersonalValidateStep2',0);
                     that.setState({
                         btnSendText:`没有收到短信，重新发送`,
                         isSendMsgDisabled:false
@@ -118,10 +131,27 @@ export default class PersonalValidate extends React.Component {
 
     componentDidMount(){
         this.initPage();
-        let countNum=parseInt(store.get('counter_inPersonalValidateStep2'));
-        if(countNum && countNum>0){
-            this.sendMsg(countNum);
-        }
+        this.timer = setInterval(()=>{
+            //查询是否已经实名验证
+            fetch('/user/getRelatedPersonInfo',false).then((res)=>{
+                if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
+                    clearInterval(this.timer);
+                    this.props.history.push({
+                        pathname:'/personalValidate/step3'
+                    });
+                }else{
+                    console.log('轮询中，未验证..');
+                }
+            },(res)=>{
+                //fetch error
+                message.error(res.message,3);
+            });
+        },5000);
+
+        // let countNum=parseInt(store.get('counter_inPersonalValidateStep2'));
+        // if(countNum && countNum>0){
+        //     this.sendMsg(countNum);
+        // }
     }
     //页面信息初始化请求
     initPage(){
