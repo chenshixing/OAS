@@ -8,13 +8,13 @@ import ReactDOM from 'react-dom';
 // 导入公共样式
 import 'ASSETS/less/main.less';
 // 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+import {ruleType,fetch} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 import AgreementModal from 'COM/agreementModal/index';
 
 // antd 组件
-import { Button, Form, Input, Checkbox, Steps, Row, Col } from 'antd';
+import { Button, Form, Input, Checkbox, Steps, Row, Col,message } from 'antd';
 import classNames from 'classnames';
 const createForm = Form.create;
 const FormItem = Form.Item;
@@ -30,23 +30,36 @@ class PersonalValidate extends React.Component {
         this.state={
             agreementModalVisible:false,
             agreementModalName:'',
+            submitDis: true,
+            protocolData:{}
         };
-
     }
+
 
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
-            if (!!errors) {
-                console.log('Errors in form!!!',errors);
-                return;
+            if (!errors) {
+                let data ={
+                    "system": "1",
+                    };
+                data.pfxPassword=values.rePassword;
+                data.protocolId=this.state.protocolData.id;
+                data.protocolVersion=this.state.protocolData.protocolEdition;
+                data.protocolName=this.state.protocolData.protocolName;
+                console.log('Submit!!!',data);
+
+                fetch('/personVerification/saveTransactionPassword',{
+                    body:data
+                }).then((res)=>{
+                    this.props.history.push({
+                        pathname:'personalValidate/step4'
+                    });
+                },(res)=>{
+                    message.error(`提交失败！${res.message}`,5);
+                });
             }
-            console.log('Submit!!!');
-            console.log(values);
-            //todo ajax submit...
-            // window.location.href='/#/personalValidate/step4?_k=REPLACE';
-            this.props.history.push({
-                pathname:'personalValidate/step4'
-            });
+           
+           
         });
     }
 
@@ -95,6 +108,32 @@ class PersonalValidate extends React.Component {
         this.setState({
             agreementModalVisible:false
         });
+    }
+
+    agreementCheck(e) {
+        this.setState({
+        submitDis: !e.target.checked
+        });
+    }
+
+    componentDidMount(){
+        this.initPage();
+    }
+
+    initPage(){
+        //获取此页面需要签署的协议
+        fetch('/common/getCurrentProtocol',{
+            body:{
+                "protocolType": 1
+            }
+        }).then((res)=>{
+            console.log('获取协议成功：',res.data);
+            this.setState({
+                protocolData:res.data,
+            });
+        },(res)=>{
+            alert('获取协议失败，请重新获取！');
+        })
     }
 
     render(){
@@ -155,8 +194,8 @@ class PersonalValidate extends React.Component {
                             <Row>
                                 <Col span="24">
                                     <Col span="12" offset="8">
-                                        <Checkbox {...getFieldProps('agreement',rules.agreement)} >我已阅读并同意
-                                                <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this,"《数字证书服务协议》")}>《数字证书服务协议》</a>
+                                        <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意
+                                                <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this,this.state.protocolData.protocolName)}>{this.state.protocolData.protocolName}</a>
                                         </Checkbox>
                                     </Col>
                                 </Col>
@@ -164,7 +203,7 @@ class PersonalValidate extends React.Component {
                             <Row className="fn-mt-30">
                                 <Col span="24">
                                     <Col span="12" offset="8">
-                                        <Button type="primary" size="large" onClick={this.handleSubmit.bind(this)}>提交</Button>
+                                        <Button type="primary" size="large" disabled={this.state.submitDis} onClick={this.handleSubmit.bind(this)}>提交</Button>
                                     </Col>
                                 </Col>
                             </Row>

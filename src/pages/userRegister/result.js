@@ -5,6 +5,7 @@
 // react 相关库
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Link} from 'react-router';
 
 import codeimg from 'ASSETS/images/code.png'
 
@@ -35,7 +36,10 @@ class RegisterResult extends React.Component{
                                showIcon
                         />
                         <div className="text-align-center fn-mt-30">
-                            <Button type="primary" className='fn-mr-40'>继续完善信息</Button><Button type="ghost" className='fn-ml-40'>返回登录</Button>
+                            <Button type="primary" className='fn-mr-40'>继续完善信息</Button>
+                            <Button type="ghost" className='fn-ml-40'> 
+                                <Link to="/userLogin">&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</Link>
+                            </Button>
                         </div>
                     </div>
 
