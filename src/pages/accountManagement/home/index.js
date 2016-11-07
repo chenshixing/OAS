@@ -274,6 +274,7 @@ class Home extends React.Component {
 }
 
                 </Modal>
+                {/*
                 <div className="fn-pa-20">
                     首页
 
@@ -290,6 +291,7 @@ class Home extends React.Component {
                         <Link to="/accountManagement/resetTradingPassword/step1">账户管理修改交易密码</Link>
                     </p>
                 </div>
+                */}
 
                 <div className="fn-ptb-20 ">
                     <div className="ant-card-head" style={{
