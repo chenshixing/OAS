@@ -75,7 +75,7 @@ const dataType = {
         reg:/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
         errMsg: '身份证号码格式不正确'
     },
-    //交易密码
+    //英文字母（区分大小写）、数字或符号组合
     "pfxPassword":{
         reg: {
             // 自定义 test 方法
@@ -87,11 +87,11 @@ const dataType = {
                         matchNum++;
                     }
                 });
-                let isMatch = matchNum >= 2 && value.length >= 8 && value.length <= 20;
+                let isMatch = matchNum >= 2;
                 return isMatch;
             }
         },
-        errMsg: '8-20位英文字母（区分大小写）、数字或符号组合'
+        errMsg: '必须为英文字母（区分大小写）、数字或符号组合'
     }
 };
 
