@@ -8,7 +8,7 @@
 import React from 'react';
 
 // antd 组件
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input,Checkbox } from 'antd';
 const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -23,7 +23,7 @@ class Reg extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: '',
+      submitDis: true,
     };
   }
   handleSubmit(e) {
@@ -31,7 +31,6 @@ class Reg extends React.Component {
     var that=this;
     this.props.form.validateFields((errors, values) => {
       if(!errors){
-        
         var data=values;
         data.userType=2;
         console.log('Submit!!!',data);
@@ -39,12 +38,10 @@ class Reg extends React.Component {
             body:data
           }).then((res)=>{
             console.log('res:',res);
-            if(res.code=='200'){
-              // alert('注册成功');
-              that.props.history.push({
-                pathname:'/userRegister/result'
-              });
-            }
+            // that.props.history.push({
+            //   pathname:'/userRegister/result'
+            // });
+            window.location.href='#/userRegister/result';
           })
       }else{
         console.log('请填完必填信息再提交...');
@@ -69,17 +66,34 @@ class Reg extends React.Component {
   }
   getVerifyCode() {
     //获取验证码
+    const num = this.props.form.getFieldValue('mobile');
+    if(!num){
+      Modal.warning({
+        title: '提示',
+        content: '请先输入电话号码',
+      });
+      return;
+    }
+    // 获取验证码
+    fetch('/common/smsAutoCode', {
+      body: {
+        "mobile": num,
+        "businesstype": "register"
+      }
+    }).then(res => {
+      alert(res);
+    });
+  }
+  agreementCheck(e) {
+    this.setState({
+      submitDis: !e.target.checked
+    });
   }
   render() {
     const { getFieldProps } = this.props.form;
 
     // 表单校验
     const rules = {
-      recommenderNo: {
-        rules: [
-          {required: true, message: '邀请码不能为空'},
-        ]
-      },
       realName: {
         rules: [
           {required: true, message: '真实姓名不能为空'},
@@ -133,13 +147,6 @@ class Reg extends React.Component {
 
     return (
       <Form horizontal>
-        <FormItem
-          {...formItemLayout}
-          label="邀请码"
-          required
-        >
-          <Input {...getFieldProps('recommenderNo', rules.recommenderNo)} />
-        </FormItem>
 
         <FormItem
           {...formItemLayout}
@@ -154,7 +161,7 @@ class Reg extends React.Component {
           label="登录名"
           required
         >
-          <Input placeholder="4-20个英文字母、数字" {...getFieldProps('realName', rules.realName)} />
+          <Input placeholder="4-20个英文字母、数字" {...getFieldProps('userNo', rules.userNo)} />
         </FormItem>
 
         <FormItem
@@ -175,7 +182,7 @@ class Reg extends React.Component {
 
         <FormItem
           {...formItemLayout}
-          label="管理员手机号码"
+          label="手机号码"
           required
         >
           <Input {...getFieldProps('mobile', rules.mobile)} />
@@ -186,12 +193,29 @@ class Reg extends React.Component {
           label="短信验证码"
           required
         >
-          <Input {...getFieldProps('smsCode', rules.smsCode)} />
+          <Input className="smsCodeInput" {...getFieldProps('smsCode', rules.smsCode)} />
           <Button className="ant-search-btn" onClick={this.getVerifyCode.bind(this)}>获取验证码</Button>
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="推荐人姓名"
+        >
+          <Input {...getFieldProps('recommenderNo')} />
+        </FormItem>
+
+        <FormItem
+          {...formItemLayout}
+          label="推荐人编号"
+        >
+          <Input {...getFieldProps('recommender')} />
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Button type="primary" onClick={this.handleSubmit.bind(this)}>下一步</Button>
+          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《用户服务协议》</a></Checkbox>
+        </FormItem>
+
+        <FormItem wrapperCol={{ span: 12, offset: 7 }}>
+          <Button type="primary" onClick={this.handleSubmit.bind(this)} disabled={this.state.submitDis}>提交注册</Button>
         </FormItem>
         
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
