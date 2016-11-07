@@ -22,6 +22,7 @@ import Frame from 'COM/form/frame';
 
 //  业务组件
 import OffLinePayTable from '../components/offlinePayTable';
+import ComfirmContent from '../components/comfirmContent';
 
 //  引入fetch
 import { fetch } from 'UTILS';
@@ -29,6 +30,35 @@ import { fetch } from 'UTILS';
 //  引入moment
 import moment from 'moment';
 
+const propsMap = {
+    companyName : "企业名称",
+    companyPaperType : "证件类型",
+    registrationPaperNo : "营业执照号",
+    registrationExtendField2 : "证件到期日",
+    orgInsCodePaperNo : "组织机构代码",
+    socialCreditPaperNo : "社会信用证代码",
+    accountName : "账户名称",
+    cardNo : "银行卡号",
+    bankId : "开户行ID",
+    bankName : "开户行名称",
+    provinceId : "省份ID",
+    provinceName : "省份名称",
+    cityId : "城市ID",
+    cityName : "城市名称",
+    branchBankId : "分支行ID",
+    branchBankName : "分支行名称",
+    validateType : "对公账户验证方式",
+}
+
+const companyPaperTypeMap = {
+    2 : "普通营业执照",
+    3 : "多证合一营业执照"
+}
+
+const validateTypeMap = {
+    OffLinePayAuth : "线下支付小额验证金核验",
+    OffLineSubmitInfo : "线下提交账户资料核验"
+}
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -133,7 +163,7 @@ class CompanyValidate extends React.Component {
             //  对公账户验证方式
             data.validateType = renderData.validateType;
             //  证件号转字符串处理
-            if(fieldsValue.companyPaperType == 2){
+            if(renderData.companyPaperType == 2){
                 renderData.registrationPaperNo = renderData.registrationPaperNo.toString();
                 renderData.orgInsCodePaperNo = renderData.orgInsCodePaperNo.toString();
             }else{
@@ -299,8 +329,48 @@ class CompanyValidate extends React.Component {
           // console.log(data);
           // 验证通过TODO
           let submitData = me._getSubmitData(data);
-          me.submit(submitData);
+          // me.submit(submitData);
+          me.confirm(submitData);
         });
+    }
+
+    confirm(submitData){
+        let me = this;
+        Modal.confirm({
+            title: '信息确认',
+            content: me.getConfirmContent(submitData),
+            okText: '确定',
+            cancelText: '取消',
+            onOk() {
+                // console.log('确定');
+                me.submit(submitData);
+            }
+        });
+    }
+
+    //  确定窗口数据渲染
+    getConfirmContent(submitData){
+        console.log(submitData);
+        const basic = ["companyName","companyPaperType","registrationExtendField2","accountName","cardNo","bankName","provinceName","cityName","branchBankName","validateType"];
+        const common = ["registrationPaperNo","orgInsCodePaperNo"];
+        const multiple = ["socialCreditPaperNo"];
+        const props = basic.concat(submitData.companyPaperType == 2 ? common : multiple);
+        let kvp = {};
+        props.map( (item,index) => {
+            kvp[item] = submitData[item];
+        });
+        kvp.companyPaperType = companyPaperTypeMap[kvp.companyPaperType];
+        kvp.validateType = validateTypeMap[kvp.validateType];
+        let sort = ["companyName","companyPaperType","registrationPaperNo","orgInsCodePaperNo","socialCreditPaperNo","registrationExtendField2","accountName","cardNo","bankName","provinceName","cityName","branchBankName","validateType"];
+        let map = propsMap;
+        let data = {
+            kvp : kvp,
+            sort : sort,
+            map : map
+        }
+        return (
+            <ComfirmContent data={data} />
+        );
     }
 
     submit(submitData){
