@@ -145,6 +145,14 @@ class CompanyValidate extends React.Component {
         }
 
         this._getBranch();
+        // console.log(fieldsValue);
+        //  证件号转字符串处理
+        if(fieldsValue.companyPaperType == 2){
+            fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo.toString();
+            fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo.toString();
+        }else{
+            fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo.toString();
+        }
 
         me.setState({
             display : display,
@@ -346,6 +354,9 @@ class CompanyValidate extends React.Component {
         let map = this.state.data.map;
         let submitData = data;
 
+        //  账户名称
+        submitData.accountName = submitData.companyName;
+
         //  添加银行账户相关的名称
         submitData.bankName = map.bank[submitData.bankId];
         submitData.provinceName = map.province[submitData.provinceId];
@@ -426,25 +437,6 @@ class CompanyValidate extends React.Component {
 
         //  营业执照到期日选择了长期则设置为不必填
         rules.registrationExtendField2.rules[0].required=!this.state.data.isLongEndTime;
-
-        const upLoadProps = {
-            name: 'file',
-            action: '/api/upload',
-            headers: {
-                authorization: 'authorization-text',
-            },
-            onChange(info) {
-                if (info.file.status !== 'uploading') {
-                    console.log(info.file, info.fileList);
-                }
-                if (info.file.status === 'done') {
-                    message.success(`${info.file.name} file uploaded successfully`);
-                } else if (info.file.status === 'error') {
-                    message.error(`${info.file.name} file upload failed.`);
-                }
-            }
-        };
-
 
         const formItemLayout = {
             labelCol: { span: 8 },

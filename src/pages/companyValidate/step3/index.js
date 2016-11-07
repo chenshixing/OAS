@@ -76,7 +76,8 @@ class CompanyValidate extends Component {
         const rules = {
             pfxPassword : {
                 rules:[
-                    {required: true, message: '交易密码不能为空'},
+                    {required: true, whitespace: true, message: '交易密码不能为空'},
+                    {min: 8, max: 20, message: '请输入8-20位字符'},
                     ruleType('pfxPassword')
                 ]
             }

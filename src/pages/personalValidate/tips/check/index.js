@@ -8,16 +8,25 @@ import {Link} from 'react-router';
 // antd 组件
 import { Row, Col, Icon, Button, Table} from 'antd';
 
+import {fetch} from 'UTILS';
+
 //  样式
 import  '../style.less';
 
 class Check extends Component {
-    static propTypes = {
-        className: PropTypes.string,
-    };
-
     constructor(props) {
         super(props);
+        this.state={
+
+        };
+    }
+
+    componentDidMount(){
+
+    }
+
+    initPage(){
+        fetch('/user/getUserCheckStatus').then();
     }
 
     render() {

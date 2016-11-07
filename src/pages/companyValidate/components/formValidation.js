@@ -33,7 +33,7 @@ const rulesBase = {
             {required: true, message: '银行账号不能为空'},
         ]
     },
-    bank:{
+    bankId:{
         rules:[
             {required: true, message: '开户行不能为空'},
         ]
@@ -53,12 +53,12 @@ const rulesBase = {
 const rulesCommon = {
     registrationPaperNo: {
         rules: [
-            {required: true, message: '营业执照注册号不能为空'},
+            {required: true, type: 'string', message: '营业执照注册号不能为空'},
         ]
     },
     orgInsCodePaperNo:{
         rules:[
-            {required: true, message: '组织机构代码证不能为空'},
+            {required: true, type: 'string', message: '组织机构代码证不能为空'},
         ]
     }
 };
@@ -66,7 +66,7 @@ const rulesCommon = {
 const rulesMultiple = {
     socialCreditPaperNo: {
         rules: [
-            {required: true, message: '统一社会信用代码不能为空'},
+            {required: true, type: 'string', message: '统一社会信用代码不能为空'},
         ]
     },
 };

@@ -146,7 +146,7 @@ class PersonalValidate extends React.Component {
                             help="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码"
                             required
                         >
-                            <p className="ant-form-text">{helper.hidenPhoneNumber(this.state.data.phoneNumber)}</p> <br/>
+                            <p className="ant-form-text">{this.state.data.phoneNumber}</p> <br/>
                         </FormItem>
 
                         <Row style={{ marginTop: 30 }}>
