@@ -107,6 +107,7 @@ export default class Steps1 extends React.Component {
                 if(res.code==200){
                     //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
                     //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+                    sessionStorage.removeItem("isSend");
                     this.props.history.push({
                         pathname: '/accountManagement/resetTradingPassword/step2'
                     })

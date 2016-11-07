@@ -19,7 +19,7 @@ const rulesBase = {
     },
     mobile :{
         rules:[
-            {required: true, message: '填写人常用手机号码不能为空'},
+            {required: true, type: 'string', message: '填写人常用手机号码不能为空'},
             ruleType('mobile')
         ]
     },
