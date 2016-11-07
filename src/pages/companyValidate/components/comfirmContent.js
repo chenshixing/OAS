@@ -18,15 +18,17 @@ class ComfirmContent extends Component {
     render() {
     	// console.log(this.state);
     	let data = this.state.data;
+        let tips = this.props.type == "realName" ? <h4>如您变更了法定代表人或代理人的姓名或手机号码，需重新进行APP实名认证。</h4> : "";
         return (
             <div>
+                {tips}
             	{
             		data.sort.map( (prop,index) => {
             			if(!data.kvp[prop]){ return true; }
             			return (
             				<Row className="fn-mt-10" key={index}>
-								<Col span={10} className="text-align-right">{data.map[prop]}：</Col>
-								<Col span={14}>{data.kvp[prop]}</Col>
+								<Col span={12} className="text-align-right">{data.map[prop]}：</Col>
+								<Col span={12}>{data.kvp[prop]}</Col>
 							</Row>
             			)
             		})
