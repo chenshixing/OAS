@@ -21,9 +21,9 @@ import FormCompany from './formCompany';
 
 // 页面
 export default class Reg extends React.Component {
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
-  }
+  // static contextTypes = {
+  //   router: React.PropTypes.object.isRequired
+  // }
   constructor(props){
     super(props);
     this.state={};
@@ -38,7 +38,7 @@ export default class Reg extends React.Component {
             <Alert message="真实姓名必须与身份证信息保持一致。" type="warning" showIcon />
             <FormPerson />
           </TabPane>
-          <TabPane tab="企业用户" key="2">
+          <TabPane tab="企业用户" key="2" history={this.props.history}>
             <Alert message="您企业名称必须与提交的证件信息保持一致。" type="warning" showIcon />
             <FormCompany />
           </TabPane>
