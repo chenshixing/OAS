@@ -82,7 +82,7 @@ class ResetPassword extends React.Component {
             rules: [
                 {required: true, min: 8, max: 20, message: '请输入8-20个字符'},
                 {validator: this.checkPass.bind(this)},
-                ruleType('en-num')
+                ruleType('pfxPassword')
             ],
             onChange: (e) => {
                 this.setState({
