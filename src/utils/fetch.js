@@ -83,7 +83,7 @@ export default (url, data, showLoading, pending) => {
                     }
                 })
                 .catch(err=> {
-                    alert(`错误代码：${ err }`);
+                    message.error(`错误代码：${ err }`);
                     console.error('Fetch Error: %s', err);
                 })
     })

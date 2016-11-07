@@ -116,7 +116,7 @@ export default class basicBodyEditor extends React.Component {
                     }
                     return (
 
-                        <div className="fn-mtb-10">
+                        <div key={index} className="fn-mtb-10">
                             <Row type="flex" justify="start" align="middle">
 
                                 <Col span={2}>
@@ -186,7 +186,7 @@ export default class basicBodyEditor extends React.Component {
                         connectorType: item.connectorType
                     }
                     return (
-                        <div className="fn-mtb-10">
+                        <div key={index} className="fn-mtb-10">
                             <Row type="flex" justify="start" align="middle">
                                 {
                                     index==0
