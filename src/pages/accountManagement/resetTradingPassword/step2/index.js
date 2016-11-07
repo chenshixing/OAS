@@ -57,7 +57,7 @@ class Steps2 extends React.Component {
                   "conpwd": this.state.conpwd
                 }
             }).then(res => {
-
+                
                 console.log(res)
                 //this.setState(res)
                 window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
