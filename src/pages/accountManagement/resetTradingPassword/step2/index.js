@@ -57,7 +57,7 @@ class Steps2 extends React.Component {
                   "conpwd": this.state.conpwd
                 }
             }).then(res => {
-                
+
                 console.log(res)
                 //this.setState(res)
                 window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
@@ -158,7 +158,7 @@ class Steps2 extends React.Component {
                     min: 8,
                     max: 20,
                     message: '请输入8-20位字符'
-                }, ruleType('en-num')
+                }, ruleType('pfxPassword')
             ],
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
