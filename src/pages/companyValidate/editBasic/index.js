@@ -376,9 +376,7 @@ class CompanyValidate extends React.Component {
     submit(submitData){
         console.log(submitData);
         fetch('/companyVerification/modifyCompanyInfo',{
-            body:{
-                submitData
-            }
+            body : submitData
         }).then(res => {
             if(res.code == 200){
                 //  提交成功TODO

@@ -22,14 +22,18 @@ class CountDown extends Component {
 		this._timeCountDown();
 	}
 
+	componentWillUnmount() {
+		clearInterval(this.timer);
+	}
+
 	_timeCountDown(){
 		let me = this;
-		let timer = setInterval(() =>{
+		me.timer = setInterval(() =>{
 			let state = me.state;
 			state.time -= 1000;
 			state.timeDisplay = me._getTimeDisplay();
 			if(state.time < 1000){
-				clearInterval(timer);
+				clearInterval(me.timer);
 				//	倒计时结束TODO
 				state.timeDisplay = undefined;
 			}

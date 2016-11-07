@@ -139,7 +139,7 @@ class InfoRow extends Component {
     		return false;
     	}
     	/*审核不通过可以修改认证资料*/
-    	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editBasic' className="fn-ml-20">修改资料</Link> : "";
+    	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname' className="fn-ml-20">修改资料</Link> : "";
         let smsData = {
             name: data.name,
             identityCode: data.identityCode,
