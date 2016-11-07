@@ -107,7 +107,7 @@ export default class basicBodyEditor extends React.Component {
     getRelatedPersonInfoTemplate(items,type){
         let smsData = {};
         let p1 = "";
-        if(type===1){
+        if(type==1){
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     smsData = {
@@ -115,52 +115,70 @@ export default class basicBodyEditor extends React.Component {
                         identityCode: item.identityCode,
                     }
                     return (
-                        <div key={index} className="fn-mtb-10">
-                            <span
-                                className="text-align-right"
-                                style={{width:150,display:"inline-block"}}
-                                >
-                                姓名：
-                            </span>
-                            <span
-                                className="heading-FontColor"
-                                style={{width:80,display:"inline-block"}}
-                                >
-                                {item.realName}
-                            </span>
-                            {
-                                item.checkPass>0
-                                ?
-                                <span
-                                    className="success-FontColor1"
-                                    style={{width:80,display:"inline-block"}}
-                                    >
-                                    已验证
-                                </span>
-                                :
-                                <span  >
-                                    <span
-                                        className="error-FontColor1"
-                                        style={{width:80,display:"inline-block"}}
-                                        >
-                                        未认证
-                                    </span>
-                                    <span colSpan={2}>
-                                        <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
-                                        {/*
-                                            <a href="javascript:;" className="link-standard">
-                                            重新发送验证短信</a>
-                                        */}
-                                    </span>
-                                </span>
-                            }
 
+                        <div className="fn-mtb-10">
+                            <Row type="flex" justify="start" align="middle">
 
+                                <Col span={2}>
+                                    {
+                                        item.checkPass>0
+                                        ?
+                                        <Icon type="check"/>
+                                        :
+                                        <Icon type="cross" className="error-FontColor1" />
+                                    }
+                                </Col>
+
+                                <Col span={6}>
+                                    <h3>
+                                        实名验证
+                                    </h3>
+                                </Col>
+
+                                <Col span={4}>
+                                    姓名：
+                                </Col>
+                                <Col span={4}>
+                                    {item.realName}
+                                </Col>
+                                <Col span={6}>
+                                    {
+                                        item.checkPass>0
+                                        ?
+                                        <span
+                                            className="success-FontColor1"
+                                            style={{width:80,display:"inline-block"}}
+                                            >
+                                            已验证
+                                        </span>
+                                        :
+                                        <span>
+                                            <span
+                                                className="error-FontColor1"
+                                                style={{width:80,display:"inline-block"}}
+                                                >
+                                                未认证
+                                            </span>
+                                            <span colSpan={2}>
+                                                <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
+                                                {/*
+                                                    <a href="javascript:;" className="link-standard">
+                                                    重新发送验证短信</a>
+                                                */}
+                                            </span>
+                                        </span>
+                                    }
+                                </Col>
+                            </Row>
                         </div>
                     )
                 }
             })
-        }else if(type===2){
+        }else if(type==2){
+            let result = items.every((item,index)=>{
+                return item.checkPass>0
+            })
+
             p1 = items.map((item,index)=>{
                     smsData = {
                         name: item.realName,
@@ -174,7 +192,13 @@ export default class basicBodyEditor extends React.Component {
                                     index==0
                                     ?
                                     <Col span={2}>
-                                        <Icon type="check"/>
+                                        {
+                                            result
+                                            ?
+                                            <Icon type="check"/>
+                                            :
+                                            <Icon type="cross" className="error-FontColor1" />
+                                        }
                                     </Col>
                                     :
                                     <Col span={2}>
