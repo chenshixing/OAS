@@ -7,6 +7,7 @@
 
 // 全局 loading 状态
 import State from 'PAGES/Layouts/state';
+import { message, Button } from 'antd';
 
 /**
  * @param { String } url 异步请求地址，默认为 get 方法
@@ -70,6 +71,10 @@ export default (url, data, showLoading, pending) => {
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                         // 处理错误
                         reject(res);
+
+                        if(res.message){
+                             message.error(`错误提示`+res.message);
+                        }
 
                         // 代码提示错误
                         if( res.code == 500 ){
