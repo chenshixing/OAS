@@ -214,8 +214,7 @@ class Home extends React.Component {
             rules: [
                 {
                     required: true,
-                    min: 5,
-                    message: '邀请码至少为 5 个字符'
+                    message: '请输入邀请码'
                 }, {
                     validator: this.userExists.bind(this)
                 }
