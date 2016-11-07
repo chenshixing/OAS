@@ -92,7 +92,7 @@ class Sms extends Component {
     }
 
     render() {
-        console.log(this)
+        // console.log(this)
         return (
             <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) }>
                 { this.props.children }
