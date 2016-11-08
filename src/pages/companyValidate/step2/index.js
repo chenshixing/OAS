@@ -102,11 +102,11 @@ class CompanyValidate extends React.Component {
         let me = this;
         let data = me.state.data;
         //  身份实名认证
-        let p1 = fetch('/companyVerification/getCompanyInfo');
+        let p1 = fetch('/companyVerification/getCompanyInfo.do');
         //  企业对公账户认证
-        let p2 = fetch('/companyVerification/getConnectorInfo');
+        let p2 = fetch('/companyVerification/getConnectorInfo.do');
         //  企业资料补充
-        let p3 = fetch('/companyVerification/getBankAccountInfo');
+        let p3 = fetch('/companyVerification/getBankAccountInfo.do');
 
         Promise.all([p1, p2, p3]).then(res => {
             // console.log(res);
@@ -153,7 +153,7 @@ class CompanyValidate extends React.Component {
     }
 
     next(){
-        fetch('/companyVerification/confirmBasicInfo',{
+        fetch('/companyVerification/confirmBasicInfo.do',{
             body : {}
         }).then(res => {
             if(res.code == 200){

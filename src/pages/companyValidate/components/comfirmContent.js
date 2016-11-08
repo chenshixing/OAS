@@ -18,7 +18,15 @@ class ComfirmContent extends Component {
     render() {
     	// console.log(this.state);
     	let data = this.state.data;
-        let tips = this.props.type == "realName" ? <h4>如您变更了法定代表人或代理人的姓名或手机号码，需重新进行APP实名认证。</h4> : "";
+
+        let propNameSpan = 9;
+        let propSpan = 15;
+        let tips = "";
+        if(this.props.type == "realName"){
+            propNameSpan = 12;
+            propSpan = 12;
+            tips = <h4>如您变更了法定代表人或代理人的姓名或手机号码，需重新进行APP实名认证。</h4>;
+        }
         return (
             <div>
                 {tips}
@@ -27,8 +35,8 @@ class ComfirmContent extends Component {
             			if(!data.kvp[prop]){ return true; }
             			return (
             				<Row className="fn-mt-10" key={index}>
-								<Col span={12} className="text-align-right">{data.map[prop]}：</Col>
-								<Col span={12}>{data.kvp[prop]}</Col>
+								<Col span={propNameSpan} className="text-align-right">{data.map[prop]}：</Col>
+								<Col span={propSpan}>{data.kvp[prop]}</Col>
 							</Row>
             			)
             		})

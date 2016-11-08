@@ -41,7 +41,7 @@ class EditRealName extends Component {
     loadData(){
         let me = this;
         let data = me.state.data;
-        fetch('/companyVerification/getConnectorInfo').then(res => {
+        fetch('/companyVerification/getConnectorInfo.do').then(res => {
             // console.log(res);
             let renderData = {};
             let companyConnectorInfoDto = data.original = res.data.companyConnectorInfoDto;
@@ -172,7 +172,7 @@ class EditRealName extends Component {
             this.props.history.push('/companyValidate/tips/disapproval');
             return false;
         }
-        fetch('/companyVerification/modifyConnectorInfo',{
+        fetch('/companyVerification/modifyConnectorInfo.do',{
             body : submitData,
         }).then(res => {
             //  修改完成TODO

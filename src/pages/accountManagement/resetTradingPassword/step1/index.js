@@ -24,7 +24,8 @@ import {
     Button,
     Steps,
     Row,
-    Col
+    Col,
+    message
 } from 'antd';
 const Step = Steps.Step;
 const FormItem = Form.Item;
@@ -51,9 +52,9 @@ export default class Steps1 extends React.Component {
                 getRelatedPersonInfo:[]
             },
             //是否发送
-            isSend:sessionStorage.getItem("isSend") || false,
+            isSend:sessionStorage.getItem("isSend") || 0,
             //是否验证
-            isValidation:false
+            isValidation:false,
         }
     }
     handleNext() {
@@ -71,55 +72,62 @@ export default class Steps1 extends React.Component {
             window.location.href = '/#/personalValidate/step3?_k=REPLACE';
         }
     }
+    //进入实名验证
     handleSend(){
-        //进入实名验证
         //发送识别码接口(v0.7)	/common/pinCode
-        fetch('/common/pinCode',{
+        //如果已经验证
+        fetch('/common/pinCode.do',{
             body:{
+                "connectorType":this.state.data.getDesensitizeMobile.connectorType,
                 "businessType": 3,
                 "isFirst": true
             }
         }).then(res=>{
-            this.state.isSend = true;
-            sessionStorage.setItem("isSend", this.state.isSend);
-            this.loadPaddingFetch();
-            this.forceUpdate();
+            sessionStorage.setItem("isSend", 1);
+            this.loadPaddingFetchFn();
+            this.setState({
+                isSend:1
+            });
         })
     }
     componentDidMount(){
-        this.loadData();
-        //this.loadPaddingFetch();
-        if(this.state.isSend){
-            this.loadPaddingFetch(3000);
-        }
-    }
-    //无限请求
-    loadPaddingFetch(time){
-        if(time){
-            time=time;
-        }else{
-            time=1;
-        }
-        //获取代理人或个人实名认证状态
+        console.log("1")
+        console.log(typeof this.state.isSend)
 
+        this.loadData();
+
+        //无限请求
+        this.loadPaddingFetch(3000);
+
+
+
+    }
+
+    //无限请求
+    loadPaddingFetch(endTime){
         clearInterval(iTime);
         iTime = setInterval(()=>{
-            fetch('/user/getAccountRealCheckStatus',{
-                body:{
-                    "businessType": 3
-                }
-            }).then(res=>{
-                if(res.code==200){
-                    //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
-                    //this.props.history.push("/accountManagement/resetTradingPassword/step2");
-                    sessionStorage.removeItem("isSend");
-                    this.props.history.push({
-                        pathname: '/accountManagement/resetTradingPassword/step2'
-                    })
-                }
-            })
-        },time)
-
+            if(this.state.isSend==1){
+                this.loadPaddingFetchFn()
+            }
+        },endTime)
+    }
+    //单次请求
+    loadPaddingFetchFn(){
+        fetch('/user/getAccountRealCheckStatus.do',{
+           body:{
+               "businessType": 3
+           }
+        }).then(res=>{
+           if(res.code==200){
+               //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
+               //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+               sessionStorage.removeItem("isSend");
+               this.props.history.push({
+                   pathname: '/accountManagement/resetTradingPassword/step2'
+               })
+           }
+        })
     }
     componentWillUnmount(){
         clearInterval(iTime);
@@ -127,22 +135,22 @@ export default class Steps1 extends React.Component {
     loadData(){
 
         //用户简单信息(v0.7)
-        let p1 = fetch('/user/getLoginUserSimpleInfo');
+        let p1 = fetch('/user/getLoginUserSimpleInfo.do');
         //获取姓名及脱敏手机号(v0.2)
-        let p2 = fetch('/user/getDesensitizeMobile',{
+        let p2 = fetch('/user/getDesensitizeMobile.do',{
             body:{
                 "businessType": 3
             }
         })
         //实名验证
-        let p3 = fetch('/user/getAccountRealCheckStatus',{
+        let p3 = fetch('/user/getAccountRealCheckStatus.do',{
             body:{
                 "businessType": 3
             }
         })
 
         //  身份实名认证
-        let p4 = fetch('/user/getRelatedPersonInfo');
+        let p4 = fetch('/user/getRelatedPersonInfo.do');
 
         Promise.all([p1, p2,p3,p4]).then(values => {
           console.log(values);
@@ -153,11 +161,13 @@ export default class Steps1 extends React.Component {
           console.log(values[3].data)
           this.forceUpdate();
         }).catch(reason => {
+
           console.log(reason)
         });
     }
     render() {
         console.log(this)
+        //console.log(reason)
         return (
             <div>
 

@@ -100,11 +100,13 @@ class CompanyValidate extends React.Component {
         let me = this;
         let data = me.state.data;
         //  银行列表信息
-        let p1 = fetch('/bank/banklist');
+        let p1 = fetch('/bank/banklist.do');
         //  省份列表信息
-        let p2 = fetch('/bank/provinces');
+        let p2 = fetch('/bank/provinces.do');
+        //  用户审核状态
+        let p3 = fetch('/user/getUserCheckStatus.do');
 
-        Promise.all([p1, p2]).then(res => {
+        Promise.all([p1, p2, p3]).then(res => {
             // console.log(res);
             data.bankList = res[0].data;
             // console.log(data.bankList);
@@ -118,6 +120,15 @@ class CompanyValidate extends React.Component {
             data.provinces.map( (item,index) => {
                 data.map.province[item.B_BankAreaID] = item.AreaName;
             });
+
+            //  用户审核状态
+            let checkStatusData = res[2].data;
+            let statusMap = {};
+            checkStatusData.checkItems.map( (item,index) =>{
+                statusMap[item.checkKey] = item;
+            })
+
+            console.log(statusMap);
 
             me.setState({
                 data : data
@@ -133,9 +144,9 @@ class CompanyValidate extends React.Component {
         let me = this;
         let data = me.state.data;
         //  企业信息
-        let p1 = fetch('/companyVerification/getCompanyInfo');
+        let p1 = fetch('/companyVerification/getCompanyInfo.do');
         //  企业对公账户信息
-        let p2 = fetch('/companyVerification/getBankAccountInfo');
+        let p2 = fetch('/companyVerification/getBankAccountInfo.do');
 
         Promise.all([p1,p2]).then(res => {
             //  数据合并
@@ -195,7 +206,7 @@ class CompanyValidate extends React.Component {
         let data = me.state.data;
         let cardNo = value ? value : e.target.value;
         if(cardNo.length < 4){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
-        fetch('/bank/cardNumber',{
+        fetch('/bank/cardNumber.do',{
             body:{
               "cardNumber": cardNo
             }
@@ -216,7 +227,7 @@ class CompanyValidate extends React.Component {
     onProvinceChange(value){
         let me = this;
         let data = me.state.data;
-        fetch('/bank/citys',{
+        fetch('/bank/citys.do',{
             body:{
                 provinceId : value
             }
@@ -256,7 +267,7 @@ class CompanyValidate extends React.Component {
         let data = me.state.data;
         // console.log(data);
         if( data.bankId && data.cityId ){
-            fetch('/bank/branchlist',{
+            fetch('/bank/branchlist.do',{
                 body:{
                   "bankId": data.bankId,
                   "cityId": data.cityId
@@ -306,6 +317,7 @@ class CompanyValidate extends React.Component {
         //     this.props.form.setFieldsValue({registrationExtendField2:""});
         // }
         this.setState({data:data});
+        // console.log(data);
     }
 
     normFile(e) {
@@ -375,7 +387,7 @@ class CompanyValidate extends React.Component {
 
     submit(submitData){
         console.log(submitData);
-        fetch('/companyVerification/modifyCompanyInfo',{
+        fetch('/companyVerification/modifyCompanyInfo.do',{
             body : submitData
         }).then(res => {
             if(res.code == 200){
@@ -435,10 +447,7 @@ class CompanyValidate extends React.Component {
         const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         // 根据不同类型选择验证机制
-        const rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
-
-        //  营业执照到期日选择了长期则设置为不必填
-        rules.registrationExtendField2.rules[0].required=!this.state.data.isLongEndTime;
+        let rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
 
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -499,9 +508,15 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <Col span="8">
-                                <FormItem>
-                                    <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={this.state.data.isLongEndTime} />
-                                </FormItem>
+                                { this.state.data.isLongEndTime === true ?
+                                    <FormItem validateStatus="success" help={null}>
+                                        <DatePicker {...getFieldProps('registrationExtendField2')} disabled={true} />
+                                    </FormItem>
+                                    :
+                                    <FormItem>
+                                        <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={false} />
+                                    </FormItem>
+                                }
                             </Col>
                             <Col span="5">
                                 <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})} checked={ this.state.data.isLongEndTime }>长期</Checkbox>
