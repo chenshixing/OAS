@@ -306,6 +306,7 @@ class CompanyValidate extends React.Component {
         //     this.props.form.setFieldsValue({registrationExtendField2:""});
         // }
         this.setState({data:data});
+        // console.log(data);
     }
 
     normFile(e) {
@@ -435,10 +436,7 @@ class CompanyValidate extends React.Component {
         const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         // 根据不同类型选择验证机制
-        const rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
-
-        //  营业执照到期日选择了长期则设置为不必填
-        rules.registrationExtendField2.rules[0].required=!this.state.data.isLongEndTime;
+        let rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
 
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -499,9 +497,15 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <Col span="8">
-                                <FormItem>
-                                    <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={this.state.data.isLongEndTime} />
-                                </FormItem>
+                                { this.state.data.isLongEndTime === true ?
+                                    <FormItem validateStatus="success" help={null}>
+                                        <DatePicker {...getFieldProps('registrationExtendField2')} disabled={true} />
+                                    </FormItem>
+                                    :
+                                    <FormItem>
+                                        <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={false} />
+                                    </FormItem>
+                                }
                             </Col>
                             <Col span="5">
                                 <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})} checked={ this.state.data.isLongEndTime }>长期</Checkbox>

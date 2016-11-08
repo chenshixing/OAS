@@ -36,8 +36,7 @@ class RegisterResult extends React.Component{
                                showIcon
                         />
                         <div className="text-align-center fn-mt-30">
-                            <Button type="primary" className='fn-mr-40'>继续完善信息</Button>
-                            <Button type="ghost" className='fn-ml-40'> 
+                            <Button type="primary"> 
                                 <Link to="/userLogin">&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</Link>
                             </Button>
                         </div>
