@@ -30,7 +30,7 @@ export default class Authenticate extends React.Component {
                         labelCol={{span: 10}}
                         wrapperCol={{span: 12}}
                         >
-                        <label>{this.props.getdesensitizemobile.name}</label>
+                        <label>{this.props.getDesensitizeMobile.name}</label>
                     </FormItem>
                     <FormItem
                         id="control-input"
@@ -38,7 +38,7 @@ export default class Authenticate extends React.Component {
                         labelCol={{span: 10}}
                         wrapperCol={{span: 12}}
                         >
-                        <label>{this.props.getdesensitizemobile.mobile}</label>
+                        <label>{this.props.getDesensitizeMobile.mobile}</label>
                     </FormItem>
                     <FormItem wrapperCol={{ span: 8, offset: 10 }} style={{ marginTop: 24 }}>
                         <Button type="primary"  onClick={this.handleSend.bind(this)}>发送身份识别码至手机</Button>

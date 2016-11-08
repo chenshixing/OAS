@@ -83,7 +83,7 @@ class InfoRow extends Component {
         	account : {
         		name : '对公账户验证',
         		status : {
-        			0 : '未认证',
+        			0 : this.props.data.accountValidateType == "bond" ? '未收到验证金' : '待提交资料',
         			1 : '已认证'
         		},
         	}
@@ -135,21 +135,24 @@ class InfoRow extends Component {
 
     _realName(){
         let data = this.state.data;
-    	if(data.passed){
-    		return false;
-    	}
+        /*已认证不需要重新发送验证短信*/
+        let smsBtn = "";
+        if(!data.passed){
+            let smsData = {
+                businesstype: 1,
+                connectorType: data.connectorType
+            };
+            smsBtn = <Sms data={ smsData }>重新发送验证短信</Sms>;
+        }
+
     	/*审核不通过可以修改认证资料*/
-    	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname' className="fn-ml-20">修改资料</Link> : "";
-        let smsData = {
-            name: data.name,
-            identityCode: data.identityCode,
-            connectorType: data.connectorType
-        };
+    	let editBtn = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname'>修改资料</Link> : "";
     	return (
     		<Col span={12}>
 				<Row>
-					<Col span={12}><Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>{editButton}</Col>
-                    <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
+					<Col span={8}>{smsBtn}</Col>
+                    <Col span={4}>{editBtn}</Col>
+                    <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)} size="small">如何实名认证？</Button></Col>
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
 			</Col>
@@ -167,14 +170,11 @@ class InfoRow extends Component {
     information(){
         let informationData = this.state.data;
         let information = this.state.information;
-    	if(this.state.data.passed){
-    		return false;
-    	}
     	return (
     		<Col span={12}>
                 <Row>
                     <Col span={24}>
-                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)}>手机APP提交</Button> 。
+                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)} size="small">手机APP提交</Button> 。
                     </Col>
                 </Row>
                 { !informationData.lackFiles.length ? "" :
@@ -216,7 +216,7 @@ class InfoRow extends Component {
             )
         }else if(accountValidateType === "information"){
             return (
-                <Col span={12} className="tableCol">需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</Col>
+                <Col span={12} className="tableCol"><strong className="fs-14">需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</strong></Col>
             )
         }
     }
@@ -236,12 +236,17 @@ class InfoRow extends Component {
 
     	//	拿到相对项的静态信息
     	let itemData = this.state[this.state.type];
+        //  是否有操作按钮
+        let hasOperation = true;
+        if(this.state.pageType === "supplement" || (this.state.pageType === "check" && data.passed)){
+            hasOperation = false;
+        }
         return(
     		<Row className="infoRow">
                 <Col span={6}>{itemData.name}{personName}</Col>
                 <Col span={6}><span className={statusClassName}>{ itemData.status[statusType] }</span></Col>
             	{/*核身信息补充提示页没有操作*/}
-                {this.state.pageType === "supplement" ? "" : this[this.state.type]()}
+                {hasOperation ? this[this.state.type]() : ""}
             </Row>
     	);
     }

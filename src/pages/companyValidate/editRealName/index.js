@@ -176,7 +176,13 @@ class EditRealName extends Component {
             body : submitData,
         }).then(res => {
             //  修改完成TODO
-            console.log(res);
+            if(res.data == 201){
+                // 201-代表有修改跳转至提交结果
+                this.props.history.push('/companyValidate/result');
+            }else if(!res.data){
+                // 空则跳转至审核不通过提示
+                this.props.history.push('/companyValidate/tips/disapproval');
+            }
         });
     }
 
@@ -275,69 +281,69 @@ class EditRealName extends Component {
                 <Form horizontal className="fn-mt-30">
 
                 	<FormItem
-                            label="您的姓名"
+                        label="您的姓名"
+                        {...formItemLayout}
+                        required
+                    >
+                        <Input {...getFieldProps('name',rules.name)} type="text"/>
+                    </FormItem>
+
+                    <FormItem
+                        label="常用手机号码"
+                        {...formItemLayout}
+                        extra="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
+                        required
+                    >
+                        <Input {...getFieldProps('mobile',rules.mobile)} type="text"/>
+                    </FormItem>
+
+                    <FormItem
+                        label="联系邮箱"
+                        {...formItemLayout}
+                    >
+                        <Input type="text" {...getFieldProps('email',rules.email)} />
+                    </FormItem>
+
+                    <FormItem
+                        {...formItemLayout}
+                        label=" 填写人的身份"
+                        required
+                    >
+                        <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType, onChange: this.onWriterTypeChange.bind(this) })}>
+                            <Radio value="1">我是委托代理人</Radio>
+                            <Radio value="2">我是法定代表人</Radio>
+                        </RadioGroup>
+
+                    </FormItem>
+
+                    <div style={{display:this.state.display}}>
+                        <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                            法定代表人信息
+                            <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
+                        </div>
+
+                        <FormItem
+                            label="法定代表人姓名"
                             {...formItemLayout}
                             required
                         >
-                            <Input {...getFieldProps('name',rules.name)} type="text"/>
+                            <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
                         </FormItem>
 
                         <FormItem
                             label="常用手机号码"
                             {...formItemLayout}
-                            extra="审核结果将通过短信发送至该手机 ，同时将作为此账号的绑定手机号码。"
-                            required
                         >
-                            <Input {...getFieldProps('mobile',rules.mobile)} type="text"/>
+                            <Input {...getFieldProps('corporationMobile',rules.corporationMobile )} type="text" />
                         </FormItem>
 
                         <FormItem
                             label="联系邮箱"
                             {...formItemLayout}
                         >
-                            <Input type="text" {...getFieldProps('email',rules.email)} />
+                            <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
                         </FormItem>
-
-                        <FormItem
-                            {...formItemLayout}
-                            label=" 填写人的身份"
-                            required
-                        >
-                            <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType, onChange: this.onWriterTypeChange.bind(this) })}>
-                                <Radio value="1">我是委托代理人</Radio>
-                                <Radio value="2">我是法定代表人</Radio>
-                            </RadioGroup>
-
-                        </FormItem>
-
-                        <div style={{display:this.state.display}}>
-                            <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                                法定代表人信息
-                                <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
-                            </div>
-
-                            <FormItem
-                                label="法定代表人姓名"
-                                {...formItemLayout}
-                                required
-                            >
-                                <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
-                            </FormItem>
-
-                            <FormItem
-                                label="常用手机号码"
-                                {...formItemLayout}
-                            >
-                                <Input {...getFieldProps('corporationMobile',rules.corporationMobile )} type="text" />
-                            </FormItem>
-
-                            <FormItem
-                                label="联系邮箱"
-                                {...formItemLayout}
-                            >
-                                <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
-                            </FormItem>
-                        </div>
+                    </div>
 
                     <Row className="fn-mt-30">
                         <Col span="12" offset="6" className="text-align-center">

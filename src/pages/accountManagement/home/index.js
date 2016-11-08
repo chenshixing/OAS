@@ -118,31 +118,6 @@ class Home extends React.Component {
                 this.setState({visible: false});
             });
         });
-        /*
-        console.log(this.state.inviteCodeValue);
-        if(this.state.inviteCodeValue==undefined){
-            message.error("邀请码不能为空")
-            return
-        }else{
-            console.log(this.state.inviteCodeValue)
-            fetch('/service/addService',{
-                body:{
-                    "inviteCode":this.state.inviteCodeValue
-                }
-            }).then(res => {
-                //console.log(res)
-                //this.setState(res)
-                //提示
-                this.openNotification(res)
-                //设置值为空
-                this.setState({
-                    inviteCodeValue:""
-                })
-            });
-            //console.log( this.state.inviteCodeValue )
-        }
-        this.setState({visible: false});
-        */
     }
     openNotification(getRes) {
         console.log(getRes)
@@ -180,19 +155,6 @@ class Home extends React.Component {
 
         this.setState({inviteCodeValue: e.target.value})
     }
-    userExists(rule, value, callback) {
-        if (!value) {
-            callback();
-        } else {
-            setTimeout(() => {
-                if (value === 'JasonWood') {
-                    callback([new Error('抱歉，该用户名已被占用。')]);
-                } else {
-                    callback();
-                }
-            }, 800);
-        }
-    }
 
     render() {
         console.log(this)
@@ -207,7 +169,7 @@ class Home extends React.Component {
                 span: 7
             },
             wrapperCol: {
-                span: 12
+                span: 16
             }
         };
         const nameProps = getFieldProps('name', {
@@ -215,8 +177,6 @@ class Home extends React.Component {
                 {
                     required: true,
                     message: '请输入邀请码'
-                }, {
-                    validator: this.userExists.bind(this)
                 }
             ]
         });
@@ -224,9 +184,17 @@ class Home extends React.Component {
         return (
             <div style={{
                 minHeight: "700px"
-            }}>
+            }}
 
-                <Modal title="添加业务" visible={this.state.visible} onOk={this.handleSubmit.bind(this)} onCancel={this.handleCancel.bind(this)} wrapClassName="vertical-center-modal">
+            >
+
+                <Modal
+                    title="添加业务"
+                    visible={this.state.visible}
+                    onOk={this.handleSubmit.bind(this)}
+                    onCancel={this.handleCancel.bind(this)}
+                    wrapClassName="vertical-center-modal"
+                >
                     {/*好像不用做*/}
                     {/*
                     <Row>
@@ -263,7 +231,7 @@ class Home extends React.Component {
                                         />
                                     */}
                                         <FormItem {...formItemLayout} label="邀请码" hasFeedback>
-                                            <Input {...nameProps} placeholder="实时校验，输入 JasonWood 看看"/>
+                                            <Input {...nameProps} placeholder="请输入邀请码"/>
                                         </FormItem>
 
                                     </Col>
