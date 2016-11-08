@@ -17,6 +17,8 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 //  表单验证配置
 import formValidation from '../components/formValidation';
+// 自定义验证 rule
+import ruleType from 'UTILS/ruleType';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -60,14 +62,30 @@ const validateTypeMap = {
     OffLineSubmitInfo : "线下提交账户资料核验"
 }
 
+const globalStatus = {
+    userType : 2,
+    step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
+    bankCheckStatus : 0,       //  -1:审核中;0:审核不通过;1:审核通过
+    showName : "用户名称"
+}
+
+const compareListMap = {
+    basic : ["companyName","companyPaperType"],
+    common : ["registrationPaperNo","orgInsCodePaperNo"],
+    multiple : ["socialCreditPaperNo"]
+}
+
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
     constructor(props){
         super(props);
         this.state={
-            loading:false,
+            visible : false,
+            loadingVisible : false,
             data:{
+                isChecking : globalStatus.bankCheckStatus == -1,
+                accountPassed : false,
                 companyName: "",
                 companyPaperType:"2",
                 isLongEndTime:false,
@@ -85,7 +103,9 @@ class CompanyValidate extends React.Component {
                     province : {},
                     city: {},
                     branch : {}
-                }
+                },
+                originalData : {},
+                pfxPassword : ""
             }
         }
 
@@ -123,12 +143,17 @@ class CompanyValidate extends React.Component {
 
             //  用户审核状态
             let checkStatusData = res[2].data;
+            // console.log(checkStatusData);
             let statusMap = {};
             checkStatusData.checkItems.map( (item,index) =>{
                 statusMap[item.checkKey] = item;
             })
 
-            console.log(statusMap);
+            //  对公账户认证状态
+            // console.log(statusMap.EnAccount.checkStatus);
+            data.accountPassed = statusMap.EnAccount.checkStatus == 1;
+
+            // console.log(data);
 
             me.setState({
                 data : data
@@ -151,6 +176,8 @@ class CompanyValidate extends React.Component {
         Promise.all([p1,p2]).then(res => {
             //  数据合并
             let renderData = Object.assign({},res[0].data,res[1].data);
+            data.originalData = Object.assign({},renderData);
+            // console.log(data.originalData);
 
             //  营业执照类型
             data.companyPaperType = renderData.companyPaperType;
@@ -193,11 +220,50 @@ class CompanyValidate extends React.Component {
         });
     }
 
+    //  弹窗的两个方法
+    handleOk() {
+        let me = this;
+        // 表单校验
+        this.props.form.validateFieldsAndScroll((errors, data) => {
+          if (errors) {
+            console.log(errors);
+            console.log(data);
+            return false;
+          }
+          console.log("passed");
+          // console.log(data);
+          // 验证通过TODO
+          me.setState({ visible: false });
+          let submitData = me._getSubmitData(data);
+          me.submit(submitData,true);
+        });
+    }
+
+    handleCancel() {
+        this.setState({ visible: false });
+    }
+
     onCompanyNameChange(e){
         let data = this.state.data;
         data.companyName = e.target.value;
         this.setState({
             data : data
+        });
+    }
+
+    handleLoadingCancel(){
+        this.setState({
+            loadingVisible : false
+        })
+    }
+
+    tipsShow(){
+        Modal.success({
+            title: '提示',
+            content: '资料修改成功。',
+            onOk() {
+                // this.props.history.push('/companyValidate/step2');
+            },
         });
     }
 
@@ -355,14 +421,37 @@ class CompanyValidate extends React.Component {
             cancelText: '取消',
             onOk() {
                 // console.log('确定');
-                me.submit(submitData);
+                // me.submit(submitData);
+                me.compare(submitData);
             }
         });
     }
 
+    //  对比是否需要交易密码弹窗
+    compare(submitData){
+        let me = this;
+        let originalData = this.state.data.originalData;
+        let compareList = compareListMap.basic.concat(submitData.companyPaperType == 2 ? compareListMap.common : compareListMap.multiple);
+        let isNeedPfxPassword = false;
+        compareList.map( (prop,index) => {
+            if(submitData[prop] != originalData[prop]){
+                isNeedPfxPassword = true;
+                return false;
+            }
+        });
+        if(isNeedPfxPassword){
+            //  弹窗输入交易密码
+            me.setState({
+                visible : true
+            });
+        }else{
+            me.submit(submitData);
+        }
+    }
+
     //  确定窗口数据渲染
     getConfirmContent(submitData){
-        console.log(submitData);
+        // console.log(submitData);
         const basic = ["companyName","companyPaperType","registrationExtendField2","accountName","cardNo","bankName","provinceName","cityName","branchBankName","validateType"];
         const common = ["registrationPaperNo","orgInsCodePaperNo"];
         const multiple = ["socialCreditPaperNo"];
@@ -385,15 +474,27 @@ class CompanyValidate extends React.Component {
         );
     }
 
-    submit(submitData){
+    submit(submitData,isHasPassword){
         console.log(submitData);
+        if(isHasPassword){
+            this.setState({
+                loadingVisible : true
+            })
+        }
         fetch('/companyVerification/modifyCompanyInfo.do',{
             body : submitData
         }).then(res => {
             if(res.code == 200){
                 //  提交成功TODO
                 console.log('next finish');
-                // this.props.history.push('/companyValidate/step2');
+                if(isHasPassword){
+                    //  交易密码提交TODO
+                    // console.log("isHasPassword");
+                    this.handleLoadingCancel();
+                    this.tipsShow();
+                }else{
+                    // this.props.history.push('/companyValidate/step2');
+                }
             }
         });
     }
@@ -449,6 +550,14 @@ class CompanyValidate extends React.Component {
         // 根据不同类型选择验证机制
         let rules = Object.assign({},formValidation.rulesBase,rulesBusiness);
 
+        rules.pfxPassword = {
+            rules:[
+                {required: true, whitespace: true, message: '交易密码不能为空'},
+                {min: 8, max: 20, message: '请输入8-20位字符'},
+                ruleType('pfxPassword')
+            ]
+        }
+
         const formItemLayout = {
             labelCol: { span: 8 },
             wrapperCol: { span: 12 },
@@ -467,7 +576,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                           <Input {...getFieldProps('companyName',Object.assign({},rules.companyName,{ onChange : this.onCompanyNameChange.bind(this) }))} />
+                           <Input {...getFieldProps('companyName',Object.assign({},rules.companyName,{ onChange : this.onCompanyNameChange.bind(this) }))} disabled={ this.state.data.isChecking || this.state.data.accountPassed }/>
                         </FormItem>
 
                         <FormItem
@@ -475,7 +584,7 @@ class CompanyValidate extends React.Component {
                             label=" 营业执照类型"
                             required
                         >
-                            <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })}>
+                            <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })} disabled={ this.state.data.isChecking }>
                                 <Radio value="2">普通营业执照</Radio>
                                 <Radio value="3">多证合一营业执照</Radio>
                             </RadioGroup>
@@ -488,7 +597,7 @@ class CompanyValidate extends React.Component {
                                 label="营业执照注册号"
                                 required
                             >
-                                <Input {...getFieldProps('registrationPaperNo',rules.registrationPaperNo)} type="text"/>
+                                <Input {...getFieldProps('registrationPaperNo',rules.registrationPaperNo)} type="text" disabled={ this.state.data.isChecking }/>
                             </FormItem>
                         </div>
 
@@ -498,7 +607,7 @@ class CompanyValidate extends React.Component {
                                 label="统一社会信用代码"
                                 required
                             >
-                                <Input {...getFieldProps('socialCreditPaperNo',rules.socialCreditPaperNo)} type="text"/>
+                                <Input {...getFieldProps('socialCreditPaperNo',rules.socialCreditPaperNo)} type="text" disabled={ this.state.data.isChecking }/>
                             </FormItem>
                         </div>
 
@@ -510,16 +619,16 @@ class CompanyValidate extends React.Component {
                             <Col span="8">
                                 { this.state.data.isLongEndTime === true ?
                                     <FormItem validateStatus="success" help={null}>
-                                        <DatePicker {...getFieldProps('registrationExtendField2')} disabled={true} />
+                                        <DatePicker {...getFieldProps('registrationExtendField2')} disabled={this.state.data.isChecking || true}/>
                                     </FormItem>
                                     :
                                     <FormItem>
-                                        <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={false} />
+                                        <DatePicker {...getFieldProps('registrationExtendField2',rules.registrationExtendField2)} disabled={this.state.data.isChecking || false}/>
                                     </FormItem>
                                 }
                             </Col>
                             <Col span="5">
-                                <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})} checked={ this.state.data.isLongEndTime }>长期</Checkbox>
+                                <Checkbox {...getFieldProps('isLongEndTime',{onChange:this.onLongEndTimeChange})} checked={ this.state.data.isLongEndTime } disabled={ this.state.data.isChecking }>长期</Checkbox>
                             </Col>
                         </FormItem>
 
@@ -529,7 +638,7 @@ class CompanyValidate extends React.Component {
                                 label="组织机构代码"
                                 required
                             >
-                                <Input {...getFieldProps('orgInsCodePaperNo',rules.orgInsCodePaperNo)} type="text"/>
+                                <Input {...getFieldProps('orgInsCodePaperNo',rules.orgInsCodePaperNo)} type="text" disabled={ this.state.data.isChecking }/>
                             </FormItem>
                         </div>
 
@@ -550,7 +659,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                            <Input type="text" {...getFieldProps('cardNo',Object.assign({},rules.cardNo,{ onChange: this.onCardNoChange.bind(this) }))} placeholder="请输入银行账号"/>
+                            <Input type="text" {...getFieldProps('cardNo',Object.assign({},rules.cardNo,{ onChange: this.onCardNoChange.bind(this) }))} placeholder="请输入银行账号" disabled={ this.state.data.accountPassed }/>
                         </FormItem>
 
                         <FormItem
@@ -558,7 +667,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bankId',Object.assign({},rules.bankId,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bankId',Object.assign({},rules.bankId,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行" disabled={ this.state.data.accountPassed }>
                             { this.state.data.bankList.map( (item,index) => {
                                 return (
                                     <Option value={item.B_BankID} key={index}>{item.BankName}</Option>
@@ -572,7 +681,7 @@ class CompanyValidate extends React.Component {
                           label="所在省份"
                           required
                         >
-                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('provinceId',Object.assign({},rules.provinceId,{ onChange: this.onProvinceChange.bind(this) }))} >
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('provinceId',Object.assign({},rules.provinceId,{ onChange: this.onProvinceChange.bind(this) }))} disabled={ this.state.data.accountPassed }>
                                 { this.state.data.provinces.map( (item,index) => {
                                     return (
                                         <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -586,7 +695,7 @@ class CompanyValidate extends React.Component {
                           label="所在城市"
                           required
                         >
-                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('cityId',Object.assign({},rules.cityId,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.cityDisabled }>
+                            <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('cityId',Object.assign({},rules.cityId,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.accountPassed ? this.state.data.accountPassed : this.state.data.cityDisabled }>
                                 { this.state.data.cities.map( (item,index) => {
                                     return (
                                         <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -600,7 +709,7 @@ class CompanyValidate extends React.Component {
                           {...formItemLayout}
                           required
                         >
-                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branchBankId',rules.branchBankId)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.state.data.branchDisabled } >
+                          <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branchBankId',rules.branchBankId)} placeholder={ this.state.data.branchPlaceHolder } disabled={ this.state.data.accountPassed ? this.state.data.accountPassed : this.state.data.branchDisabled } >
                             { this.state.data.branches.map( (item,index) => {
                                 return (
                                     <Option value={ item.BranchBankCode } key={ index }>{ item.BranchBankName }</Option>
@@ -647,6 +756,50 @@ class CompanyValidate extends React.Component {
                             </Col>
                         </Row>
                     </Form>
+
+                    <Modal ref="modal"
+                      visible={this.state.visible}
+                      title="提示" onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}
+                      footer={[
+                        <Button key="back" type="ghost" size="large" onClick={this.handleCancel.bind(this)}>取 消</Button>,
+                        <Button key="submit" type="primary" size="large" onClick={this.handleOk.bind(this)}>
+                          确 定
+                        </Button>,
+                      ]}
+                    >
+                      <h4>由于您修改了企业信息，将为您重新申请数字证书。</h4>
+                      <Form>
+                        <FormItem
+                            {...formItemLayout}
+                            label="交易密码"
+                            required
+                            className="fn-mt-20"
+                        >
+                            {this.state.visible ? 
+                                <Input {...getFieldProps('pfxPassword',rules.pfxPassword)} type="password" placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"/>
+                                :
+                                ""
+                            }
+                        </FormItem>
+                      </Form>
+                    </Modal>
+
+                    <Modal ref="modal"
+                      visible={this.state.loadingVisible}
+                      title="提示"
+                      onCancel={this.handleLoadingCancel.bind(this)}
+                      footer={null}
+                    >
+                      <Row className="fn-mtb-20">
+                          <Col span="6" className="text-align-right">
+                                <Icon type="loading" className="fs-36"/>
+                          </Col>
+                          <Col span="16" offset="2">
+                                <h4>系统正在申请数字证书</h4>
+                                <p className="viceText-FontColor">请勿关闭当前页面</p>
+                          </Col>
+                      </Row>
+                    </Modal>
 
                 </Frame>
         );
