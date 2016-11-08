@@ -118,31 +118,6 @@ class Home extends React.Component {
                 this.setState({visible: false});
             });
         });
-        /*
-        console.log(this.state.inviteCodeValue);
-        if(this.state.inviteCodeValue==undefined){
-            message.error("邀请码不能为空")
-            return
-        }else{
-            console.log(this.state.inviteCodeValue)
-            fetch('/service/addService',{
-                body:{
-                    "inviteCode":this.state.inviteCodeValue
-                }
-            }).then(res => {
-                //console.log(res)
-                //this.setState(res)
-                //提示
-                this.openNotification(res)
-                //设置值为空
-                this.setState({
-                    inviteCodeValue:""
-                })
-            });
-            //console.log( this.state.inviteCodeValue )
-        }
-        this.setState({visible: false});
-        */
     }
     openNotification(getRes) {
         console.log(getRes)
@@ -209,9 +184,17 @@ class Home extends React.Component {
         return (
             <div style={{
                 minHeight: "700px"
-            }}>
+            }}
 
-                <Modal title="添加业务" visible={this.state.visible} onOk={this.handleSubmit.bind(this)} onCancel={this.handleCancel.bind(this)} wrapClassName="vertical-center-modal">
+            >
+
+                <Modal
+                    title="添加业务"
+                    visible={this.state.visible}
+                    onOk={this.handleSubmit.bind(this)}
+                    onCancel={this.handleCancel.bind(this)}
+                    wrapClassName="vertical-center-modal"
+                >
                     {/*好像不用做*/}
                     {/*
                     <Row>

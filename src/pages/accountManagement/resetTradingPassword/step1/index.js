@@ -104,7 +104,11 @@ export default class Steps1 extends React.Component {
 
         clearInterval(iTime);
         iTime = setInterval(()=>{
-            fetch('/user/getAccountRealCheckStatus').then(res=>{
+            fetch('/user/getAccountRealCheckStatus',{
+                body:{
+                    "businessType": 3
+                }
+            }).then(res=>{
                 if(res.code==200){
                     //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
                     //this.props.history.push("/accountManagement/resetTradingPassword/step2");
@@ -131,7 +135,11 @@ export default class Steps1 extends React.Component {
             }
         })
         //实名验证
-        let p3 = fetch('/user/getAccountRealCheckStatus');
+        let p3 = fetch('/user/getAccountRealCheckStatus',{
+            body:{
+                "businessType": 3
+            }
+        })
 
         //  身份实名认证
         let p4 = fetch('/user/getRelatedPersonInfo');
