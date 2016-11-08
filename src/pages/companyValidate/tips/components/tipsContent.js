@@ -36,11 +36,11 @@ class TipsRow extends Component {
         let me = this;
         let data = me.state.data;
         //  身份实名认证
-        let p1 = fetch('/user/getRelatedPersonInfo');
+        let p1 = fetch('/user/getRelatedPersonInfo.do');
         //  企业对公账户认证
-        let p2 = fetch('/user/getCompanyAccountCheckStatus');
+        let p2 = fetch('/user/getCompanyAccountCheckStatus.do');
         //  企业资料补充
-        let p3 = fetch('/paper/getCompanyPaperInfoStatus');
+        let p3 = fetch('/paper/getCompanyPaperInfoStatus.do');
 
         Promise.all([p1,p2,p3]).then(res => {
             // console.log(res);

@@ -41,7 +41,7 @@ class CompanyValidate extends Component {
     loadData(){
         let me = this;
         let protocolData = me.state.protocolData;
-        fetch('/common/getCurrentProtocol',{
+        fetch('/common/getCurrentProtocol.do',{
             body : {
                 protocolType : 2
             }
@@ -77,7 +77,7 @@ class CompanyValidate extends Component {
         let protocolData = this.state.protocolData;
         // console.log(submitData);
         this.setState({ visible: true });
-        fetch('/companyVerification/saveTransactionPassword',{
+        fetch('/companyVerification/saveTransactionPassword.do',{
             body : {
                 system : 1,
                 pfxPassword : submitData.pfxPassword,
