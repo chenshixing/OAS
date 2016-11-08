@@ -83,7 +83,7 @@ class InfoRow extends Component {
         	account : {
         		name : '对公账户验证',
         		status : {
-        			0 : '未认证',
+        			0 : this.props.data.accountValidateType == "bond" ? '未收到验证金' : '待提交资料',
         			1 : '已认证'
         		},
         	}
@@ -141,14 +141,13 @@ class InfoRow extends Component {
     	/*审核不通过可以修改认证资料*/
     	let editButton = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname' className="fn-ml-20">修改资料</Link> : "";
         let smsData = {
-            name: data.name,
-            identityCode: data.identityCode,
+            businesstype: 1,
             connectorType: data.connectorType
         };
     	return (
     		<Col span={12}>
 				<Row>
-					<Col span={12}><Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>{editButton}</Col>
+					<Col span={12}><Sms data={ smsData }>重新发送验证短信</Sms>{editButton}</Col>
                     <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>

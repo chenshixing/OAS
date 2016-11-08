@@ -29,7 +29,7 @@ class Check extends Component {
         return (
             <div className="tipsBox">
                 <Row className="tipsRow">
-                    <Col span={3} className="text-align-center">   
+                    <Col span={3} className="text-align-center">
                         <Icon type="exclamation-circle" className="tipsIcon exclamation"/>
                     </Col>
                     <Col span={21}>
