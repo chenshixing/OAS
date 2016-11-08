@@ -22,6 +22,7 @@ class Reg extends React.Component {
     super(props);
     this.state = {
       submitDis: true,
+      protocolData:{}
     };
   }
   handleSubmit(e) {
@@ -30,9 +31,11 @@ class Reg extends React.Component {
       if(!errors){
         var data=values;
         data.userType=1;
+        data.protocolId=this.state.protocolData.id;
         console.log('Submit!!!',data);
         fetch('/register/post',{body:data}).then((res)=>{
           console.log('注册成功');
+          window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
         });
@@ -79,6 +82,27 @@ class Reg extends React.Component {
       submitDis: !e.target.checked
     });
   }
+
+  componentDidMount(){
+    this.initPage();
+  }
+
+  initPage(){
+      //获取此页面需要签署的协议
+      fetch('/common/getCurrentProtocol',{
+          body:{
+              "protocolType": 1
+          }
+      }).then((res)=>{
+          console.log('获取协议成功：',res.data);
+          this.setState({
+              protocolData:res.data,
+          });
+      },(res)=>{
+          alert('获取协议失败，请重新获取！');
+      })
+  }
+
   render() {
     const { getFieldProps } = this.props.form;
 
@@ -160,7 +184,7 @@ class Reg extends React.Component {
           label="登录密码"
           required
         >
-          <Input type="loginPwd" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
+          <Input type="password" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
         </FormItem>
 
         <FormItem
@@ -168,7 +192,7 @@ class Reg extends React.Component {
           label="确认密码"
           required
         >
-          <Input type="conLoginPwd" autoComplete="off" {...getFieldProps('conLoginPwd', rules.conLoginPwd)} />
+          <Input type="password" autoComplete="off" {...getFieldProps('conLoginPwd', rules.conLoginPwd)} />
         </FormItem>
 
         <FormItem
@@ -203,7 +227,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《用户服务协议》</a></Checkbox>
+          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>

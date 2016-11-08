@@ -24,6 +24,7 @@ class Reg extends React.Component {
     super(props);
     this.state = {
       submitDis: true,
+      protocolData:{}
     };
   }
   handleSubmit(e) {
@@ -33,6 +34,7 @@ class Reg extends React.Component {
       if(!errors){
         var data=values;
         data.userType=2;
+        data.protocolId=this.state.protocolData.id;
         console.log('Submit!!!',data);
         fetch('/register/post',{
             body:data
@@ -89,6 +91,27 @@ class Reg extends React.Component {
       submitDis: !e.target.checked
     });
   }
+
+  componentDidMount(){
+    this.initPage();
+  }
+
+  initPage(){
+      //获取此页面需要签署的协议
+      fetch('/common/getCurrentProtocol',{
+          body:{
+              "protocolType": 1
+          }
+      }).then((res)=>{
+          console.log('获取协议成功：',res.data);
+          this.setState({
+              protocolData:res.data,
+          });
+      },(res)=>{
+          alert('获取协议失败，请重新获取！');
+      })
+  }
+
   render() {
     const { getFieldProps } = this.props.form;
 
@@ -211,7 +234,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《用户服务协议》</a></Checkbox>
+          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
