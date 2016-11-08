@@ -43,7 +43,7 @@ class Sms extends Component {
     sms() {
     	let me = this;
 
-		fetch('/common/pinCode',{
+		fetch('/common/pinCode.do',{
 			body : {
 			  businesstype : me.state.data.businesstype,
 			  connectortype : me.state.data.connectorType,

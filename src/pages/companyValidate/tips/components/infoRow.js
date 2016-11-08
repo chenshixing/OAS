@@ -11,9 +11,6 @@ import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 import CountDown from './countDown';
 import Sms from 'BCOM/Sms/index';
 
-//  引入fetch
-import { fetch } from 'UTILS';
-
 //  引入线下支付小额验证金核验表格信息
 import offlinePayTableInfo from 'PAGES/companyValidate/components/offlinePayTableInfo';
 

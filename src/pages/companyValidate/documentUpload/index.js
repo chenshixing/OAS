@@ -39,7 +39,7 @@ class DocumentUpload extends Component {
     loadData(){
         let me = this;
         let fileList = me.state.fileList;
-        fetch('/paper/searchCompany').then(res => {
+        fetch('/paper/searchCompany.do').then(res => {
             if(res.code == 200){
                 for( let prop in res.data){
                     res.data[prop].map( (item,index) =>{
@@ -167,7 +167,7 @@ class DocumentUpload extends Component {
     submit(){
         let data = this._getSubmitData();
         console.log(data);
-        fetch('/paper/save',{
+        fetch('/paper/save.do',{
             body : {
                 uid : 123,
                 data : data

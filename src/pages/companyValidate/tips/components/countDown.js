@@ -23,7 +23,7 @@ class CountDown extends Component {
 
 	componentDidMount() {
 		let me = this;
-		fetch('/companyVerification/getBankAccountStatus').then(res => {
+		fetch('/companyVerification/getBankAccountStatus.do').then(res => {
 			me.setState({
 				time : res.data.timeLeft * 1000
 			});
