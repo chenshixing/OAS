@@ -77,21 +77,21 @@ export default class BasicInformation extends React.Component {
 
 
         //获取用户审核状态(v0.4)
-        let p1 = fetch('/user/getUserCheckStatus');
+        let p1 = fetch('/user/getUserCheckStatus.do');
         //用户简单信息(v2.2)
-        let p2 = fetch('/user/getLoginUserSimpleInfo');
+        let p2 = fetch('/user/getLoginUserSimpleInfo.do');
         //获取登录后判断状态(v0.4)
-        let p3 = fetch('/common/getLoginCheckStatus');
+        let p3 = fetch('/common/getLoginCheckStatus.do');
         //获取绑定手机(v0.4)	/user/getBindMobile
-        let p4 = fetch('/user/getBindMobile');
+        let p4 = fetch('/user/getBindMobile.do');
         //是否设置交易密码(v0.4)	/user/getIsSetPayPassword
-        let p5 = fetch('/user/getIsSetPayPassword');
+        let p5 = fetch('/user/getIsSetPayPassword.do');
         //获取对公账户验证状态(v1.6)	/user/getCompanyAccountCheckStatus
-        let p6 = fetch('/user/getCompanyAccountCheckStatus');
+        let p6 = fetch('/user/getCompanyAccountCheckStatus.do');
         //获取已核身银行账号(v0.6)	/person/getCheckedBank
-        let p7 = fetch('/person/getCheckedBank');
+        let p7 = fetch('/person/getCheckedBank.do');
         //获取用户信息填写人（关系人）信息(v2.6)
-        let p8 = fetch('/user/getRelatedPersonInfo');
+        let p8 = fetch('/user/getRelatedPersonInfo.do');
 
 
 

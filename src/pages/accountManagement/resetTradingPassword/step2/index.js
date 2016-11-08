@@ -50,7 +50,7 @@ class Steps2 extends React.Component {
                 console.log('Errors in form!!!');
                 return;
             }
-            fetch('/user/resetPwd',{
+            fetch('/user/resetPwd.do',{
                 body:{
                   "businesstype": 3,
                   "pwd": this.state.pwd,
