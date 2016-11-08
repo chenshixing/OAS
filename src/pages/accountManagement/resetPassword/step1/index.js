@@ -16,13 +16,19 @@ class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
         this.state={
-            oldPasswdProps:"",
-            passwdProps:"",
-            confirmPasswordProps:"",
+            oldLoginPwd:"",
+            newLoginPwd:"",
+            conNewLoginPwd:"",
         }
     }
 
     componentDidMount() {
+        this.loadData()
+    }
+    loadData(){
+        fetch("/user/checkUserInfo").then(res=>{
+            console.log(res)
+        })
     }
 
     handleSubmit(e) {
@@ -34,9 +40,9 @@ class ResetPassword extends React.Component {
 
             fetch('/user/modifyLoginPwd',{
                 body:{
-                    oldPasswdProps:this.state.oldPasswdProps,
-                    passwdProps:this.state.passwdProps,
-                    confirmPasswordProps:this.state.confirmPasswordProps,
+                    oldLoginPwd:this.state.oldLoginPwd,
+                    newLoginPwd:this.state.newLoginPwd,
+                    conNewLoginPwd:this.state.conNewLoginPwd,
                 }
             }).then(res => {
                 console.log(res)
@@ -67,18 +73,18 @@ class ResetPassword extends React.Component {
             wrapperCol: {span: 8},
         };
         const {getFieldProps} = this.props.form; //用于和表单进行双向绑定
-        const oldPasswdProps = getFieldProps('oldPassword', { //原登录密码
+        const oldLoginPwd = getFieldProps('oldPassword', { //原登录密码
             rules: [
                 {required: true, whitespace: true, message: '请输入原登录密码'},
             ],
             onChange: (e) => {
                 this.setState({
-                    oldPasswdProps:e.target.value
+                    oldLoginPwd:e.target.value
                 })
                 console.log('原密码：', e.target.value);
             }
         });
-        const passwdProps = getFieldProps('password', {//新登录密码
+        const newLoginPwd = getFieldProps('password', {//新登录密码
             rules: [
                 {required: true, min: 8, max: 20, message: '请输入8-20个字符'},
                 {validator: this.checkPass.bind(this)},
@@ -86,19 +92,19 @@ class ResetPassword extends React.Component {
             ],
             onChange: (e) => {
                 this.setState({
-                    passwdProps:e.target.value
+                    newLoginPwd:e.target.value
                 })
                 console.log('新登录密码：', e.target.value);
             }
         });
-        const confirmPasswordProps = getFieldProps('confirmPassword', {//确认新登录密码
+        const conNewLoginPwd = getFieldProps('confirmPassword', {//确认新登录密码
             rules: [
                 {required: true, message: '请再次输入密码'},
                 {validator: this.checkConfirmPass.bind(this)},
             ],
             onChange: (e) => {
                 this.setState({
-                    confirmPasswordProps:e.target.value
+                    conNewLoginPwd:e.target.value
                 })
                 console.log('确认新登录密码：', e.target.value);
             }
@@ -114,19 +120,19 @@ class ResetPassword extends React.Component {
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder=""
-                                {...oldPasswdProps}/>
+                                {...oldLoginPwd}/>
                         </Form.Item>
                         <Form.Item {...props} label="新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
-                                {...passwdProps}/>
+                                {...newLoginPwd}/>
                         </Form.Item>
                         <Form.Item {...props} label="确认新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
-                                {...confirmPasswordProps} />
+                                {...conNewLoginPwd} />
                         </Form.Item>
                         <Form.Item wrapperCol={{span: 12, offset: 8}}>
                             <Button type="primary" htmlType="submit">确认提交</Button>

@@ -2,8 +2,14 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+//less
+import './style.less'
+
+
 // 页面组件
 import Sms from 'BCOM/Sms/index';
+
+
 
 // antd 组件
 import {
@@ -36,22 +42,37 @@ export default class basicBodyEditor extends React.Component {
     GetLoginCheckStatusTemplate(type) {
         //判断 获取登录后判断状态  银行审核状态，-1：审核中，0：审核不通过，1：审核通过
         //执行到的步骤，0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+        //如果需要对齐 <Col span={1}> 改成 <Col span={2}>。这里是故意不对齐。为了使强迫症填写资料
         let iSuccess = (type.bankCheckStatus == 1 && type.step == 999);
         let result = null;
         if (iSuccess) {
             result = (
-                <span>
-                    <span className="fn-mr-10"><Icon type="check"/></span>
-                    您已完成全部安全设置，请放心使用本系统的功能。
-                </span>
+                <div className="fn-mt-50">
+                    <Row type="flex" justify="start" align="middle">
+                        <Col span={2}>
+                            <span className="fn-mr-10"><Icon type="check"/></span>
+                        </Col>
+                        <Col span={12}>
+                            您已完成全部安全设置，请放心使用本系统的功能。
+                        </Col>
+                    </Row>
+                </div>
+
             )
 
         } else {
             result = (
-                <span>
-                    <span className="error-FontColor1 fn-mr-10"><Icon type="cross"/></span>
-                    建议您完成全部安全设置，以保障账户及资金安全。
-                </span>
+                <div className="fn-mt-50">
+
+                    <Row type="flex" justify="start" align="middle">
+                        <Col span={1}>
+                            <span className="error-FontColor1 fn-mr-10"><Icon type="cross"/></span>
+                        </Col>
+                        <Col span={12}>
+                            建议您完成全部安全设置，以保障账户及资金安全。
+                        </Col>
+                    </Row>
+                </div>
             )
         }
         return result;
@@ -70,7 +91,7 @@ export default class basicBodyEditor extends React.Component {
     basicInformationTemplate(userType){
         let items = {
             1:(
-                <div className="fn-mtb-10">
+                <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             <Icon type="check"/>
@@ -85,7 +106,7 @@ export default class basicBodyEditor extends React.Component {
                 </div>
             ),
             2:(
-                <div className="fn-mtb-10">
+                <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             <Icon type="check"/>
@@ -116,7 +137,7 @@ export default class basicBodyEditor extends React.Component {
                     }
                     return (
 
-                        <div key={index} className="fn-mtb-10">
+                        <div key={index} className="fn-mt-10" >
                             <Row type="flex" justify="start" align="middle">
 
                                 <Col span={2}>
@@ -186,7 +207,7 @@ export default class basicBodyEditor extends React.Component {
                         connectorType: item.connectorType
                     }
                     return (
-                        <div key={index} className="fn-mtb-10">
+                        <div key={index} className="fn-mt-10">
                             <Row type="flex" justify="start" align="middle">
                                 {
                                     index==0
@@ -269,7 +290,7 @@ export default class basicBodyEditor extends React.Component {
         let template = ""
         if(userType==2){
                 template = (
-                    <div className="fn-mtb-10">
+                    <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                         <Row type="flex" justify="start" align="middle">
                             <Col span={2}>
                                 {
@@ -309,7 +330,7 @@ export default class basicBodyEditor extends React.Component {
         let template = "";
 
         template = (
-            <div className="fn-mtb-10">
+            <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                 <Row type="flex" justify="start" align="middle">
                     <Col span={2}>
                         <Icon type="check"/>
@@ -339,7 +360,7 @@ export default class basicBodyEditor extends React.Component {
         let template = "";
 
         template = (
-            <div className="fn-mtb-10">
+            <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                 <Row type="flex" justify="start" align="middle">
                     <Col span={2}>
                         {
@@ -387,7 +408,7 @@ export default class basicBodyEditor extends React.Component {
         let template = "";
 
         template = (
-            <div className="fn-mtb-10">
+            <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                 <Row type="flex" justify="start" align="middle">
                     <Col span={2}>
                         {
@@ -426,7 +447,7 @@ export default class basicBodyEditor extends React.Component {
 
         if(userType==1){
             template = (
-                <div className="fn-mtb-10">
+                <div className="fn-mtb-10 fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
@@ -451,7 +472,7 @@ export default class basicBodyEditor extends React.Component {
             )
         }else{
             template = (
-                <div className="fn-mtb-10">
+                <div className="fn-mtb-10 fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
@@ -574,7 +595,10 @@ export default class basicBodyEditor extends React.Component {
                     {/*基本信息*/}
                     {basicInformationTemplate}
                     {/*实名验证*/}
-                    {getRelatedPersonInfoTemplate}
+                    <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
+
+                        {getRelatedPersonInfoTemplate}
+                    </div>
                     {/*证件资料*/}
                     {getCompanyPaperInfoStatusTemplate}
                     {/*登录密码*/}
