@@ -66,12 +66,12 @@ class Home extends React.Component {
         //
 
         //用户简单信息(v0.7)
-        let p1 = fetch('/user/getLoginUserSimpleInfo');
+        let p1 = fetch('/user/getLoginUserSimpleInfo.do');
         //返回用户服务列表(v0.3)
-        let p2 = fetch('/user/getUserServiceList');
+        let p2 = fetch('/user/getUserServiceList.do');
 
         //获取登录后判断状态
-        let p3 = fetch('/common/getLoginCheckStatus');
+        let p3 = fetch('/common/getLoginCheckStatus.do');
 
         Promise.all([p1, p2, p3]).then(values => {
             this.state.data = values[0].data
@@ -102,7 +102,7 @@ class Home extends React.Component {
             }
             console.log('Submit!!!');
             console.log(values);
-            fetch('/service/addService',{
+            fetch('/service/addService.do',{
                 body:{
                     "inviteCode":this.state.inviteCodeValue
                 }

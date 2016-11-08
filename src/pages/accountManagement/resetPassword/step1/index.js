@@ -26,7 +26,7 @@ class ResetPassword extends React.Component {
         this.loadData()
     }
     loadData(){
-        fetch("/user/checkUserInfo").then(res=>{
+        fetch("/user/checkUserInfo.do").then(res=>{
             console.log(res)
         })
     }
@@ -38,7 +38,7 @@ class ResetPassword extends React.Component {
                 return;
             }
 
-            fetch('/user/modifyLoginPwd',{
+            fetch('/user/modifyLoginPwd.do',{
                 body:{
                     oldLoginPwd:this.state.oldLoginPwd,
                     newLoginPwd:this.state.newLoginPwd,

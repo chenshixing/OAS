@@ -76,7 +76,7 @@ export default class Steps1 extends React.Component {
     handleSend(){
         //发送识别码接口(v0.7)	/common/pinCode
         //如果已经验证
-        fetch('/common/pinCode',{
+        fetch('/common/pinCode.do',{
             body:{
                 "connectorType":this.state.data.getDesensitizeMobile.connectorType,
                 "businessType": 3,
@@ -114,7 +114,7 @@ export default class Steps1 extends React.Component {
     }
     //单次请求
     loadPaddingFetchFn(){
-        fetch('/user/getAccountRealCheckStatus',{
+        fetch('/user/getAccountRealCheckStatus.do',{
            body:{
                "businessType": 3
            }
@@ -135,22 +135,22 @@ export default class Steps1 extends React.Component {
     loadData(){
 
         //用户简单信息(v0.7)
-        let p1 = fetch('/user/getLoginUserSimpleInfo');
+        let p1 = fetch('/user/getLoginUserSimpleInfo.do');
         //获取姓名及脱敏手机号(v0.2)
-        let p2 = fetch('/user/getDesensitizeMobile',{
+        let p2 = fetch('/user/getDesensitizeMobile.do',{
             body:{
                 "businessType": 3
             }
         })
         //实名验证
-        let p3 = fetch('/user/getAccountRealCheckStatus',{
+        let p3 = fetch('/user/getAccountRealCheckStatus.do',{
             body:{
                 "businessType": 3
             }
         })
 
         //  身份实名认证
-        let p4 = fetch('/user/getRelatedPersonInfo');
+        let p4 = fetch('/user/getRelatedPersonInfo.do');
 
         Promise.all([p1, p2,p3,p4]).then(values => {
           console.log(values);
