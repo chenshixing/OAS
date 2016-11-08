@@ -176,7 +176,13 @@ class EditRealName extends Component {
             body : submitData,
         }).then(res => {
             //  修改完成TODO
-            console.log(res);
+            if(res.data == 201){
+                // 201-代表有修改跳转至提交结果
+                this.props.history.push('/companyValidate/result');
+            }else if(!res.data){
+                // 空则跳转至审核不通过提示
+                this.props.history.push('/companyValidate/tips/disapproval');
+            }
         });
     }
 
