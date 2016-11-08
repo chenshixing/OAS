@@ -327,7 +327,7 @@ class Home extends React.Component {
 
                         {getUserServiceList.map((item, index) => {
                             return (
-                                <a href={item.serviceURL}>
+                                <a key={index} href={item.serviceURL}>
                                     <Col span="6">
                                         <Card>{item.serviceChannelName}</Card>
                                     </Col>

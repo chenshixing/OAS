@@ -116,7 +116,7 @@ export default class basicBodyEditor extends React.Component {
                     }
                     return (
 
-                        <div className="fn-mtb-10">
+                        <div key={index} className="fn-mtb-10">
                             <Row type="flex" justify="start" align="middle">
 
                                 <Col span={2}>
@@ -141,7 +141,7 @@ export default class basicBodyEditor extends React.Component {
                                 <Col span={4}>
                                     {item.realName}
                                 </Col>
-                                <Col span={6}>
+                                <Col span={8}>
                                     {
                                         item.checkPass>0
                                         ?
@@ -155,7 +155,7 @@ export default class basicBodyEditor extends React.Component {
                                         <span>
                                             <span
                                                 className="error-FontColor1"
-                                                style={{width:80,display:"inline-block"}}
+                                                style={{width:190,display:"inline-block"}}
                                                 >
                                                 未认证
                                             </span>
@@ -186,7 +186,7 @@ export default class basicBodyEditor extends React.Component {
                         connectorType: item.connectorType
                     }
                     return (
-                        <div className="fn-mtb-10">
+                        <div key={index} className="fn-mtb-10">
                             <Row type="flex" justify="start" align="middle">
                                 {
                                     index==0
@@ -226,7 +226,7 @@ export default class basicBodyEditor extends React.Component {
                                 <Col span={4}>
                                     {item.realName}
                                 </Col>
-                                <Col span={6}>
+                                <Col span={8}>
                                     {
                                         item.checkPass>0
                                         ?
@@ -240,7 +240,7 @@ export default class basicBodyEditor extends React.Component {
                                         <span>
                                             <span
                                                 className="error-FontColor1"
-                                                style={{width:80,display:"inline-block"}}
+                                                style={{width:190,display:"inline-block"}}
                                                 >
                                                 未认证
                                             </span>
