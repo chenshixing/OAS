@@ -68,20 +68,16 @@ export default class RealNameAuthentication extends React.Component {
         console.log(this);
     }
 
-    handleMessage() {
 
-        fetch('/common/smsAutoCode',{
-            body:{
-                "businesstype": "register"
-            }
-        }).then(res=>{
-            message.success('验证码发送发送成功...');
-        })
-    }
 
     render() {
         console.log(this)
-        let {getAccountRealCheckStatus,getRelatedPersonInfo,getLoginUserSimpleInfo} = this.props;
+        let {
+            getAccountRealCheckStatus,
+            getRelatedPersonInfo,
+            getLoginUserSimpleInfo,
+            getDesensitizeMobile
+        } = this.props;
 
         // let smsData = {
         //     name: getRelatedPersonInfo.realName,
@@ -89,6 +85,10 @@ export default class RealNameAuthentication extends React.Component {
         //     connectorType: getRelatedPersonInfo.connectorType
         // };
         let smsData = {};
+        smsData = {
+            businesstype: 3,
+            connectorType: getDesensitizeMobile.connectorType
+        }
 
         // 使用方式：
         // 传入data和businesstype
@@ -97,28 +97,24 @@ export default class RealNameAuthentication extends React.Component {
         //     identityCode: data.identityCode,        身份识别码
         //     connectorType: data.connectorType       关系人类型 （2：企业法人，3：经办人）（个人账户不用传，企业账户必须）
         // };
-        if(getRelatedPersonInfo && getRelatedPersonInfo.length>0){
-            getRelatedPersonInfo.map((item,index)=>{
 
-                    if(getLoginUserSimpleInfo.userType==1){
-                        return (
-                            smsData = {
-                                name: item.realName,
-                                identityCode: item.identityCode,
-                            }
-                        )
-                    }else if(getLoginUserSimpleInfo.userType==2){
-                        return (
-                            smsData = {
-                                name: item.realName,
-                                identityCode: item.identityCode,
-                                connectorType: item.connectorType
-                            }
-                        )
-                    }
 
-            })
-        }
+        // if(getLoginUserSimpleInfo.userType==1){
+        //     return (
+        //         smsData = {
+        //             businesstype: 3,
+        //             connectorType: getDesensitizeMobile.connectorType
+        //         }
+        //     )
+        // }else if(getLoginUserSimpleInfo.userType==2){
+        //     return (
+        //         smsData = {
+        //             businesstype: 3,
+        //             connectorType: getDesensitizeMobile.connectorType
+        //         }
+        //     )
+        // }
+
 
 
 
@@ -147,8 +143,7 @@ export default class RealNameAuthentication extends React.Component {
                         <Col span={12} offset={6}>
                             <p>
                                 姓名：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
-                                <Sms data={ smsData } businesstype={3}>重新发送验证短信</Sms>
-                                {/*<a href='javascript:;' onClick={this.handleMessage.bind(this)}>没有收到短信，重新发送</a>*/}
+                                <Sms data={ smsData } >重新发送验证短信</Sms>
                             </p>
                             <p>
                                 请下载实名认证APP完成认证。
