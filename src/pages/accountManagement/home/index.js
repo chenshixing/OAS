@@ -180,19 +180,6 @@ class Home extends React.Component {
 
         this.setState({inviteCodeValue: e.target.value})
     }
-    userExists(rule, value, callback) {
-        if (!value) {
-            callback();
-        } else {
-            setTimeout(() => {
-                if (value === 'JasonWood') {
-                    callback([new Error('抱歉，该用户名已被占用。')]);
-                } else {
-                    callback();
-                }
-            }, 800);
-        }
-    }
 
     render() {
         console.log(this)
@@ -207,7 +194,7 @@ class Home extends React.Component {
                 span: 7
             },
             wrapperCol: {
-                span: 12
+                span: 16
             }
         };
         const nameProps = getFieldProps('name', {
@@ -215,8 +202,6 @@ class Home extends React.Component {
                 {
                     required: true,
                     message: '请输入邀请码'
-                }, {
-                    validator: this.userExists.bind(this)
                 }
             ]
         });
@@ -263,7 +248,7 @@ class Home extends React.Component {
                                         />
                                     */}
                                         <FormItem {...formItemLayout} label="邀请码" hasFeedback>
-                                            <Input {...nameProps} placeholder="实时校验，输入 JasonWood 看看"/>
+                                            <Input {...nameProps} placeholder="请输入邀请码"/>
                                         </FormItem>
 
                                     </Col>

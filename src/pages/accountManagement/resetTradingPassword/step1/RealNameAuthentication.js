@@ -146,7 +146,7 @@ export default class RealNameAuthentication extends React.Component {
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p>
-                                姓名：{this.props.getdesensitizemobile.name}，您的身份识别码已发送到手机{this.props.getdesensitizemobile.mobile}。
+                                姓名：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
                                 <Sms data={ smsData } businesstype={3}>重新发送验证短信</Sms>
                                 {/*<a href='javascript:;' onClick={this.handleMessage.bind(this)}>没有收到短信，重新发送</a>*/}
                             </p>

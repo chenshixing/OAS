@@ -46,7 +46,7 @@ export default class Steps1 extends React.Component {
                 identityCode: '12345',
                 phoneNumber: '15999872092',
                 getLoginUserSimpleInfo:{},
-                getdesensitizemobile:{},
+                getDesensitizeMobile:{},
                 getAccountRealCheckStatus:{},
                 getRelatedPersonInfo:[]
             },
@@ -73,10 +73,11 @@ export default class Steps1 extends React.Component {
     }
     handleSend(){
         //进入实名验证
-        //发送短信验证码
-        fetch('/common/smsAutoCode',{
+        //发送识别码接口(v0.7)	/common/pinCode
+        fetch('/common/pinCode',{
             body:{
-                "businesstype": "register"
+                "businessType": 3,
+                "isFirst": true
             }
         }).then(res=>{
             this.state.isSend = true;
@@ -124,9 +125,9 @@ export default class Steps1 extends React.Component {
         //用户简单信息(v0.7)
         let p1 = fetch('/user/getLoginUserSimpleInfo');
         //获取姓名及脱敏手机号(v0.2)
-        let p2 = fetch('/user/getdesensitizemobile',{
+        let p2 = fetch('/user/getDesensitizeMobile',{
             body:{
-                "businesstype": 3
+                "businessType": 3
             }
         })
         //实名验证
@@ -138,7 +139,7 @@ export default class Steps1 extends React.Component {
         Promise.all([p1, p2,p3,p4]).then(values => {
           console.log(values);
           this.state.data.getLoginUserSimpleInfo = values[0].data
-          this.state.data.getdesensitizemobile = values[1].data
+          this.state.data.getDesensitizeMobile = values[1].data
           this.state.data.getAccountRealCheckStatus = values[2].data
           this.state.data.getRelatedPersonInfo = values[3].data;
           console.log(values[3].data)
