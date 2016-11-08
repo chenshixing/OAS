@@ -26,7 +26,7 @@ class Check extends Component {
     }
 
     initPage(){
-        fetch('/user/getUserCheckStatus').then();
+        fetch('/user/getUserCheckStatus.do').then();
     }
 
     render() {
