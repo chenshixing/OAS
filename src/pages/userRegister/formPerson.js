@@ -71,7 +71,7 @@ class Reg extends React.Component {
     fetch('/common/smsAutoCode.do', {
       body: {
         "mobile": num,
-        "businesstype": "register"
+        "businessType": "register"
       }
     }).then(res => {
       alert(res);
