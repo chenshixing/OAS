@@ -150,9 +150,9 @@ class InfoRow extends Component {
     	return (
     		<Col span={12}>
 				<Row>
-					<Col span={6}>{smsBtn}</Col>
-                    <Col span={6}>{editBtn}</Col>
-                    <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)}>如何实名认证？</Button></Col>
+					<Col span={8}>{smsBtn}</Col>
+                    <Col span={4}>{editBtn}</Col>
+                    <Col span={12}><Button type="primary" onClick={this.showIdentityModal.bind(this)} size="small">如何实名认证？</Button></Col>
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
 			</Col>
@@ -174,7 +174,7 @@ class InfoRow extends Component {
     		<Col span={12}>
                 <Row>
                     <Col span={24}>
-                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)}>手机APP提交</Button> 。
+                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)} size="small">手机APP提交</Button> 。
                     </Col>
                 </Row>
                 { !informationData.lackFiles.length ? "" :

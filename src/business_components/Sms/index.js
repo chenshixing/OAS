@@ -104,7 +104,7 @@ class Sms extends Component {
     render() {
         // console.log(this)
         return (
-            <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) }>
+            <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) } size="small">
                 { this.props.children }
                 {this.state.timeGo>0?this.state.timeGo+"秒":""}
             </Button>

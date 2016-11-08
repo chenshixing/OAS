@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
+//  引入fetch
+import { fetch } from 'UTILS';
+
 class CountDown extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -8,8 +11,8 @@ class CountDown extends Component {
     constructor(props) {
         super(props);
         this.state = Object.assign({},this.props,{
-			// time : 172800000,
-			time : 5000,
+			time : 172800000,
+			// time : 5000,
 			timeDisplay: "",
         });
     }
@@ -19,7 +22,14 @@ class CountDown extends Component {
 	}
 
 	componentDidMount() {
-		this._timeCountDown();
+		let me = this;
+		fetch('/companyVerification/getBankAccountStatus').then(res => {
+			me.setState({
+				time : res.data.timeLeft * 1000
+			});
+			me._timeCountDown();
+		});
+		// this._timeCountDown();
 	}
 
 	componentWillUnmount() {
@@ -40,6 +50,7 @@ class CountDown extends Component {
 			me.setState({
 				state : state
 			});
+			// console.log(me.state);
 		},1000);
 	}
 
