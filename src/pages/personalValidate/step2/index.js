@@ -62,7 +62,7 @@ export default class PersonalValidate extends React.Component {
     handleNextClick(){
         console.log('handleNextClick');
         //查询是否已经实名验证
-        fetch('/user/getRelatedPersonInfo').then((res)=>{
+        fetch('/personVerification/getRealVerifiedStatus').then((res)=>{
             if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
                 clearInterval(this.timer);
                 this.props.history.push({
@@ -133,7 +133,7 @@ export default class PersonalValidate extends React.Component {
         this.initPage();
         this.timer = setInterval(()=>{
             //查询是否已经实名验证
-            fetch('/user/getRelatedPersonInfo',false).then((res)=>{
+            fetch('/personVerification/getRealVerifiedStatus',false).then((res)=>{
                 if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
                     clearInterval(this.timer);
                     this.props.history.push({
