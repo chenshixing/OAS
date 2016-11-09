@@ -253,11 +253,12 @@ class CompanyValidate extends React.Component {
     }
 
     tipsShow(){
+        let me = this;
         Modal.success({
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                this.props.history.push('/companyValidate/tips/disapproval');
+                me.props.history.push('/companyValidate/tips/disapproval');
             },
         });
     }
@@ -529,7 +530,7 @@ class CompanyValidate extends React.Component {
                     me.handleLoadingCancel();
                     me.tipsShow();
                 }else{
-                    this.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
+                    me.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
                 }
             }
         });
