@@ -148,10 +148,10 @@ class CompanyValidate extends React.Component {
         // console.log(fieldsValue);
         //  证件号转字符串处理
         if(fieldsValue.companyPaperType == 2){
-            fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo.toString();
-            fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo.toString();
+            fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo ? fieldsValue.registrationPaperNo.toString() : "";
+            fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo ? fieldsValue.orgInsCodePaperNo.toString() : "";
         }else{
-            fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo.toString();
+            fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo ? fieldsValue.socialCreditPaperNo.toString() : "";
         }
 
         me.setState({
