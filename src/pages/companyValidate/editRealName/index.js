@@ -180,9 +180,20 @@ class EditRealName extends Component {
                 // 201-代表有修改跳转至提交结果
                 this.props.history.push('/companyValidate/result');
             }else if(!res.data){
-                // 空则跳转至审核不通过提示
-                this.props.history.push('/companyValidate/tips/disapproval');
+                // 空则跳转至审核不通过提示(弹窗确认)
+                this.tipsShow();
             }
+        });
+    }
+
+    tipsShow(){
+        let me = this;
+        Modal.success({
+            title: '提示',
+            content: '资料修改成功。',
+            onOk() {
+                me.props.history.push('/companyValidate/tips/disapproval');
+            },
         });
     }
 
@@ -259,6 +270,10 @@ class EditRealName extends Component {
         // If we made it this far, objects
         // are considered equivalent
         return true;
+    }
+
+    goBack(){
+        this.props.history.goBack();
     }
 
     render() {
@@ -348,7 +363,7 @@ class EditRealName extends Component {
                     <Row className="fn-mt-30">
                         <Col span="12" offset="6" className="text-align-center">
                             <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
-                            <Link to="/" className="fn-ml-20">暂不修改</Link>
+                            <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">暂不修改</Button>
                         </Col>
                     </Row>
 

@@ -31,7 +31,6 @@ class DocumentUpload extends Component {
             isChecking : globalStatus.bankCheckStatus == -1,
             isCommon : true,
             limit : 5,
-            entry : globalStatus.bankCheckStatus == -1 ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval',
             fileList : {
                 registration : [],
                 orgInsCode : [],
@@ -120,7 +119,7 @@ class DocumentUpload extends Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push(me.state.entry);
+                me.props.history.push(me.state.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
             },
         });
     }
@@ -223,6 +222,10 @@ class DocumentUpload extends Component {
         }
 
         return data;
+    }
+
+    goBack(){
+        this.props.history.goBack();
     }
 
     render() {
@@ -395,7 +398,7 @@ class DocumentUpload extends Component {
                     <Row style={{ marginTop: 30 }}>
                         <Col span="12" offset="8">
                             <Button type="primary" onClick={ this.submit.bind(this) }>提交</Button>
-                            <Link to={ this.state.entry } className="fn-ml-20">暂不修改</Link>
+                            <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">暂不修改</Button>
                         </Col>
                     </Row>
 
