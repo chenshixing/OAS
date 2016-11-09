@@ -47,7 +47,7 @@ export default class basicBodyEditor extends React.Component {
         let result = null;
         if (iSuccess) {
             result = (
-                <div className="fn-mt-50">
+                <div className="fn-mb-50">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             <span className="fn-mr-10"><Icon type="check"/></span>
@@ -62,7 +62,7 @@ export default class basicBodyEditor extends React.Component {
 
         } else {
             result = (
-                <div className="fn-mt-50">
+                <div className="fn-mb-50">
 
                     <Row type="flex" justify="start" align="middle">
                         <Col span={1}>
