@@ -13,6 +13,13 @@ const FormItem = Form.Item;
 //  引入fetch
 import { fetch } from 'UTILS';
 
+const globalStatus = {
+    userType : 2,
+    step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
+    bankCheckStatus : 0,       //  -1:审核中;0:审核不通过;1:审核通过
+    showName : "用户名称"
+}
+
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -21,6 +28,8 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isChecking : globalStatus.bankCheckStatus == -1,
+            isCommon : true,
             limit : 5,
             fileList : {
                 registration : [],
@@ -38,24 +47,34 @@ class DocumentUpload extends Component {
 
     loadData(){
         let me = this;
-        let fileList = me.state.fileList;
-        fetch('/paper/searchCompany.do').then(res => {
-            if(res.code == 200){
-                for( let prop in res.data){
-                    res.data[prop].map( (item,index) =>{
-                        let uid = prop + '_' + new Date()/1 + '_' + index;
-                        let file = {
-                            uid: uid,
-                            name: item.fileName,
-                            status: 'done',
-                            url: item.imgUrl,
-                            data: item
-                        }
-                        fileList[prop].push(file);
-                    })
-                }
-                me.setState({ fileList });
+        //  证件查询
+        let p1 = fetch('/paper/searchCompany.do');
+        //  获取企业信息
+        let p2 = fetch('/companyVerification/getCompanyInfo.do');
+
+        Promise.all([p1,p2]).then(res => {
+            let fileList = me.state.fileList;
+            let fileData = res[0].data;
+            for( let prop in fileData){
+                fileData[prop].map( (item,index) =>{
+                    let uid = prop + '_' + new Date()/1 + '_' + index;
+                    let file = {
+                        uid: uid,
+                        name: item.fileName,
+                        status: 'done',
+                        url: item.imgUrl,
+                        data: item
+                    }
+                    fileList[prop].push(file);
+                })
             }
+
+            me.setState({
+                isCommon : res[1].data.companyPaperType == 2,
+                fileList : fileList
+            });
+        }).catch(reason => {
+            console.log(reason)
         });
     }
 
@@ -91,6 +110,17 @@ class DocumentUpload extends Component {
         Modal.warning({
             title: '图片最多上传' + me.state.limit + '张',
             content: '请删除图片后再上传。',
+        });
+    }
+
+    tipsShow(){
+        let me = this;
+        Modal.success({
+            title: '提示',
+            content: '资料修改成功。',
+            onOk() {
+                me.props.history.push(me.state.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
+            },
         });
     }
 
@@ -165,17 +195,16 @@ class DocumentUpload extends Component {
     }
 
     submit(){
-        let data = this._getSubmitData();
+        let me = this;
+        let data = me._getSubmitData();
         console.log(data);
-        fetch('/paper/save.do',{
-            body : {
-                uid : 123,
-                data : data
-            }
+        fetch('/paper/saveCompany.do',{
+            body : data
         }).then(res => {
             if(res.code == 200){
                 console.log(res);
                 //  提交成功TODO
+                me.tipsShow();
             }
         });
     }
@@ -193,6 +222,10 @@ class DocumentUpload extends Component {
         }
 
         return data;
+    }
+
+    goBack(){
+        this.props.history.goBack();
     }
 
     render() {
@@ -234,12 +267,9 @@ class DocumentUpload extends Component {
 
         const upLoadProps = {
             name: 'file',
-            action: '/api/common/fileupload',
+            action: '/api/common/fileupload.do',
             headers: {
                 authorization: 'authorization-text',
-            },
-            data: {
-                "userId": "123"
             }
         };
 
@@ -265,29 +295,46 @@ class DocumentUpload extends Component {
             <Frame title="企业证件扫描件" small="(请提供原件照片或彩色扫描件。注：正副本均可。)">
             	<Form horizontal className="fn-mt-30">
 
-					<FormItem
-	                    {...formItemLayout}
-	                    label="营业执照"
-	                    required
-	                >
-	                    <Upload {...registrationUpLoadProps} fileList={this.state.fileList.registration}>
-	                        <Button type="ghost">
-	                            <Icon type="upload" /> 点击上传
-	                        </Button>
-	                    </Upload>
-	                </FormItem>
+                    <div style={ { display : this.state.isCommon ? "block" : "none" } }>
+    					<FormItem
+    	                    {...formItemLayout}
+    	                    label="营业执照"
+    	                    required
+    	                >
+    	                    <Upload {...registrationUpLoadProps} fileList={this.state.fileList.registration}>
+    	                        <Button type="ghost">
+    	                            <Icon type="upload" /> 点击上传
+    	                        </Button>
+    	                    </Upload>
+    	                </FormItem>
 
-	                <FormItem
-	                    {...formItemLayout}
-	                    label="组织机构代码证"
-	                    required
-	                >
-	                    <Upload {...orgInsCodeUpLoadProps} fileList={this.state.fileList.orgInsCode}>
-	                        <Button type="ghost">
-	                            <Icon type="upload" /> 点击上传
-	                        </Button>
-	                    </Upload>
-	                </FormItem>
+    	                <FormItem
+    	                    {...formItemLayout}
+    	                    label="组织机构代码证"
+    	                    required
+                            display={ this.state.isCommon ? "block" : "none" }
+    	                >
+    	                    <Upload {...orgInsCodeUpLoadProps} fileList={this.state.fileList.orgInsCode}>
+    	                        <Button type="ghost">
+    	                            <Icon type="upload" /> 点击上传
+    	                        </Button>
+    	                    </Upload>
+    	                </FormItem>
+                    </div>
+
+                    <div style={ { display : !this.state.isCommon ? "block" : "none" } }>
+                        <FormItem
+                            {...formItemLayout}
+                            label="统一社会信用代码证"
+                            required
+                        >
+                            <Upload {...socialCreditUpLoadProps} fileList={this.state.fileList.socialCredit}>
+                                <Button type="ghost">
+                                    <Icon type="upload" /> 点击上传
+                                </Button>
+                            </Upload>
+                        </FormItem>
+                    </div>
 
 	                <FormItem
                         {...formItemLayout}
@@ -351,7 +398,7 @@ class DocumentUpload extends Component {
                     <Row style={{ marginTop: 30 }}>
                         <Col span="12" offset="8">
                             <Button type="primary" onClick={ this.submit.bind(this) }>提交</Button>
-                            <Link to="/" className="fn-ml-20">暂不修改</Link>
+                            <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">暂不修改</Button>
                         </Col>
                     </Row>
 

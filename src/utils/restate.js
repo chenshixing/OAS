@@ -10,17 +10,19 @@ class Restate{
     createState(stateClass) {
         class base extends stateClass{
             getState() {
-                return this.updateState;
+                return this.getStateSession();
             }
             setState(state, isInit) {
+                const updateState = this.getState();
+
                 if(typeof state === 'function'){
-                    state(this.updateState);
+                    state(updateState);
                 }else{
                     // 遵循react的浅度assign覆盖赋值
-                    this.updateState = Object.assign(this.updateState, state);
+                    this.setStateSession(Object.assign(updateState, state));
                 }
                 if(!isInit){
-                    this.reactComponent.setState(typeof state === 'function' ? this.updateState : state);
+                    this.reactComponent.setState(typeof state === 'function' ? updateState : state);
                 }
             }
             initState(state) {
@@ -33,6 +35,9 @@ class Restate{
             }
             bind(reactComponent) {
                 this.reactComponent = reactComponent;
+                // sessionId
+                //this.sessionId = `React_${reactComponent.constructor.name}_${Date.now()}`;
+                //console.log(reactComponent)
                 
                 if(reactComponent.props && reactComponent.props.location){
                     // 尝试合并路由数据
@@ -67,19 +72,19 @@ class Restate{
                 //执行reset
                 //console.log(Restate.resetState)
                 if(Restate.resetState){
-                    this.reset(reactComponent);
+                    this.reset();
                 }
 
                 //init state
-                if(!this.updateState){
-                    // 复制一份state拷贝
-                    this.updateState = this.copy(this.state);
-                }
+                // if(!this.getStateSession()){
+                //     // 复制一份state拷贝
+                //     this.setStateSession(this.copy(this.state));
+                // }
 
                 return this;
             }
-            reset(reactComponent) {
-                this.updateState = this.copy(this.state);
+            reset() {
+                this.setStateSession(this.copy(this.state));
                 this.hasInit = false;
             }
             copy(object) {
@@ -88,8 +93,25 @@ class Restate{
                 // 且state数据一般表现为属性类型（不含有function），故用JSON方法进行深度复制
                 return JSON.parse(JSON.stringify(object));
             }
-            saveState() {
-                //TODO: 后期考虑用sessionStorage来储存state值
+            setStateSession(value) {
+                if(this.sessionId){
+                    value = JSON.stringify(value);// 转string
+                    sessionStorage.setItem(this.sessionId, value);
+                }else{
+                    this.updateState = value;
+                }
+            }
+            getStateSession() {
+                if(this.sessionId){
+                    const value = sessionStorage.getItem(this.sessionId);
+                    return JSON.parse(value);
+                }else{
+                    return this.updateState;
+                }
+            }
+            delStateSession() {
+                sessionStorage.removeItem(this.sessionId);
+                //sessionStorage.clear();
             }
         }
         return new base();

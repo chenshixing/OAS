@@ -253,11 +253,12 @@ class CompanyValidate extends React.Component {
     }
 
     tipsShow(){
+        let me = this;
         Modal.success({
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                this.props.history.push('/companyValidate/tips/disapproval');
+                me.props.history.push('/companyValidate/tips/disapproval');
             },
         });
     }
@@ -529,7 +530,7 @@ class CompanyValidate extends React.Component {
                     me.handleLoadingCancel();
                     me.tipsShow();
                 }else{
-                    this.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
+                    me.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
                 }
             }
         });
@@ -574,6 +575,10 @@ class CompanyValidate extends React.Component {
         }
 
         return submitData;
+    }
+
+    goBack(){
+        this.props.history.goBack();
     }
 
     render() {
@@ -788,7 +793,7 @@ class CompanyValidate extends React.Component {
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">
                                 <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
-                                <Link className="fn-ml-20" to="/">暂不修改</Link>
+                                <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">暂不修改</Button>
                             </Col>
                         </Row>
                     </Form>
