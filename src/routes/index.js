@@ -25,7 +25,7 @@ const routes = {
           // 首页跳转
           path: '/',
           indexRoute: {
-            onEnter: (nextState, replace) => replace('', 'userLogin')
+            onEnter: (nextState, replace) => replace('', 'redirect')
           },
         },
         // 登录跳转页
