@@ -94,6 +94,7 @@ class Home extends React.Component {
         this.setState({visible: true});
     }
     handleSubmit(e) {
+        //console.log(this.props.from.getFieldValue())
         //e.preventDefault();
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
@@ -115,6 +116,7 @@ class Home extends React.Component {
                 this.setState({
                     inviteCodeValue:""
                 })
+                this.props.form.setFieldsValue({name:""});
                 this.setState({visible: false});
             });
         });
@@ -178,7 +180,12 @@ class Home extends React.Component {
                     required: true,
                     message: '请输入邀请码'
                 }
-            ]
+            ],
+            onChange:(e)=>{
+                this.setState({
+                    inviteCodeValue:e.target.value
+                })
+            }
         });
 
         return (
@@ -213,32 +220,35 @@ class Home extends React.Component {
                         </Col>
                     </Row>
                     */}
-                    {this.state.isInviteCode
-                        ? <Form>
-                                <Row>
+                    {
+                        this.state.isInviteCode
+                        ?
+                        <Form>
+                            <Row>
+                                {/*
+                            <Col span={4} offset={6}>
+                                <label className="ant-form-item-label">邀请码:</label>
+                            </Col>
+                            */}
+                                <Col span={12} offset={6}>
                                     {/*
-                                <Col span={4} offset={6}>
-                                    <label className="ant-form-item-label">邀请码:</label>
-                                </Col>
+                                <Input
+                                    type="text"
+                                    placeholder="请输入邀请码"
+                                    value={this.state.inviteCodeValue}
+                                    onChange={this.handleInviteCodeValue.bind(this)}
+                                    />
                                 */}
-                                    <Col span={12} offset={6}>
-                                        {/*
-                                    <Input
-                                        type="text"
-                                        placeholder="请输入邀请码"
-                                        value={this.state.inviteCodeValue}
-                                        onChange={this.handleInviteCodeValue.bind(this)}
-                                        />
-                                    */}
-                                        <FormItem {...formItemLayout} label="邀请码" hasFeedback>
-                                            <Input {...nameProps} placeholder="请输入邀请码"/>
-                                        </FormItem>
+                                    <FormItem {...formItemLayout} label="邀请码" hasFeedback>
+                                        <Input  {...nameProps} placeholder="请输入邀请码"/>
+                                    </FormItem>
 
-                                    </Col>
-                                </Row>
-                            </Form>
-                        : null
-}
+                                </Col>
+                            </Row>
+                        </Form>
+                        :
+                        null
+                    }
 
                 </Modal>
                 {/*
@@ -267,16 +277,14 @@ class Home extends React.Component {
                         <h3 className="ant-card-head-title">
                             <span className="fn-mr-10">{this.state.data.name}</span>
                             {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
-                            {this.templateUserType(this.state.data.userType)
-}
+                            {this.templateUserType(this.state.data.userType)}
 
                         </h3>
                     </div>
 
                     <div className="alert alert-warning fn-mt-10">
                         {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
-                        {this.templateUserTypeManagement(this.state.data.userType)
-}
+                        {this.templateUserTypeManagement(this.state.data.userType)}
                         <span className="fn-plr-10">|</span>
                         上次登录时间：{this.state.data.lastLoginTime}
                     </div>
@@ -293,16 +301,17 @@ class Home extends React.Component {
 
                     <Row>
 
-                        {getUserServiceList.map((item, index) => {
-                            return (
-                                <a key={index} href={item.serviceURL}>
-                                    <Col span="6">
-                                        <Card>{item.serviceChannelName}</Card>
-                                    </Col>
-                                </a>
-                            )
-                        })
-}
+                        {
+                            getUserServiceList.map((item, index) => {
+                                return (
+                                    <a key={index} href={item.serviceURL}>
+                                        <Col span="6">
+                                            <Card>{item.serviceChannelName}</Card>
+                                        </Col>
+                                    </a>
+                                )
+                            })
+                        }
 
                         <a href="javascript:;" onClick={this.handleAddBusiness.bind(this)}>
                             <Col span="6">
