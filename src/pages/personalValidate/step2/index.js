@@ -100,6 +100,7 @@ export default class PersonalValidate extends React.Component {
         }).then((res)=>{
             if(res.code=='200'){
                 console.log('身份识别码发送成功..');
+                message.success('身份识别码发送成功');
                 countDown(countNum);
             }
         });

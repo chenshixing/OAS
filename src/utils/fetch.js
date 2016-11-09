@@ -73,7 +73,7 @@ export default (url, data, showLoading, pending) => {
                         reject(res);
 
                         if(res.message){
-                             message.error(`错误提示`+res.message);
+                             message.error(`错误提示：(${res.code})`+res.message,3);
                         }
 
                         // 代码提示错误
