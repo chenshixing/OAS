@@ -47,7 +47,7 @@ export default class basicBodyEditor extends React.Component {
         let result = null;
         if (iSuccess) {
             result = (
-                <div className="fn-mt-50">
+                <div className="fn-mb-50">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             <span className="fn-mr-10"><Icon type="check"/></span>
@@ -62,7 +62,7 @@ export default class basicBodyEditor extends React.Component {
 
         } else {
             result = (
-                <div className="fn-mt-50">
+                <div className="fn-mb-50">
 
                     <Row type="flex" justify="start" align="middle">
                         <Col span={1}>
@@ -132,9 +132,9 @@ export default class basicBodyEditor extends React.Component {
             p1 = items.map((item,index)=>{
                 if(item.connectorType==3){
                     smsData = {
-                        name: item.realName,
-                        identityCode: item.identityCode,
-                    }
+                        businesstype: 1,
+                        connectorType: item.connectorType
+                    };
                     return (
 
                         <div key={index} className="fn-mt-10" >
@@ -181,7 +181,7 @@ export default class basicBodyEditor extends React.Component {
                                                 未认证
                                             </span>
                                             <span colSpan={2}>
-                                                <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
+                                                <Sms data={ smsData } >重新发送验证短信</Sms>
                                                 {/*
                                                     <a href="javascript:;" className="link-standard">
                                                     重新发送验证短信</a>
@@ -202,10 +202,9 @@ export default class basicBodyEditor extends React.Component {
 
             p1 = items.map((item,index)=>{
                     smsData = {
-                        name: item.realName,
-                        identityCode: item.identityCode,
+                        businesstype: 1,
                         connectorType: item.connectorType
-                    }
+                    };
                     return (
                         <div key={index} className="fn-mt-10">
                             <Row type="flex" justify="start" align="middle">
@@ -266,7 +265,7 @@ export default class basicBodyEditor extends React.Component {
                                                 未认证
                                             </span>
                                             <span colSpan={2}>
-                                                <Sms data={ smsData } businesstype={1}>重新发送验证短信</Sms>
+                                                <Sms data={ smsData } >重新发送验证短信</Sms>
                                                 {/*
                                                     <a href="javascript:;" className="link-standard">
                                                     重新发送验证短信</a>
