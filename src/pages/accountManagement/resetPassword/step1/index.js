@@ -23,12 +23,12 @@ class ResetPassword extends React.Component {
     }
 
     componentDidMount() {
-        this.loadData()
+        //this.loadData()
     }
     loadData(){
-        fetch("/user/checkUserInfo.do").then(res=>{
-            console.log(res)
-        })
+        //fetch("/user/checkUserInfo.do").then(res=>{
+        //    console.log(res)
+        //})
     }
 
     handleSubmit(e) {
