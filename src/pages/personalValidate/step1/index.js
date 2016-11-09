@@ -84,7 +84,7 @@ class PersonalValidate extends React.Component {
     }
 
     initPage(){
-        fetch('/personVerification/getPersonInfo.do').then((res)=>{
+        fetch('/personVerification/getPersonInfo.do',{body:{"isMosaicMobile": "0"}}).then((res)=>{
             console.log(res);
             if(res.code=='200'){
                 this.setState({
