@@ -9,6 +9,8 @@ import {Link} from 'react-router';
 import { Row, Col, Icon, Button, Table} from 'antd';
 
 import {fetch} from 'UTILS';
+// 获取全局state
+import State from 'PAGES/redirect/state';
 
 //  样式
 import  '../style.less';
@@ -16,11 +18,12 @@ import  '../style.less';
 class Check extends Component {
     constructor(props) {
         super(props);
+        const state = State.getState();
         this.state={
-            userType:'1',//从全局state中获取,用户类型，1：个人；2：企业；
-            step:'2',//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
-            bankCheckStatus:'-1',//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
-            showName:'张三',//显示用户名称
+            userType:state.userType,//从全局state中获取,用户类型，1：个人；2：企业；
+            step:state.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+            bankCheckStatus:state.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+            showName:state.showName,//显示用户名称
         };
     }
 
