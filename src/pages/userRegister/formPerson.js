@@ -8,7 +8,7 @@
 import React from 'react';
 
 // antd 组件
-import { Button, Form, Input, Checkbox, Modal } from 'antd';
+import { Button, Form, Input, Checkbox, Modal,message } from 'antd';
 const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -22,6 +22,8 @@ class Reg extends React.Component {
     super(props);
     this.state = {
       submitDis: true,
+      isBtnSmsCodeDisabled:false,
+      btnSmsCodeText:`获取验证码`,
       protocolData:{}
     };
   }
@@ -58,6 +60,7 @@ class Reg extends React.Component {
       callback();
     }
   }
+
   getVerifyCode() {
     const num = this.props.form.getFieldValue('mobile');
     if(!num){
@@ -74,9 +77,35 @@ class Reg extends React.Component {
         "businessType": "register"
       }
     }).then(res => {
-      alert(res);
+      console.log('短信验证码获取成功：',res);
+      message.success('短信验证码获取成功');
+      countDown();
     });
+
+    function countDown(){
+        that.setState({
+            isBtnSmsCodeDisabled:true
+        });
+        
+        var count=60;
+        let timer = setInterval(()=>{
+            count--;
+            if(count>0){
+                that.setState({
+                    btnSmsCodeText:`${count}秒后重新获取`
+                });
+            }else{
+                clearInterval(timer);
+                that.setState({
+                    btnSmsCodeText:`获取验证码`,
+                    isBtnSmsCodeDisabled:false
+                });
+            }
+        },1000)
+    }
+
   }
+
   agreementCheck(e) {
     this.setState({
       submitDis: !e.target.checked
@@ -99,7 +128,7 @@ class Reg extends React.Component {
               protocolData:res.data,
           });
       },(res)=>{
-          alert('获取协议失败，请重新获取！');
+          message.error(`${res.code}获取协议失败，请重新获取！`,3);
       })
   }
 
@@ -122,8 +151,8 @@ class Reg extends React.Component {
       userNo: {
         rules: [
           {required: true, message: '登录名不能为空'},
-          {min: 4, max: 20, message: '请输入4-20位字符'},
-          ruleType('en-num')
+          ruleType('en+num'),
+          {min: 4, max: 32, message: '请输入4-32位字符'},
         ]
       },
       loginPwd: {
@@ -148,7 +177,8 @@ class Reg extends React.Component {
       },
       smsCode: {
         rules: [
-          {required: true, message: '短信验证码不能为空'}
+          {required: true, message: '短信验证码不能为空'},
+          {min: 6, max: 6, message: '请输入6位的短信验证码'}
         ]
       }
     };
@@ -176,7 +206,7 @@ class Reg extends React.Component {
           label="登录名"
           required
         >
-          <Input placeholder="4-20个英文字母、数字" {...getFieldProps('userNo', rules.userNo)} />
+          <Input placeholder="4-32个英文字母、数字" {...getFieldProps('userNo', rules.userNo)} />
         </FormItem>
 
         <FormItem
@@ -209,7 +239,7 @@ class Reg extends React.Component {
           required
         >
           <Input className="smsCodeInput" {...getFieldProps('smsCode', rules.smsCode)} />
-          <Button className="ant-search-btn" onClick={this.getVerifyCode.bind(this)}>获取验证码</Button>
+          <Button className="ant-search-btn" disabled={this.state.isBtnSmsCodeDisabled} onClick={this.getVerifyCode.bind(this)}>{this.state.btnSmsCodeText}</Button>
         </FormItem>
 
         <FormItem
@@ -227,7 +257,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
+          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《{this.state.protocolData.protocolName}》</a></Checkbox>
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
