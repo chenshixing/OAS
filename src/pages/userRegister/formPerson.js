@@ -22,8 +22,8 @@ class Reg extends React.Component {
     super(props);
     this.state = {
       submitDis: true,
+      btnSmsCodeText:'获取验证码',
       isBtnSmsCodeDisabled:false,
-      btnSmsCodeText:`获取验证码`,
       protocolData:{}
     };
   }
@@ -62,6 +62,7 @@ class Reg extends React.Component {
   }
 
   getVerifyCode() {
+    var that =this;
     const num = this.props.form.getFieldValue('mobile');
     if(!num){
       Modal.warning({
