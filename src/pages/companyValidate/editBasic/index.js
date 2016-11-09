@@ -69,12 +69,6 @@ const globalStatus = {
     showName : "用户名称"
 }
 
-const compareListMap = {
-    basic : ["companyName","companyPaperType"],
-    common : ["registrationPaperNo","orgInsCodePaperNo"],
-    multiple : ["socialCreditPaperNo"]
-}
-
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
@@ -84,6 +78,7 @@ class CompanyValidate extends React.Component {
             visible : false,
             loadingVisible : false,
             data:{
+                isHasPassword : false,
                 isChecking : globalStatus.bankCheckStatus == -1,
                 accountPassed : false,
                 companyName: "",
@@ -235,7 +230,7 @@ class CompanyValidate extends React.Component {
           // 验证通过TODO
           me.setState({ visible: false });
           let submitData = me._getSubmitData(data);
-          me.submit(submitData,true);
+          me.submit(submitData);
         });
     }
 
@@ -262,7 +257,7 @@ class CompanyValidate extends React.Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                // this.props.history.push('/companyValidate/step2');
+                this.props.history.push('/companyValidate/tips/disapproval');
             },
         });
     }
@@ -427,26 +422,65 @@ class CompanyValidate extends React.Component {
         });
     }
 
-    //  对比是否需要交易密码弹窗
+    //  对比校验
     compare(submitData){
         let me = this;
-        let originalData = this.state.data.originalData;
-        let compareList = compareListMap.basic.concat(submitData.companyPaperType == 2 ? compareListMap.common : compareListMap.multiple);
-        let isNeedPfxPassword = false;
-        compareList.map( (prop,index) => {
-            if(submitData[prop] != originalData[prop]){
-                isNeedPfxPassword = true;
-                return false;
-            }
-        });
-        if(isNeedPfxPassword){
-            //  弹窗输入交易密码
-            me.setState({
-                visible : true
+        let data = me.state.data;
+        let originalData = me.state.data.originalData;
+
+        const getIsChange = (compareList,submitData,originalData) =>{
+            let isChange = false;
+            compareList.map( (prop,index) => {
+                if(submitData[prop] != originalData[prop]){
+                    isChange = true;
+                    return false;
+                }
             });
-        }else{
-            me.submit(submitData);
+            return isChange;
         }
+        if(!data.isChecking){
+            //  审核不通过TODO
+            const compareListMap = {
+                basic : ["companyName","companyPaperType"],
+                common : ["registrationPaperNo","orgInsCodePaperNo"],
+                multiple : ["socialCreditPaperNo"]
+            }
+            let compareList = compareListMap.basic.concat(submitData.companyPaperType == 2 ? compareListMap.common : compareListMap.multiple);
+            let isNeedPfxPassword = getIsChange(compareList,submitData,originalData);
+            if(isNeedPfxPassword){
+                //  弹窗输入交易密码
+                me.setState({
+                    isHasPassword : true,
+                    visible : true
+                });
+            }else{
+                me.setState({
+                    isHasPassword : false
+                });
+                let leftCompareList = ["registrationExtendField2","accountName","cardNo","bankId","provinceId","cityId","branchBankId","validateType"];
+                let isChange = getIsChange(leftCompareList,submitData,originalData);
+                if(isChange){
+                    //  有更改
+                    me.submit(submitData);
+                }else{
+                    //  所有资料都没有改变
+                    me.props.history.push('/companyValidate/tips/disapproval');
+                }
+            }
+        }else{
+            //  审核中
+            let compareList = ["accountName","cardNo","bankId","provinceId","cityId","branchBankId","validateType"];
+            let isNeedPost = getIsChange(compareList,submitData,originalData);
+            if(isNeedPost){
+                //  对公账户信息及验证方式有变更TODO
+                me.submit(submitData);
+            }else{
+                //  对公账户信息及验证方式无变更TODO
+                // console.log("noChange")
+                me.props.history.push('/companyValidate/tips/check');
+            }
+        }
+
     }
 
     //  确定窗口数据渲染
@@ -474,10 +508,12 @@ class CompanyValidate extends React.Component {
         );
     }
 
-    submit(submitData,isHasPassword){
+    submit(submitData){
         console.log(submitData);
-        if(isHasPassword){
-            this.setState({
+        let me = this;
+        let data = me.state.data;
+        if(data.isHasPassword){
+            me.setState({
                 loadingVisible : true
             })
         }
@@ -487,13 +523,13 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 //  提交成功TODO
                 console.log('next finish');
-                if(isHasPassword){
+                if(data.isHasPassword){
                     //  交易密码提交TODO
                     // console.log("isHasPassword");
-                    this.handleLoadingCancel();
-                    this.tipsShow();
+                    me.handleLoadingCancel();
+                    me.tipsShow();
                 }else{
-                    // this.props.history.push('/companyValidate/step2');
+                    this.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
                 }
             }
         });

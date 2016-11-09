@@ -40,7 +40,7 @@ class Steps2 extends React.Component {
             passStrength: 'L', // 密码强度
             rePassStrength: 'L',
             pwd:"",
-            conpwd:"",
+            conPwd:"",
         }
     }
     handleSubmit() {
@@ -52,9 +52,9 @@ class Steps2 extends React.Component {
             }
             fetch('/user/resetPwd.do',{
                 body:{
-                  "businesstype": 3,
+                  "businessType": 3,
                   "pwd": this.state.pwd,
-                  "conpwd": this.state.conpwd
+                  "conPwd": this.state.conPwd
                 }
             }).then(res => {
 
@@ -184,7 +184,7 @@ class Steps2 extends React.Component {
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
                 this.setState({
-                    conpwd:e.target.value
+                    conPwd:e.target.value
                 })
             }
         });
