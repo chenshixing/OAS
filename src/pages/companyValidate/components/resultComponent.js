@@ -5,10 +5,10 @@
 // react 相关库
 import React, { Component, PropTypes } from 'react';
 
-import { Link } from 'react-router';
+import { Link,History } from 'react-router';
 
 // antd 组件
-import { Table, Alert, Button, Row, Col } from 'antd';
+import { Table, Alert, Button, Row, Col, Modal } from 'antd';
 
 //  业务组件
 import Content from './content';  //  认证内容组件
@@ -27,6 +27,7 @@ export default class ResultComponent extends React.Component {
 
     constructor(props) {
         super(props);
+        this.mixins = [ History ];
         this.state = {
             data : {
                 tableColumns : [{
@@ -140,8 +141,46 @@ export default class ResultComponent extends React.Component {
         });
     }
 
+    goBack(){
+        this.props.history.goBack();
+    }
+
+    finish(){
+        let me = this;
+        fetch('/common/getLoginCheckStatus.do').then(res => {
+            if(res.code == 200){
+              let data = res.data;
+              if(data.bankCheckStatus == -1){
+                //  审核中
+                me.goToTips()
+              }else if(data.bankCheckStatus == 0){
+                //  审核未通过 资料未提供完全
+                me.tipsShow();
+              }else if(data.bankCheckStatus == 1){
+                //  审核通过
+                this.props.history.push(`accountManagement`);
+              }
+            }
+        });
+    }
+
+    goToTips(){
+      this.props.history.push('/companyValidate/tips/check');
+    }
+
+    tipsShow(){
+       let me = this;
+       Modal.warning({
+        title: '提示',
+        content: '您还有实名资料未完成认证，将影响您的审核进度，请尽快完成。',
+        onOk() {
+          me.goToTips();
+        },
+      });
+    }
+
     render() {
-        let linkBtn = this.props.pageType == "result" ? <Link to='/' className="fn-ml-20">稍后认证，返回</Link> : "";
+        let linkBtn = this.props.pageType == "result" ? <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">稍后认证，返回</Button> : "";
         return (
             <div className="form-frame">
                 <Row className="fn-mt-30">
@@ -157,7 +196,7 @@ export default class ResultComponent extends React.Component {
                 </Row>
                 <Row className="fn-mt-30">
                     <Col offset="8" span="8" className="text-align-center">
-                        <Button type="primary">已完成认证</Button>
+                        <Button type="primary" onClick={ this.finish.bind(this) } >已完成认证</Button>
                         { linkBtn }
                     </Col>
                 </Row>

@@ -169,7 +169,7 @@ class EditRealName extends Component {
         console.log(submitData);
         if(this._isObjectValueEqual(submitData.companyConnectorInfoDto, this.state.data.original)){
             //  没有修改任何信息
-            this.props.history.push('/companyValidate/tips/disapproval');
+            this.props.history.push('/companyValidate/tips/check');
             return false;
         }
         fetch('/companyVerification/modifyConnectorInfo.do',{
@@ -192,7 +192,7 @@ class EditRealName extends Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/disapproval');
+                me.props.history.push('/companyValidate/tips/check');
             },
         });
     }

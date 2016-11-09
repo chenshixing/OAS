@@ -163,6 +163,10 @@ class CompanyValidate extends React.Component {
         });
     }
 
+    goBack(){
+        this.props.history.goBack();
+    }
+
     render() {
         let data = this.state.data;
 
@@ -247,7 +251,7 @@ class CompanyValidate extends React.Component {
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">
                                 <Button type="primary" onClick={ this.next.bind(this) }>下一步</Button>
-                                <Link to="/companyValidate/step1" className="fn-ml-20">信息有误，返回修改</Link>
+                                <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">信息有误，返回修改</Button>
                             </Col>
                         </Row>
 

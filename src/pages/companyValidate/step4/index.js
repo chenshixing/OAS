@@ -31,7 +31,7 @@ export default class PersonalValidate extends React.Component {
                     <Step title="企业安全认证" />
                     <Step title="提交结果" />
                 </Steps>
-                <ResultComponent />
+                <ResultComponent history={ this.props.history }/>
             </div>
 
         );

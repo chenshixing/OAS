@@ -13,13 +13,6 @@ const FormItem = Form.Item;
 //  引入fetch
 import { fetch } from 'UTILS';
 
-const globalStatus = {
-    userType : 2,
-    step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
-    bankCheckStatus : 0,       //  -1:审核中;0:审核不通过;1:审核通过
-    showName : "用户名称"
-}
-
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -28,7 +21,6 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isChecking : globalStatus.bankCheckStatus == -1,
             isCommon : true,
             limit : 5,
             fileList : {
@@ -119,7 +111,7 @@ class DocumentUpload extends Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push(me.state.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
+                me.props.history.push('/companyValidate/tips/check');
             },
         });
     }

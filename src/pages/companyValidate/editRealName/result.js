@@ -21,7 +21,7 @@ class Result extends Component {
 
     render() {
         return (
-            <ResultComponent pageType={ this.state.pageType } />
+            <ResultComponent pageType={ this.state.pageType } history={ this.props.history }/>
         );
     }
 }

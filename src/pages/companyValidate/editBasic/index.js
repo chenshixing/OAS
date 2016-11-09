@@ -1,5 +1,5 @@
 /**
- * 企业核身step1
+ * 修改企业基本信息
  * limit
  */
 // react 相关库
@@ -62,7 +62,12 @@ const validateTypeMap = {
     OffLineSubmitInfo : "线下提交账户资料核验"
 }
 
-const globalStatus = {
+//  全局状态
+import State from 'PAGES/redirect/state';
+// const globalState = State.getState();
+
+//  登录对接完成后去掉
+const globalState = {
     userType : 2,
     step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
     bankCheckStatus : 0,       //  -1:审核中;0:审核不通过;1:审核通过
@@ -79,7 +84,7 @@ class CompanyValidate extends React.Component {
             loadingVisible : false,
             data:{
                 isHasPassword : false,
-                isChecking : globalStatus.bankCheckStatus == -1,
+                isChecking : globalState.bankCheckStatus == -1,
                 accountPassed : false,
                 companyName: "",
                 companyPaperType:"2",
@@ -258,7 +263,7 @@ class CompanyValidate extends React.Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/disapproval');
+                me.props.history.push('/companyValidate/tips/check');
             },
         });
     }
@@ -465,7 +470,7 @@ class CompanyValidate extends React.Component {
                     me.submit(submitData);
                 }else{
                     //  所有资料都没有改变
-                    me.props.history.push('/companyValidate/tips/disapproval');
+                    me.props.history.push('/companyValidate/tips/check');
                 }
             }
         }else{
@@ -530,7 +535,7 @@ class CompanyValidate extends React.Component {
                     me.handleLoadingCancel();
                     me.tipsShow();
                 }else{
-                    me.props.history.push(data.isChecking ? '/companyValidate/tips/check' : '/companyValidate/tips/disapproval');
+                    me.props.history.push('/companyValidate/tips/check');
                 }
             }
         });
