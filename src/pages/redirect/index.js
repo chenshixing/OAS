@@ -26,11 +26,11 @@ export default class Redirect extends React.Component {
             }[userType];
 
             // 业务判断
-            // if(step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
-            //     return this.props.history.push(`accountManagement`);
-            // } else {
-            //     return this.props.history.push(`${type}/tips/check`);
-            // }
+            if(step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
+                return this.props.history.push(`accountManagement`);
+            } else {
+                return this.props.history.push(`${type}/tips/check`);
+            }
 
             // 业务判断
             // if(step == 999){ //已完成核身流程
