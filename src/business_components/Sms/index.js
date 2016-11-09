@@ -32,7 +32,7 @@ class Sms extends Component {
         super(props);
         this.state = Object.assign({},this.props,{
             timeGo : 0,
-            data : {}
+            showData : {}
         });
     }
     componentWillReceiveProps(nextProps){
@@ -54,7 +54,7 @@ class Sms extends Component {
             	// console.log(res);
                 //	重新发送验证码TODO
                 me.setState({
-                    data : res.data
+                    showData : res.data
                 })
 				me.success(60);
             }
@@ -85,7 +85,7 @@ class Sms extends Component {
     }
 
     _getSuccessContent(){
-        let data = this.state.data;
+        let data = this.state.showData;
     	return (
     		<div>
 	    		<Row>
@@ -102,7 +102,7 @@ class Sms extends Component {
     }
 
     render() {
-        // console.log(this)
+         console.log(this)
         return (
             <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) } size="small">
                 { this.props.children }
