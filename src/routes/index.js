@@ -28,6 +28,15 @@ const routes = {
             onEnter: (nextState, replace) => replace('', 'userLogin')
           },
         },
+        // 登录跳转页
+        {
+          path: 'redirect',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/redirect').default)
+            })
+          }
+        },
         // 用户注册页
         {
           path: 'userRegister',
