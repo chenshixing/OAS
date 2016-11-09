@@ -26,7 +26,9 @@ export default class Redirect extends React.Component {
             }[userType];
 
             setTimeout(() => {
-                if(step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
+                if(step == 0){ //未开始
+                    return this.props.history.push(`${type}/step1`);
+                } else if (step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
                     return this.props.history.push(`accountManagement`);
                 } else {
                     return this.props.history.push(`${type}/tips/check`);
