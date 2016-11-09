@@ -54,7 +54,7 @@ class PersonalValidate extends React.Component {
         e.preventDefault();
         this.setState({ loading: true });
         console.log('Submit!!!');
-        fetch('/personVerification/savePersonInfo',{body:{
+        fetch('/personVerification/savePersonInfo.do',{body:{
             "cardNumber":this.state.data.IdCard
         }}).then((res)=>{
             console.log(res);
@@ -84,7 +84,7 @@ class PersonalValidate extends React.Component {
     }
 
     initPage(){
-        fetch('/personVerification/getPersonInfo').then((res)=>{
+        fetch('/personVerification/getPersonInfo.do').then((res)=>{
             console.log(res);
             if(res.code=='200'){
                 this.setState({

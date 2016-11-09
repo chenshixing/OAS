@@ -36,7 +36,7 @@ class Reg extends React.Component {
         data.userType=2;
         data.protocolId=this.state.protocolData.id;
         console.log('Submit!!!',data);
-        fetch('/register/post',{
+        fetch('/register/post.do',{
             body:data
           }).then((res)=>{
             console.log('res:',res);
@@ -77,10 +77,10 @@ class Reg extends React.Component {
       return;
     }
     // 获取验证码
-    fetch('/common/smsAutoCode', {
+    fetch('/common/smsAutoCode.do', {
       body: {
         "mobile": num,
-        "businesstype": "register"
+        "businessType": "register"
       }
     }).then(res => {
       alert(res);
@@ -98,7 +98,7 @@ class Reg extends React.Component {
 
   initPage(){
       //获取此页面需要签署的协议
-      fetch('/common/getCurrentProtocol',{
+      fetch('/common/getCurrentProtocol.do',{
           body:{
               "protocolType": 1
           }

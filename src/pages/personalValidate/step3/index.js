@@ -48,7 +48,7 @@ class PersonalValidate extends React.Component {
                 data.protocolName=this.state.protocolData.protocolName;
                 console.log('Submit!!!',data);
 
-                fetch('/personVerification/saveTransactionPassword',{
+                fetch('/personVerification/saveTransactionPassword.do',{
                     body:data
                 }).then((res)=>{
                     this.props.history.push({
@@ -122,7 +122,7 @@ class PersonalValidate extends React.Component {
 
     initPage(){
         //获取此页面需要签署的协议
-        fetch('/common/getCurrentProtocol',{
+        fetch('/common/getCurrentProtocol.do',{
             body:{
                 "protocolType": 1
             }

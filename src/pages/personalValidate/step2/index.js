@@ -62,7 +62,7 @@ export default class PersonalValidate extends React.Component {
     handleNextClick(){
         console.log('handleNextClick');
         //查询是否已经实名验证
-        fetch('/personVerification/getRealVerifiedStatus').then((res)=>{
+        fetch('/personVerification/getRealVerifiedStatus.do').then((res)=>{
             if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
                 clearInterval(this.timer);
                 this.props.history.push({
@@ -92,7 +92,7 @@ export default class PersonalValidate extends React.Component {
         if(this.state.isSendMsgDisabled) return;
         var that=this;
 
-        fetch('/common/pinCode',{
+        fetch('/common/pinCode.do',{
             body:{
                 "businesstype": 1,
                 "connectortype": 1
@@ -133,7 +133,7 @@ export default class PersonalValidate extends React.Component {
         this.initPage();
         this.timer = setInterval(()=>{
             //查询是否已经实名验证
-            fetch('/personVerification/getRealVerifiedStatus',false).then((res)=>{
+            fetch('/personVerification/getRealVerifiedStatus.do',false).then((res)=>{
                 if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
                     clearInterval(this.timer);
                     this.props.history.push({
@@ -155,7 +155,7 @@ export default class PersonalValidate extends React.Component {
     }
     //页面信息初始化请求
     initPage(){
-        fetch('/user/getdesensitizemobile',{body:{"businesstype": 1}}).then((res)=>{
+        fetch('/user/getdesensitizemobile.do',{body:{"businesstype": 1}}).then((res)=>{
             console.log(res);
             if(res.code=='200'){
                 this.setState({
