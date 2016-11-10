@@ -19,7 +19,7 @@ export default (url, data, showLoading, pending) => {
 
     // 请求统一自动加上 /api，以便使用 webpack-dev-server 代理
     // 代理会去掉 /api 获取数据
-    url = __DEV__ ? `/api${url}` : url.replace(/^\//, ''); // 测试环境url去掉第一个“/”
+    url = __DEV__ ? `/api${url}` : url;
 
     // 兼容 showLoading 在第二个参数位置设置
     if(showLoading === undefined && typeof data === 'boolean') {
@@ -83,7 +83,7 @@ export default (url, data, showLoading, pending) => {
 
                         // 未登录，页面跳转到指定url登录
                         if(res.code == 401){
-                            const url = `${res.data}?callback=${location.origin}${location.pathname}#/redirect`;
+                            const url = `${res.data}&callback=${location.origin}${location.pathname}#/redirect`;
                             location.href = url;
                         }
                     }
