@@ -155,8 +155,22 @@ export default class PersonalValidate extends React.Component {
         // }
     }
     //页面信息初始化请求
+    // initPage(){
+    //     fetch('/user/getDesensitizeMobile.do',{body:{"businesstype": 1}}).then((res)=>{
+    //         console.log(res);
+    //         if(res.code=='200'){
+    //             this.setState({
+    //                 data:{
+    //                     realName:res.data.name,
+    //                     phoneNumber:res.data.mobile
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
+
     initPage(){
-        fetch('/user/getDesensitizeMobile.do',{body:{"businesstype": 1}}).then((res)=>{
+        fetch('/personVerification/getPersonInfo.do',{body:{"isMosaicMobile": "0"}}).then((res)=>{
             console.log(res);
             if(res.code=='200'){
                 this.setState({

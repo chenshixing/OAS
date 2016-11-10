@@ -18,7 +18,7 @@ import  '../style.less';
 class Check extends Component {
     constructor(props) {
         super(props);
-        const state = State.getState();
+        const state = State.getState().data;
         console.log('state:',state);
         this.state={
             userType:state && state.userType,//从全局state中获取,用户类型，1：个人；2：企业；

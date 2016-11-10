@@ -88,15 +88,7 @@ export default (url, data, showLoading, pending) => {
                             throw new Error(`错误代码：${res.code}, 原因：${res.message}`);
                         }
 
-<<<<<<< HEAD
-                        
-=======
-                        // 未登录，页面跳转到指定url登录
-                        if(res.code == 401){
-                            const url = `${res.data}&callback=${location.origin}${location.pathname}#/redirect`;
-                            location.href = url;
-                        }
->>>>>>> 0f1ded6cedc3dd03996cfff0cd856e9b6a7a9d18
+
                     }
                 })
                 .catch(err=> {
