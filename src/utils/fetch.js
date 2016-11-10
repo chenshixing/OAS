@@ -70,10 +70,10 @@ export default (url, data, showLoading, pending) => {
                     } else {
 
                         // 未登录，页面跳转到指定url登录
+                        // "cas=1"是为了中转页面判断第一次登录，记录日志
                         if(res.code == 401){
-                            const url = `${res.data}?callback=${location.origin}${location.pathname}#/redirect`;
+                            const url = `${res.data}${encodeURIComponent('?cas=1')}`;
                             location.href = url;
-                            return;
                         }
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                         // 处理错误
