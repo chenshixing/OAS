@@ -21,6 +21,10 @@ import {
     Col
 } from 'antd';
 
+import { helper } from 'UTILS'
+
+
+
 // 页面
 export default class basicBodyEditor extends React.Component {
     constructor(props) {
@@ -28,7 +32,6 @@ export default class basicBodyEditor extends React.Component {
         this.state = {
             data: this.props.data,
         }
-
     }
     //个人用户 或者 企业用户
     UserTypeTemplate(item) {
@@ -79,22 +82,27 @@ export default class basicBodyEditor extends React.Component {
     }
     //获取用户审核状态组合后的数据
     getUserCheckStatusCheckItems() {
-
-        let checkItems = this.props.data.getUserCheckStatus.checkItems || [];
-        let checkItemsJson = {}
-        checkItems.map( (item,index) => {
-            checkItemsJson[item.checkKey] = item;
-        })
-        return checkItemsJson;
+        //console.log( "helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems)=>" )
+        //console.log( helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems) )
+        return helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems);
     }
     //基本信息
-    basicInformationTemplate(userType){
+    basicInformationTemplate(userType,checkItems){
+        console.log("checkItems=>")
+        console.log(checkItems)
         let items = {
             1:(
                 <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
-                            <Icon type="check"/>
+                            {
+                                ( (checkItems.PerBasicInfo) && (checkItems.PerBasicInfo.bankStatus == 1) && (checkItems.PerBasicInfo.systemStatus==1)  )
+                                ?
+                                <Icon type="check"/>
+                                :
+                                <Icon type="cross" className="error-FontColor1" />
+                            }
+
                         </Col>
                         <Col span={6}>
                             <h3>
@@ -109,7 +117,13 @@ export default class basicBodyEditor extends React.Component {
                 <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
-                            <Icon type="check"/>
+                            {
+                                ( (checkItems.EnBasicInfo) && (checkItems.EnBasicInfo.bankStatus == 1) && (checkItems.EnBasicInfo.systemStatus==1)  )
+                                ?
+                                <Icon type="check"/>
+                                :
+                                <Icon type="cross" className="error-FontColor1" />
+                            }
                         </Col>
                         <Col span={6}>
                             <h3>
@@ -285,7 +299,7 @@ export default class basicBodyEditor extends React.Component {
         return p1;
     }
     //证件资料，只有企业才有证件资料。
-    getCompanyPaperInfoStatusTemplate(type,userType){
+    getCompanyPaperInfoStatusTemplate(checkItems,userType){
         let template = ""
         if(userType==2){
                 template = (
@@ -293,7 +307,7 @@ export default class basicBodyEditor extends React.Component {
                         <Row type="flex" justify="start" align="middle">
                             <Col span={2}>
                                 {
-                                    type.EnPaper && (type.EnPaper.checkStatus==1)
+                                    ( (checkItems.EnPaper) && (checkItems.EnPaper.bankStatus == 1) && (checkItems.EnPaper.systemStatus==1)  )
                                     ?
                                     <span className="fn-mr-10"><Icon type="check" /></span>
                                     :
@@ -440,8 +454,8 @@ export default class basicBodyEditor extends React.Component {
      * getCompanyAccountCheckStatus 获取对公账号的银行账号
      */
     getCompanyAccountCheckStatusTemplate(userType,checkItems,getCompanyAccountCheckStatus,getCheckedBank){
-        console.log("getCheckedBank=》")
-        console.log(getCheckedBank)
+        //console.log("checkItems=》")
+        //console.log(checkItems)
         let template = "";
 
         if(userType==1){
@@ -475,7 +489,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                checkItems.EnAccount && (checkItems.EnAccount.checkStatus == 1 )
+                                ( (checkItems.EnAccount) && (checkItems.EnAccount.bankStatus == 1) && (checkItems.EnAccount.systemStatus==1)  )
                                 ?
                                 <Icon type="check"/>
                                 :
@@ -533,6 +547,18 @@ export default class basicBodyEditor extends React.Component {
             getCompanyAccountCheckStatus,
             getCheckedBank
         } = this.props.data;
+        //获取用户审核状态组合后的数据
+        /**
+        * 审核项Key，
+        * EnBasicInfo ：企业_基本信息，
+        * EnOperator ：企业_经办人，
+        * EnLegalPerson ：企业_法人，
+        * EnPaper ：企业_证件，
+        * EnAccount ：企业_对公账号，
+        * PerBasicInfo ：个人_基本信息，
+        * PerReal ：个人_实名
+        */
+        let getUserCheckStatusCheckItems  = this.getUserCheckStatusCheckItems();
         /**
         * userType 判断个人或者企业
         * 个人=>1
@@ -543,21 +569,9 @@ export default class basicBodyEditor extends React.Component {
         const UserTypeTemplate = this.UserTypeTemplate(userType);
         //建议完成基本资料
         const GetLoginCheckStatusTemplate = this.GetLoginCheckStatusTemplate(getLoginCheckStatus);
-        //获取用户审核状态组合后的数据
-        /**
-         * 审核项Key，
-         * EnBasicInfo ：企业_基本信息，
-         * EnOperator ：企业_经办人，
-         * EnLegalPerson ：企业_法人，
-         * EnPaper ：企业_证件，
-         * EnAccount ：企业_对公账号，
-         * PerBasicInfo ：个人_基本信息，
-         * PerReal ：个人_实名
-         */
-        let getUserCheckStatusCheckItems  = this.getUserCheckStatusCheckItems();
 
         //基本信息
-        const basicInformationTemplate = this.basicInformationTemplate(userType);
+        const basicInformationTemplate = this.basicInformationTemplate(userType,getUserCheckStatusCheckItems);
 
         //实名验证内容
         const getRelatedPersonInfoTemplate = this.getRelatedPersonInfoTemplate(getRelatedPersonInfo,userType);

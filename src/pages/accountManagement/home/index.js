@@ -82,7 +82,7 @@ class Home extends React.Component {
             if (values[2].data.bankCheckStatus == 1 && values[2].data.step == 999) {
                 return true
             } else {
-                //this.props.history.push("/accountManagement/basicInformation")
+                this.props.history.push("/accountManagement/basicInformation")
             }
 
             this.forceUpdate();
