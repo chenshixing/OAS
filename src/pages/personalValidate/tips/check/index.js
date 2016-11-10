@@ -19,6 +19,7 @@ class Check extends Component {
     constructor(props) {
         super(props);
         const state = State.getState();
+        console.log('state:',state);
         this.state={
             userType:state && state.userType,//从全局state中获取,用户类型，1：个人；2：企业；
             step:state && state.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
@@ -28,7 +29,7 @@ class Check extends Component {
     }
 
     componentDidMount(){
-        // this.initPage();
+        this.initPage();
     }
 
     initPage(){
@@ -44,6 +45,7 @@ class Check extends Component {
         var reVerify=null;
         if(this.state.step!='999'){//资料未提交完成
             var nextStep=`/personalValidate/step${this.state.step}`;
+            console.log('nextStep:',nextStep);
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
                         <p>您的认证资料未填写完，请尽快完成。<Button type='primary' size='small'><Link to={nextStep}>继续填写</Link></Button></p>
