@@ -162,7 +162,7 @@ class Home extends React.Component {
         console.log(this)
 
         let {
-            getUserServiceList = []
+            getUserServiceList
         } = this.state.data;
 
         const {getFieldProps} = this.props.form;
@@ -302,7 +302,7 @@ class Home extends React.Component {
                     <Row>
 
                         {
-                            getUserServiceList.map((item, index) => {
+                            getUserServiceList && getUserServiceList.map((item, index) => {
                                 return (
                                     <a key={index} href={item.serviceURL}>
                                         <Col span="6">
