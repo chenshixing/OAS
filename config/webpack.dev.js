@@ -11,7 +11,7 @@ const HOST = utils.getIP();
 const PORT = 8090;
 
 module.exports = Object.assign(commonConfig, {
-    devtool: 'cheap-source-map', // 'eval'
+    devtool: 'source-map', // 'eval'  生产配置这个： cheap-source-map  测试配置这个：source-map
     cache: true,
     plugins: commonConfig.plugins.concat([
         // 配置全局常量

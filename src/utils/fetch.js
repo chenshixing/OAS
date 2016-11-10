@@ -68,6 +68,13 @@ export default (url, data, showLoading, pending) => {
                     if( res.code == 200 ) {
                         resolve(res);
                     } else {
+
+                        // 未登录，页面跳转到指定url登录
+                        if(res.code == 401){
+                            const url = `${res.data}?callback=${location.origin}${location.pathname}#/redirect`;
+                            location.href = url;
+                            return;
+                        }
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                         // 处理错误
                         reject(res);
@@ -81,11 +88,7 @@ export default (url, data, showLoading, pending) => {
                             throw new Error(`错误代码：${res.code}, 原因：${res.message}`);
                         }
 
-                        // 未登录，页面跳转到指定url登录
-                        if(res.code == 401){
-                            const url = `${res.data}?callback=${location.origin}${location.pathname}#/redirect`;
-                            location.href = url;
-                        }
+                        
                     }
                 })
                 .catch(err=> {

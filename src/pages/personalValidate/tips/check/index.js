@@ -20,15 +20,15 @@ class Check extends Component {
         super(props);
         const state = State.getState();
         this.state={
-            userType:state.userType,//从全局state中获取,用户类型，1：个人；2：企业；
-            step:state.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
-            bankCheckStatus:state.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
-            showName:state.showName,//显示用户名称
+            userType:state && state.userType,//从全局state中获取,用户类型，1：个人；2：企业；
+            step:state && state.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+            bankCheckStatus:state && state.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+            showName:state && state.showName,//显示用户名称
         };
     }
 
     componentDidMount(){
-        this.initPage();
+        // this.initPage();
     }
 
     initPage(){
@@ -41,6 +41,7 @@ class Check extends Component {
 
     render() {
         var text='';
+        var reVerify=null;
         if(this.state.step!='999'){//资料未提交完成
             var nextStep=`/personalValidate/step${this.state.step}`;
             text=(<div className="ant-col-18">
@@ -54,6 +55,7 @@ class Check extends Component {
                         <p>账号正在审核中，我们将尽快完成审核，结果将以短信通知您。</p>
                         <p>请尽快完成以下认证条件，如需修改信息请联系客服电话：400-106-6698。</p>
                   </div>);
+            reVerify=(<Row>如确认申请资料无误，请重新申请认证，点击 <Button type="primary">提交认证申请</Button></Row>);
         }else if(this.state.step=='999' && this.state.bankCheckStatus =='-1'){//资料已提交完成，但审核不通过
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
@@ -80,6 +82,7 @@ class Check extends Component {
                         <Col span={6}><span className="error-FontColor1">待认证</span></Col>
                         <Col span={6}><Link to='/'>重新发送验证短信</Link></Col>
                     </Row>
+                    {reVerify}
                 </Row>
                 <Row className="tipsRow pl-50">
                     <p>如您想更换账号，请点击 <Link to='/'>重新登录</Link>。</p>
