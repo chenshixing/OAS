@@ -11,6 +11,10 @@ import Frame from 'COM/form/frame';
 //fetch
 import { fetch } from 'UTILS';
 
+import State from 'PAGES/redirect/state';
+const globalState = State.getState();
+//console.log(globalState)
+
 
 class ResetPassword extends React.Component {
     constructor(props) {
@@ -70,6 +74,7 @@ class ResetPassword extends React.Component {
     }
 
     render() {
+        console.log(this)
         const props = {
             labelCol: {span: 8},
             wrapperCol: {span: 8},
@@ -116,7 +121,7 @@ class ResetPassword extends React.Component {
                 <div className="fn-pt-30">
                     <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Item {...props} label="登录名">
-                            <label>HYP123</label>
+                            <label>{globalState.data.showName}</label>
                         </Form.Item>
                         <Form.Item {...props} label="原登录密码" hasFeedback required>
                             <Input type="password"
