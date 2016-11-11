@@ -96,7 +96,9 @@ class AgreementModal extends React.Component{
                     width={this.state.iframeData.modalWidth}
                     wrapClassName="vertical-center-modal"
                     footer={
-                        <div>
+                        <div style={{
+                                "text-align":"center"
+                            }}>
                             <Button type="primary" onClick={this.handleOk.bind(this)}>同意阅读</Button>
                         </div>
                     }
