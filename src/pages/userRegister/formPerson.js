@@ -29,7 +29,7 @@ class Reg extends React.Component {
       btnSmsCodeText:'获取验证码',
       isBtnSmsCodeDisabled:false,
       protocolData:{},
-      submitDisCheck:false
+      // submitDisCheck:false
     };
   }
   handleSubmit(e) {
@@ -134,12 +134,12 @@ class Reg extends React.Component {
   agreementCheck(e) {
     this.setState({
       submitDis: !e.target.checked,
-      submitDisCheck:e.target.checked
+      // submitDisCheck:e.target.checked
     });
   }
   handleAgreementonOK(){
       this.setState({
-        submitDisCheck:true,
+        // submitDisCheck:true,
         agreementModalVisible:false,
         submitDis:false
       });

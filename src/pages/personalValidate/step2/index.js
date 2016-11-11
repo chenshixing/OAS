@@ -95,7 +95,8 @@ export default class PersonalValidate extends React.Component {
         fetch('/common/pinCode.do',{
             body:{
                 "businesstype": 1,
-                "connectortype": 1
+                "connectortype": 1,
+                "isFirst": false
             }
         }).then((res)=>{
             if(res.code=='200'){
