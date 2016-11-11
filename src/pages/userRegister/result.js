@@ -17,11 +17,14 @@ const Step = Steps.Step;
 // 页面组件
 import Frame from 'COM/form/frame';
 
+import store from 'store';
+
 
 class RegisterResult extends React.Component{
     constructor(props){
         super(props);
         this.state={};
+        this.loginUrl=store.get('loginUrl');
     }
 
     render(){
@@ -37,7 +40,7 @@ class RegisterResult extends React.Component{
                         />
                         <div className="text-align-center fn-mt-30">
                             <Button type="primary"> 
-                                <Link to="/userLogin">&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</Link>
+                                <a href={this.loginUrl}>&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
                             </Button>
                         </div>
                     </div>
