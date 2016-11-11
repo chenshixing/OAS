@@ -294,15 +294,21 @@ class CompanyValidate extends React.Component {
               "cardNumber": cardNo
             }
         },false).then(res => {
-            if(res.code == 200){
+            if(res.code == 200 && res.data && res.data.B_BankID){
                 let bankId = res.data.B_BankID;
+                if(data.bankId == bankId){
+                    //  如果返回的bankId没有改变,不进行任何操作
+                    return false;
+                }
                 data.bankId = bankId;
                 me.setState({
                     data : data
                 });
                 me.props.form.setFieldsValue({
-                    bankId : bankId
+                    bankId : bankId,
+                    branchBankId : undefined
                 });
+                // console.log("onCardNoChange");
             }
         });
     }
@@ -310,6 +316,10 @@ class CompanyValidate extends React.Component {
     onProvinceChange(value){
         let me = this;
         let data = me.state.data;
+        if(data.provinceId == value){
+            //  如果省份Id没有改变，不执行任何操作
+            return false;
+        }
         fetch('/bank/citys.do',{
             body:{
                 provinceId : value
@@ -319,11 +329,17 @@ class CompanyValidate extends React.Component {
                 data.cities = res.data;
                 data.cityPlaceHolder = "请选择城市";
                 data.cityDisabled = false;
+                data.branchPlaceHolder = "请先选择开户行和所在城市";
+                data.branchDisabled = true;
                 // console.log(data.cities);
 
                 //  配置映射表
                 data.cities.map( (item,index) => {
                     data.map.city[item.B_BankAreaID] = item.AreaName;
+                });
+                me.props.form.setFieldsValue({
+                    cityId : undefined,
+                    branchBankId : undefined
                 });
                 me.setState({
                     data : data
@@ -334,6 +350,9 @@ class CompanyValidate extends React.Component {
 
     onBankChange(value){
         let data = this.state.data;
+        if(data.bankId == value){
+            return false;
+        }
         data.bankId = value;
         // console.log(data);
         this._getBranch();
@@ -341,6 +360,9 @@ class CompanyValidate extends React.Component {
 
     onCityChange(value){
         let data = this.state.data;
+        if(data.cityId == value){
+            return false;
+        }
         data.cityId = value;
         this._getBranch();
     }
@@ -368,18 +390,12 @@ class CompanyValidate extends React.Component {
                     me.setState({
                         data : data
                     });
+                    me.props.form.setFieldsValue({
+                        branchBankId : undefined
+                    });
                 }
             });
         }
-    }
-
-    onCompanyPaperTypeChange(e) {
-        console.log('radio checked', e.target.value);
-        let data=this.state.data;
-        data.companyPaperType=e.target.value;
-        this.setState({
-            data: data
-        });
     }
 
     onValidateTypeChange(e) {
@@ -387,6 +403,15 @@ class CompanyValidate extends React.Component {
         let data=this.state.data;
         if(data.validateType === e.target.value){ return false;}
         data.validateType = e.target.value;
+        this.setState({
+            data: data
+        });
+    }
+
+    onCompanyPaperTypeChange(e) {
+        console.log('radio checked', e.target.value);
+        let data=this.state.data;
+        data.companyPaperType=e.target.value;
         this.setState({
             data: data
         });
@@ -401,13 +426,6 @@ class CompanyValidate extends React.Component {
         // }
         this.setState({data:data});
         // console.log(data);
-    }
-
-    normFile(e) {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
     }
 
     //  点击下一步
