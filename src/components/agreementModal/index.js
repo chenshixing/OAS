@@ -4,10 +4,48 @@
  *
  * 参数说明：
  * {
- *     this.props.iframeSrc 就是连接
+ *     //入口
+ *     iframeData:{
+ *          name：[string]协议名字，默认值为"《协议提示》"
+ *          iframeSrc：[string]链接地址，默认为空
+ *          modalWidth：[string/number]容器的宽度，默认为"60%"
+ *          iframeHeight：[string/number]高度，默认为"430px"
+ *     }
+ *     visible:[boolean] Modal里面的，弹出/关闭窗口 不封在iframeData里面了。
+ *     onOk:[function] Modal里面的 确认按钮 不封在iframeData。里面了
+ *     onCancel:[function] Modal里面的 关闭按钮 不封在iframeData。里面了
  * }
  * 使用说明
  * <AgreementModal iframeSrc="连接地址" />
+ *
+ *
+
+ let iframeData = {
+     iframeSrc:"https://www.baidu.com/",
+     name:this.state.protocolData.protocolName
+ }
+
+ <AgreementModal
+     visible={ this.state.agreementModalVisible }
+     onOk={this.handleAgreementonOK.bind(this)}
+     onCancel={this.hideAgreementModal.bind(this)}
+     iframeData={iframeData}
+     //iframeData={{
+     //    iframeSrc:"https://www.baidu.com/",
+     //    name:this.state.protocolData.protocolName
+     //}}
+
+ >
+     <Checkbox
+         checked={!this.state.submitDis}
+         onChange={this.agreementCheck.bind(this)}
+         >
+         我已阅读并同意
+     </Checkbox>
+     <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this)}>
+         {this.state.protocolData.protocolName}
+     </a>
+ </AgreementModal>
  */
 // react 相关库
 import React from 'react';
@@ -18,12 +56,18 @@ import './style.less';
 // antd 组件
 import { Button, Modal, Row, Col } from 'antd';
 
-const baiduSrc = "https://www.baidu.com/";
+
 class AgreementModal extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            iframeSrc:this.props.iframeSrc || baiduSrc
+            iframeData:{
+                name:this.props.iframeData.name || "《协议提示》",
+                iframeSrc:this.props.iframeData.iframeSrc || "",
+                modalWidth:this.props.iframeData.modalWidth || "60%",
+                iframeHeight:this.props.iframeData.iframeHeight || '430px'
+            }
+
         };
     }
 
@@ -38,21 +82,28 @@ class AgreementModal extends React.Component{
     }
 
     render(){
+        console.log("this=>")
+        console.log(this.state.iframeData.iframeHeight)
         return(
             <div className='agreementModal'>
+                {this.props.children}
                 <Modal
-                    title={this.props.name}
+                    title={this.props.iframeData.name}
                     visible={this.props.visible}
                     maskClosable={false}
-                    onOk={this.handleOk.bind(this)}
                     onCancel={this.handleCancel.bind(this)}
                     okText="已阅读并同意此协议"
-                    width="60%"
+                    width={this.state.iframeData.modalWidth}
                     wrapClassName="vertical-center-modal"
+                    footer={
+                        <div>
+                            <Button type="primary" onClick={this.handleOk.bind(this)}>同意阅读</Button>
+                        </div>
+                    }
 
                 >
                     <iframe
-                        src={this.state.iframeSrc}
+                        src={this.state.iframeData.iframeSrc}
                         scrolling="yes"
                         frameBorder="no"
                         allowTransparency="true"
@@ -60,7 +111,7 @@ class AgreementModal extends React.Component{
                             border: 'none',
                             width:"100%",
                             display: 'block',
-                            height: '430px',
+                            "height":this.state.iframeData.iframeHeight,
                             overflow: 'hidden'
                         }}
                         name="dialog-iframe1478073723066"

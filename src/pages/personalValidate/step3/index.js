@@ -58,8 +58,8 @@ class PersonalValidate extends React.Component {
                     message.error(`提交失败！${res.message}`,5);
                 });
             }
-           
-           
+
+
         });
     }
 
@@ -155,7 +155,7 @@ class PersonalValidate extends React.Component {
                 ]
             },
             agreement:{
-                initialValue: false, 
+                initialValue: false,
                 valuePropName: 'checked',
                 rules:[{validator: this.validateAgreement.bind(this)}],
             }
@@ -190,7 +190,7 @@ class PersonalValidate extends React.Component {
                             >
                                 <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off" />
                             </FormItem>
-                            
+
                             <Row>
                                 <Col span="24">
                                     <Col span="12" offset="8">

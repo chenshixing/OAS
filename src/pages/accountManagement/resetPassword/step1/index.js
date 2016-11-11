@@ -47,7 +47,8 @@ class ResetPassword extends React.Component {
             }).then(res => {
                 console.log(res)
                 //this.setState(res)
-                window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
+                //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
+                this.props.history.push("/accountManagement/resetPassword/step2")
             });
         });
     }
