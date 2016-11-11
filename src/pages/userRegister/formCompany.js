@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
 import { Link } from 'react-router';
-
+import AgreementModal from 'COM/agreementModal'
 import store from 'store';
 
 // 自定义验证 rule 及 fetch 方法
@@ -116,11 +116,39 @@ class Reg extends React.Component {
         },1000)
     }
   }
+
+  /*协议*/
+  openAgreementModal(){
+
+      this.setState({
+          agreementModalVisible:true,
+      });
+  }
+  hideAgreementModal(){
+      this.setState({
+          agreementModalVisible:false
+      });
+  }
+  handleAgreement(){
+
+      this.setState({
+          agreementModalVisible:false,
+      });
+  }
   agreementCheck(e) {
     this.setState({
-      submitDis: !e.target.checked
+      submitDis: !e.target.checked,
+      // submitDisCheck:e.target.checked
     });
   }
+  handleAgreementonOK(){
+      this.setState({
+        // submitDisCheck:true,
+        agreementModalVisible:false,
+        submitDis:false
+      });
+  }
+  /*协议 end*/
 
   componentDidMount(){
     this.initPage();
@@ -266,7 +294,31 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
+        {
+          /*
+<Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
+          */
+        }
+          
+          <AgreementModal
+                visible={ this.state.agreementModalVisible }
+                onOk={this.handleAgreementonOK.bind(this)}
+                onCancel={this.hideAgreementModal.bind(this)}
+                iframeData={{
+                    iframeSrc:"https://www.baidu.com/",
+                    name:this.state.protocolData.protocolName
+                }}
+            >
+                <Checkbox
+                    checked={!this.state.submitDis}
+                    onChange={this.agreementCheck.bind(this)}
+                    >
+                    我已阅读并同意
+                </Checkbox>
+                <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this)}>
+                    {this.state.protocolData.protocolName}
+                </a>
+            </AgreementModal>
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
