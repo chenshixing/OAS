@@ -5,6 +5,7 @@ const rulesBase = {
     companyName : {
         rules:[
             {required: true, message: '企业名称不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     },
     registrationExtendField2:{
@@ -15,6 +16,7 @@ const rulesBase = {
     name:{
         rules:[
             {required: true, message: '您的姓名不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     },
     mobile :{
@@ -25,12 +27,14 @@ const rulesBase = {
     },
     email: {
         rules: [
-            ruleType('email')
+            ruleType('email'),
+            {max: 50, message: '请输入99位以内的字符'},
         ]
     },
     cardNo:{
         rules:[
             {required: true, message: '银行账号不能为空'},
+            {min:5, max: 30, message: '请输入5-30位字符'},
         ]
     },
     bankId:{
@@ -54,11 +58,13 @@ const rulesCommon = {
     registrationPaperNo: {
         rules: [
             {required: true, type: 'string', message: '营业执照注册号不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     },
     orgInsCodePaperNo:{
         rules:[
             {required: true, type: 'string', message: '组织机构代码证不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     }
 };
@@ -67,6 +73,7 @@ const rulesMultiple = {
     socialCreditPaperNo: {
         rules: [
             {required: true, type: 'string', message: '统一社会信用代码不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     },
 };
@@ -75,6 +82,7 @@ const rulesAgent = {
     corporationName: {
         rules: [
             {required: true, message: '法定代表人姓名不能为空'},
+            {max: 50, message: '请输入50位以内的字符'},
         ]
     },
     corporationMobile : {
