@@ -18,6 +18,11 @@ import ruleType from 'UTILS/ruleType';
 // 页面组件
 import Frame from 'COM/form/frame';
 
+//全局获取基本信息
+import State from 'PAGES/redirect/state';
+const globalState = State.getState();
+import Store from 'store'
+//console.log(globalState)
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -27,8 +32,16 @@ class CompanyValidate extends React.Component {
         this.state={
             loading:false,
             data:{
-                businessLicenseType:'Personal',
-                isLongEndTimeChange:false
+                userType:'1',
+                isLongEndTimeChange:false,
+                //真实姓名
+                realName:"",
+                //公司名
+                companyName:"",
+                //登录名
+                loginName:"",
+                //手机号码
+                userMobile:""
             }
         }
         this.handleNext=this.handleNext.bind(this);
@@ -36,19 +49,69 @@ class CompanyValidate extends React.Component {
 
     handleNext() {
         this.props.form.validateFields((errors, values) => {
-            if(!errors){
-                this.setState({ loading: true });
-                setTimeout(() => {
-                    this.setState({ loading: false});
-                    window.location.href='/#/resetPassword/step2';
-                }, 1000);
-            }
+             if (!!errors) {
+               console.log('Errors in form!!!');
+               return;
+             }
+             //console.log(this.state.data)
+
+             this.setState({ loading: true });
+             setTimeout(() => {
+                 Store.set("resetPasswordData", this.state.data);
+                 this.setState({ loading: false});
+                 //window.location.href='/#/resetPassword/step2';
+                 this.props.history.push("/resetPassword/step2")
+             }, 1000);
         });
+        // this.props.form.validateFields((errors, values) => {
+        //     if(!errors){
+        //         console.log(this.state.data)
+        //         this.setState({ loading: true });
+        //         setTimeout(() => {
+        //             this.setState({ loading: false});
+        //             //window.location.href='/#/resetPassword/step2';
+        //             this.props.history.push("/resetPassword/step2")
+        //         }, 1000);
+        //     }
+        // });
     }
     onBusinessLicenseTypeChange(e) {
-        this.props.form.resetFields()
+        //this.props.form.resetFields()
         let data=this.state.data;
-        data.businessLicenseType=e.target.value;
+        data.userType=e.target.value;
+        this.setState({
+            data: data
+        });
+    }
+    realName(e){
+        //this.props.form.resetFields()
+        let data=this.state.data;
+        data.realName=e.target.value;
+        this.setState({
+            data: data
+        });
+    }
+    companyName(e){
+        //this.props.form.resetFields()
+        let data=this.state.data;
+        data.companyName=e.target.value;
+        this.setState({
+            data: data
+        });
+    }
+    loginName(e){
+        //this.props.form.resetFields()
+        let data=this.state.data;
+        data.loginName=e.target.value;
+
+        this.setState({
+            data: data
+        });
+    }
+    userMobile(e){
+        //this.props.form.resetFields()
+        let data=this.state.data;
+        data.userMobile=e.target.value;
         this.setState({
             data: data
         });
@@ -86,8 +149,38 @@ class CompanyValidate extends React.Component {
             wrapperCol: { span: 12 },
         };
         const { getFieldProps } = this.props.form;
-        const displayTypePersonal=this.state.data.businessLicenseType =='Personal' ? 'block' : 'none';
-        const displayTypeCompany=this.state.data.businessLicenseType == 'company' ? 'block' : 'none';
+        const displayTypePersonal=this.state.data.userType =='1' ? 'block' : 'none';
+        const displayTypeCompany=this.state.data.userType == '2' ? 'block' : 'none';
+        var nameHtml=null;
+        if(this.state.data.userType =='1'){
+            nameHtml=(
+                <FormItem
+                    {...formItemLayout}
+                    label="真实姓名"
+                    required
+                >
+                    <Input
+                        {...getFieldProps('realName',rules.realName)}
+                        type="text"
+
+                    />
+                </FormItem>
+            );
+        }else{
+            nameHtml=(
+                <FormItem
+                    {...formItemLayout}
+                    label="企业名称"
+                    required
+                >
+                    <Input
+                        {...getFieldProps('companyName',rules.companyName)}
+                        type="text"
+
+                        />
+                </FormItem>
+            );
+        }
         return (
             <div>
                 <Steps size="default" current={0} className="fn-mb-30">
@@ -104,32 +197,17 @@ class CompanyValidate extends React.Component {
                             label="用户类型"
                             required
                         >
-                            <RadioGroup {...getFieldProps('businessLicenseType',{ initialValue: this.state.data.businessLicenseType })} onChange={this.onBusinessLicenseTypeChange.bind(this)}>
-                                <Radio value="Personal">个人用户</Radio>
-                                <Radio value="company">企业用户</Radio>
+                            <RadioGroup
+                                {...getFieldProps('userType',{ initialValue: this.state.data.userType,onChange:this.onBusinessLicenseTypeChange.bind(this) })}
+
+                                >
+                                <Radio value="1">个人用户</Radio>
+                                <Radio value="2">企业用户</Radio>
                             </RadioGroup>
 
                         </FormItem>
+                        {nameHtml}
 
-                        <div style={{display:displayTypePersonal}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="真实姓名"
-                                required
-                            >
-                                <Input {...getFieldProps('realName',rules.realName)} type="text"/>
-                            </FormItem>
-                        </div>
-
-                        <div style={{display:displayTypeCompany}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="企业名称"
-                                required
-                            >
-                                <Input {...getFieldProps('companyName',rules.companyName)} type="text"/>
-                            </FormItem>
-                        </div>
 
                         <div>
                             <FormItem
@@ -137,7 +215,11 @@ class CompanyValidate extends React.Component {
                                 label="登录名"
                                 required
                             >
-                                <Input {...getFieldProps('loginName',rules.loginName)} type="text"/>
+                                <Input
+                                    {...getFieldProps('loginName',rules.loginName)}
+                                    type="text"
+
+                                    />
                             </FormItem>
                         </div>
 
@@ -147,7 +229,10 @@ class CompanyValidate extends React.Component {
                                 label="手机号码"
                                 required
                             >
-                                <Input {...getFieldProps('userMobile',rules.userMobile)}/>
+                                <Input
+                                    {...getFieldProps('userMobile',rules.userMobile)}
+
+                                    />
                             </FormItem>
                         </div>
 

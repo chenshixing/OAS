@@ -11,6 +11,8 @@ import Frame from 'COM/form/frame';
 //fetch
 import { fetch } from 'UTILS';
 
+
+//全局获取基本信息
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
 //console.log(globalState)
