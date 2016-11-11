@@ -97,9 +97,9 @@ class AgreementModal extends React.Component{
                     wrapClassName="vertical-center-modal"
                     footer={
                         <div style={{
-                                "text-align":"center"
+                                "textAlign":"center"
                             }}>
-                            <Button type="primary" onClick={this.handleOk.bind(this)}>同意阅读</Button>
+                            <Button type="primary" onClick={this.handleOk.bind(this)}>已阅读并同意此协议</Button>
                         </div>
                     }
 
