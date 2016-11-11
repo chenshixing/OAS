@@ -288,12 +288,12 @@ class CompanyValidate extends React.Component {
         let me = this;
         let data = me.state.data;
         let cardNo = value ? value : e.target.value;
-        if(cardNo.length < 4){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
+        if(cardNo.length < 5){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
         fetch('/bank/cardNumber.do',{
             body:{
               "cardNumber": cardNo
             }
-        }).then(res => {
+        },false).then(res => {
             if(res.code == 200){
                 let bankId = res.data.B_BankID;
                 data.bankId = bankId;

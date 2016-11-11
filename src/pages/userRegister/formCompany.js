@@ -8,12 +8,14 @@
 import React from 'react';
 
 // antd 组件
-import { Button, Form, Input,Checkbox,message } from 'antd';
+import { Button, Form, Input,Checkbox,message,Modal } from 'antd';
 const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
 import { Link } from 'react-router';
+
+import store from 'store';
 
 // 自定义验证 rule 及 fetch 方法
 import { ruleType, fetch } from 'UTILS';
@@ -45,6 +47,7 @@ class Reg extends React.Component {
             // that.props.history.push({
             //   pathname:'/userRegister/result'
             // });
+            store.set('loginUrl',res.data.loginUrl);
             window.location.href='#/userRegister/result';
           })
       }else{
@@ -263,7 +266,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《{this.state.protocolData.protocolName}》</a></Checkbox>
+          <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">{this.state.protocolData.protocolName}</a></Checkbox>
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>

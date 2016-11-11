@@ -29,7 +29,7 @@ module.exports = Object.assign(commonConfig, {
         port: PORT,
         proxy: {
             '/api/*': {
-                target: 'http://accountcmb.frontpay.cn/',
+                target: 'http://10.1.21.13/',
                 //target: 'http://192.168.9.154:8081/',
                 pathRewrite: {
                     '^/api': ''

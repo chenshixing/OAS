@@ -21,13 +21,15 @@ export default (url, data, showLoading, pending) => {
     // 代理会去掉 /api 获取数据
     url = __DEV__ ? `/api${url}` : url;
 
-    // 兼容 showLoading 在第二个参数位置设置
-    if(showLoading === undefined && typeof data === 'boolean') {
-        showLoading = data;
-        data = {};
-    } else {
-        // 默认显示loading
-        showLoading = true;
+    if(showLoading === undefined){
+        if(typeof data === 'boolean'){
+            // 兼容 showLoading 在第二个参数位置设置
+            showLoading = data;
+            data = {};
+        }else{
+            // 默认显示loading
+            showLoading = true
+        }
     }
 
     // fetch 规范中只有 post 才能设置 body 属性
@@ -72,6 +74,8 @@ export default (url, data, showLoading, pending) => {
                         // 未登录，页面跳转到指定url登录
                         // "cas=1"是为了中转页面判断第一次登录，记录日志
                         if(res.code == 401){
+                            //res.data = res.data.replace(/\?.*/, '');
+                            //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
                             const url = `${res.data}${encodeURIComponent('?cas=1')}`;
                             location.href = url;
                         }

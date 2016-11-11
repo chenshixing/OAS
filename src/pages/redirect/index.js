@@ -26,6 +26,7 @@ export default class Redirect extends React.Component {
             }[userType];
 
             setTimeout(() => {
+                // 业务判断
                 if(step == 0){ //未开始
                     return this.props.history.push(`${type}/step1`);
                 } else if (step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
@@ -33,14 +34,7 @@ export default class Redirect extends React.Component {
                 } else {
                     return this.props.history.push(`${type}/tips/check`);
                 }
-            }, 5000)
-
-            // 业务判断
-            // if(step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
-            //     return this.props.history.push(`accountManagement`);
-            // } else {
-            //     return this.props.history.push(`${type}/tips/check`);
-            // }
+            }, 5000);
 
             // 业务判断
             // if(step == 999){ //已完成核身流程
@@ -62,6 +56,10 @@ export default class Redirect extends React.Component {
                 data: res.data
             });
         });
+        // OAS日志接口
+        if(location.search.indexOf('cas=1') != -1){
+            fetch('/redirect.do');
+        }
     }
     render() {
         return (

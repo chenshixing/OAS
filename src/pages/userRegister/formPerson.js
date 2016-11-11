@@ -7,6 +7,8 @@
 // react 相关库
 import React from 'react';
 
+import store from 'store';
+
 // antd 组件
 import { Button, Form, Input, Checkbox, Modal,message } from 'antd';
 const createForm = Form.create;
@@ -40,6 +42,7 @@ class Reg extends React.Component {
         console.log('Submit!!!',data);
         fetch('/register/post.do',{body:data}).then((res)=>{
           console.log('注册成功');
+          store.set('loginUrl',res.data.loginUrl);
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
@@ -292,6 +295,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
+
         {/*
             <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《{this.state.protocolData.protocolName}》</a></Checkbox>
         */}
@@ -318,6 +322,7 @@ class Reg extends React.Component {
                     {this.state.protocolData.protocolName}
                 </a>
             </AgreementModal>
+
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
