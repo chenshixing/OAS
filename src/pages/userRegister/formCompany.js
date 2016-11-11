@@ -1,6 +1,6 @@
 /**
  * 企业用户注册表单
- * 
+ *
  * by koen
  * 2016/9/21
  */
@@ -50,7 +50,7 @@ class Reg extends React.Component {
       }else{
         console.log('请填完必填信息再提交...');
       }
-      
+
     });
   }
   checkPassWord(rule, value, callback) {
@@ -90,12 +90,12 @@ class Reg extends React.Component {
       message.success('短信验证码获取成功');
       countDown();
     });
-    
+
     function countDown(){
         that.setState({
             isBtnSmsCodeDisabled:true
         });
-        
+
         var count=60;
         let timer = setInterval(()=>{
             count--;
@@ -160,7 +160,7 @@ class Reg extends React.Component {
           {required: true, message: '登录名不能为空'},
           ruleType('en+num'),
           {min: 4, max: 32, message: '请输入4-20位字符'},
-          
+
         ]
       },
       loginPwd: {
@@ -218,7 +218,7 @@ class Reg extends React.Component {
 
         <FormItem
           {...formItemLayout}
-          label="登录密码"  
+          label="登录密码"
           required
         >
           <Input type="password" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
@@ -269,7 +269,7 @@ class Reg extends React.Component {
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
           <Button type="primary" onClick={this.handleSubmit.bind(this)} disabled={this.state.submitDis}>提交注册</Button>
         </FormItem>
-        
+
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
           <p>已有账号？ <Link to="/userLogin" >直接登录</Link></p>
         </FormItem>
