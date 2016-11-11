@@ -45,8 +45,8 @@ class Sms extends Component {
 
 		fetch('/common/pinCode.do',{
 			body : {
-			  businesstype : me.state.data.businesstype,
-			  connectortype : me.state.data.connectorType,
+			  businessType : me.state.data.businesstype,
+			  connectorType : me.state.data.connectorType,
               isFirst : false           //  这里为重新发送写死
 			}
 		}).then(res => {

@@ -40,7 +40,7 @@ export default class PersonalValidate extends React.Component {
                 phoneNumber:''
             }
         }
-        
+
         this.componentDidMount=this.componentDidMount.bind(this);
 
         this.timer=null;
@@ -66,7 +66,7 @@ export default class PersonalValidate extends React.Component {
             if(res.data.length===1 && res.data[0].connectorType=='1' && res.data[0].checkPass=='1'){
                 clearInterval(this.timer);
                 this.props.history.push({
-                    pathname:'/personalValidate/step3' 
+                    pathname:'/personalValidate/step3'
                 });
             }else{
                 //未验证提醒
@@ -94,8 +94,8 @@ export default class PersonalValidate extends React.Component {
 
         fetch('/common/pinCode.do',{
             body:{
-                "businesstype": 1,
-                "connectortype": 1,
+                "businessType": 1,
+                "connectorType": 1,
                 "isFirst": false
             }
         }).then((res)=>{
@@ -110,7 +110,7 @@ export default class PersonalValidate extends React.Component {
             that.setState({
                 isSendMsgDisabled:true
             });
-            
+
             var count=countNum;
             let timer = setInterval(()=>{
                 count--;
