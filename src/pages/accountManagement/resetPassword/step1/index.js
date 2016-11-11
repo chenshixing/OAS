@@ -45,6 +45,7 @@ class ResetPassword extends React.Component {
                     conNewLoginPwd:this.state.conNewLoginPwd,
                 }
             }).then(res => {
+                //alert(res)
                 console.log(res)
                 //this.setState(res)
                 //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
