@@ -10,6 +10,7 @@ import Footer from './Common/footer';
 import { Spin } from 'antd';
 
 import State from './state';
+import rState from 'PAGES/redirect/state';
 
 export default class Index extends React.Component{
     constructor(props) {
@@ -28,7 +29,7 @@ export default class Index extends React.Component{
       return (
           <Spin spinning={this.state.loading}>
           <div className="main-frm">
-            <Header />
+            <Header data={rState.getState()} />
             <div className="frame-wrap-bg">
               <div className="frame-wrap">
                 {/* 主内容区 */}

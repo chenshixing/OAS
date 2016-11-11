@@ -5,8 +5,21 @@ import React from 'react';
 
 //import img from 'ASSETS/images/logo.png';
 
+
+
 export default class Header extends React.Component{
+    shouldComponentUpdate(nextProps, nextState) {
+      //console.log(nextProps.data.data)
+      if(nextProps.data && nextProps.data.data === null)
+        return false;
+      else
+        return true;
+    }
     render() {
+      let showName = '';
+      if(this.props.dat){
+        showName = this.props.data.data;
+      }
       return (
         <div className="the-main-nav-wrap">
           <div className="the-main-nav-box">
@@ -14,10 +27,9 @@ export default class Header extends React.Component{
 
             </a>
             <div className="login-box ">
-              <a href="javascript:;void(0)" title="当前登录用户：Jim">您好，广东益达有限公司</a>
+              {showName? <a href="javascript:;void(0)" title="当前登录用户">您好，{showName}</a> : null}
               <a href="javascript:;void(0)" title="首页">首页</a>
-              <a href="javascript:;void(0)" title="退出">退出</a>
-              <a className="frm-header-link" href="/other">网站其他入口>>></a>
+              {showName? <a href="javascript:;void(0)" title="退出">退出</a> : null}
             </div>
           </div>
         </div>
