@@ -603,7 +603,7 @@ class CompanyValidate extends React.Component {
         if(submitData.isLongEndTime){
             submitData.registrationExtendField2 = "长期";
         }else{
-            submitData.registrationExtendField2 = moment(submitData.registrationExtendField2).format('YYYY-MM-DD');
+            submitData.registrationExtendField2 = moment(submitData.registrationExtendField2).format('YYYY-MM-DD hh:mm:ss');
         }
         delete submitData.isLongEndTime;
 

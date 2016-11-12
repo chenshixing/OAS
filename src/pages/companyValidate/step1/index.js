@@ -115,6 +115,7 @@ class CompanyValidate extends React.Component {
         data.companyPaperType = fieldsValue.companyPaperType;
         //  营业执照到期日处理
         if(fieldsValue.registrationExtendField2){
+            //  用date对象渲染数据
             fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
         }
         data.isLongEndTime = fieldsValue.isLongEndTime;
@@ -366,7 +367,7 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 //  提交成功TODO
                 console.log('next finish');
-                this.props.history.push('/companyValidate/step2');
+                // this.props.history.push('/companyValidate/step2');
             }
         });
     }
@@ -399,7 +400,7 @@ class CompanyValidate extends React.Component {
         if(submitData.isLongEndTime){
             submitData.registrationExtendField2 = "长期";
         }else{
-            submitData.registrationExtendField2 = moment(submitData.registrationExtendField2).format('YYYY-MM-DD');
+            submitData.registrationExtendField2 = moment(submitData.registrationExtendField2).format('YYYY-MM-DD hh:mm:ss');
         }
         delete submitData.isLongEndTime;
 
