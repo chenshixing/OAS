@@ -90,25 +90,36 @@ class PersonalValidate extends React.Component {
         }
     }
 
-    openAgreementModal(name){
-        console.log('name',name)
+    /*协议*/
+    openAgreementModal(){
+
         this.setState({
             agreementModalVisible:true,
-            agreementModalName:name
         });
     }
-
     hideAgreementModal(){
         this.setState({
             agreementModalVisible:false
         });
     }
-
     handleAgreement(){
+
         this.setState({
-            agreementModalVisible:false
+            agreementModalVisible:false,
         });
     }
+    agreementCheck(e) {
+        this.setState({
+        submitDis: !e.target.checked,
+        });
+    }
+    handleAgreementonOK(){
+        this.setState({
+            agreementModalVisible:false,
+            submitDis:false
+        });
+    }
+    /*协议 end*/
 
     agreementCheck(e) {
         this.setState({
@@ -144,8 +155,7 @@ class PersonalValidate extends React.Component {
                 rules: [
                     {required: true, message: '密码不能为空'},
                     {min: 8, max: 20, message: '请输入8-20位字符'},
-                    //{validator: this.checkPassWord.bind(this)},
-                    ruleType('en-num')
+                    ruleType('pfxPassword')
                 ]
             },
             rePassword: {
@@ -154,11 +164,6 @@ class PersonalValidate extends React.Component {
                     {validator: this.checkPassWordAgain.bind(this)}
                 ]
             },
-            agreement:{
-                initialValue: false,
-                valuePropName: 'checked',
-                rules:[{validator: this.validateAgreement.bind(this)}],
-            }
         };
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -194,9 +199,29 @@ class PersonalValidate extends React.Component {
                             <Row>
                                 <Col span="24">
                                     <Col span="12" offset="8">
-                                        <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意
+                                    {/*<Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意
                                                 <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this,this.state.protocolData.protocolName)}>{this.state.protocolData.protocolName}</a>
                                         </Checkbox>
+                                         */}
+                                        <AgreementModal
+                                            visible={ this.state.agreementModalVisible }
+                                            onOk={this.handleAgreementonOK.bind(this)}
+                                            onCancel={this.hideAgreementModal.bind(this)}
+                                            iframeData={{
+                                                iframeSrc:"https://www.baidu.com/",
+                                                name:this.state.protocolData.protocolName
+                                            }}
+                                        >
+                                            <Checkbox
+                                                checked={!this.state.submitDis}
+                                                onChange={this.agreementCheck.bind(this)}
+                                                >
+                                                我已阅读并同意
+                                            </Checkbox>
+                                            <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this)}>
+                                                {this.state.protocolData.protocolName}
+                                            </a>
+                                        </AgreementModal>
                                     </Col>
                                 </Col>
                             </Row>
@@ -210,7 +235,6 @@ class PersonalValidate extends React.Component {
                         </Form>
                     </div>
                 </Frame>
-                <AgreementModal name={this.state.agreementModalName} visible={ this.state.agreementModalVisible } onOk={this.handleAgreement.bind(this)} onCancel={this.hideAgreementModal.bind(this)} />
             </div>
         )
     }

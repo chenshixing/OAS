@@ -1,6 +1,6 @@
 /**
- * 企业核身step1
- * yongquan.wu
+ * findPassword step1
+ * update by yongquan.wu
  */
 // react 相关库
 import React from 'react';
@@ -13,8 +13,8 @@ const createForm = Form.create;
 const Step = Steps.Step;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
-// 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+// fetch、 自定义验证 rule
+import {fetch,ruleType} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -22,7 +22,6 @@ import Frame from 'COM/form/frame';
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
 import Store from 'store'
-//console.log(globalState)
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -30,18 +29,8 @@ class CompanyValidate extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            loading:false,
             data:{
                 userType:'1',
-                isLongEndTimeChange:false,
-                //真实姓名
-                realName:"",
-                //公司名
-                companyName:"",
-                //登录名
-                loginName:"",
-                //手机号码
-                userMobile:""
             }
         }
         this.handleNext=this.handleNext.bind(this);
@@ -49,13 +38,28 @@ class CompanyValidate extends React.Component {
 
     handleNext() {
         this.props.form.validateFields((errors, values) => {
-             if (!!errors) {
-               console.log('Errors in form!!!');
-               return;
+             var data=values;
+             console.log('submit:',data);
+             if (!errors) {
+                 fetch('/user/checkUserInfo.do',{
+                     body:data
+                 }).then((res)=>{
+                     var nextStep='';
+                     if(res.data.bankCheckStatus=='1'){
+                         nextStep='/resetPassword/step2/autherized/index1';
+                     }else{
+                         nextStep='/resetPassword/step2/unautherized';
+                     }
+                     this.props.history.push({
+                        pathname:nextStep
+                     });
+                 },(res)=>{
+                     message.error(`(${res.code})${res.message}`,3);
+                 })
+             }else{
+                 console.log('Errors in form!!!');
              }
-             //console.log(this.state.data)
 
-             this.setState({ loading: true });
              setTimeout(() => {
                  Store.set("resetPasswordData", this.state.data);
                  this.setState({ loading: false});
@@ -63,67 +67,28 @@ class CompanyValidate extends React.Component {
                  this.props.history.push("/resetPassword/step2")
              }, 1000);
         });
-        // this.props.form.validateFields((errors, values) => {
-        //     if(!errors){
-        //         console.log(this.state.data)
-        //         this.setState({ loading: true });
-        //         setTimeout(() => {
-        //             this.setState({ loading: false});
-        //             //window.location.href='/#/resetPassword/step2';
-        //             this.props.history.push("/resetPassword/step2")
-        //         }, 1000);
-        //     }
-        // });
     }
-    onBusinessLicenseTypeChange(e) {
-        //this.props.form.resetFields()
-        let data=this.state.data;
-        data.userType=e.target.value;
-        this.setState({
-            data: data
-        });
-    }
-    realName(e){
-        //this.props.form.resetFields()
-        let data=this.state.data;
-        data.realName=e.target.value;
-        this.setState({
-            data: data
-        });
-    }
-    companyName(e){
-        //this.props.form.resetFields()
-        let data=this.state.data;
-        data.companyName=e.target.value;
-        this.setState({
-            data: data
-        });
-    }
-    loginName(e){
-        //this.props.form.resetFields()
-        let data=this.state.data;
-        data.loginName=e.target.value;
 
+    onBusinessLicenseTypeChange(e) {
         this.setState({
-            data: data
-        });
-    }
-    userMobile(e){
-        //this.props.form.resetFields()
-        let data=this.state.data;
-        data.userMobile=e.target.value;
-        this.setState({
-            data: data
+            data: {
+                userType:e.target.value
+            }
         });
     }
 
     render() {
         // 表单校验
         const rules = {
+            userType:{
+                initialValue:this.state.data.userType,
+                onChange:this.onBusinessLicenseTypeChange.bind(this)
+            },
             realName: {
                 rules: [
                     {required: true, message: '真实姓名不能为空'},
-                ]
+                ],
+                
             },
             companyName:{
                 rules:[
@@ -149,8 +114,7 @@ class CompanyValidate extends React.Component {
             wrapperCol: { span: 12 },
         };
         const { getFieldProps } = this.props.form;
-        const displayTypePersonal=this.state.data.userType =='1' ? 'block' : 'none';
-        const displayTypeCompany=this.state.data.userType == '2' ? 'block' : 'none';
+
         var nameHtml=null;
         if(this.state.data.userType =='1'){
             nameHtml=(
@@ -181,6 +145,7 @@ class CompanyValidate extends React.Component {
                 </FormItem>
             );
         }
+
         return (
             <div>
                 <Steps size="default" current={0} className="fn-mb-30">
@@ -197,17 +162,14 @@ class CompanyValidate extends React.Component {
                             label="用户类型"
                             required
                         >
-                            <RadioGroup
-                                {...getFieldProps('userType',{ initialValue: this.state.data.userType,onChange:this.onBusinessLicenseTypeChange.bind(this) })}
-
-                                >
+                            <RadioGroup {...getFieldProps('userType',rules.userType)}>
                                 <Radio value="1">个人用户</Radio>
                                 <Radio value="2">企业用户</Radio>
                             </RadioGroup>
 
                         </FormItem>
-                        {nameHtml}
 
+                        {nameHtml}
 
                         <div>
                             <FormItem
@@ -238,16 +200,11 @@ class CompanyValidate extends React.Component {
 
                         <Row style={{ marginTop: 30 }}>
                             <Col span="12" offset="8">
-                                <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.handleNext}>下一步 </Button>
+                                <Button key="submit" type="primary" size="large" onClick={this.handleNext}>下一步 </Button>
                                 <Link type="primary" className="fn-ml-10" to='/resetPassword/step2'>下一步（审核不通过）</Link>
                                 <Link to="/userRegister" className="link-standard fn-pl-20">重新登录</Link>
                             </Col>
                         </Row>
-                        {/*<div className="text-align-center fn-mt-30">
-                            <Button type="primary" size="large">下一步</Button>
-                            <a href="/#/personalValidate/step1?_k=REPLACE" className="link-standard fn-pl-20">重新登录</a>
-                        </div>*/}
-
 
                     </Form>
 

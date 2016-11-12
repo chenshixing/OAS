@@ -62,10 +62,10 @@ class AgreementModal extends React.Component{
         super(props);
         this.state={
             iframeData:{
-                name:this.props.iframeData.name || "《协议提示》",
-                iframeSrc:this.props.iframeData.iframeSrc || "",
-                modalWidth:this.props.iframeData.modalWidth || "60%",
-                iframeHeight:this.props.iframeData.iframeHeight || '430px'
+                name:this.props.iframeData && this.props.iframeData.name || "《协议提示》",
+                iframeSrc:this.props.iframeData && this.props.iframeData.iframeSrc || "",
+                modalWidth:this.props.iframeData && this.props.iframeData.modalWidth || "60%",
+                iframeHeight:this.props.iframeData && this.props.iframeData.iframeHeight || '430px'
             }
 
         };
