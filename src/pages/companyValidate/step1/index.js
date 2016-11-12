@@ -22,8 +22,6 @@ import Frame from 'COM/form/frame';
 
 //  业务组件
 import OffLinePayTable from '../components/offlinePayTable';
-//  引入实名认证的交互方法
-import RealNameAction from '../components/realNameAction';
 
 //  引入fetch
 import { fetch } from 'UTILS';
