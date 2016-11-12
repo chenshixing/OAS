@@ -1,6 +1,6 @@
 /**
- * 个人核身step2
- * xing
+ * findPassword step2
+ * yongquan.wu
  */
 // react 相关库
 import React from 'react';

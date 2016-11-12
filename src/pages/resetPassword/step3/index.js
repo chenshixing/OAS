@@ -1,3 +1,7 @@
+/**
+ * findPassword step3
+ * yongquan.wu
+ */
 // react 相关库
 import React from 'react';
 import classNames from 'classNames';

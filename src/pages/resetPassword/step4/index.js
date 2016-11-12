@@ -1,3 +1,7 @@
+/**
+ * findPassword step4
+ * yongquan.wu
+ */
 // react 相关库
 import React from 'react';
 
