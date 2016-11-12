@@ -68,15 +68,15 @@ const validateTypeMap = {
 
 //  全局状态
 import State from 'PAGES/redirect/state';
-// const globalState = State.getState();
+const globalState = State.getState();
 
 //  登录对接完成后去掉
-const globalState = {
-    userType : 2,
-    step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
-    bankCheckStatus : -1,       //  -1:审核中;0:审核不通过;1:审核通过
-    showName : "用户名称"
-}
+// const globalState = {
+//     userType : 2,
+//     step : 999,                 //  0:未开始;1:第一步;2:第二步;3:第三步;4:第四步;999:完成;
+//     bankCheckStatus : -1,       //  -1:审核中;0:审核不通过;1:审核通过
+//     showName : "用户名称"
+// }
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
