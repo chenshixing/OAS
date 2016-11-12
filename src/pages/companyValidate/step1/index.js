@@ -103,130 +103,6 @@ class CompanyValidate extends React.Component {
         });
     }
 
-    // onCardNoChange(e,value){
-    //     let me = this;
-    //     let data = me.state.data;
-    //     let cardNo = value ? value : e.target.value;
-    //     if(cardNo.length < 5){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
-    //     fetch('/bank/cardNumber.do',{
-    //         body:{
-    //           "cardNumber": cardNo
-    //         }
-    //     },false).then(res => {
-    //         if(res.code == 200 && res.data && res.data.B_BankID){
-    //             let bankId = res.data.B_BankID;
-    //             if(data.bankId == bankId){
-    //                 //  如果返回的bankId没有改变,不进行任何操作
-    //                 return false;
-    //             }
-    //             data.bankId = bankId;
-    //             me.setState({
-    //                 data : data
-    //             });
-    //             me.props.form.setFieldsValue({
-    //                 bankId : bankId,
-    //                 branchBankId : undefined
-    //             });
-    //             // console.log("onCardNoChange");
-    //         }
-    //     });
-    // }
-
-    // onProvinceChange(value){
-    //     let me = this;
-    //     let data = me.state.data;
-    //     if(data.provinceId == value){
-    //         //  如果省份Id没有改变，不执行任何操作
-    //         return false;
-    //     }
-    //     fetch('/bank/citys.do',{
-    //         body:{
-    //             provinceId : value
-    //         }
-    //     }).then(res => {
-    //         if(res.code == 200){
-    //             data.cities = res.data;
-    //             data.cityPlaceHolder = "请选择城市";
-    //             data.cityDisabled = false;
-    //             data.branchPlaceHolder = "请先选择开户行和所在城市";
-    //             data.branchDisabled = true;
-    //             // console.log(data.cities);
-
-    //             //  配置映射表
-    //             data.cities.map( (item,index) => {
-    //                 data.map.city[item.B_BankAreaID] = item.AreaName;
-    //             });
-    //             me.props.form.setFieldsValue({
-    //                 cityId : undefined,
-    //                 branchBankId : undefined
-    //             });
-    //             me.setState({
-    //                 data : data
-    //             });
-    //         }
-    //     });
-    // }
-
-    // onBankChange(value){
-    //     let data = this.state.data;
-    //     if(data.bankId == value){
-    //         return false;
-    //     }
-    //     data.bankId = value;
-    //     // console.log(data);
-    //     this._getBranch();
-    // }
-
-    // onCityChange(value){
-    //     let data = this.state.data;
-    //     if(data.cityId == value){
-    //         return false;
-    //     }
-    //     data.cityId = value;
-    //     this._getBranch();
-    // }
-
-    // _getBranch(){
-    //     let me = this;
-    //     let data = me.state.data;
-    //     // console.log(data);
-    //     if( data.bankId && data.cityId ){
-    //         fetch('/bank/branchlist.do',{
-    //             body:{
-    //               "bankId": data.bankId,
-    //               "cityId": data.cityId
-    //             }
-    //         }).then(res => {
-    //             if(res.code == 200){
-    //                 data.branches = res.data;
-    //                 data.branchPlaceHolder = "请选择分支行";
-    //                 data.branchDisabled = false;
-
-    //                 //  配置映射表
-    //                 data.branches.map( (item,index) => {
-    //                     data.map.branch[item.BranchBankCode] = item.BranchBankName;
-    //                 });
-    //                 me.setState({
-    //                     data : data
-    //                 });
-    //                 me.props.form.setFieldsValue({
-    //                     branchBankId : undefined
-    //                 });
-    //             }
-    //         });
-    //     }
-    // }
-
-    // onValidateTypeChange(e) {
-    //     console.log('radio checked', e.target.value);
-    //     let data=this.state.data;
-    //     if(data.validateType === e.target.value){ return false;}
-    //     data.validateType = e.target.value;
-    //     this.setState({
-    //         data: data
-    //     });
-    // }
-
     onWriterTypeChange(e) {
         console.log('radio checked', e.target.value);
         let display = e.target.value == "1" ? "block" : "none";
@@ -265,13 +141,6 @@ class CompanyValidate extends React.Component {
         this.setState({data:data});
     }
 
-    normFile(e) {
-        if (Array.isArray(e)) {
-            return e;
-        }
-        return e && e.fileList;
-    }
-
     //  点击下一步
     next(){
         let me = this;
@@ -308,7 +177,7 @@ class CompanyValidate extends React.Component {
 
     //  获取提交数据
     _getSubmitData(data){
-        let map = this.state.data.map;
+        let map = this.refs.Account.state.data.map;
         let submitData = data;
 
         //  账户名称
@@ -553,7 +422,7 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <Account getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
+                        <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">

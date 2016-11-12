@@ -89,21 +89,58 @@ class Account extends Component {
         if(fieldsValue.bankId){
             //  存在开户行时TODO
             data.bankId = fieldsValue.bankId;
-        }else if(!fieldsValue.bankId && fieldsValue.cardNo){
-            //  不存在开户行而且存在银行账号时TODO
-            this.onCardNoChange(null,fieldsValue.cardNo);
         }
+
         //  所在省份处理
         if(fieldsValue.provinceId){
-            this.onProvinceChange(fieldsValue.provinceId);
+            data.provinceId = fieldsValue.provinceId;
+            data.cityPlaceHolder = "请选择城市";
+            data.cityDisabled = false;
+            let param = {
+                data : {
+                    provinceId : fieldsValue.provinceId
+                }
+            }
+            if(fieldsValue.cityId){
+                //  存在城市时TODO
+                data.cityId = fieldsValue.cityId;
+            }
+            me.getCityList(param);
         }
 
-        //  所在城市处理
-        if(fieldsValue.cityId){
-            data.cityId = fieldsValue.cityId;
-        }
+        //  分支行处理
+        me._getBranch(true);
 
-        this._getBranch();
+        me.setState({ data });
+
+    }
+
+    //  获取城市列表
+    getCityList(param){
+        // param : {
+        //     data : {
+        //         provinceId : {provinceId}   string
+        //     },
+        //     callBack : {callBack}     function
+        // }
+        let me = this;
+        let data = me.state.data;
+        fetch('/bank/citys.do',{
+            body : param.data
+        }).then(res => {
+            if(res.code == 200){
+                data.cities = res.data;
+                //  配置映射表
+                data.cities.map( (item,index) => {
+                    data.map.city[item.B_BankAreaID] = item.AreaName;
+                });
+                param.callBack && param.callBack();
+
+                me.setState({
+                    data : data
+                });
+            }
+        });
     }
 
     onCardNoChange(e,value){
@@ -130,7 +167,6 @@ class Account extends Component {
                     bankId : bankId,
                     branchBankId : undefined
                 });
-                // console.log("onCardNoChange");
             }
         });
     }
@@ -142,32 +178,28 @@ class Account extends Component {
             //  如果省份Id没有改变，不执行任何操作
             return false;
         }
-        fetch('/bank/citys.do',{
-            body:{
+        let callBack = function(){
+            data.cityId = undefined;
+            data.cityPlaceHolder = "请选择城市";
+            data.cityDisabled = false;
+            data.branchPlaceHolder = "请先选择开户行和所在城市";
+            data.branchDisabled = true;
+            // 配置映射表
+            data.cities.map( (item,index) => {
+                data.map.city[item.B_BankAreaID] = item.AreaName;
+            });
+            me.props.form.setFieldsValue({
+                cityId : undefined,
+                branchBankId : undefined
+            });
+        }
+        let param = {
+            data :{
                 provinceId : value
-            }
-        }).then(res => {
-            if(res.code == 200){
-                data.cities = res.data;
-                data.cityPlaceHolder = "请选择城市";
-                data.cityDisabled = false;
-                data.branchPlaceHolder = "请先选择开户行和所在城市";
-                data.branchDisabled = true;
-                // console.log(data.cities);
-
-                //  配置映射表
-                data.cities.map( (item,index) => {
-                    data.map.city[item.B_BankAreaID] = item.AreaName;
-                });
-                me.props.form.setFieldsValue({
-                    cityId : undefined,
-                    branchBankId : undefined
-                });
-                me.setState({
-                    data : data
-                });
-            }
-        });
+            },
+            callBack : callBack
+        }
+        me.getCityList(param);
     }
 
     onBankChange(value){
@@ -189,7 +221,7 @@ class Account extends Component {
         this._getBranch();
     }
 
-    _getBranch(){
+    _getBranch(isRender){
         let me = this;
         let data = me.state.data;
         // console.log(data);
@@ -212,9 +244,12 @@ class Account extends Component {
                     me.setState({
                         data : data
                     });
-                    me.props.form.setFieldsValue({
-                        branchBankId : undefined
-                    });
+                    if(!isRender){
+                        //  不是初始化Render
+                        me.props.form.setFieldsValue({
+                            branchBankId : undefined
+                        });
+                    }
                 }
             });
         }
@@ -258,7 +293,7 @@ class Account extends Component {
                     {...formItemLayout}
                     required
                 >
-                    <Input type="text" {...getFieldProps('cardNo',Object.assign({},rules.cardNo,{ onChange: this.onCardNoChange.bind(this) }))} placeholder="请输入银行账号"/>
+                    <Input type="text" {...getFieldProps('cardNo',Object.assign({},rules.cardNo,{ onChange: this.onCardNoChange.bind(this) }))} placeholder="请输入银行账号" disabled = { this.props.accountDisabled }/>
                 </FormItem>
 
                 <FormItem
@@ -266,7 +301,7 @@ class Account extends Component {
                   {...formItemLayout}
                   required
                 >
-                  <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bankId',Object.assign({},rules.bankId,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行">
+                  <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('bankId',Object.assign({},rules.bankId,{ onChange: this.onBankChange.bind(this) }))} size="large" placeholder="请选择开户行" disabled = { this.props.accountDisabled }>
                     { this.state.data.bankList.map( (item,index) => {
                         return (
                             <Option value={item.B_BankID} key={index}>{item.BankName}</Option>
@@ -280,7 +315,7 @@ class Account extends Component {
                   label="所在省份"
                   required
                 >
-                    <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('provinceId',Object.assign({},rules.provinceId,{ onChange: this.onProvinceChange.bind(this) }))} >
+                    <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder="请选择省份" {...getFieldProps('provinceId',Object.assign({},rules.provinceId,{ onChange: this.onProvinceChange.bind(this) }))} disabled = { this.props.accountDisabled }>
                         { this.state.data.provinces.map( (item,index) => {
                             return (
                                 <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -294,7 +329,7 @@ class Account extends Component {
                   label="所在城市"
                   required
                 >
-                    <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('cityId',Object.assign({},rules.cityId,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.state.data.cityDisabled }>
+                    <Select showSearch optionFilterProp="children" notFoundContent="无法找到" placeholder={ this.state.data.cityPlaceHolder } {...getFieldProps('cityId',Object.assign({},rules.cityId,{ onChange: this.onCityChange.bind(this) }))} disabled={ this.props.accountDisabled || this.state.data.cityDisabled }>
                         { this.state.data.cities.map( (item,index) => {
                             return (
                                 <Option value={item.B_BankAreaID} key={index}>{item.AreaName}</Option>
@@ -308,7 +343,7 @@ class Account extends Component {
                   {...formItemLayout}
                   required
                 >
-                  <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branchBankId',rules.branchBankId)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.state.data.branchDisabled } >
+                  <Select showSearch optionFilterProp="children" notFoundContent="无法找到" {...getFieldProps('branchBankId',rules.branchBankId)} placeholder={ this.state.data.branchPlaceHolder } disabled = { this.props.accountDisabled || this.state.data.branchDisabled } >
                     { this.state.data.branches.map( (item,index) => {
                         return (
                             <Option value={ item.BranchBankCode } key={ index }>{ item.BranchBankName }</Option>
@@ -326,7 +361,7 @@ class Account extends Component {
                     label="请选择验证方式"
                     required
                 >
-                    <RadioGroup {...getFieldProps('validateType',{ initialValue: this.state.data.validateType , onChange : this.onValidateTypeChange.bind(this)})}>
+                    <RadioGroup {...getFieldProps('validateType',{ initialValue: this.state.data.validateType , onChange : this.onValidateTypeChange.bind(this)})} disabled = { this.props.accountDisabled }>
                         <Radio value="OffLinePayAuth">线下支付小额验证金核验</Radio>
                         <Radio value="OffLineSubmitInfo">线下提交账户资料核验</Radio>
                     </RadioGroup>
