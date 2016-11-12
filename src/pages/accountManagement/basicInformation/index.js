@@ -98,14 +98,30 @@ export default class BasicInformation extends React.Component {
 
         Promise.all([p1,p2,p3,p4,p5,p6,p7,p8]).then(values => {
           //console.log(values);
-          this.state.data.getUserCheckStatus = values[0].data
-          this.state.data.getLoginUserSimpleInfo = values[1].data
-          this.state.data.getLoginCheckStatus = values[2].data
-          this.state.data.getBindMobile = values[3].data
-          this.state.data.getIsSetPayPassword = values[4].data
-          this.state.data.getCompanyAccountCheckStatus = values[5].data
-          this.state.data.getCheckedBank = values[6].data
-          this.state.data.getRelatedPersonInfo = values[7].data
+          if(values[0].data){
+              this.state.data.getUserCheckStatus = values[0].data
+          }
+          if(values[1].data){
+              this.state.data.getLoginUserSimpleInfo = values[1].data
+          }
+          if(values[2].data){
+              this.state.data.getLoginCheckStatus = values[2].data
+          }
+          if(values[3].data){
+              this.state.data.getBindMobile = values[3].data
+          }
+          if(values[4].data){
+              this.state.data.getIsSetPayPassword = values[4].data
+          }
+          if(values[5].data){
+              this.state.data.getCompanyAccountCheckStatus = values[5].data
+          }
+          if(values[6].data){
+              this.state.data.getCheckedBank = values[6].data
+          }
+          if(values[7].data){
+              this.state.data.getRelatedPersonInfo = values[7].data
+          }
           //this.state.data.getRelatedPersonInfo = values[7].data
           //this.state.data.getRelatedPersonInfo = values[3].data
 
