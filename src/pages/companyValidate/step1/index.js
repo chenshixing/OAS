@@ -171,7 +171,7 @@ class CompanyValidate extends React.Component {
             if(res.code == 200){
                 //  提交成功TODO
                 console.log('next finish');
-                // this.props.history.push('/companyValidate/step2');
+                this.props.history.push('/companyValidate/step2');
             }
         });
     }
