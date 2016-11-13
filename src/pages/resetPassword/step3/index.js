@@ -43,7 +43,7 @@ class Step3 extends React.Component {
                     console.log('res:',res);
                     this.props.history.push({
                         pathname:'resetPassword/step4',
-                        query:{loginUrl:res.data && res.data.loginUrl}
+                        state:{loginUrl:res.data && res.data.loginUrl}
                     });
                 },(res)=>{
                     message.error(`提交失败！${res.message}`,5);

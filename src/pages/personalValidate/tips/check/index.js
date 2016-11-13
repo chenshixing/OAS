@@ -39,22 +39,22 @@ class Check extends Component {
             if(res.data.userType=='1'){
                 var obj = helper.convertUserCheckStatus(res.data.checkItems);
                 console.log('convertUserCheckStatus:',obj);
-                var PerBasicInfoText='';
-                var PerRealText='';
+                var PerBasicInfoText='待提交';
+                var PerRealText='待认证';
                 //审核状态，-1：待审核；0:未通过；1：通过；2：审核中  
                 //系统：systemStatus 银行：bankStatus
                         
                 const {PerBasicInfo,PerReal} = obj;
-                if(PerBasicInfo.systemStatus=='-1' && PerBasicInfo.bankStatus=='0'){
+                if(PerBasicInfo.systemStatus=='-1'){
                     PerBasicInfoText='待提交';
                 }else{
                     PerBasicInfoText='已提交';
                 }
 
-                if((PerReal.systemStatus=='1' && PerReal.bankStatus=='2') || (PerReal.systemStatus=='1' && PerReal.bankStatus=='0')){
-                    PerRealText='已认证';
-                }else{
+                if(PerReal.systemStatus=='-1'){
                     PerRealText='待认证';
+                }else{
+                    PerRealText='已认证';
                 }
                 this.setState({
                     PerBasicInfoText:PerBasicInfoText,
