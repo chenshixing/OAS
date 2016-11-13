@@ -9,8 +9,6 @@ import {Link} from 'react-router';
 // 页面组件
 import Frame from 'COM/form/frame';
 
-//自己内容组件
-import StepsBar from './StepsBar';
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
 
@@ -41,13 +39,13 @@ class Step3 extends React.Component {
                     body:data
                 }).then((res)=>{
                     this.props.history.push({
-                        pathname:'resetPassword/step4'
+                        pathname:'resetPassword/step4',
+                        query:{loginUrl:res.data && res.data.loginUrl}
                     });
                 },(res)=>{
                     message.error(`提交失败！${res.message}`,5);
                 });
             }
-
 
         });
     }
@@ -95,8 +93,12 @@ class Step3 extends React.Component {
 
         return (
             <div>
-                {/*步骤*/}
-                <StepsBar />
+                <Steps size="default" current={2} className="fn-mb-30">
+                    <Step title="账户信息" />
+                    <Step title="验证身份" />
+                    <Step title="重置登录密码" />
+                    <Step title="重置成功" />
+                </Steps>
                 <Frame title="重置交易密码" small=" &nbsp;&nbsp;请勿与交易密码一致" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem

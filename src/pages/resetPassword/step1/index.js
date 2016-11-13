@@ -59,13 +59,6 @@ class CompanyValidate extends React.Component {
              }else{
                  console.log('Errors in form!!!');
              }
-
-             setTimeout(() => {
-                 Store.set("resetPasswordData", this.state.data);
-                 this.setState({ loading: false});
-                 //window.location.href='/#/resetPassword/step2';
-                 this.props.history.push("/resetPassword/step2")
-             }, 1000);
         });
     }
 
@@ -201,7 +194,6 @@ class CompanyValidate extends React.Component {
                         <Row style={{ marginTop: 30 }}>
                             <Col span="12" offset="8">
                                 <Button key="submit" type="primary" size="large" onClick={this.handleNext}>下一步 </Button>
-                                <Link type="primary" className="fn-ml-10" to='/resetPassword/step2'>下一步（审核不通过）</Link>
                                 <Link to="/userRegister" className="link-standard fn-pl-20">重新登录</Link>
                             </Col>
                         </Row>

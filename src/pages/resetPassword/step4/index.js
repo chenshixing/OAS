@@ -15,6 +15,8 @@ class Steps3 extends React.Component {
     constructor(props){
         super(props);
         this.state={};
+        console.log(this.props.location);
+        // this.loginUrl=this.props.location.loginUrl;
     }
 
     render() {
