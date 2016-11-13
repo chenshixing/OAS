@@ -10,7 +10,7 @@ import {Link} from 'react-router';
 import Frame from 'COM/form/frame';
 
 // 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+import {fetch,ruleType} from 'UTILS';
 
 // antd 组件
 import {Alert,Steps,Button,Form,Input,Col,Row,message} from 'antd';
@@ -32,12 +32,15 @@ class Step3 extends React.Component {
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
-                let data =values;
+                let data ={businessType:2};
+                data.pwd=values.password;
+                data.conPwd=values.rePassword;
                 console.log('Submit!!!',data);
 
                 fetch('/user/resetPwd.do',{
                     body:data
                 }).then((res)=>{
+                    console.log('res:',res);
                     this.props.history.push({
                         pathname:'resetPassword/step4',
                         query:{loginUrl:res.data && res.data.loginUrl}
@@ -99,11 +102,11 @@ class Step3 extends React.Component {
                     <Step title="重置登录密码" />
                     <Step title="重置成功" />
                 </Steps>
-                <Frame title="重置交易密码" small=" &nbsp;&nbsp;请勿与交易密码一致" className="">
+                <Frame title="重置登录密码" small=" &nbsp;&nbsp;请勿与交易密码一致" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem
                                 {...formItemLayout}
-                                label="设置交易密码"
+                                label="设置登录密码"
                                 required
                             >
                                 <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" />
@@ -111,7 +114,7 @@ class Step3 extends React.Component {
 
                             <FormItem
                                 {...formItemLayout}
-                                label="确认交易密码"
+                                label="确认登录密码"
                                 required
                             >
                                 <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off" />

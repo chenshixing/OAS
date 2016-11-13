@@ -88,12 +88,12 @@ class CompanyValidate extends React.Component {
                     {required: true, message: '企业名称不能为空'},
                 ]
             },
-            loginName:{
+            userNo:{
                 rules:[
                     {required: true, message: '登录名不能为空'},
                 ]
             },
-            userMobile:{
+            mobile:{
                 rules:[
                     {required: true, message: '常用手机号码不能为空或者格式不正确'},
                     ruleType('mobile')
@@ -171,7 +171,7 @@ class CompanyValidate extends React.Component {
                                 required
                             >
                                 <Input
-                                    {...getFieldProps('loginName',rules.loginName)}
+                                    {...getFieldProps('userNo',rules.userNo)}
                                     type="text"
 
                                     />
@@ -185,7 +185,7 @@ class CompanyValidate extends React.Component {
                                 required
                             >
                                 <Input
-                                    {...getFieldProps('userMobile',rules.userMobile)}
+                                    {...getFieldProps('mobile',rules.mobile)}
 
                                     />
                             </FormItem>
