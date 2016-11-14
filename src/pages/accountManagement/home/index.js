@@ -80,7 +80,8 @@ class Home extends React.Component {
 
             //验证不通过，就跳转到验证页面
             if (values[2].data.bankCheckStatus == 1 && values[2].data.step == 999) {
-                return true
+                console.log("成功")
+                //return true
             } else {
                 this.props.history.push("/accountManagement/basicInformation")
             }
