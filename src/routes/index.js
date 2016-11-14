@@ -84,24 +84,7 @@ const routes = {
                 })
             }
         },
-        // 核身信息补充提示页(个人)
-        {
-            path: 'personalValidate/tips/supplement',
-            getComponent(nextState, cb) {
-                require.ensure([], (require) => {
-                    cb(null, require('PAGES/personalValidate/tips/supplement/index.js').default)
-                })
-            }
-        },
-        // 核审核不通过提示页(个人)
-        {
-            path: 'personalValidate/tips/disapproval',
-            getComponent(nextState, cb) {
-                require.ensure([], (require) => {
-                    cb(null, require('PAGES/personalValidate/tips/disapproval/index.js').default)
-                })
-            }
-        },
+        
         // 个人核身-step1
         {
           path: 'personalValidate/step1',
@@ -310,7 +293,8 @@ const routes = {
           }
         },
         /***************账户管理 end ***************/
-        /***************重置登录密码 start *************/
+
+        /***************重置登录密码(密码找回) start *************/
         {
           path: 'resetPassword/step1',
           getComponent(nextState, cb) {
@@ -319,11 +303,28 @@ const routes = {
             });
           }
         },
+        
         {
-          path: 'resetPassword/step2',
+          path: 'resetPassword/step2/autherized/index1',
           getComponent(nextState, cb) {
             require.ensure([], (require) => {
-              cb(null, require('PAGES/resetPassword/step2').default);
+              cb(null, require('PAGES/resetPassword/step2/autherized/index1').default);
+            });
+          }
+        },
+        {
+          path: 'resetPassword/step2/autherized/index2',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step2/autherized/index2').default);
+            });
+          }
+        },
+        {
+          path: 'resetPassword/step2/unautherized',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/resetPassword/step2/unautherized').default);
             });
           }
         },
@@ -343,7 +344,7 @@ const routes = {
             });
           }
         },
-        /***************重置登录密码 end ***************/
+        /***************重置登录密码(密码找回) end ***************/
         // 404
         {
           path: '*',
