@@ -56,7 +56,10 @@ class Check extends Component {
     }
 
     continueToFill(){
-        let step = globalState.step == 0 ? 1 : globalState.step;
+        let step = 1;
+        if(globalState && globalState.step){
+            step = globalState.step == 0 ? 1 : globalState.step;
+        }
         this.props.history.push('/companyValidate/step' + step);
     }
 
