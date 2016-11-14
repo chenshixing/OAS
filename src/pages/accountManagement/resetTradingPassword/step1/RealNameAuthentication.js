@@ -75,7 +75,7 @@ export default class RealNameAuthentication extends React.Component {
         let {
             getAccountRealCheckStatus,
             //getRelatedPersonInfo,
-            getLoginUserSimpleInfo,
+            //getLoginUserSimpleInfo,
             getDesensitizeMobile
         } = this.props;
 
