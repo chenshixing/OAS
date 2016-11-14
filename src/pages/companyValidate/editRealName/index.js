@@ -44,7 +44,7 @@ class EditRealName extends Component {
         fetch('/companyVerification/getConnectorInfo.do').then(res => {
             // console.log(res);
             let renderData = {};
-            let companyConnectorInfoDto = data.original = res.data.companyConnectorInfoDto;
+            let companyConnectorInfoDto = data.original = res.data;
 
             //  处理保存的原始数据(用于修改对比)
             data.original.writerType = data.original.writerType.toString();
@@ -134,16 +134,16 @@ class EditRealName extends Component {
     getConfirmContent(submitData){
         // console.log(submitData);
         let me = this;
-        let companyConnectorInfoDto = submitData.companyConnectorInfoDto;
+        let companyConnectorInfoDto = submitData;
         let client = companyConnectorInfoDto.client;
         let corperator = companyConnectorInfoDto.corperator;
         let kvp = Object.assign({},client);
-        if(submitData.companyConnectorInfoDto.writerType == 1){
+        if(submitData.writerType == 1){
             //  委托代理人TODO
             for( let prop in corperator){
                 kvp["corporation" + me._firstUpperCase(prop)] = corperator[prop];
             }
-        }else if(submitData.companyConnectorInfoDto.writerType == 2){
+        }else if(submitData.writerType == 2){
             //  法定代表人TODO
             for( let prop in kvp){
                 kvp["corporation" + me._firstUpperCase(prop)] = kvp[prop];
@@ -167,7 +167,7 @@ class EditRealName extends Component {
 
     submit(submitData){
         console.log(submitData);
-        if(this._isObjectValueEqual(submitData.companyConnectorInfoDto, this.state.data.original)){
+        if(this._isObjectValueEqual(submitData, this.state.data.original)){
             //  没有修改任何信息
             this.props.history.push('/companyValidate/tips/check');
             return false;
@@ -216,7 +216,6 @@ class EditRealName extends Component {
             corperator : corperator
         }
 
-        submitData.companyConnectorInfoDto = companyConnectorInfoDto;
         delete submitData.writerType;
         delete submitData.name;
         delete submitData.mobile;
@@ -225,11 +224,9 @@ class EditRealName extends Component {
         delete submitData.corporationMobile;
         delete submitData.corporationEmail;
 
-        return submitData;
+        submitData = companyConnectorInfoDto;
 
-        // console.log(submitData.companyConnectorInfoDto);
-        // console.log(this.state.data.original);
-        // console.log(this._isObjectValueEqual(submitData.companyConnectorInfoDto,this.state.data.original));
+        return submitData;
     }
 
     //  判断两个对象是否相等

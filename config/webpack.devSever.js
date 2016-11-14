@@ -7,8 +7,8 @@ const webpack = require('webpack');
 const commonConfig = require('./webpack.common');
 // WDS
 const utils = require('./utils');
-const HOST = utils.getIP();
-const PORT = 8090;
+const HOST = 'accountcmb.frontpay.local';
+const PORT = 80;
 
 module.exports = Object.assign(commonConfig, {
     devtool: 'cheap-source-map', // 'eval'
@@ -29,7 +29,7 @@ module.exports = Object.assign(commonConfig, {
         port: PORT,
         proxy: {
             '/api/*': {
-                target: 'http://10.1.21.13/',
+                target: 'http://10.1.21.13:8080/',
                 //target: 'http://192.168.9.154:8081/',
                 pathRewrite: {
                     '^/api': ''

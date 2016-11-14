@@ -109,7 +109,7 @@ class CompanyValidate extends React.Component {
         let p3 = fetch('/companyVerification/getBankAccountInfo.do');
 
         Promise.all([p1, p2, p3]).then(res => {
-            // console.log(res);
+            console.log(res);
 
             //  企业信息处理
             let companyInfo = res[0].data;
@@ -124,7 +124,7 @@ class CompanyValidate extends React.Component {
             data.companyInfo = companyInfo;
 
             //  关系人信息处理
-            let companyConnectorInfoDto = res[1].data.companyConnectorInfoDto;
+            let companyConnectorInfoDto = res[1].data;
 
             companyConnectorInfoDto.clientDisplay = "block";
             if(companyConnectorInfoDto.writerType == 2){
@@ -164,7 +164,7 @@ class CompanyValidate extends React.Component {
     }
 
     goBack(){
-        this.props.history.goBack();
+        this.props.history.push('/companyValidate/step1?getInfo=1');
     }
 
     render() {

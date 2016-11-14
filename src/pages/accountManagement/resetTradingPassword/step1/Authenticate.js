@@ -19,6 +19,14 @@ export default class Authenticate extends React.Component {
     handleSend(){
         this.props.handleSend()
     }
+    loadConnectorType(item){
+        let items = {
+            1:"经办人",
+            2:"法人",
+            3:"个人"
+        }
+        return items[item];
+    }
     render() {
         console.log(this)
         return (
@@ -26,7 +34,7 @@ export default class Authenticate extends React.Component {
                 <Form horizontal className="fn-mt-30">
                     <FormItem
                         id="control-input"
-                        label={this.props.getLoginUserSimpleInfo.userType==1?"姓名":"委托代理人"}
+                        label={this.loadConnectorType(this.props.getDesensitizeMobile.connectorType)}
                         labelCol={{span: 10}}
                         wrapperCol={{span: 12}}
                         >

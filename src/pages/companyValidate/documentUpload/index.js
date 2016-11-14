@@ -256,10 +256,10 @@ class DocumentUpload extends Component {
             labelCol: { span: 8 },
             wrapperCol: { span: 12 },
         };
-
+        let url = '/common/fileupload.do';
         const upLoadProps = {
             name: 'file',
-            action: '/api/common/fileupload.do',
+            action: __DEV__ ? `/api${url}` : url,
             headers: {
                 authorization: 'authorization-text',
             }

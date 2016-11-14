@@ -483,7 +483,7 @@ export default class basicBodyEditor extends React.Component {
                     </Row>
                 </div>
             )
-        }else{
+        }else if(userType==2){
             template = (
                 <div className="fn-mtb-10 fn-pb-10">
                     <Row type="flex" justify="start" align="middle">

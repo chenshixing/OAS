@@ -41,20 +41,20 @@ class Check extends Component {
                 console.log('convertUserCheckStatus:',obj);
                 var PerBasicInfoText='待提交';
                 var PerRealText='待认证';
-                //审核状态，-1：待审核；0:未通过；1：通过；2：审核中  
+                //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
                 //系统：systemStatus 银行：bankStatus
-                        
+
                 const {PerBasicInfo,PerReal} = obj;
                 if(PerBasicInfo.systemStatus=='-1'){
-                    PerBasicInfoText='待提交';
+                    PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
                 }else{
-                    PerBasicInfoText='已提交';
+                    PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
                 }
 
                 if(PerReal.systemStatus=='-1'){
-                    PerRealText='待认证';
+                    PerRealText=<span className="error-FontColor1">待认证</span>;
                 }else{
-                    PerRealText='已认证';
+                    PerRealText=<span className="success-FontColor1">已认证</span>;
                 }
                 this.setState({
                     PerBasicInfoText:PerBasicInfoText,
@@ -68,7 +68,7 @@ class Check extends Component {
 
     //重新提交认证申请
     reVerify(){
-        fetch('/personVerification/resubmitVerification').then((res)=>{
+        fetch('/personVerification/resubmitVerification.do').then((res)=>{
             Modal.success({
                 title: '审核申请已提交，请耐心等待结果。',
                 content: (
@@ -125,11 +125,17 @@ class Check extends Component {
                 <Row className="tipsRow">
                     <Row className="infoRow">
                         <Col span={6}>个人基本资料</Col>
-                        <Col span={6}><span className="success-FontColor1">{PerBasicInfoText}</span></Col>
+                        {/*
+                            <Col span={6}><span className="success-FontColor1">{PerBasicInfoText}</span></Col>
+                        */}
+                        <Col span={6}>{PerBasicInfoText}</Col>
                     </Row>
                     <Row className="infoRow">
                         <Col span={6}>实名认证</Col>
-                        <Col span={6}><span className="error-FontColor1">{PerRealText}</span></Col>
+                        {/*
+                            <Col span={6}><span className="error-FontColor1">{PerRealText}</span></Col>
+                        */}
+                        <Col span={6}>{PerRealText}</Col>
                     </Row>
                     {reVerify}
                 </Row>
@@ -142,4 +148,3 @@ class Check extends Component {
 }
 
 export default Check;
-
