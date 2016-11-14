@@ -124,7 +124,7 @@ class CompanyValidate extends React.Component {
             data.companyInfo = companyInfo;
 
             //  关系人信息处理
-            let companyConnectorInfoDto = res[1].data.companyConnectorInfoDto;
+            let companyConnectorInfoDto = res[1].data;
 
             companyConnectorInfoDto.clientDisplay = "block";
             if(companyConnectorInfoDto.writerType == 2){
