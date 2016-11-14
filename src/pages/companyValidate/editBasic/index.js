@@ -112,7 +112,7 @@ class CompanyValidate extends React.Component {
         fetch('/user/getUserCheckStatus.do').then(res => {
             let statusMap = helper.convertUserCheckStatus(res.data.checkItems);
 
-            data.accountDisabled = (statusMap.EnAccount.bankStatus == 1 && statusMap.EnAccount.systemStatus == 1) ? true : false;
+            data.accountDisabled = statusMap.EnAccount.systemStatus == 1 ? true : false;
 
             console.log(data.accountDisabled);
 
