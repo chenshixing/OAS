@@ -119,7 +119,7 @@ export default class Steps1 extends React.Component {
                "businessType": 3
            }
         }).then(res=>{
-           if(res.code==200){
+           if(res.code==200 && res.data.checkPass == 1){
                //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
                //this.props.history.push("/accountManagement/resetTradingPassword/step2");
                sessionStorage.removeItem("isSend");
