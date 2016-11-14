@@ -167,21 +167,22 @@ class EditRealName extends Component {
 
     submit(submitData){
         console.log(submitData);
-        if(this._isObjectValueEqual(submitData, this.state.data.original)){
+        let me = this;
+        if(me._isObjectValueEqual(submitData, this.state.data.original)){
             //  没有修改任何信息
-            this.props.history.push('/companyValidate/tips/check');
+            me.props.history.push('/companyValidate/tips/check');
             return false;
         }
         fetch('/companyVerification/modifyConnectorInfo.do',{
             body : submitData,
         }).then(res => {
             //  修改完成TODO
-            if(res.data == 201){
-                // 201-代表有修改跳转至提交结果
-                this.props.history.push('/companyValidate/result');
+            if(res.data == 201 || res.data == 202){
+                // 201或202-代表有修改跳转至提交结果页
+                me.props.history.push('/companyValidate/result');
             }else if(!res.data){
-                // 空则跳转至审核不通过提示(弹窗确认)
-                this.tipsShow();
+                // 空则跳转至审核不通过提示页(弹窗确认)
+                me.tipsShow();
             }
         });
     }

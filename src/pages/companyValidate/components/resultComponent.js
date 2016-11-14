@@ -165,7 +165,7 @@ export default class ResultComponent extends React.Component {
     }
 
     goToTips(){
-      this.props.history.push('/companyValidate/tips/check');
+      this.props.history.push('/companyValidate/tips/check?reloadStatus=1');
     }
 
     tipsShow(){
