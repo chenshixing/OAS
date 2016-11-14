@@ -12,9 +12,6 @@ import OffLinePayTable from '../components/offlinePayTable';
 //  引入fetch
 import { fetch } from 'UTILS';
 
-//  引入store
-import store from 'store';
-
 class Account extends Component {
     static propTypes = {
         className: PropTypes.string

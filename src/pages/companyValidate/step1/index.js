@@ -30,9 +30,6 @@ import { fetch } from 'UTILS';
 //  引入moment
 import moment from 'moment';
 
-//  引入store
-import store from 'store';
-
 //  全局状态
 import State from 'PAGES/redirect/state';
 const globalState = State.getState().data;
@@ -63,7 +60,7 @@ class CompanyValidate extends React.Component {
 
     dataRender(){
         let me = this;
-        console.log(me);
+        // console.log(me);
         let data = me.state.data;
         if(me.props.location.query.getInfo != 1){
             //  没有传参获取时就不获取
@@ -77,7 +74,7 @@ class CompanyValidate extends React.Component {
 
         Promise.all([p1,p2]).then(res => {
             let fieldsValue = Object.assign({},res[0].data,res[1].data);
-            console.log(fieldsValue);
+            // console.log(fieldsValue);
             //  企业名称处理
             data.companyName = fieldsValue.companyName;
             //  营业执照类型处理
@@ -121,40 +118,6 @@ class CompanyValidate extends React.Component {
         }).catch(reason => {
           console.log(reason)
         });
-        // let fieldsValue = store.get('cvs1FieldsValue');
-        // if(!fieldsValue){ return false; }
-        // // console.log(fieldsValue);
-        // //  企业名称处理
-        // data.companyName = fieldsValue.companyName;
-        // //  营业执照类型处理
-        // data.companyPaperType = fieldsValue.companyPaperType;
-        // //  营业执照到期日处理
-        // if(fieldsValue.registrationExtendField2){
-        //     //  用date对象渲染数据
-        //     fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
-        // }
-        // data.isLongEndTime = fieldsValue.isLongEndTime;
-        // //  填写人的身份处理
-        // data.writerType = fieldsValue.writerType;
-        // let display = "block";
-        // if(data.writerType == "2"){
-        //     //  法定代表人TODO
-        //     display = "none";
-        // }
-        // // console.log(fieldsValue);
-        // //  证件号转字符串处理
-        // if(fieldsValue.companyPaperType == 2){
-        //     fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo ? fieldsValue.registrationPaperNo.toString() : "";
-        //     fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo ? fieldsValue.orgInsCodePaperNo.toString() : "";
-        // }else{
-        //     fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo ? fieldsValue.socialCreditPaperNo.toString() : "";
-        // }
-
-        me.setState({
-            // display : display,
-            data : data
-        });
-        // this.props.form.setFieldsValue(fieldsValue);
     }
 
     onCompanyNameChange(e){
@@ -206,9 +169,6 @@ class CompanyValidate extends React.Component {
     //  点击下一步
     next(){
         let me = this;
-        //  本地存储表单信息
-        let fieldsValue = this.props.form.getFieldsValue();
-        store.set('cvs1FieldsValue',fieldsValue);
         // 表单校验
         this.props.form.validateFieldsAndScroll((errors, data) => {
           if (errors) {
