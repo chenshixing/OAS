@@ -112,7 +112,7 @@ class CompanyValidate extends React.Component {
         fetch('/user/getUserCheckStatus.do').then(res => {
             let statusMap = helper.convertUserCheckStatus(res.data.checkItems);
 
-            data.accountDisabled = (statusMap.EnAccount.bankStatus == 1 && statusMap.EnAccount.systemStatus == 1) ? true : false;
+            data.accountDisabled = statusMap.EnAccount.systemStatus == 1 ? true : false;
 
             console.log(data.accountDisabled);
 
@@ -477,8 +477,8 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })} disabled = { data.isChecking }>
-                                <Radio value="2">普通营业执照</Radio>
-                                <Radio value="3">多证合一营业执照</Radio>
+                                <Radio value={2}>普通营业执照</Radio>
+                                <Radio value={3}>多证合一营业执照</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -534,7 +534,7 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <Account ref="Account" getFieldProps={ getFieldProps } accountDisabled = { this.state.data.accountDisabled }  rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
+                        <Account ref="Account" getFieldProps={ getFieldProps } accountDisabled = { this.state.data.accountDisabled } location = { this.props.location } rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">

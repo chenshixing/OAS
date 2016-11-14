@@ -12,9 +12,6 @@ import OffLinePayTable from '../components/offlinePayTable';
 //  引入fetch
 import { fetch } from 'UTILS';
 
-//  引入store
-import store from 'store';
-
 class Account extends Component {
     static propTypes = {
         className: PropTypes.string
@@ -83,35 +80,46 @@ class Account extends Component {
     dataRender(){
     	let me = this;
         let data = me.state.data;
-        let fieldsValue = store.get('cvs1FieldsValue');
-        if(!fieldsValue){ return false; }
-    	//  开户行处理
-        if(fieldsValue.bankId){
-            //  存在开户行时TODO
-            data.bankId = fieldsValue.bankId;
+        if(me.props.location.query.getInfo != 1){
+            //  没有传参获取时就不获取
+            return false;
         }
-
-        //  所在省份处理
-        if(fieldsValue.provinceId){
-            data.provinceId = fieldsValue.provinceId;
-            data.cityPlaceHolder = "请选择城市";
-            data.cityDisabled = false;
-            let param = {
-                data : {
-                    provinceId : fieldsValue.provinceId
+        //  获取企业对公账户信息
+        fetch('/companyVerification/getBankAccountInfo.do').then(res => {
+            if(res.code == 200){
+                //  提交成功TODO
+                let fieldsValue = res.data;
+                if(!fieldsValue){ return false; }
+                //  开户行处理
+                if(fieldsValue.bankId){
+                    //  存在开户行时TODO
+                    data.bankId = fieldsValue.bankId;
                 }
-            }
-            if(fieldsValue.cityId){
-                //  存在城市时TODO
-                data.cityId = fieldsValue.cityId;
-            }
-            me.getCityList(param);
-        }
 
-        //  分支行处理
-        me._getBranch(true);
+                //  所在省份处理
+                if(fieldsValue.provinceId){
+                    data.provinceId = fieldsValue.provinceId;
+                    data.cityPlaceHolder = "请选择城市";
+                    data.cityDisabled = false;
+                    let param = {
+                        data : {
+                            provinceId : fieldsValue.provinceId
+                        }
+                    }
+                    if(fieldsValue.cityId){
+                        //  存在城市时TODO
+                        data.cityId = fieldsValue.cityId;
+                    }
+                    me.getCityList(param);
+                }
 
-        me.setState({ data });
+                //  分支行处理
+                me._getBranch(true);
+
+                me.setState({ data });
+                me.props.form.setFieldsValue(fieldsValue);
+            }
+        });
 
     }
 

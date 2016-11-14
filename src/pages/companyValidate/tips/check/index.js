@@ -14,9 +14,12 @@ import TipsContent from '../components/tipsContent';
 //  样式
 import  '../style.less';
 
+//  引入fetch
+import { fetch } from 'UTILS';
+
 //  全局状态
 import State from 'PAGES/redirect/state';
-const globalState = State.getState().data;
+let globalState = State.getState().data;
 
 //  登录对接完成后去掉
 // const globalState = {
@@ -33,6 +36,33 @@ class Check extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            pageType : this._getPageType(),
+            showName : globalState.showName ? globalState.showName : ""
+        }
+    }
+
+    componentDidMount() {
+        this._refreshStatus();
+    }
+
+    _refreshStatus(){
+        let me = this;
+        if(me.props.location.query.reloadStatus != 1){
+            //  没有传参需要刷新缓存则不用更新缓存
+            return false;
+        }
+        fetch('/common/getLoginCheckStatus.do').then(res => {
+            globalState = res.data;
+            me.setState({
+                pageType : me._getPageType(),
+                showName : globalState.showName ? globalState.showName : ""
+            });
+        });
+    }
+
+    _getPageType(){
         //  没有完成 核身信息补充提示页
         let pageType = "supplement";
         if(globalState.step == 999){
@@ -45,10 +75,7 @@ class Check extends Component {
                 pageType = "disapproval";
             }
         }
-        this.state = {
-            pageType : pageType,
-            showName : globalState.showName ? globalState.showName : ""
-        }
+        return pageType;
     }
 
     headerRender(){
@@ -73,7 +100,7 @@ class Check extends Component {
                 <Col span={21}>
                     <h4>{ this.state.showName }</h4>
                     <p>您的认证资料未填写完，请尽快完成。<Button type="primary" onClick={ this.continueToFill.bind(this) }>继续填写</Button></p>
-                    <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1'>重新认证</Link>。</p>
+                    <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1?getInfo=1'>重新认证</Link>。</p>
                 </Col>
             </Row>
         );
