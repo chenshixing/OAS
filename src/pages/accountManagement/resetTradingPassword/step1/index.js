@@ -143,22 +143,22 @@ export default class Steps1 extends React.Component {
             }
         })
         //实名验证
-        let p3 = fetch('/user/getAccountRealCheckStatus.do',{
-            body:{
-                "businessType": 3
-            }
-        })
+        // let p3 = fetch('/user/getAccountRealCheckStatus.do',{
+        //     body:{
+        //         "businessType": 3
+        //     }
+        // })
 
         //  身份实名认证
-        let p4 = fetch('/user/getRelatedPersonInfo.do');
+        //let p4 = fetch('/user/getRelatedPersonInfo.do');
 
-        Promise.all([p1, p2,p3,p4]).then(values => {
+        Promise.all([p1, p2]).then(values => {
           console.log(values);
           this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getDesensitizeMobile = values[1].data
-          this.state.data.getAccountRealCheckStatus = values[2].data
-          this.state.data.getRelatedPersonInfo = values[3].data;
-          console.log(values[3].data)
+          //this.state.data.getAccountRealCheckStatus = values[2].data
+          //this.state.data.getRelatedPersonInfo = values[3].data;
+          //console.log(values[3].data)
           this.forceUpdate();
         }).catch(reason => {
 

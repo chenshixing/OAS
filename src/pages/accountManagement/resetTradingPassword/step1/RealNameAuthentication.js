@@ -74,7 +74,7 @@ export default class RealNameAuthentication extends React.Component {
         console.log(this)
         let {
             getAccountRealCheckStatus,
-            getRelatedPersonInfo,
+            //getRelatedPersonInfo,
             getLoginUserSimpleInfo,
             getDesensitizeMobile
         } = this.props;
@@ -160,7 +160,7 @@ export default class RealNameAuthentication extends React.Component {
                         <p>
                             实名认证成功后页面自动跳转，如没有跳转请点击
                             {
-                                getAccountRealCheckStatus.checkStatus==1
+                                getAccountRealCheckStatus && getAccountRealCheckStatus.checkStatus==1
                                 ?
                                 <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
                                 :
