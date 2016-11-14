@@ -125,7 +125,7 @@ class InfoRow extends Component {
         }
 		return (
 			<Col span={12}>
-				<Link to='/companyValidate/editBasic?getInfo'>修改资料</Link>
+				<Link to='/companyValidate/editBasic?getInfo=1'>修改资料</Link>
 			</Col>
     	);
     }
