@@ -97,13 +97,13 @@ class Check extends Component {
                         <p>您的认证资料未填写完，请尽快完成。<Button type='primary' size='small'><Link to={nextStep}>继续填写</Link></Button></p>
                         <p>如需修改已提交的信息，请点击 <Link to='/personalValidate/step1'>重新认证</Link></p>
                   </div>);
-        }else if(this.state.step=='999' && this.state.bankCheckStatus =='0'){//资料已提交完成，审核中
+        }else if(this.state.step=='999' && this.state.bankCheckStatus =='-1'){//资料已提交完成，审核中
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
                         <p>账号正在审核中，我们将尽快完成审核，结果将以短信通知您。</p>
                         <p>请尽快完成以下认证条件，如需修改信息请联系客服电话：400-106-6698。</p>
                   </div>);
-        }else if(this.state.step=='999' && this.state.bankCheckStatus =='-1'){//资料已提交完成，但审核不通过
+        }else if(this.state.step=='999' && this.state.bankCheckStatus =='0'){//资料已提交完成，但审核不通过
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
                         <p>您的资料审核不通过，具体原因请联系分行客户经理。</p>
