@@ -73,7 +73,7 @@ class Check extends Component {
                 <Col span={21}>
                     <h4>{ this.state.showName }</h4>
                     <p>您的认证资料未填写完，请尽快完成。<Button type="primary" onClick={ this.continueToFill.bind(this) }>继续填写</Button></p>
-                    <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1'>重新认证</Link>。</p>
+                    <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1?getInfo=1'>重新认证</Link>。</p>
                 </Col>
             </Row>
         );

@@ -33,6 +33,10 @@ import moment from 'moment';
 //  引入store
 import store from 'store';
 
+//  全局状态
+import State from 'PAGES/redirect/state';
+const globalState = State.getState().data;
+
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
@@ -43,7 +47,7 @@ class CompanyValidate extends React.Component {
             display : 'block',
             visible : false,
             data:{
-                companyName: "",
+                companyName: globalState.showName ? globalState.showName : "",
                 companyPaperType:"2",
                 isLongEndTime:false,
                 writerType : '1'
@@ -59,41 +63,98 @@ class CompanyValidate extends React.Component {
 
     dataRender(){
         let me = this;
+        console.log(me);
         let data = me.state.data;
-        let fieldsValue = store.get('cvs1FieldsValue');
-        if(!fieldsValue){ return false; }
-        // console.log(fieldsValue);
-        //  企业名称处理
-        data.companyName = fieldsValue.companyName;
-        //  营业执照类型处理
-        data.companyPaperType = fieldsValue.companyPaperType;
-        //  营业执照到期日处理
-        if(fieldsValue.registrationExtendField2){
-            //  用date对象渲染数据
-            fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
-        }
-        data.isLongEndTime = fieldsValue.isLongEndTime;
-        //  填写人的身份处理
-        data.writerType = fieldsValue.writerType;
-        let display = "block";
-        if(data.writerType == "2"){
-            //  法定代表人TODO
-            display = "none";
-        }
-        // console.log(fieldsValue);
-        //  证件号转字符串处理
-        if(fieldsValue.companyPaperType == 2){
-            fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo ? fieldsValue.registrationPaperNo.toString() : "";
-            fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo ? fieldsValue.orgInsCodePaperNo.toString() : "";
-        }else{
-            fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo ? fieldsValue.socialCreditPaperNo.toString() : "";
+        if(me.props.location.query.getInfo != 1){
+            //  没有传参获取时就不获取
+            return false;
         }
 
+        //  获取企业信息
+        let p1 = fetch('/companyVerification/getCompanyInfo.do');
+        //  获取关系人信息
+        let p2 = fetch('/companyVerification/getConnectorInfo.do');
+
+        Promise.all([p1,p2]).then(res => {
+            let fieldsValue = Object.assign({},res[0].data,res[1].data);
+            console.log(fieldsValue);
+            //  企业名称处理
+            data.companyName = fieldsValue.companyName;
+            //  营业执照类型处理
+            data.companyPaperType = fieldsValue.companyPaperType;
+            //  营业执照到期日处理
+            if(fieldsValue.registrationExtendField2 != "长期"){
+                //  用date对象渲染数据
+                fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
+                data.isLongEndTime = false;
+            }else{
+                fieldsValue.registrationExtendField2 = undefined;
+                data.isLongEndTime = fieldsValue.isLongEndTime = teue;
+            }
+            //  填写人的身份处理
+            data.writerType = fieldsValue.writerType;
+            let display = "block";
+            if(data.writerType == 1){
+                //  委托代理人
+                fieldsValue.name = fieldsValue.client.name;
+                fieldsValue.mobile = fieldsValue.client.mobile;
+                fieldsValue.email = fieldsValue.client.email;
+                fieldsValue.corporationName = fieldsValue.corperator.name;
+                fieldsValue.corporationMobile = fieldsValue.corperator.mobile;
+                fieldsValue.corporationEmail = fieldsValue.corperator.email;
+            }else if(data.writerType == 2){
+                //  法定代表人TODO
+                display = "none";
+                fieldsValue.name = fieldsValue.corperator.name;
+                fieldsValue.mobile = fieldsValue.corperator.mobile;
+                fieldsValue.email = fieldsValue.corperator.email;
+            }
+            delete fieldsValue.client;
+            delete fieldsValue.corporator;
+
+            me.setState({
+                display : display,
+                data : data
+            });
+            me.props.form.setFieldsValue(fieldsValue);
+
+        }).catch(reason => {
+          console.log(reason)
+        });
+        // let fieldsValue = store.get('cvs1FieldsValue');
+        // if(!fieldsValue){ return false; }
+        // // console.log(fieldsValue);
+        // //  企业名称处理
+        // data.companyName = fieldsValue.companyName;
+        // //  营业执照类型处理
+        // data.companyPaperType = fieldsValue.companyPaperType;
+        // //  营业执照到期日处理
+        // if(fieldsValue.registrationExtendField2){
+        //     //  用date对象渲染数据
+        //     fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
+        // }
+        // data.isLongEndTime = fieldsValue.isLongEndTime;
+        // //  填写人的身份处理
+        // data.writerType = fieldsValue.writerType;
+        // let display = "block";
+        // if(data.writerType == "2"){
+        //     //  法定代表人TODO
+        //     display = "none";
+        // }
+        // // console.log(fieldsValue);
+        // //  证件号转字符串处理
+        // if(fieldsValue.companyPaperType == 2){
+        //     fieldsValue.registrationPaperNo = fieldsValue.registrationPaperNo ? fieldsValue.registrationPaperNo.toString() : "";
+        //     fieldsValue.orgInsCodePaperNo = fieldsValue.orgInsCodePaperNo ? fieldsValue.orgInsCodePaperNo.toString() : "";
+        // }else{
+        //     fieldsValue.socialCreditPaperNo = fieldsValue.socialCreditPaperNo ? fieldsValue.socialCreditPaperNo.toString() : "";
+        // }
+
         me.setState({
-            display : display,
+            // display : display,
             data : data
         });
-        this.props.form.setFieldsValue(fieldsValue);
+        // this.props.form.setFieldsValue(fieldsValue);
     }
 
     onCompanyNameChange(e){
@@ -209,7 +270,7 @@ class CompanyValidate extends React.Component {
         delete submitData.isLongEndTime;
 
         // 填写人类型
-        let client = client = {
+        let client  = {
             name : submitData.name,
             mobile : submitData.mobile,
             email : submitData.email
@@ -287,7 +348,7 @@ class CompanyValidate extends React.Component {
                             {...formItemLayout}
                             required
                         >
-                           <Input {...getFieldProps('companyName',Object.assign({},rules.companyName,{ onChange : this.onCompanyNameChange.bind(this) }))} />
+                           <Input {...getFieldProps('companyName',Object.assign({},rules.companyName,{ onChange : this.onCompanyNameChange.bind(this),initialValue: this.state.data.companyName }))} />
                         </FormItem>
 
                         <FormItem
@@ -296,8 +357,8 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })}>
-                                <Radio value="2">普通营业执照</Radio>
-                                <Radio value="3">多证合一营业执照</Radio>
+                                <Radio value={2}>普通营业执照</Radio>
+                                <Radio value={3}>多证合一营业执照</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -388,8 +449,8 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType, onChange: this.onWriterTypeChange.bind(this) })}>
-                                <Radio value="1">我是委托代理人</Radio>
-                                <Radio value="2">我是法定代表人</Radio>
+                                <Radio value={1}>我是委托代理人</Radio>
+                                <Radio value={2}>我是法定代表人</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -423,7 +484,7 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
+                        <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } location = { this.props.location } companyName = {this.state.data.companyName}/>
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">
