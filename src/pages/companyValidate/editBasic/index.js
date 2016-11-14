@@ -68,7 +68,7 @@ const validateTypeMap = {
 
 //  全局状态
 import State from 'PAGES/redirect/state';
-const globalState = State.getState();
+const globalState = State.getState().data;
 
 //  登录对接完成后去掉
 // const globalState = {

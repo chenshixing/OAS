@@ -16,7 +16,7 @@ import  '../style.less';
 
 //  全局状态
 import State from 'PAGES/redirect/state';
-const globalState = State.getState();
+const globalState = State.getState().data;
 
 //  登录对接完成后去掉
 // const globalState = {
@@ -47,6 +47,7 @@ class Check extends Component {
         }
         this.state = {
             pageType : pageType,
+            showName : globalState.showName ? globalState.showName : ""
         }
     }
 
@@ -70,7 +71,7 @@ class Check extends Component {
                     <Icon type="exclamation-circle" className="tipsIcon exclamation"/>
                 </Col>
                 <Col span={21}>
-                    <h4>广东亿达有限公司</h4>
+                    <h4>{ this.state.showName }</h4>
                     <p>您的认证资料未填写完，请尽快完成。<Button type="primary" onClick={ this.continueToFill.bind(this) }>继续填写</Button></p>
                     <p>如需修改已提交信息，请点击<Link to='/companyValidate/step1'>重新认证</Link>。</p>
                 </Col>
@@ -85,7 +86,7 @@ class Check extends Component {
                     <Icon type="exclamation-circle" className="tipsIcon exclamation"/>
                 </Col>
                 <Col span={21}>
-                    <h4>广东亿达有限公司</h4>
+                    <h4>{ this.state.showName }</h4>
                     <p>请根据您的实际情况尽快完成以下未认证项，如需修改信息请联系客服电话：400-106-6698。</p>
                 </Col>
             </Row>
@@ -99,7 +100,7 @@ class Check extends Component {
                     <Icon type="cross-circle" className="tipsIcon across"/>
                 </Col>
                 <Col span={21}>
-                    <h4>广东亿达有限公司</h4>
+                    <h4>{ this.state.showName }</h4>
                     <p>您的资料审核不通过，具体原因请联系分行客户经理。</p>
                     <p>您需要修改资料后重新提交认证申请，如有疑问请联系客服电话：400-106-6698。</p>
                 </Col>
