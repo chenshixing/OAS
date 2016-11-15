@@ -109,7 +109,7 @@ class CompanyValidate extends React.Component {
         let p3 = fetch('/companyVerification/getBankAccountInfo.do');
 
         Promise.all([p1, p2, p3]).then(res => {
-            console.log(res);
+            // console.log(res);
 
             //  企业信息处理
             let companyInfo = res[0].data;
