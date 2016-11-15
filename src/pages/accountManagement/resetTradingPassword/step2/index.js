@@ -61,7 +61,7 @@ class Steps2 extends React.Component {
                 console.log(res)
                 //this.setState(res)
                 //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
-                this.props.history.push("/accountManagement/resetTradingPassword/");
+                this.props.history.push("/accountManagement/resetTradingPassword/step3");
             });
         });
     }
