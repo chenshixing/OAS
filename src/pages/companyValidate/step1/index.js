@@ -21,7 +21,6 @@ import formValidation from '../components/formValidation';
 import Frame from 'COM/form/frame';
 
 //  业务组件
-import OffLinePayTable from '../components/offlinePayTable';
 import Account from '../components/accountComponent';
 
 //  引入fetch
