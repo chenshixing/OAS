@@ -213,7 +213,7 @@ class CompanyValidate extends React.Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/check');
+                me.props.history.push('/companyValidate/tips/check?reloadStatus=1');
             },
         });
     }
@@ -534,7 +534,7 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <Account ref="Account" getFieldProps={ getFieldProps } accountDisabled = { this.state.data.accountDisabled } location = { this.props.location } rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
+                        <Account ref="Account" getFieldProps={ getFieldProps } accountDisabled = { this.state.data.accountDisabled } isGetInfo={ true } rules = { rules } form={ this.props.form } companyName = {this.state.data.companyName}/>
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">
