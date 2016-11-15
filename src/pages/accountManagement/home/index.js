@@ -95,9 +95,17 @@ class Home extends React.Component {
     handleAddBusiness() {
         this.setState({visible: true});
     }
+    // handleSubmit2(){
+    //
+    //     let data = {"serviceChannelNo":"20161031160941","serviceChannelName":"单元测试20161031160941","serviceURL":"http://www.baidu.com3"};
+    //     this.state.data.getUserServiceList.push(data)
+    //     this.forceUpdate();
+    // }
+
     handleSubmit(e) {
         //console.log(this.props.from.getFieldValue())
         //e.preventDefault();
+        let _this = this;
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 console.log('Errors in form!!!');
@@ -115,25 +123,25 @@ class Home extends React.Component {
                 //提示
                 //this.openNotification(res)
                 //设置值为空
+
+                //暂时用window.location.reload 其实应该返回列表然后再浪的
+                //window.location.reload()
+                //console.log(res)
+                let resData = res.data
                 this.setState({
                     inviteCodeValue:"",
                     visible:false
                 })
-                //暂时用window.location.reload 其实应该返回列表然后再浪的
-                //window.location.reload()
+                this.props.form.setFieldsValue({name:""});
                 Modal.success({
                     title: '提示',
                     content: '添加应用成功',
                     onOk() {
-                        // fetch('/user/getUserServiceList.do').then(resetRes=>{
-                        //     console.log(resetRes)
-                        //     this.state.data.getUserServiceList = resetRes.data;
-                        //     this.forceUpdate();
-                        // })
-                        window.location.reload()
+                        _this.state.data.getUserServiceList.push(resData)
+                        _this.forceUpdate();
                     },
                 });
-                this.props.form.setFieldsValue({name:""});
+
                 //this.setState({visible: false});
             });
         });
