@@ -1,5 +1,5 @@
 /**
- * 连开发环境构建配置
+ * mock构建配置
  */
 const path = require('path');
 const webpack = require('webpack');
@@ -7,11 +7,11 @@ const webpack = require('webpack');
 const commonConfig = require('./webpack.common');
 // WDS
 const utils = require('./utils');
-const HOST = 'accountcmb.frontpay.local';
-const PORT = 80;
+const HOST = utils.getIP();
+const PORT = 8090;
 
 module.exports = Object.assign(commonConfig, {
-    devtool: 'cheap-source-map', // 'eval'
+    devtool: 'source-map', // 'eval'  生产配置这个： cheap-source-map  测试配置这个：source-map
     cache: true,
     plugins: commonConfig.plugins.concat([
         // 配置全局常量
@@ -29,8 +29,8 @@ module.exports = Object.assign(commonConfig, {
         port: PORT,
         proxy: {
             '/api/*': {
-                target: 'http://accountcmb.frontpay.cn/',
-                //target: 'http://192.168.9.154:8081/',
+                target: 'http://192.168.8.160:20160/',// mock服务器
+                // target: 'http://192.168.9.154:8081/',
                 pathRewrite: {
                     '^/api': ''
                 },

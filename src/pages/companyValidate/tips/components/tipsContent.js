@@ -6,7 +6,7 @@ import { Row, Col, Icon, Button, Table} from 'antd';
 
 //  业务组件
 import InfoRow from './infoRow';
-import Map from '../../components/map';
+import Map from 'PAGES/companyValidate/components/map';
 
 //  引入fetch
 import { fetch } from 'UTILS';
@@ -74,7 +74,7 @@ class TipsRow extends Component {
             data.tipsRow = <Row className="tipsRow">
                                 <InfoRow type="basic" pageType={ this.state.pageType } data={ this.state.data.basicData } />
 
-                                <InfoRow type="corporation" pageType={ this.state.pageType } data={ user.corporationData } />
+                                <InfoRow type="corporation" pageType={ this.state.pageType } data={ user.corporationData || {} } />
 
                                 {user.agentData ? <InfoRow type="agent" pageType={ this.state.pageType } data={ user.agentData } /> : ""}
 

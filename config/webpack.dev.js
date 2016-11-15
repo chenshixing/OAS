@@ -29,7 +29,8 @@ module.exports = Object.assign(commonConfig, {
         port: PORT,
         proxy: {
             '/api/*': {
-                target: 'http://192.168.8.160:20160/',
+                target: 'http://accountcmb.frontpay.cn/',// 13服务器，需要配host：10.1.21.13 accountcmb.frontpay.cn
+                //target: 'http://192.168.8.160:20160/',// mock服务器
                 pathRewrite: {
                     '^/api': ''
                 },

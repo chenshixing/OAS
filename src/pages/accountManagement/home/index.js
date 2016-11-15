@@ -50,6 +50,7 @@ class Home extends React.Component {
         }
     }
     componentDidMount() {
+
         this.loadData();
     }
     loadData() {
@@ -112,13 +113,28 @@ class Home extends React.Component {
                 //console.log(res)
                 //this.setState(res)
                 //提示
-                this.openNotification(res)
+                //this.openNotification(res)
                 //设置值为空
                 this.setState({
-                    inviteCodeValue:""
+                    inviteCodeValue:"",
+                    visible:false
                 })
+                //暂时用window.location.reload 其实应该返回列表然后再浪的
+                //window.location.reload()
+                Modal.success({
+                    title: '提示',
+                    content: '添加应用成功',
+                    onOk() {
+                        // fetch('/user/getUserServiceList.do').then(resetRes=>{
+                        //     console.log(resetRes)
+                        //     this.state.data.getUserServiceList = resetRes.data;
+                        //     this.forceUpdate();
+                        // })
+                        window.location.reload()
+                    },
+                });
                 this.props.form.setFieldsValue({name:""});
-                this.setState({visible: false});
+                //this.setState({visible: false});
             });
         });
     }
@@ -240,7 +256,7 @@ class Home extends React.Component {
                                     onChange={this.handleInviteCodeValue.bind(this)}
                                     />
                                 */}
-                                    <FormItem {...formItemLayout} label="邀请码" hasFeedback>
+                                    <FormItem {...formItemLayout} label="邀请码" >
                                         <Input  {...nameProps} placeholder="请输入邀请码"/>
                                     </FormItem>
 

@@ -34,7 +34,7 @@ export default class Redirect extends React.Component {
                 } else {
                     return this.props.history.push(`${type}/tips/check`);
                 }
-            }, 5000);
+            }, 3000);
 
             // 业务判断
             // if(step == 999){ //已完成核身流程

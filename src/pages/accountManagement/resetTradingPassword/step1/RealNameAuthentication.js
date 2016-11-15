@@ -67,6 +67,14 @@ export default class RealNameAuthentication extends React.Component {
         this.setState({identityVisible: false});
         console.log(this);
     }
+    loadConnectorType(item){
+        let items = {
+            1:"个人",
+            2:"企业法人",
+            3:"经办人"
+        }
+        return items[item];
+    }
 
 
 
@@ -142,7 +150,8 @@ export default class RealNameAuthentication extends React.Component {
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p>
-                                姓名：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
+                                {/*姓名（1：经办人,2：法人，3：个人）*/}
+                                {this.loadConnectorType(this.props.getDesensitizeMobile.connectorType)}姓名：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
                                 <Sms data={ smsData } >重新发送验证短信</Sms>
                             </p>
                             <p>

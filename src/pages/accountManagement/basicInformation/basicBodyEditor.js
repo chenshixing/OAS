@@ -22,6 +22,9 @@ import {
 } from 'antd';
 
 import { helper } from 'UTILS'
+//全局获取基本信息
+import State from 'PAGES/redirect/state';
+const globalState = State.getState();
 
 
 
@@ -30,8 +33,9 @@ export default class basicBodyEditor extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: this.props.data,
+            data: this.props.data
         }
+
     }
     //个人用户 或者 企业用户
     UserTypeTemplate(item) {
@@ -42,11 +46,41 @@ export default class basicBodyEditor extends React.Component {
         return items[item]
     }
     //判断完成状态
-    GetLoginCheckStatusTemplate(type) {
+    GetLoginCheckStatusTemplate(type,getUserCheckStatusCheckItems) {
         //判断 获取登录后判断状态  银行审核状态，-1：审核中，0：审核不通过，1：审核通过
         //执行到的步骤，0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
         //如果需要对齐 <Col span={1}> 改成 <Col span={2}>。这里是故意不对齐。为了使强迫症填写资料
-        let iSuccess = (type.bankCheckStatus == 1 && type.step == 999);
+        console.log("GetLoginCheckStatusTemplate=>")
+        console.log(getUserCheckStatusCheckItems)
+        let iSuccess = null;
+        if(globalState.data.userType==1){
+
+            iSuccess = (
+                (type.bankCheckStatus == 1)
+                &&
+                (type.step == 999)
+                &&
+                (getUserCheckStatusCheckItems.PerReal.systemStatus ==1)
+                &&
+                (getUserCheckStatusCheckItems.PerBasicInfo.systemStatus ==1)
+            );
+        }else if(globalState.data.userType==2){
+            iSuccess = (
+                (type.bankCheckStatus == 1)
+                &&
+                (type.step == 999)
+                &&
+                (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==1)
+                &&
+                (getUserCheckStatusCheckItems.EnOperator.systemStatus ==1)
+                &&
+                (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==1)
+                &&
+                (getUserCheckStatusCheckItems.EnPaper.systemStatus ==1)
+                &&
+                (getUserCheckStatusCheckItems.EnAccount.systemStatus ==1)
+            );
+        }
         let result = null;
         if (iSuccess) {
             result = (
@@ -82,14 +116,19 @@ export default class basicBodyEditor extends React.Component {
     }
     //获取用户审核状态组合后的数据
     getUserCheckStatusCheckItems() {
-        //console.log( "helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems)=>" )
-        //console.log( helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems) )
-        return helper.convertUserCheckStatus(this.props.data.getUserCheckStatus.checkItems);
+        // console.log( "helper.convertUserCheckStatus(this.state.data.getUserCheckStatus.checkItems)=>" )
+        // console.log( helper.convertUserCheckStatus(this.state.data.getUserCheckStatus.checkItems) )
+        let checkItems = null;
+        let item = null
+
+        checkItems =  this.props.data.getUserCheckStatus.checkItems
+        item = helper.convertUserCheckStatus(checkItems);
+
+        return item;
     }
     //基本信息
     basicInformationTemplate(userType,checkItems){
-        console.log("checkItems=>")
-        console.log(checkItems)
+
         let items = {
             1:(
                 <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
@@ -140,11 +179,13 @@ export default class basicBodyEditor extends React.Component {
     }
     //实名验证内容
     getRelatedPersonInfoTemplate(items,type){
+
         let smsData = {};
         let p1 = "";
         if(type==1){
             p1 = items.map((item,index)=>{
-                if(item.connectorType==3){
+                //1 个人  / 2 3 企业 精准判断
+                if(item.connectorType==1){
                     smsData = {
                         businesstype: 1,
                         connectorType: item.connectorType
@@ -456,6 +497,7 @@ export default class basicBodyEditor extends React.Component {
     getCompanyAccountCheckStatusTemplate(userType,checkItems,getCompanyAccountCheckStatus,getCheckedBank){
         //console.log("checkItems=》")
         //console.log(checkItems)
+
         let template = "";
 
         if(userType==1){
@@ -527,6 +569,18 @@ export default class basicBodyEditor extends React.Component {
     }
 
     render() {
+        let getUserCheckStatusCheckItems,
+            userType,
+            UserTypeTemplate,
+            GetLoginCheckStatusTemplate,
+            basicInformationTemplate,
+            getRelatedPersonInfoTemplate,
+            getCompanyPaperInfoStatusTemplate,
+            resetPasswordTemplate,
+            resetTradingPasswordTemplate,
+            getBindMobileTemplate,
+            getCompanyAccountCheckStatusTemplate
+
         /**
          * 获取用户审核状态(v0.4)	/user/getUserCheckStatus
          * 用户简单信息(v2.2)	/user/getLoginUserSimpleInfo
@@ -558,34 +612,48 @@ export default class basicBodyEditor extends React.Component {
         * PerBasicInfo ：个人_基本信息，
         * PerReal ：个人_实名
         */
-        let getUserCheckStatusCheckItems  = this.getUserCheckStatusCheckItems();
+
+
+        let loadCheckItems = null;
+
+            // console.log("===============")
+            // console.log("data",this.state.data)
+            // console.log("getUserCheckStatus",this.state.data.getUserCheckStatus)
+            // console.log("checkItems",this.state.data.getUserCheckStatus.checkItems)
+            // console.log("===============")
+            //console.log(loadCheckItems)
+
+        getUserCheckStatusCheckItems  = this.getUserCheckStatusCheckItems();
+
+
         /**
         * userType 判断个人或者企业
         * 个人=>1
         * 企业=>2
         */
-        const userType = getUserCheckStatus.userType;
+        userType = getUserCheckStatus.userType;
         //个人用户/企业用户
-        const UserTypeTemplate = this.UserTypeTemplate(userType);
+        UserTypeTemplate = this.UserTypeTemplate(userType);
         //建议完成基本资料
-        const GetLoginCheckStatusTemplate = this.GetLoginCheckStatusTemplate(getLoginCheckStatus);
+        GetLoginCheckStatusTemplate = this.GetLoginCheckStatusTemplate(getLoginCheckStatus,getUserCheckStatusCheckItems);
 
         //基本信息
-        const basicInformationTemplate = this.basicInformationTemplate(userType,getUserCheckStatusCheckItems);
+        basicInformationTemplate = this.basicInformationTemplate(userType,getUserCheckStatusCheckItems);
 
         //实名验证内容
-        const getRelatedPersonInfoTemplate = this.getRelatedPersonInfoTemplate(getRelatedPersonInfo,userType);
+        getRelatedPersonInfoTemplate = this.getRelatedPersonInfoTemplate(getRelatedPersonInfo,userType);
 
         //证件资料
-        let getCompanyPaperInfoStatusTemplate = this.getCompanyPaperInfoStatusTemplate(getUserCheckStatusCheckItems,userType);
+        getCompanyPaperInfoStatusTemplate = this.getCompanyPaperInfoStatusTemplate(getUserCheckStatusCheckItems,userType);
         //登录密码
-        let resetPasswordTemplate = this.resetPasswordTemplate();
+        resetPasswordTemplate = this.resetPasswordTemplate();
         //交易密码
-        let resetTradingPasswordTemplate = this.resetTradingPasswordTemplate(getIsSetPayPassword);
+        resetTradingPasswordTemplate = this.resetTradingPasswordTemplate(getIsSetPayPassword);
         //绑定手机
-        let getBindMobileTemplate = this.getBindMobileTemplate(getBindMobile);
+        getBindMobileTemplate = this.getBindMobileTemplate(getBindMobile);
         //银行账户/对公账户
-        let getCompanyAccountCheckStatusTemplate = this.getCompanyAccountCheckStatusTemplate(userType,getUserCheckStatusCheckItems,getCompanyAccountCheckStatus,getCheckedBank);
+        getCompanyAccountCheckStatusTemplate = this.getCompanyAccountCheckStatusTemplate(userType,getUserCheckStatusCheckItems,getCompanyAccountCheckStatus,getCheckedBank);
+
 
 
         return (

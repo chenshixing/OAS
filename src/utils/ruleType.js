@@ -75,7 +75,7 @@ const dataType = {
         reg:/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
         errMsg: '身份证号码格式不正确'
     },
-    //英文字母（区分大小写）、数字或符号组合
+    //英文字母（区分大小写）、数字或符号组合(三选二 )
     "pfxPassword":{
         reg: {
             // 自定义 test 方法
@@ -97,6 +97,16 @@ const dataType = {
     "en+num":{
         reg:/^[A-Za-z0-9]+$/,
         errMsg:"英文（区分大小写）、数字"
+    },
+    //不能为今天或过去的日期(value必须为Date对象)
+    "futureTime":{
+        reg: {
+            // 自定义 test 方法
+            test: function(value) {
+                return value > new Date();
+            }
+        },
+        errMsg: '非法日期'
     }
 };
 

@@ -10,6 +10,7 @@ const Step = Steps.Step;
 const FormItem = Form.Item;
 // 页面组件
 import Frame from 'COM/form/frame';
+import AgreementModal from 'COM/agreementModal/index';
 
 //  引入fetch
 import { fetch } from 'UTILS';
@@ -27,6 +28,7 @@ class CompanyValidate extends Component {
         this.state = {
             visible : false,
             agreementChecked : false,
+            agreementModalVisible : false,
             pfxPassword : "",
             protocolData : {
                 fileUrl : "#",
@@ -99,6 +101,31 @@ class CompanyValidate extends Component {
 
     handleCancel(){
         this.setState({ visible: false });
+    }
+
+    //  协议
+    openAgreementModal(){
+
+        this.setState({
+            agreementModalVisible:true,
+        });
+    }
+    hideAgreementModal(){
+        this.setState({
+            agreementModalVisible:false
+        });
+    }
+    handleAgreement(){
+
+        this.setState({
+            agreementModalVisible:false,
+        });
+    }
+    handleAgreementonOK(){
+        this.setState({
+            agreementModalVisible:false,
+            agreementChecked:true
+        });
     }
 
     render() {
@@ -187,10 +214,25 @@ class CompanyValidate extends Component {
 
 	                    <Row>
                             <Col offset="8" span="8">
-                                <Checkbox checked={ this.state.agreementChecked } onChange={ this.agreementOnChange.bind(this) }>
-                                	我已阅读并同意
-                                    <a href={ this.state.protocolData.fileUrl } target="_blank">《数字证书服务协议》</a>
-                                </Checkbox>
+                                <AgreementModal
+                                    visible={ this.state.agreementModalVisible }
+                                    onOk={this.handleAgreementonOK.bind(this)}
+                                    onCancel={this.hideAgreementModal.bind(this)}
+                                    iframeData={{
+                                        iframeSrc:this.state.protocolData.fileUrl,
+                                        name:this.state.protocolData.protocolName
+                                    }}
+                                >
+                                    <Checkbox
+                                        checked={this.state.agreementChecked}
+                                        onChange={this.agreementOnChange.bind(this)}
+                                        >
+                                        我已阅读并同意
+                                    </Checkbox>
+                                    <a href="javascript:void(0)" onClick={this.openAgreementModal.bind(this)}>
+                                        {this.state.protocolData.protocolName}
+                                    </a>
+                                </AgreementModal>
                             </Col>
                         </Row>
 
