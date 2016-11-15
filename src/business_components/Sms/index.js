@@ -11,7 +11,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button, Modal, Row, Col } from 'antd';
 
 //初始
-let iTime = null;
+
 
 let map = {
     connectorType : {
@@ -32,7 +32,8 @@ class Sms extends Component {
         super(props);
         this.state = Object.assign({},this.props,{
             timeGo : 0,
-            showData : {}
+            showData : {},
+            iTime:null
         });
     }
     componentWillReceiveProps(nextProps){
@@ -53,21 +54,25 @@ class Sms extends Component {
             if(res.code == 200){
             	// console.log(res);
                 //	重新发送验证码TODO
+                console.log(res)
                 me.setState({
-                    showData : res.data
+                    showData : res.data,
+                    iTime:res.data.name
                 })
-				me.success(60);
+
+				me.success(60,this.state.iTime);
             }
         });
     }
 
-    success(timeGocountdown){
+    success(timeGocountdown,iTime){
     	let me = this;
 		Modal.success({
 		    title: '实名认证邀请已发送，请尽快完成认证。',
 		    content: me._getSuccessContent()
 		});
 
+        console.log(iTime)
         clearInterval(iTime);
         iTime = setInterval(()=>{
             timeGocountdown--
@@ -81,7 +86,7 @@ class Sms extends Component {
 
     }
     componentWillUnmount(){
-        clearInterval(iTime);
+        clearInterval(this.state.iTime);
     }
 
     _getSuccessContent(){
