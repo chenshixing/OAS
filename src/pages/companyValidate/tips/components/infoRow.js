@@ -125,7 +125,7 @@ class InfoRow extends Component {
         }
 		return (
 			<Col span={12}>
-				<Link to='/companyValidate/editBasic?getInfo=1'>修改资料</Link>
+				<Link to='/companyValidate/editBasic'>修改资料</Link>
 			</Col>
     	);
     }
@@ -208,7 +208,7 @@ class InfoRow extends Component {
                     <CountDown />
                     <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
                     <Table dataSource={offlinePayTableInfo.dataSource} columns={offlinePayTableInfo.columns} pagination={false}/>
-                    <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic?getInfo=1'>修改对公账户</Link>。</p>
+                    <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
                 </Col>
             )
         }else if(accountValidateType === "information"){

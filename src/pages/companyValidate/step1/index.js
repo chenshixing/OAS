@@ -444,7 +444,7 @@ class CompanyValidate extends React.Component {
                             </FormItem>
                         </div>
 
-                        <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } location = { this.props.location } companyName = {this.state.data.companyName}/>
+                        <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } isGetInfo = { this.props.location.query.getInfo == 1 } companyName = {this.state.data.companyName}/>
 
                         <Row className="fn-mt-30">
                             <Col span="12" offset="6" className="text-align-center">

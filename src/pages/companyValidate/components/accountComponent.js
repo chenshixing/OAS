@@ -80,8 +80,7 @@ class Account extends Component {
     dataRender(){
     	let me = this;
         let data = me.state.data;
-        if(me.props.location.query.getInfo != 1){
-            //  没有传参获取时就不获取
+        if(!me.props.isGetInfo){
             return false;
         }
         //  获取企业对公账户信息
