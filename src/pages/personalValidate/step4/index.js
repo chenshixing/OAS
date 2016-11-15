@@ -18,6 +18,8 @@ import Frame from 'COM/form/frame';
 
 import State from './state';
 
+import {fetch} from 'UTILS';
+
 // 页面组件（导出）
 export default class PersonalValidate extends React.Component {
     constructor(props){
