@@ -74,7 +74,7 @@ class TipsRow extends Component {
             data.tipsRow = <Row className="tipsRow">
                                 <InfoRow type="basic" pageType={ this.state.pageType } data={ this.state.data.basicData } />
 
-                                <InfoRow type="corporation" pageType={ this.state.pageType } data={ user.corporationData } />
+                                <InfoRow type="corporation" pageType={ this.state.pageType } data={ user.corporationData || {} } />
 
                                 {user.agentData ? <InfoRow type="agent" pageType={ this.state.pageType } data={ user.agentData } /> : ""}
 
