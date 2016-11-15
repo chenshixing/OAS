@@ -129,7 +129,7 @@ export default class BasicInformation extends React.Component {
           this.forceUpdate();
         }).catch(reason => {
           console.log(reason)
-        });
+        })
     }
     render() {
         console.log(this)
