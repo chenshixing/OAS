@@ -69,9 +69,9 @@ export default class RealNameAuthentication extends React.Component {
     }
     loadConnectorType(item){
         let items = {
-            1:"经办人",
-            2:"法人",
-            3:"个人"
+            1:"个人",
+            2:"企业法人",
+            3:"经办人"
         }
         return items[item];
     }

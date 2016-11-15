@@ -44,11 +44,13 @@ class Steps2 extends React.Component {
 
     initPage(){
         fetch('/user/getDesensitizeMobile.do',{body:{"businessType": 2}}).then((res)=>{
-            var nameText='';
+            var nameText='姓名';
             if(res.data.connectorType=='1'){
-                nameText='委托代理人';
-            }else{
                 nameText='姓名';
+            }else if(res.data.connectorType=='2'){
+                nameText='法人';
+            }else if(res.data.connectorType=='3'){
+                nameText='经办人';
             }
             this.setState({
                 name:res.data.name,
