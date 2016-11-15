@@ -59,11 +59,13 @@ class PersonalValidate extends React.Component {
         }}).then((res)=>{
             console.log(res);
             this.setState({ loading: false, visible: false });
-            if(res.code=='200'){
-                this.props.history.push({
-                    pathname: '/personalValidate/step2'
-                })
-            }
+            this.props.history.push({
+                pathname: '/personalValidate/step2'
+            });
+        },(res)=>{
+            console.log(res);
+            this.setState({ loading: false, visible: false });
+            message.error(`(${res.code})${res.message}`);
         });
     }
 
