@@ -18,77 +18,48 @@ const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
-import {Link} from 'react-router';
+import { fetch } from 'UTILS';
 
 // 页面组件
 //import Frame from 'COM/form/frame';
 
-import eaccountlogo from 'ASSETS/images/eaccountlogo.png';
-
-import FormPerson from './formPerson';
-import FormCompany from './formCompany';
-
 
 // 页面
-export default class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: '',
-        };
+class Login extends React.Component {
+    login() {
+        fetch(`/tmp/login.do?subUserId=${this.props.form.getFieldValue('subUserId')}`, null, false, () => {
+            location.href = `${location.origin}${location.pathname}`;
+        });
     }
     render() {
+        const { getFieldProps } = this.props.form;
         return (
             <div className="login-page">
                 <div className="main-frm">
                     <div className="login-layerout">
-                        <div className="login-head-wrap">
-                            <div className="login-head-content">
-                                <a href="#" className="login-head-logo">
-                                    <img src={eaccountlogo} />
-                                </a>
-                                <a href="###" className="login-admin default-FontColor">管理员登录</a>
-                            </div>
-                        </div>
-                        <div className="login-wrap">
-                            <div className="login-bg">
-                                <div className="login-content">
-                                    <Tabs type="card">
-                                        <TabPane tab="个人用户" key="1">
-                                            <FormPerson />
-
-                                        </TabPane>
-                                        <TabPane tab="企业用户" key="2">
-                                            <FormCompany />
-                                        </TabPane>
-                                    </Tabs>
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="main-footer clearfix">
-                        <div className="main-ft-inner">
-                            <div className="main-ft-bank"><span className="bank-bg bank-cmb"></span></div>
-                            <div className="main-ft-helper">
-                                <ul>
-                                    <li className="has-r-line">
-                                        <Icon type="message"  />
-                                        <a href="##">帮助中心</a>
-                                    </li>
-                                    <li className="tel has-r-line"><Icon type="phone" />客服热线<b>400-106-6698</b></li>
-                                    <li>粤ICP备 14098252号-2</li>
-                                </ul>
-                            </div>
-                        </div>
+                        <Form horizontal>
+                            <FormItem label="subUserId">
+                                <Input style={{width:300}} type="input" {...getFieldProps('subUserId')} />
+                                <Button type="primary" htmlType="submit" onClick={this.login.bind(this)}>登录</Button>
+                            </FormItem>
+                        </Form>
+                        
+                        <h4>一些可用的subUserId：</h4>
+                        <pre>
+                        <br/>
+                        67213cbb5e41401f9696b9481638b214	csx001<br/>
+                        545b56ba38e54be380621c96df782d70	wuyq123<br/>
+                        75657385a6b54b0da96d71c30f212ad3	dangdang2<br/>
+                        ed5cac7f60394282848b45744fffd34a	testName<br/>
+                        dfeb61318dcd4344afad1345442f05de	fronypay<br/>
+                        a753a42b772041f3bd56a6949f3eeab9	dangdang<br/>
+                        6dc7d994f5134ffeb9b032e0cb3d010c	koen<br/>
+                        </pre>
                     </div>
                 </div>
-
-
             </div>
         );
     }
 }
+
+export default Form.create()(Login);

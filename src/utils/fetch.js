@@ -13,12 +13,17 @@ import { message, Button } from 'antd';
  * @param { String } url 异步请求地址，默认为 get 方法
  * @param { PlainObject } data 异步配置参数 [可选]
  * @param { Boolean } showLoading 判断是否显示 Loading [可选]
- * @param { Function } pending 异步请求持续过程函数 [可选]
+ * @param { Function } errCallback 自定义错误处理函数 [可选]
  */
-export default (url, data, showLoading, pending) => {
+export default (url, data, showLoading, errCallback) => {
 
     // 请求统一自动加上 /api，以便使用 webpack-dev-server 代理
     // 代理会去掉 /api 获取数据
+    // if(__COUPLING__){
+    //     url =  `${__COUPLING__.slice(0, -1)}${url}`;
+    // }else if(__DEV__){
+    //     url =  `/api${url}`;
+    // }
     url = __DEV__ ? `/api${url}` : url;
 
     if(showLoading === undefined){
@@ -49,14 +54,12 @@ export default (url, data, showLoading, pending) => {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest"
         },
-        // 设置同源cookies
-        credentials: 'same-origin',
-        // 跨域资源共享
-        // credentials: 'include'
+        // 设置cookies跨域
+        credentials: 'include'//'same-origin'
     }, data);
 
     // 显示loading图标
-    showLoading && State.showLoading();
+    showLoading && State.showLoading && State.showLoading();
 
     return new Promise(function (resolve, reject) {
 
@@ -64,12 +67,17 @@ export default (url, data, showLoading, pending) => {
                 .then(res=> res.json())  // 数据接口统一为 json
                 .then(res => {
                     // 隐藏loading图标
-                    showLoading && State.hideLoading();
+                    showLoading && State.hideLoading && State.hideLoading();
 
                     // 业务code特定处理
                     if( res.code == 200 ) {
                         resolve(res);
                     } else {
+                        
+                        // 本地联调用到的专用登录页
+                        if(__DEV__ && (res.code == "001" || res.code == "003")){
+                            return location.href = `${location.origin}${location.pathname}#/userLogin`;
+                        }
 
                         // 未登录，页面跳转到指定url登录
                         // "cas=1"是为了中转页面判断第一次登录，记录日志
@@ -77,7 +85,7 @@ export default (url, data, showLoading, pending) => {
                             //res.data = res.data.replace(/\?.*/, '');
                             //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
                             const url = `${res.data}${encodeURIComponent('?cas=1')}`;
-                            location.href = url;
+                            return location.href = url;
                         }
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                         // 处理错误
@@ -96,6 +104,9 @@ export default (url, data, showLoading, pending) => {
                     }
                 })
                 .catch(err=> {
+                    if(errCallback){
+                        return errCallback();
+                    }
                     message.error(`错误代码：${ err }`);
                     console.error('Fetch Error: %s', err);
                 })
