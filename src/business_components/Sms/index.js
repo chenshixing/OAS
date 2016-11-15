@@ -54,7 +54,7 @@ class Sms extends Component {
             if(res.code == 200){
             	// console.log(res);
                 //	重新发送验证码TODO
-                console.log(res)
+                // console.log(res)
                 me.setState({
                     showData : res.data,
                     iTime:res.data.name
@@ -72,7 +72,7 @@ class Sms extends Component {
 		    content: me._getSuccessContent()
 		});
 
-        console.log(iTime)
+        // console.log(iTime)
         clearInterval(iTime);
         iTime = setInterval(()=>{
             timeGocountdown--
@@ -107,7 +107,7 @@ class Sms extends Component {
     }
 
     render() {
-         console.log(this)
+         // console.log(this)
         return (
             <Button type="primary" disabled={this.state.timeGo>0?true:false}  onClick={ this.sms.bind(this) } size="small">
                 { this.props.children }
