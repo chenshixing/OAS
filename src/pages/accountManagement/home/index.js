@@ -110,7 +110,6 @@ class Home extends React.Component {
                     "inviteCode":this.state.inviteCodeValue
                 }
             }).then(res => {
-
                 //console.log(res)
                 //this.setState(res)
                 //提示
@@ -126,6 +125,11 @@ class Home extends React.Component {
                     title: '提示',
                     content: '添加应用成功',
                     onOk() {
+                        // fetch('/user/getUserServiceList.do').then(resetRes=>{
+                        //     console.log(resetRes)
+                        //     this.state.data.getUserServiceList = resetRes.data;
+                        //     this.forceUpdate();
+                        // })
                         window.location.reload()
                     },
                 });
@@ -252,7 +256,7 @@ class Home extends React.Component {
                                     onChange={this.handleInviteCodeValue.bind(this)}
                                     />
                                 */}
-                                    <FormItem {...formItemLayout} label="邀请码" hasFeedback>
+                                    <FormItem {...formItemLayout} label="邀请码" >
                                         <Input  {...nameProps} placeholder="请输入邀请码"/>
                                     </FormItem>
 

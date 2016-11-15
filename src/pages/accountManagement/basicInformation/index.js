@@ -35,7 +35,8 @@ export default class BasicInformation extends React.Component {
                 getLoginCheckStatus:{},
                 getRelatedPersonInfo:{
 
-                }
+                },
+                getCheckedBank:{}
             },
             history:this.props.history
         }
@@ -44,7 +45,7 @@ export default class BasicInformation extends React.Component {
         if(globalState.data.userType==1){
             this.loadDataP();
         }else if(globalState.data.userType==2){
-            this.loadDataP();
+            this.loadDataC();
         }else{
             message.error("加载失败,没有获取到登录信息啊。")
         }
@@ -53,7 +54,7 @@ export default class BasicInformation extends React.Component {
 
     loadDataP(){
 
-
+        console.log("个人")
 
         //获取用户审核状态(v0.4)
         let p1 = fetch('/user/getUserCheckStatus.do');
@@ -99,7 +100,7 @@ export default class BasicInformation extends React.Component {
     loadDataC(){
 
 
-
+        console.log("企业")
         //获取用户审核状态(v0.4)
         let p1 = fetch('/user/getUserCheckStatus.do');
         //用户简单信息(v2.2)
