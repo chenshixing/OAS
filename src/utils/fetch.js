@@ -74,9 +74,9 @@ export default (url, data, showLoading, pending) => {
                         // 未登录，页面跳转到指定url登录
                         // "cas=1"是为了中转页面判断第一次登录，记录日志
                         if(res.code == 401){
-                            //res.data = res.data.replace(/\?.*/, '');
-                            //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
-                            const url = `${res.data}${encodeURIComponent('?cas=1')}`;
+                            res.data = res.data.replace(/\?.*/, '');
+                            const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
+                            //const url = `${res.data}${encodeURIComponent('?cas=1')}`;
                             location.href = url;
                         }
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
