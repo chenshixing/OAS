@@ -121,30 +121,12 @@ const routes = {
             })
           }
         },
-        // 审核中提示页(企业)
+        // 核身信息提示页(企业)
         {
             path: 'companyValidate/tips/check',
             getComponent(nextState, cb) {
                 require.ensure([], (require) => {
                     cb(null, require('PAGES/companyValidate/tips/check/index.js').default)
-                })
-            }
-        },
-        // 核身信息补充提示页(企业)
-        {
-            path: 'companyValidate/tips/supplement',
-            getComponent(nextState, cb) {
-                require.ensure([], (require) => {
-                    cb(null, require('PAGES/companyValidate/tips/supplement/index.js').default)
-                })
-            }
-        },
-        // 核审核不通过提示页(企业)
-        {
-            path: 'companyValidate/tips/disapproval',
-            getComponent(nextState, cb) {
-                require.ensure([], (require) => {
-                    cb(null, require('PAGES/companyValidate/tips/disapproval/index.js').default)
                 })
             }
         },

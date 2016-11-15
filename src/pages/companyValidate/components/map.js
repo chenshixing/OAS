@@ -17,9 +17,8 @@ const accountMap = {
 		"OffLineSubmitInfo" : "information"
 	},
 	passType : {
-		"1" : false,
-		"2" : false,
-		"3" : true
+		"1" : true,
+		"0" : false,
 	}
 }
 
