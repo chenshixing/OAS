@@ -15,7 +15,7 @@ import { fetch } from 'UTILS';
 //全局获取基本信息
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
-//console.log(globalState)
+console.log(globalState)
 
 
 class ResetPassword extends React.Component {
@@ -123,7 +123,7 @@ class ResetPassword extends React.Component {
                 <div className="fn-pt-30">
                     <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
                         <Form.Item {...props} label="登录名">
-                            <label>{globalState.data.showName}</label>
+                            <label>{globalState.data.loginName}</label>
                         </Form.Item>
                         <Form.Item {...props} label="原登录密码" hasFeedback required>
                             <Input type="password"
