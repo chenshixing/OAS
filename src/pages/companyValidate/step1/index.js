@@ -45,9 +45,9 @@ class CompanyValidate extends React.Component {
             visible : false,
             data:{
                 companyName: globalState.showName ? globalState.showName : "",
-                companyPaperType:"2",
+                companyPaperType:2,
                 isLongEndTime:false,
-                writerType : '1'
+                writerType : 1
             }
         }
 
