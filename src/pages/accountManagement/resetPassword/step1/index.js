@@ -15,7 +15,7 @@ import { fetch } from 'UTILS';
 //全局获取基本信息
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
-//console.log(globalState)
+console.log(globalState)
 
 
 class ResetPassword extends React.Component {
