@@ -54,7 +54,7 @@ class DocumentUpload extends Component {
                         uid: uid,
                         name: item.fileName,
                         status: 'done',
-                        url: item.imgUrl,
+                        url: item.linkUrl,
                         data: item
                     }
                     fileList[prop].push(file);
