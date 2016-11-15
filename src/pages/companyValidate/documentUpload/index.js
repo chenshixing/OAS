@@ -81,7 +81,7 @@ class DocumentUpload extends Component {
         fileList = fileList.map((file) => {
           if (file.response) {
             // 组件会将 file.url 作为链接进行展示
-            file.url = file.response.data.imgSmallUrl;
+            file.url = file.response.data.linkUrl;
           }
           return file;
         });
@@ -111,7 +111,7 @@ class DocumentUpload extends Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/check');
+                me.props.history.push('/companyValidate/tips/check?reloadStatus=1');
             },
         });
     }
@@ -220,8 +220,22 @@ class DocumentUpload extends Component {
         this.props.history.goBack();
     }
 
+    normFile(e) {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    }
+
     render() {
     	let rules={
+            socialCredit:{
+                rules:[
+                    {required: true, message: '请上传统一社会信用代码证'},
+                ],
+                valuePropName: 'fileList',
+                normalize: this.normFile
+            },
     		registration:{
                 rules:[
                     {required: true, message: '请上传营业执照'},
@@ -267,19 +281,19 @@ class DocumentUpload extends Component {
 
         const socialCreditUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.socialCreditChange.bind(this)
-        });
+        },rules.socialCredit);
         const registrationUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.registrationChange.bind(this)
-        });
+        },rules.registration);
         const orgInsCodeUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.orgInsCodeChange.bind(this)
-        });
+        },rules.orgInsCode);
         const identityProofUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.identityProofChange.bind(this)
-        });
+        },rules.identityProof);
         const deletegatePromiseLetterUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.deletegatePromiseLetterChange.bind(this)
-        });
+        },rules.deletegatePromiseLetter);
 
         const { getFieldProps } = this.props.form;
 
