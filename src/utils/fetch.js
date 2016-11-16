@@ -14,8 +14,9 @@ import { message, Button } from 'antd';
  * @param { PlainObject } data 异步配置参数 [可选]
  * @param { Boolean } showLoading 判断是否显示 Loading [可选]
  * @param { Function } errCallback 自定义错误处理函数 [可选]
+ * @param { Function } codeErrCallback 自定义返回码为非200错误处理函数 [可选]
  */
-export default (url, data, showLoading, errCallback) => {
+export default (url, data, showLoading, errCallback, codeErrCallback) => {
 
     // 请求统一自动加上 /api，以便使用 webpack-dev-server 代理
     // 代理会去掉 /api 获取数据
@@ -73,7 +74,8 @@ export default (url, data, showLoading, errCallback) => {
                     if( res.code == 200 ) {
                         resolve(res);
                     } else {
-                        
+                        //  当返回code不等于200时
+                        codeErrCallback && codeErrCallback();
                         // 本地联调用到的专用登录页
                         if(__DEV__ && (res.code == "001" || res.code == "003")){
                             return location.href = `${location.origin}${location.pathname}#/userLogin`;

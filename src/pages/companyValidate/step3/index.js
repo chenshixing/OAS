@@ -79,6 +79,7 @@ class CompanyValidate extends Component {
         let protocolData = this.state.protocolData;
         // console.log(submitData);
         this.setState({ visible: true });
+
         fetch('/companyVerification/saveTransactionPassword.do',{
             body : {
                 system : 1,
@@ -87,10 +88,15 @@ class CompanyValidate extends Component {
                 protocolVersion : protocolData.protocolEdition,
                 protocolName : protocolData.protocolName
             }
-        }).then(res =>{
+        },true,null,this.codeErrCallback.bind(this)).then(res =>{
             //  申请成功TODO
             this.props.history.push('/companyValidate/step4');
         });
+    }
+
+    //  报错回调
+    codeErrCallback(){
+        this.setState({ visible: false });
     }
 
     pfxPasswordOnChange(e){
