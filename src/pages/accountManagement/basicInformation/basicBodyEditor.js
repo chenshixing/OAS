@@ -60,9 +60,9 @@ export default class basicBodyEditor extends React.Component {
                 &&
                 (type.step == 999)
                 &&
-                (getUserCheckStatusCheckItems.PerReal.systemStatus ==3)
+                (getUserCheckStatusCheckItems.PerReal.systemStatus ==1)
                 &&
-                (getUserCheckStatusCheckItems.PerBasicInfo.systemStatus ==3)
+                (getUserCheckStatusCheckItems.PerBasicInfo.systemStatus ==1)
             );
         }else if(globalState.data.userType==2){
             iSuccess = (
@@ -70,15 +70,15 @@ export default class basicBodyEditor extends React.Component {
                 &&
                 (type.step == 999)
                 &&
-                (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==3)
+                (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==1)
                 &&
-                (getUserCheckStatusCheckItems.EnOperator.systemStatus ==3)
+                (getUserCheckStatusCheckItems.EnOperator.systemStatus ==1)
                 &&
-                (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==3)
+                (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==1)
                 &&
-                (getUserCheckStatusCheckItems.EnPaper.systemStatus ==3)
+                (getUserCheckStatusCheckItems.EnPaper.systemStatus ==1)
                 &&
-                (getUserCheckStatusCheckItems.EnAccount.systemStatus ==3)
+                (getUserCheckStatusCheckItems.EnAccount.systemStatus ==1)
             );
         }
         let result = null;
@@ -137,7 +137,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                ( (checkItems.PerBasicInfo) && (checkItems.PerBasicInfo.bankStatus == 3) && (checkItems.PerBasicInfo.systemStatus==3)  )
+                                ( (checkItems.PerBasicInfo) && (checkItems.PerBasicInfo.bankStatus == 1) && (checkItems.PerBasicInfo.systemStatus==1)  )
                                 ?
                                 <Icon type="check"/>
                                 :
@@ -159,7 +159,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                ( (checkItems.EnBasicInfo) && (checkItems.EnBasicInfo.bankStatus == 3) && (checkItems.EnBasicInfo.systemStatus==3)  )
+                                ( (checkItems.EnBasicInfo) && (checkItems.EnBasicInfo.bankStatus == 1) && (checkItems.EnBasicInfo.systemStatus==1)  )
                                 ?
                                 <Icon type="check"/>
                                 :
@@ -350,7 +350,7 @@ export default class basicBodyEditor extends React.Component {
                         <Row type="flex" justify="start" align="middle">
                             <Col span={2}>
                                 {
-                                    ( (checkItems.EnPaper) && (checkItems.EnPaper.bankStatus == 3) && (checkItems.EnPaper.systemStatus==3)  )
+                                    ( (checkItems.EnPaper) && (checkItems.EnPaper.bankStatus == 1) && (checkItems.EnPaper.systemStatus==1)  )
                                     ?
                                     <span className="fn-mr-10"><Icon type="check" /></span>
                                     :
@@ -508,7 +508,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                getCheckedBank.checkStatus && (getCheckedBank.checkStatus == 1 )
+                                getCheckedBank.checkStatus && (getCheckedBank.checkStatus == 3 )
                                 ?
                                 <Icon type="check"/>
                                 :
@@ -533,7 +533,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                ( (checkItems.EnAccount) && (checkItems.EnAccount.bankStatus == 3) && (checkItems.EnAccount.systemStatus==3)  )
+                                ( (checkItems.EnAccount) && (checkItems.EnAccount.bankStatus == 1) && (checkItems.EnAccount.systemStatus==1)  )
                                 ?
                                 <Icon type="check"/>
                                 :
