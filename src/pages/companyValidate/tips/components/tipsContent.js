@@ -91,13 +91,18 @@ class TipsRow extends Component {
         });
     }
 
+    logout(){
+        let url = (__DEV__ ? `/api` : ``) + `/logout.do`;
+        location.href = url;
+    }
+
     render() {
         return (
             <div>
             	{ this.state.data.tipsRow }
             	<Row className="tipsRow pl-50">
             		<Col span={24}>
-            			<p>如您想更换账号，请点击 <Link to='/'>重新登录</Link>。</p>
+            			<p>如您想更换账号，请点击 <a href="javaScript:void(0);" onClick= { this.logout.bind(this) }>重新登录</a>。</p>
             		</Col>
                 </Row>
             </div>
