@@ -49,6 +49,9 @@ module.exports = {
     }, {
       test: /\.(gif|jpg|png|woff|svg|eot|ttf)$/, // 这些资源包括在js中import或在css中background url引入都会被处理
       loader: 'url?limit=10000&name=[name]-[hash].[ext]' // 小于10k的用url-loader处理生成Data Url，否则用file-loadre处理生成相应资源 [name]-[hash].[ext]
+    }, {
+      test: /\.(doc|docx)$/,
+      loader: 'file'
     }],
     // for ie8 hack
     postLoaders: [{
