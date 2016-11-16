@@ -173,7 +173,7 @@ export default class RealNameAuthentication extends React.Component {
                                 ?
                                 <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
                                 :
-                                <Button type="primary" onClick={this.handleNoRealNameComplete.bind(this)}>未验证</Button>
+                                <Button type="primary" onClick={this.handleNoRealNameComplete.bind(this)}>已完成认证</Button>
                             }
 
                         </p>

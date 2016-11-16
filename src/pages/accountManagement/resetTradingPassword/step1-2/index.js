@@ -14,7 +14,8 @@ import Frame from 'COM/form/frame';
  * RealNameAuthentication 实名认证
  */
 import StepsBar from './StepsBar';
-import Authenticate from './Authenticate';
+
+import RealNameAuthentication from './RealNameAuthentication';
 //全局获取基本信息
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
@@ -83,23 +84,78 @@ export default class Steps1 extends React.Component {
                 "isFirst": true
             }
         }).then(res=>{
-            this.props.history.push("/accountManagement/resetTradingPassword/step1-2")
+            this.loadPaddingFetchFn();
+
         })
     }
     componentDidMount(){
-        this.loadData();
+
+        if(globalState.data.bankCheckStatus==1 && globalState.data.step==999){
+            this.loadData();
+            //无限请求
+            this.loadPaddingFetch(3000);
+        }else{
+            //不通过核身验证什么的，就跳走了。
+            this.props.history.push("/accountManagement")
+        }
+
+
+
     }
 
+    //无限请求
+    loadPaddingFetch(endTime){
+        clearInterval(iTime);
+        iTime = setInterval(()=>{
+            this.loadPaddingFetchFn()
+        },endTime)
+    }
+    //单次请求
+    loadPaddingFetchFn(){
+        fetch('/user/getAccountRealCheckStatus.do',{
+           body:{
+               "businessType": 3
+           }
+       },false).then(res=>{
+           if(res.code==200 && res.data.checkPass == 1){
+               //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
+               //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+               this.props.history.push({
+                   pathname: '/accountManagement/resetTradingPassword/step2'
+               })
+           }
+        })
+    }
+    componentWillUnmount(){
+        clearInterval(iTime);
+    }
     loadData(){
+
+        //用户简单信息(v0.7)
+        //let p1 = fetch('/user/getLoginUserSimpleInfo.do');
         //获取姓名及脱敏手机号(v0.2)
         let p2 = fetch('/user/getDesensitizeMobile.do',{
             body:{
                 "businessType": 3
             }
         })
+        //实名验证
+        // let p3 = fetch('/user/getAccountRealCheckStatus.do',{
+        //     body:{
+        //         "businessType": 3
+        //     }
+        // })
+
+        //  身份实名认证
+        //let p4 = fetch('/user/getRelatedPersonInfo.do');
 
         Promise.all([p2]).then(values => {
+          console.log(values);
+          //this.state.data.getLoginUserSimpleInfo = values[0].data
           this.state.data.getDesensitizeMobile = values[0].data
+          //this.state.data.getAccountRealCheckStatus = values[2].data
+          //this.state.data.getRelatedPersonInfo = values[3].data;
+          //console.log(values[3].data)
           this.forceUpdate();
         }).catch(reason => {
 
@@ -114,10 +170,14 @@ export default class Steps1 extends React.Component {
 
                 {/*StepsBar 步骤1*/}
                 <StepsBar/>
-                    <Authenticate
-                        handleSend={this.handleSend.bind(this)}
-                        {...this.state.data}
-                    />
+
+                {/*Authenticate 验证身份*/}
+                {/* RealNameAuthentication 实名认证 */}
+                <RealNameAuthentication
+                    isValidation={this.state.isValidation}
+                    {...this.state.data}
+                    handleSend={this.handleSend.bind(this)}
+                />
             </div>
         );
     }
