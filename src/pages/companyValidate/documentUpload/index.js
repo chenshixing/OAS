@@ -231,43 +231,43 @@ class DocumentUpload extends Component {
     }
 
     render() {
-    	let rules={
-            socialCredit:{
-                rules:[
-                    {required: true, message: '请上传统一社会信用代码证'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-    		registration:{
-                rules:[
-                    {required: true, message: '请上传营业执照'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            orgInsCode:{
-                rules:[
-                    {required: true, message: '请上传组织机构代码证'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            identityProof:{
-                rules:[
-                    {required: true, message: '请上传企业法定代表人身份证明书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-            deletegatePromiseLetter:{
-                rules:[
-                    {required: true, message: '请上传承诺函及授权委托书'},
-                ],
-                valuePropName: 'fileList',
-                normalize: this.normFile
-            },
-    	};
+    	// let rules={
+     //        socialCredit:{
+     //            rules:[
+     //                {required: true, message: '请上传统一社会信用代码证'},
+     //            ],
+     //            valuePropName: 'fileList',
+     //            normalize: this.normFile
+     //        },
+    	// 	registration:{
+     //            rules:[
+     //                {required: true, message: '请上传营业执照'},
+     //            ],
+     //            valuePropName: 'fileList',
+     //            normalize: this.normFile
+     //        },
+     //        orgInsCode:{
+     //            rules:[
+     //                {required: true, message: '请上传组织机构代码证'},
+     //            ],
+     //            valuePropName: 'fileList',
+     //            normalize: this.normFile
+     //        },
+     //        identityProof:{
+     //            rules:[
+     //                {required: true, message: '请上传企业法定代表人身份证明书'},
+     //            ],
+     //            valuePropName: 'fileList',
+     //            normalize: this.normFile
+     //        },
+     //        deletegatePromiseLetter:{
+     //            rules:[
+     //                {required: true, message: '请上传承诺函及授权委托书'},
+     //            ],
+     //            valuePropName: 'fileList',
+     //            normalize: this.normFile
+     //        },
+    	// };
 
 		const formItemLayout = {
             labelCol: { span: 8 },
@@ -284,19 +284,19 @@ class DocumentUpload extends Component {
 
         const socialCreditUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.socialCreditChange.bind(this)
-        },rules.socialCredit);
+        });
         const registrationUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.registrationChange.bind(this)
-        },rules.registration);
+        });
         const orgInsCodeUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.orgInsCodeChange.bind(this)
-        },rules.orgInsCode);
+        });
         const identityProofUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.identityProofChange.bind(this)
-        },rules.identityProof);
+        });
         const deletegatePromiseLetterUpLoadProps = Object.assign({},upLoadProps,{
             onChange : this.deletegatePromiseLetterChange.bind(this)
-        },rules.deletegatePromiseLetter);
+        });
 
         const { getFieldProps } = this.props.form;
 
