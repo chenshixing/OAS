@@ -15,7 +15,6 @@ import Frame from 'COM/form/frame';
  */
 import StepsBar from './StepsBar';
 import Authenticate from './Authenticate';
-import RealNameAuthentication from './RealNameAuthentication';
 //全局获取基本信息
 import State from 'PAGES/redirect/state';
 const globalState = State.getState();
