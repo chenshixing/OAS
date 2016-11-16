@@ -131,11 +131,14 @@ class CompanyValidate extends React.Component {
         console.log('radio checked', e.target.value);
         let display = e.target.value == "1" ? "block" : "none";
         if(this.state.display == display){ return false;}
+        let data = this.state.data;
+        data.writerType = e.target.value;
         if(e.target.value == "2"){
             this.warning();
         }
         this.setState({
-            display : display
+            display : display,
+            data : data
         });
     }
 
@@ -277,8 +280,8 @@ class CompanyValidate extends React.Component {
         const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         //  根据填写人身份选择验证机制
-        const rulesFill = this.state.data.writerType == '1' ? formValidation.rulesAgent : {};
-
+        const rulesFill = this.state.data.writerType === 1 ? formValidation.rulesAgent : {};
+        // console.log(rulesFill);
         // 根据不同类型选择验证机制
         let rules = Object.assign({},formValidation.rulesBase,rulesBusiness,rulesFill);
 
