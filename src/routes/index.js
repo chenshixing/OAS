@@ -55,7 +55,7 @@ const routes = {
             })
           }
         },
-        
+
         // 业务错误页面
         {
           path: 'error',
@@ -84,7 +84,7 @@ const routes = {
                 })
             }
         },
-        
+
         // 个人核身-step1
         {
           path: 'personalValidate/step1',
@@ -256,6 +256,15 @@ const routes = {
             });
           }
         },
+        //账户管理修改交易密码 步骤1-2
+        {
+          path: 'accountManagement/resetTradingPassword/step1-2',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/accountManagement/resetTradingPassword/step1-2').default);
+            });
+          }
+        },
         // 账户管理修改交易密码 步骤2
         {
           path: 'accountManagement/resetTradingPassword/step2',
@@ -285,7 +294,7 @@ const routes = {
             });
           }
         },
-        
+
         {
           path: 'resetPassword/step2/autherized/index1',
           getComponent(nextState, cb) {
