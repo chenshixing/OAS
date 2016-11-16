@@ -54,6 +54,7 @@ class Login extends React.Component {
                         dfeb61318dcd4344afad1345442f05de	fronypay<br/>
                         a753a42b772041f3bd56a6949f3eeab9	dangdang<br/>
                         6dc7d994f5134ffeb9b032e0cb3d010c	koen<br/>
+                        54a06e3531354edb9f672145a14fb87a    bug2<br/>
                         </pre>
                     </div>
                 </div>
