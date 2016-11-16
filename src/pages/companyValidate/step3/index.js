@@ -94,7 +94,7 @@ class CompanyValidate extends Component {
         });
     }
 
-    //  报错回调
+    //  code不等于200时回调
     codeErrCallback(){
         this.setState({ visible: false });
     }

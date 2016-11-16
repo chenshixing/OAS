@@ -28,9 +28,16 @@ class TipsRow extends Component {
         });
     }
 
-    componentDidMount() {
+    //  重新获取状态刷新时更新状态
+    componentWillReceiveProps(nextProps) {
+        let state = Object.assign({},this.state,nextProps);
+        this.setState(state);
         this.loadData();
     }
+
+    // componentDidMount() {
+    //     this.loadData();
+    // }
 
     loadData(){
         let me = this;
