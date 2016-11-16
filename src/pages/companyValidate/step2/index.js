@@ -34,6 +34,9 @@ import {
     fetch
 } from 'UTILS';
 
+//  引入moment
+import moment from 'moment';
+
 const map = {
     companyPaperType : {
         2 : "普通营业执照",
@@ -121,6 +124,10 @@ class CompanyValidate extends React.Component {
                 companyInfo.multipleDisplay = "block";
             }
             companyInfo.companyPaperType = map.companyPaperType[companyInfo.companyPaperType];
+            //  营业执照到期日处理
+            if(companyInfo.registrationExtendField2 != "长期"){
+                companyInfo.registrationExtendField2 = moment(companyInfo.registrationExtendField2).format("YYYY-MM-DD");
+            }
             data.companyInfo = companyInfo;
 
             //  关系人信息处理
