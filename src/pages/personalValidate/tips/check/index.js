@@ -87,7 +87,7 @@ class Check extends Component {
     }
 
     reValidata(){
-        fetch('/companyVerification/resetStep.do').then((res)=>{
+        fetch('/personVerification/resetStep.do').then((res)=>{
             this.props.history.push('/personalValidate/step1');
         },(res)=>{
             message.error(`(${res.code})${res.message}`,3);
@@ -103,7 +103,7 @@ class Check extends Component {
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
                         <p>您的认证资料未填写完，请尽快完成。<Button type='primary' size='small'><Link to={nextStep}>继续填写</Link></Button></p>
-                        <p>如需修改已提交的信息，请点击 <a href='javascript:void(0)' onClick={this.reValidata.bind}>重新认证</a></p>
+                        <p>如需修改已提交的信息，请点击 <a href='javascript:void(0)' onClick={this.reValidata.bind(this)}>重新认证</a></p>
                   </div>);
         }else if(this.state.step=='999' && this.state.bankCheckStatus =='-1'){//资料已提交完成，审核中
             text=(<div className="ant-col-18">
