@@ -8,6 +8,9 @@ import appimg from 'ASSETS/images/app.png';
 
 import './style.less';
 
+//  引入文件链接
+import FileUrl from 'PAGES/companyValidate/components/fileUrl';
+
 class IdentityModal extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -163,7 +166,7 @@ class SupplementModal extends Component {
 	          	<Col span={8} className="s4m-step1">
 	          		<div className="wh80">
 						<h5>第一步：</h5>
-						<p>点击下载以下资料，打印填写并加盖公章：<a href="javaScript:void(0);">《企业法定代表人身份证明书》</a>，<a href="javaScript:void(0);">《承诺函及授权委托书》</a>。</p>
+						<p>点击下载以下资料，打印填写并加盖公章：<a href={ FileUrl.identityProof } download="企业法定代表人身份证明书">《企业法定代表人身份证明书》</a>，<a href={ FileUrl.deletegatePromiseLetter } download="承诺函及授权委托书">《承诺函及授权委托书》</a>。</p>
 						<p>准备好营业执照；组织机构代码证（多证合一营业执照可不提供）。</p>
 	          		</div>
 	          	</Col>

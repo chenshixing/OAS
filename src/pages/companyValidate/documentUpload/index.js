@@ -13,6 +13,9 @@ const FormItem = Form.Item;
 //  引入fetch
 import { fetch } from 'UTILS';
 
+//  引入文件链接
+import FileUrl from 'PAGES/companyValidate/components/fileUrl';
+
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -374,7 +377,7 @@ class DocumentUpload extends Component {
                         label="上传文件要求"
                     >
                         <ul>
-                            <li>下载<a href="javaScript:void(0);" download="企业法定代表人身份证明书">企业法定代表人身份证明书</a>，打印填写并加盖公章。</li>
+                            <li>下载<a href={ FileUrl.identityProof } download="企业法定代表人身份证明书">《企业法定代表人身份证明书》</a>，打印填写并加盖公章。</li>
                             <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
                         </ul>
                     </FormItem>
@@ -396,7 +399,7 @@ class DocumentUpload extends Component {
                         label="上传文件要求"
                     >
                         <ul>
-                            <li>下载<a href="javaScript:void(0);" download="承诺函及授权委托书">承诺函及授权委托书</a>，打印填写并加盖公章。</li>
+                            <li>下载<a href={ FileUrl.deletegatePromiseLetter } download="承诺函及授权委托书">《承诺函及授权委托书》</a>，打印填写并加盖公章。</li>
                             <li>支持格式jpg、jpeg、png、bmp，不超过10M。</li>
                         </ul>
                     </FormItem>
