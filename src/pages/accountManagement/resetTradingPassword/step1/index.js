@@ -16,7 +16,10 @@ import Frame from 'COM/form/frame';
 import StepsBar from './StepsBar';
 import Authenticate from './Authenticate';
 import RealNameAuthentication from './RealNameAuthentication';
-
+//全局获取基本信息
+import State from 'PAGES/redirect/state';
+const globalState = State.getState();
+console.log("globalState",globalState)
 // antd 组件
 import {
     Form,
@@ -94,10 +97,14 @@ export default class Steps1 extends React.Component {
         console.log("1")
         console.log(typeof this.state.isSend)
 
-        this.loadData();
-
-        //无限请求
-        this.loadPaddingFetch(3000);
+        if(globalState.data.bankCheckStatus==1 && globalState.data.step==999){
+            this.loadData();
+            //无限请求
+            this.loadPaddingFetch(3000);
+        }else{
+            //不通过核身验证什么的，就跳走了。
+            this.props.history.push("/accountManagement")
+        }
 
 
 
