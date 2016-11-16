@@ -176,6 +176,12 @@ class Steps2 extends React.Component {
         });
     }
 
+    componentWillUnmount(){
+        if(this.timer){
+            clearInterval(this.timer);
+        }
+    }
+
     render() {
         const sendMsgCls=classnames({
             color_gray:this.state.isSendMsgDisabled

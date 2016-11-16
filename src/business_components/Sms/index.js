@@ -15,9 +15,9 @@ import { Button, Modal, Row, Col } from 'antd';
 
 let map = {
     connectorType : {
-        1 : "委托代理人",
-        2 : "法定代表人",
-        3 : "真实姓名"
+        1 : "真实姓名：",
+        2 : "法定代表人姓名：",
+        3 : "委托代理人姓名："
     }
 }
 //  引入fetch
@@ -94,7 +94,7 @@ class Sms extends Component {
     	return (
     		<div>
 	    		<Row>
-					<Col span={8} className="text-align-right">{ map.connectorType[data.connectorType] }姓名：</Col><Col span={16}>{data.realName}</Col>
+					<Col span={8} className="text-align-right">{ map.connectorType[data.connectorType] }</Col><Col span={16}>{data.realName}</Col>
 	    		</Row>
 	    		<Row>
 					<Col span={8} className="text-align-right">身份识别码：</Col><Col span={16}>{ data.identityCode }</Col>
