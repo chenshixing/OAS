@@ -99,9 +99,14 @@ class Sms extends Component {
 	    		<Row>
 					<Col span={8} className="text-align-right">身份识别码：</Col><Col span={16}>{ data.identityCode }</Col>
 	    		</Row>
-	    		<Row>
-					<Col span={8} className="text-align-right">接收手机号码：</Col><Col span={16}>{ data.mobile }</Col>
-	    		</Row>
+                {
+                    data.mobile ? 
+                    <Row>
+                        <Col span={8} className="text-align-right">接收手机号码：</Col><Col span={16}>{ data.mobile }</Col>
+                    </Row>
+                    :
+                    ""
+                }
     		</div>
     	);
     }
