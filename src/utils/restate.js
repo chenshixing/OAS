@@ -104,7 +104,7 @@ class Restate{
             getStateSession() {
                 // 获得初始化的state，兼容一些未bind就直接getState()的情况
                 if(!this.hasInit){
-                    return this.copy(this.state);
+                    return JSON.parse(sessionStorage.getItem(this.sessionId)) || this.copy(this.state);
                 }
                 if(this.sessionId){
                     const value = sessionStorage.getItem(this.sessionId);
