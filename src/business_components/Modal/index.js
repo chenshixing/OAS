@@ -3,13 +3,16 @@ import React, { Component, PropTypes } from 'react';
 // antd 组件
 import { Modal, Button, Row, Col, Icon } from 'antd';
 
-import codeimg from 'ASSETS/images/code.png';
 import appimg from 'ASSETS/images/app.png';
 
 import './style.less';
 
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
+
+//  全局状态codeimg
+import State from 'PAGES/redirect/state';
+const codeimg = State.getState().sysInfo.appQrcodeUrl;
 
 class IdentityModal extends Component {
     static propTypes = {

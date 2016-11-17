@@ -10,7 +10,6 @@ import { Link } from 'react-router';
 
 import './style.less';
 
-import codeimg from 'ASSETS/images/code.png';
 import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
 
 //  业务组件
@@ -19,6 +18,9 @@ import OffLinePayTable from './offlinePayTable';
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
 
+//  全局状态codeimg
+import State from 'PAGES/redirect/state';
+const codeimg = State.getState().sysInfo.appQrcodeUrl;
 
 export default class Content extends Component{
     static propTypes = {

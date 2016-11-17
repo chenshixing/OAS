@@ -35,9 +35,12 @@ class TipsRow extends Component {
         this.loadData();
     }
 
-    // componentDidMount() {
-    //     this.loadData();
-    // }
+    componentDidMount() {
+        if(this.props.isReload){
+            return false;
+        }
+        this.loadData();
+    }
 
     loadData(){
         let me = this;

@@ -20,11 +20,12 @@ import {
 const Step = Steps.Step;
 const FormItem = Form.Item;
 
-import codeimg from 'ASSETS/images/code.png';
 import {IdentityModal, SupplementModal} from 'BCOM/Modal/index';
 import {fetch} from 'UTILS';
 
-
+//  全局状态codeimg
+import State from 'PAGES/redirect/state';
+const codeimg = State.getState().sysInfo.appQrcodeUrl;
 
 // 页面身份验证
 export default class RealNameAuthentication extends React.Component {
