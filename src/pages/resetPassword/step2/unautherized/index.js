@@ -35,8 +35,9 @@ class Steps2 extends React.Component {
                 fetch('/user/checkResetPwdAutoCode.do',{
                     body:data
                 }).then((res)=>{
+                    //权限控制 不能改，乱改动枪毙
                     this.props.history.push({
-                        pathname:'/resetPassword/step3'
+                        pathname:'/resetPassword/step3?isCheck=1'
                     });
                 },(res)=>{
                     message.error(`提交失败！${res.message}`,5);
@@ -131,7 +132,7 @@ class Steps2 extends React.Component {
                 </Steps>
                  <Frame title="您的账户正在审核中，请使用验证短信进行校验。">
                     <Form horizontal className="fn-mt-30">
-                        
+
                         <FormItem
                             label="手机号码"
                             {...formItemLayout}

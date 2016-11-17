@@ -25,10 +25,18 @@ class Step3 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         }
     }
-
+    componentDidMount(){
+        this.loadData()
+    }
+    loadData(){
+        //权限控制 不能改，乱改动枪毙
+        if(this.props.location.query.isCheck!="1"){
+            this.props.history.push("/accountManagement")
+        }
+    }
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
@@ -42,7 +50,7 @@ class Step3 extends React.Component {
                 }).then((res)=>{
                     console.log('res:',res);
                     this.props.history.push({
-                        pathname:'resetPassword/step4',
+                        pathname:'resetPassword/step4?isCheck=1',
                         state:{loginUrl:res.data && res.data.loginUrl}
                     });
                 },(res)=>{

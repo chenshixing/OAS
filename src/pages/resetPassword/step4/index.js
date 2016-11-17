@@ -20,6 +20,15 @@ class Steps3 extends React.Component {
         super(props);
         this.state={};
     }
+    componentDidMount(){
+        this.loadData()
+    }
+    loadData(){
+        //权限控制 不能改，乱改动枪毙
+        if(this.props.location.query.isCheck!="1"){
+            this.props.history.push("/accountManagement")
+        }
+    }
 
     render() {
         return (
