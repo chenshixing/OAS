@@ -3,9 +3,7 @@
 */
 import React from 'react';
 
-//import img from 'ASSETS/images/logo.png';
-
-
+import { Link } from 'react-router';
 
 export default class Header extends React.Component{
     shouldComponentUpdate(nextProps, nextState) {
@@ -21,12 +19,10 @@ export default class Header extends React.Component{
       return (
         <div className="the-main-nav-wrap">
           <div className="the-main-nav-box">
-            <a href="/" className="logo-wrap">
-
-            </a>
+            <Link to="/" className="logo-wrap"></Link>
             <div className="login-box ">
               {showName? <a title={`当前登录用户${showName}`}>您好，{showName}</a> : null}
-              <a href="/" title="首页">首页</a>
+              <Link to="/" title="首页">首页</Link>
               {showName? <a href={logoutUrl} title="退出">退出</a> : null}
             </div>
           </div>
