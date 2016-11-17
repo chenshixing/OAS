@@ -508,7 +508,7 @@ export default class basicBodyEditor extends React.Component {
                     <Row type="flex" justify="start" align="middle">
                         <Col span={2}>
                             {
-                                getCheckedBank.checkStatus && (getCheckedBank.checkStatus == 3 )
+                                getCheckedBank.checkStatus && (getCheckedBank.checkStatus == 1 )
                                 ?
                                 <Icon type="check"/>
                                 :
