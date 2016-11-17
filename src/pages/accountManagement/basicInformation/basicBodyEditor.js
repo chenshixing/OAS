@@ -301,7 +301,8 @@ export default class basicBodyEditor extends React.Component {
                                     { item.connectorType == 2 ? "法定代表人" : "委托代理人"}姓名：
                                 </Col>
                                 <Col span={4}>
-                                    {item.realName}
+                                    {/*脱敏*/}
+                                    {item.realName.replace(/^.*(.)$/,"***$1")}
                                 </Col>
                                 <Col span={8}>
                                     {
