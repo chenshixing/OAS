@@ -46,6 +46,17 @@ class Reg extends React.Component {
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
+          switch(res.code){
+            case '004':
+              this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+              break;
+            case '005':
+              this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+              break;
+            case '301':
+              this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
+              break;
+          }
         });
       }
 
@@ -224,9 +235,7 @@ class Reg extends React.Component {
       wrapperCol: { span: 12 },
     };
     console.log(this.state.agreementModalName)
-    // let iframeData = {
-    //     iframeSrc:"https://www.baidu.com/",
-    // }
+    
     return (
       <Form horizontal>
 
@@ -295,20 +304,12 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-
-        {/*
-            <Checkbox onChange={this.agreementCheck.bind(this)}>我已阅读并同意<a href="#">《{this.state.protocolData.protocolName}》</a></Checkbox>
-        */}
-        </FormItem>
-
-
-        <FormItem wrapperCol={{ span: 12, offset: 7 }}>
             <AgreementModal
                 visible={ this.state.agreementModalVisible }
                 onOk={this.handleAgreementonOK.bind(this)}
                 onCancel={this.hideAgreementModal.bind(this)}
                 iframeData={{
-                    iframeSrc:"https://www.baidu.com/",
+                    iframeSrc:this.state.protocolData.fileUrl,
                     name:this.state.protocolData.protocolName
                 }}
             >

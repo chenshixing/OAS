@@ -39,7 +39,7 @@ class Steps3 extends React.Component {
                         marginTop: 30
                         }}
                     >
-                        <Alert message="重置交易密码成功" description="交易密码已重置成功，请妥善保管您的密码。如需帮助请联系客服电话：400-106-6698。" type="success" showIcon/>
+                        <Alert message="重置登录密码成功" description="登录密码已重置成功，请妥善保管您的密码。如需帮助请联系客服电话：400-106-6698。" type="success" showIcon/>
                         <div className="text-align-center fn-mt-30">
                             <Button type='primary'><a href={globalState.sysInfo && globalState.sysInfo.logoutUrl}>重新登录</a></Button>
                         </div>

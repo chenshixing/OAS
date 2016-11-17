@@ -44,14 +44,25 @@ class Reg extends React.Component {
             body:data
           }).then((res)=>{
             console.log('res:',res);
-            // that.props.history.push({
-            //   pathname:'/userRegister/result'
-            // });
             store.set('loginUrl',res.data.loginUrl);
             window.location.href='#/userRegister/result';
           })
       }else{
         console.log('请填完必填信息再提交...');
+        switch(res.code){
+          case '004':
+            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+            break;
+          case '005':
+            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+            break;
+          case '301':
+            this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
+            break;
+          case '302':
+            this.props.form.setFields({"companyName":{"errors":[new Error(res.message)]}});
+            break;
+        }
       }
 
     });
@@ -305,7 +316,7 @@ class Reg extends React.Component {
                 onOk={this.handleAgreementonOK.bind(this)}
                 onCancel={this.hideAgreementModal.bind(this)}
                 iframeData={{
-                    iframeSrc:"https://www.baidu.com/",
+                    iframeSrc:this.state.protocolData.fileUrl,
                     name:this.state.protocolData.protocolName
                 }}
             >

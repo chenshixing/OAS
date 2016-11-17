@@ -55,7 +55,18 @@ class PersonalValidate extends React.Component {
                         pathname:'personalValidate/step4'
                     });
                 },(res)=>{
-                    message.error(`提交失败！${res.message}`,5);
+                    // message.error(`提交失败！${res.message}`,5);
+                    // switch(res.code){
+                    //     case '004':
+                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                    //         break;
+                    //     case '005':
+                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                    //         break;
+                    //     case '301':
+                    //         this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
+                    //         break;
+                    // }
                 });
             }
 
@@ -208,7 +219,7 @@ class PersonalValidate extends React.Component {
                                             onOk={this.handleAgreementonOK.bind(this)}
                                             onCancel={this.hideAgreementModal.bind(this)}
                                             iframeData={{
-                                                iframeSrc:"https://www.baidu.com/",
+                                                iframeSrc:this.state.protocolData.fileUrl,
                                                 name:this.state.protocolData.protocolName
                                             }}
                                         >
