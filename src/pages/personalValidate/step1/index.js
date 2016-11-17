@@ -38,6 +38,7 @@ class PersonalValidate extends React.Component {
 
     showModal() {
         this.props.form.validateFields((errors, values) => {
+            console.log('errors:',JSON.stringify(errors));
             if(!errors){
                 let data=this.state.data;
                 Object.assign(data,values);
@@ -63,9 +64,11 @@ class PersonalValidate extends React.Component {
                 pathname: '/personalValidate/step2'
             });
         },(res)=>{
-            console.log(res);
+            if(res.code=='002'){
+                this.props.form.setFields({"IdCard":{"errors":[new Error(res.message)]}});
+            }
             this.setState({ loading: false, visible: false });
-            message.error(`(${res.code})${res.message}`);
+            // message.error(`(${res.code})${res.message}`);
         });
     }
 
@@ -138,6 +141,7 @@ class PersonalValidate extends React.Component {
                             {...formItemLayout}
                             label=" 身份证号码"
                             required
+                            hasFeedback
                         >
                             <Input placeholder="请输入身份证号码" {...getFieldProps('IdCard', rules.IdCard)} />
                         </FormItem>

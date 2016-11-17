@@ -195,7 +195,7 @@ class CompanyValidate extends React.Component {
                             <Col span="12" offset="8">
                                 <Button key="submit" type="primary" size="large" onClick={this.handleNext}>下一步 </Button>
                                 {/** <Link to="/userRegister" className="link-standard fn-pl-20">重新登录</Link> */}
-                                <a href={globalState.sysInfo.logoutUrl}>重新登录</a>
+                                <a href={globalState.sysInfo && globalState.sysInfo.logoutUrl}>重新登录</a>
                             </Col>
                         </Row>
 
