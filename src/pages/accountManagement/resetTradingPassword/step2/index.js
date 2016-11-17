@@ -43,6 +43,15 @@ class Steps2 extends React.Component {
             conPwd:"",
         }
     }
+    componentDidMount(){
+        this.loadData()
+    }
+    loadData(){
+        //权限控制，如果没有参数 不要进来。
+        if(this.props.location.query.isCheck!="1"){
+            this.props.history.push("/accountManagement")
+        }
+    }
     handleSubmit() {
         console.log(this)
         this.props.form.validateFields((errors, values) => {
@@ -61,7 +70,8 @@ class Steps2 extends React.Component {
                 console.log(res)
                 //this.setState(res)
                 //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
-                this.props.history.push("/accountManagement/resetTradingPassword/step3");
+                //权限控制，跳转乱动枪毙
+                this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
             });
         });
     }
@@ -144,6 +154,7 @@ class Steps2 extends React.Component {
     }
 
     render() {
+        console.log(this)
         const {getFieldProps} = this.props.form;
         const formItemLayout = {
             labelCol: { span: 8 },

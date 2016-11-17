@@ -120,8 +120,9 @@ export default class Steps1 extends React.Component {
            if(res.code==200 && res.data.checkPass == 1){
                //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
                //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+               //权限控制，跳转乱动枪毙
                this.props.history.push({
-                   pathname: '/accountManagement/resetTradingPassword/step2'
+                   pathname: '/accountManagement/resetTradingPassword/step2?isCheck=1'
                })
            }
         })
