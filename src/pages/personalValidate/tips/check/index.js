@@ -79,7 +79,7 @@ class Check extends Component {
                 ),
             });
             this.setState({
-                bankCheckStatus:0
+                bankCheckStatus:-1   //审核中
             });
         },(res)=>{
             message.error(`(${res.code})${res.message}`,3);
