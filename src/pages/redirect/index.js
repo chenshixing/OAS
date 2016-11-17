@@ -62,9 +62,9 @@ export default class Redirect extends React.Component {
 
         });
         // OAS日志接口
-        if(location.search.indexOf('cas=1') != -1){
-            fetch('/redirect.do');
-        }
+        // if(location.search.indexOf('cas=1') != -1){
+        //     fetch('/redirect.do');
+        // }
     }
     render() {
         return (
