@@ -16,7 +16,8 @@ const Step = Steps.Step;
 // 页面组件
 import Frame from 'COM/form/frame';
 
-import State from './state';
+// 获取全局state
+import State from 'PAGES/redirect/state';
 
 import {fetch} from 'UTILS';
 
@@ -24,7 +25,7 @@ import {fetch} from 'UTILS';
 export default class PersonalValidate extends React.Component {
     constructor(props){
         super(props);
-        this.state = State.bind(this).getState();
+        // this.state = State.bind(this).getState();
     }
 
     componentDidMount(){

@@ -10,15 +10,15 @@ import { Alert, Steps, Button } from 'antd';
 import { Link } from 'react-router';
 const Step = Steps.Step;
 
+//全局获取基本信息
+import State from 'PAGES/redirect/state';
+const globalState = State.getState();
 
 // 页面
 class Steps3 extends React.Component {
     constructor(props){
         super(props);
-        this.state={
-            loginUrl:this.props.location.state.loginUrl
-        };
-        console.log('resetPassword step4',this.props);
+        this.state={};
     }
 
     render() {
@@ -41,7 +41,7 @@ class Steps3 extends React.Component {
                     >
                         <Alert message="重置交易密码成功" description="交易密码已重置成功，请妥善保管您的密码。如需帮助请联系客服电话：400-106-6698。" type="success" showIcon/>
                         <div className="text-align-center fn-mt-30">
-                            <Button type='primary'><a href={this.state.loginUrl}>重新登录</a></Button>
+                            <Button type='primary'><a href={globalState.sysInfo.logoutUrl}>重新登录</a></Button>
                         </div>
                     </div>
 

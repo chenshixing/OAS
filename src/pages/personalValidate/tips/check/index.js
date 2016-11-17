@@ -18,15 +18,15 @@ import  '../style.less';
 class Check extends Component {
     constructor(props) {
         super(props);
-        const state = State.getState().data;
-        console.log('state:',state);
+        const {data,sysInfo} = State.getState();
         this.state={
-            userType:state && state.userType,//从全局state中获取,用户类型，1：个人；2：企业；
-            step:state && state.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
-            bankCheckStatus:state && state.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
-            showName:state && state.showName,//显示用户名称
+            userType:data && data.userType,//从全局state中获取,用户类型，1：个人；2：企业；
+            step:data && data.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+            bankCheckStatus:data && data.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+            showName:data && data.showName,//显示用户名称
             PerBasicInfoText:'',
             PerRealText:'',
+            logoutUrl:sysInfo && sysInfo.logoutUrl
         };
     }
 
@@ -148,7 +148,7 @@ class Check extends Component {
                     {reVerify}
                 </Row>
                 <Row className="tipsRow pl-50">
-                    <p>如您想更换账号，请点击 <Link to='/'>重新登录</Link>。</p>
+                    <p>如您想更换账号，请点击 <a href={this.state.logoutUrl}>重新登录</a>。</p>
                 </Row>
             </div>
         );
