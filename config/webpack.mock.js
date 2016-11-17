@@ -20,7 +20,7 @@ module.exports = Object.assign(commonConfig, {
                 NODE_ENV: JSON.stringify('development')
             },
             __DEV__: true,
-            __WHY_DID_YOU_UPDATE__: false // 是否检测不必要的组件重渲染
+            __CORS__: false // CORS跨域请求
         })
     ]),
     // webpack dev server 配置

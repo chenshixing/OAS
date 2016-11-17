@@ -18,7 +18,10 @@ export default class Redirect extends React.Component {
         this.state = State.bind(this).getState();
     }
     componentDidMount() {
-        fetch('/common/getLoginCheckStatus.do').then(res => {
+        Promise.all([
+            fetch('/common/getLoginCheckStatus.do'),
+            fetch('/common/getSystemInfo.do')
+        ]).then(([res, info]) => {
             const {step, userType, bankCheckStatus} = res.data;
             const type = {
                 "1": "personalValidate",
@@ -53,8 +56,10 @@ export default class Redirect extends React.Component {
 
             // save data
             State.setState({
-                data: res.data
+                data: res.data,
+                sysInfo: info.data
             });
+
         });
         // OAS日志接口
         if(location.search.indexOf('cas=1') != -1){
