@@ -11,6 +11,11 @@ import Map from 'PAGES/companyValidate/components/map';
 //  引入fetch
 import { fetch } from 'UTILS';
 
+//  全局状态
+import State from 'PAGES/redirect/state';
+const sysInfo = State.getState().sysInfo;
+// console.log(State.getState().sysInfo);
+
 class TipsRow extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -23,7 +28,8 @@ class TipsRow extends Component {
                 basicData : {
                     passed : true
                 },
-                tipsRow : ""
+                tipsRow : "",
+                logoutUrl : sysInfo && sysInfo.logoutUrl || "javaScript:void(0);"
             }
         });
     }
@@ -112,7 +118,7 @@ class TipsRow extends Component {
             	{ this.state.data.tipsRow }
             	<Row className="tipsRow pl-50">
             		<Col span={24}>
-            			<p>如您想更换账号，请点击 <a href="javaScript:void(0);" onClick= { this.logout.bind(this) }>重新登录</a>。</p>
+            			<p>如您想更换账号，请点击 <a href={ this.state.data.logoutUrl }>重新登录</a>。</p>
             		</Col>
                 </Row>
             </div>

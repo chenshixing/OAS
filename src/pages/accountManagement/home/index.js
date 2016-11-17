@@ -44,7 +44,7 @@ class Home extends React.Component {
             data: {
                 name: "",
                 lastLoginTime: "",
-                getUserServiceList: []
+                getUserServiceList:[]
             },
             isInviteCode: true
         }
@@ -84,7 +84,7 @@ class Home extends React.Component {
                 console.log("成功")
                 //return true
             } else {
-                this.props.history.push("/accountManagement/basicInformation")
+                //this.props.history.push("/accountManagement/basicInformation")
             }
 
             this.forceUpdate();
@@ -103,9 +103,10 @@ class Home extends React.Component {
     // }
 
     handleSubmit(e) {
+        
         //console.log(this.props.from.getFieldValue())
         //e.preventDefault();
-        let _this = this;
+
         this.props.form.validateFields((errors, values) => {
             if (!!errors) {
                 console.log('Errors in form!!!');
@@ -128,20 +129,13 @@ class Home extends React.Component {
                 //window.location.reload()
                 //console.log(res)
                 let resData = res.data
+                this.state.data.getUserServiceList.push(resData)
+                this.props.form.setFieldsValue({name:""});
                 this.setState({
                     inviteCodeValue:"",
                     visible:false
                 })
-                this.props.form.setFieldsValue({name:""});
-                Modal.success({
-                    title: '提示',
-                    content: '添加应用成功',
-                    onOk() {
-                        _this.state.data.getUserServiceList.push(resData)
-                        _this.forceUpdate();
-                    },
-                });
-
+                this.openNotification();
                 //this.setState({visible: false});
             });
         });

@@ -13,7 +13,7 @@ const ROOT_PATH = commonConfig.root; // 项目根目录
 const DIST_PATH = path.join(ROOT_PATH, 'dist'); // 产出路径
 
 module.exports = Object.assign(commonConfig, {
-    devtool: 'source-map', // 'eval'  生产配置这个： cheap-source-map  测试配置这个：source-map
+    // devtool: 'source-map', // 'eval'  生产配置这个： cheap-source-map  测试配置这个：source-map
     cache: false,
     plugins: commonConfig.plugins.concat([
         // 配置全局常量
