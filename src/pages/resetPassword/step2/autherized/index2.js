@@ -6,11 +6,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import codeimg from 'ASSETS/images/code.png';
 import classnames from 'classnames';
 import store from 'store';
 
 
+//  全局状态codeimg
+import State from 'PAGES/redirect/state';
+const codeimg = State.getState().sysInfo.appQrcodeUrl;
 
 import { Link } from 'react-router';
 

@@ -22,7 +22,7 @@ module.exports = Object.assign(commonConfig, {
                 NODE_ENV: JSON.stringify('production')
             },
             __DEV__: false,
-            __WHY_DID_YOU_UPDATE__: false // 是否检测不必要的组件重渲染
+            __CORS__: false // CORS跨域请求
         }),
         // 根据模块调用次数，给模块分配ids，常被调用的ids分配更短的id，使得ids可预测，降低文件大小（for [hash] or [chunkhash]）
         new webpack.optimize.OccurrenceOrderPlugin(),

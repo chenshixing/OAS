@@ -139,7 +139,7 @@ class Check extends Component {
         return (
             <div className="tipsBox">
                 { this.headerRender() }
-                <TipsContent pageType={ this.state.pageType } />
+                <TipsContent pageType={ this.state.pageType } isReload={ this.props.location.query.reloadStatus == 1 } />
             </div>
         );
     }

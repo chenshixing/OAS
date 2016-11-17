@@ -7,7 +7,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import codeimg from 'ASSETS/images/code.png'
 import {Link} from 'react-router';
 // antd 组件
 import { Alert, Steps, Button } from 'antd';
@@ -20,6 +19,10 @@ import Frame from 'COM/form/frame';
 import State from 'PAGES/redirect/state';
 
 import {fetch} from 'UTILS';
+
+//  全局状态codeimg
+import globalState from 'PAGES/redirect/state';
+const codeimg = globalState.getState().sysInfo.appQrcodeUrl;
 
 // 页面组件（导出）
 export default class PersonalValidate extends React.Component {

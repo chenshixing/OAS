@@ -20,12 +20,14 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
 
     // 请求统一自动加上 /api，以便使用 webpack-dev-server 代理
     // 代理会去掉 /api 获取数据
-    // if(__COUPLING__){
-    //     url =  `${__COUPLING__.slice(0, -1)}${url}`;
-    // }else if(__DEV__){
-    //     url =  `/api${url}`;
-    // }
-    url = __DEV__ ? `/api${url}` : url;
+
+    // CORS跨域判断
+    if(__CORS__){
+        url =  `${__CORS__.slice(0, -1)}${url}`;
+    }else if(__DEV__){
+        url =  `/api${url}`;
+    }
+    //url = __DEV__ ? `/api${url}` : url;
 
     if(showLoading === undefined){
         if(typeof data === 'boolean'){

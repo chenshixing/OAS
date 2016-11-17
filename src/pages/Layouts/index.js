@@ -29,7 +29,7 @@ export default class Index extends React.Component{
       return (
           <Spin spinning={this.state.loading}>
           <div className="main-frm">
-            <Header data={rState.getState()} />
+            <Header state={rState.getState()} />
             <div className="frame-wrap-bg">
               <div className="frame-wrap">
                 {/* 主内容区 */}

@@ -7,8 +7,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 
-import codeimg from 'ASSETS/images/code.png'
-
+//  全局状态codeimg
+import State from 'PAGES/redirect/state';
+const codeimg = State.getState().sysInfo.appQrcodeUrl;
 
 // antd 组件
 import { Alert, Steps, Button } from 'antd';
