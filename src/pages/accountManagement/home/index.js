@@ -294,7 +294,7 @@ class Home extends React.Component {
                         padding: 0
                     }}>
                         <h3 className="ant-card-head-title">
-                            <span className="fn-mr-10">{this.state.data.name}</span>
+                            <span className="fn-mr-10">欢迎您，{this.state.data.name}</span>
                             {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
                             {this.templateUserType(this.state.data.userType)}
 
