@@ -5,18 +5,33 @@
 // react 相关库
 import React from 'react';
 import classNames from 'classNames';
-import {Link} from 'react-router';
+import {
+    Link
+} from 'react-router';
 // 页面组件
 import Frame from 'COM/form/frame';
 
 // 自定义验证 rule
-import {fetch,ruleType} from 'UTILS';
+import {
+    fetch,
+    ruleType
+} from 'UTILS';
 
 // antd 组件
-import {Alert,Steps,Button,Form,Input,Col,Row,message} from 'antd';
+import {
+    Alert,
+    Steps,
+    Button,
+    Form,
+    Input,
+    Col,
+    Row,
+    message
+} from 'antd';
 const Step = Steps.Step;
 const createForm = Form.create;
 const FormItem = Form.Item;
+
 function noop() {
     return false;
 }
@@ -28,33 +43,37 @@ class Step3 extends React.Component {
 
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         this.loadData()
     }
-    loadData(){
+    loadData() {
         //权限控制 不能改，乱改动枪毙
-        if(this.props.location.query.isCheck!="1"){
+        if (this.props.location.query.isCheck != "1") {
             this.props.history.push("/accountManagement")
         }
     }
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
-                let data ={businessType:2};
-                data.pwd=values.password;
-                data.conPwd=values.rePassword;
-                console.log('Submit!!!',data);
+                let data = {
+                    businessType: 2
+                };
+                data.pwd = values.password;
+                data.conPwd = values.rePassword;
+                console.log('Submit!!!', data);
 
-                fetch('/user/resetPwd.do',{
-                    body:data
-                }).then((res)=>{
-                    console.log('res:',res);
+                fetch('/user/resetPwd.do', {
+                    body: data
+                }).then((res) => {
+                    console.log('res:', res);
                     this.props.history.push({
-                        pathname:'resetPassword/step4?isCheck=1',
-                        state:{loginUrl:res.data && res.data.loginUrl}
+                        pathname: 'resetPassword/step4?isCheck=1',
+                        state: {
+                            loginUrl: res.data && res.data.loginUrl
+                        }
                     });
-                },(res)=>{
-                    message.error(`提交失败！${res.message}`,5);
+                }, (res) => {
+                    message.error(`提交失败！${res.message}`, 5);
                 });
             }
 
@@ -62,7 +81,9 @@ class Step3 extends React.Component {
     }
 
     checkPassWordAgain(rule, value, callback) {
-        const { getFieldValue } = this.props.form;
+        const {
+            getFieldValue
+        } = this.props.form;
         if (value && value !== getFieldValue('password')) {
             callback('两次所填写的密码不一致，请重新输入');
         } else {
@@ -70,35 +91,53 @@ class Step3 extends React.Component {
         }
     }
 
-    onPassWordBlur(e){
-        const value=e.target.value;
-        const { validateFields,getFieldError } = this.props.form;
-        console.log('pwd:',getFieldError('password'));
+    onPassWordBlur(e) {
+        const value = e.target.value;
+        const {
+            validateFields,
+            getFieldError
+        } = this.props.form;
+        console.log('pwd:', getFieldError('password'));
         if (value && !getFieldError('password')) {
-            validateFields(['rePassword'], { force: true });
+            validateFields(['rePassword'], {
+                force: true
+            });
         }
     }
 
     render() {
-        const {getFieldProps} = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
         // 表单校验
         const rules = {
             password: {
-                rules: [
-                    {required: true, message: '密码不能为空'},
-                    {min: 8, max: 20, message: '请输入8-20位字符'},
-                    ruleType('pfxPassword')
+                rules: [{
+                        required: true,
+                        message: '密码不能为空'
+                    }, {
+                        min: 8,
+                        max: 20,
+                        message: '请输入8-20位字符'
+                    },
+                    ruleType('password')
                 ]
             },
             rePassword: {
-                rules: [
-                    {required: true, message: '请再次输入密码'},
-                    {validator: this.checkPassWordAgain.bind(this)}
-                ]
+                rules: [{
+                    required: true,
+                    message: '请再次输入密码'
+                }, {
+                    validator: this.checkPassWordAgain.bind(this)
+                }]
             },
         };
 
