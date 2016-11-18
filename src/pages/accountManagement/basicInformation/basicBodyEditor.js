@@ -213,10 +213,10 @@ export default class basicBodyEditor extends React.Component {
                                     </h3>
                                 </Col>
 
-                                <Col span={4}>
+                                <Col span={1}>
                                     姓名：
                                 </Col>
-                                <Col span={4}>
+                                <Col span={7}>
                                     {item.realName}
                                 </Col>
                                 <Col span={8}>
@@ -297,10 +297,10 @@ export default class basicBodyEditor extends React.Component {
                                 }
 
 
-                                <Col span={4}>
-                                    { item.connectorType == 2 ? "法定代表人" : "委托代理人"}姓名：
+                                <Col span={2}>
+                                    { item.connectorType == 2 ? "法定代表人" : "委托代理人"}：
                                 </Col>
-                                <Col span={4}>
+                                <Col span={6}>
                                     {/*脱敏*/}
                                     {item.realName.replace(/^.*(.)$/,"***$1")}
                                 </Col>
