@@ -186,23 +186,18 @@ class Reg extends React.Component {
 
     // 表单校验
     const rules = {
-      realName: {
-        rules: [
-          {required: true, message: '真实姓名不能为空'},
-          ruleType('cn')
-        ]
-      },
       companyName: {
         rules: [
-          {required: true, message: '企业名不能为空'},
+          {required: true, message: '企业名称不能为空'},
+          ruleType('cn+en+str'),
+          {max: 50, message: '企业名称长度不能超多50位'}
         ]
       },
       userNo: {
         rules: [
           {required: true, message: '登录名不能为空'},
           ruleType('en+num'),
-          {min: 4, max: 32, message: '请输入4-20位字符'},
-
+          {min: 4, max: 32, message: '请输入4-32位字符'},
         ]
       },
       loginPwd: {
@@ -210,7 +205,7 @@ class Reg extends React.Component {
           {required: true, message: '密码不能为空'},
           {min: 8, max: 20, message: '请输入8-20位字符'},
           {validator: this.checkPassWord.bind(this)},
-          ruleType('en-num')
+          ruleType('password')
         ]
       },
       conLoginPwd: {
@@ -228,7 +223,19 @@ class Reg extends React.Component {
       smsCode: {
         rules: [
           {required: true, message: '短信验证码不能为空'},
-          {min: 6, max: 6, message: '请输入6位的短信验证码'}
+          {len:6, message: '请输入6位的短信验证码'}
+        ]
+      },
+      recommender:{
+        rules:[
+          ruleType('cn+en+str'),
+          {max: 50, message: '推荐人长度不能超多50位'},
+        ]
+      },
+      recommenderNo:{
+        rules:[
+          ruleType('cn+en+str'),
+          {max: 30, message: '推荐人长度不能超多30位'},
         ]
       }
     };
@@ -294,14 +301,14 @@ class Reg extends React.Component {
           {...formItemLayout}
           label="推荐人姓名"
         >
-          <Input {...getFieldProps('recommenderNo')} />
+          <Input {...getFieldProps('recommender',rules.recommender)} />
         </FormItem>
 
         <FormItem
           {...formItemLayout}
           label="推荐人编号"
         >
-          <Input {...getFieldProps('recommender')} />
+          <Input {...getFieldProps('recommenderNo',rules.recommenderNo)} />
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
