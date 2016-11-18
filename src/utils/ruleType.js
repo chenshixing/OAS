@@ -45,7 +45,7 @@ const dataType = {
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                return /[a-zA-Z]+(?=[0-9]+)|[0-9]+(?=[a-zA-Z]+)/.test(value) &&　value.replace(/[a-zA-Z]/g, '').replace(/[0-9]/g, '') === '';
+                return /[a-zA-Z]+(?=[0-9]+)|[0-9]+(?=[a-zA-Z]+)/.test(value) && 　value.replace(/[a-zA-Z]/g, '').replace(/[0-9]/g, '') === '';
             }
         },
         errMsg: '必须是英文字母、数字组合'
@@ -71,19 +71,19 @@ const dataType = {
         errMsg: 'url格式不正确'
     },
     //idcard
-    "id-card":{
-        reg:/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
+    "id-card": {
+        reg: /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
         errMsg: '身份证号码格式不正确'
     },
     //英文字母（区分大小写）、数字或符号组合(三选二 )
-    "pfxPassword":{
+    "pfxPassword": {
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[\W,_]+/];
+                const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[·.,\-_~\*\(\)\!@#\$%\^&]+/];
                 let matchNum = 0;
-                regArr.map( (item,index) => {
-                    if(item.test(value)){
+                regArr.map((item, index) => {
+                    if (item.test(value)) {
                         matchNum++;
                     }
                 });
@@ -94,12 +94,12 @@ const dataType = {
         errMsg: '必须为英文字母（区分大小写）、数字或符号组合'
     },
     //验证由数字和26个英文字母组成的字符串 4-20位
-    "en+num":{
-        reg:/^[A-Za-z0-9]+$/,
-        errMsg:"英文（区分大小写）、数字"
+    "en+num": {
+        reg: /^[A-Za-z0-9]+$/,
+        errMsg: "英文（区分大小写）、数字"
     },
     //不能为今天或过去的日期(value必须为Date对象)
-    "futureTime":{
+    "futureTime": {
         reg: {
             // 自定义 test 方法
             test: function(value) {
@@ -113,16 +113,16 @@ const dataType = {
 // 生成 Ant 验证规则 rule
 export default function getRule(type, errMsg) {
     const validate = dataType[type];
-    if(validate){
+    if (validate) {
         return {
             validator: function(rule, value, callback) {
                 // console.log(rule)
                 if (!value) {
                     callback();
                 } else {
-                    if(!validate.reg.test(value)){
+                    if (!validate.reg.test(value)) {
                         callback([new Error(errMsg || validate.errMsg)]);
-                    }else{
+                    } else {
                         callback();
                     }
                 }
