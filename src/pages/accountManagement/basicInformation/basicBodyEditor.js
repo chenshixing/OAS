@@ -351,7 +351,7 @@ export default class basicBodyEditor extends React.Component {
                         <Row type="flex" justify="start" align="middle">
                             <Col span={2}>
                                 {
-                                    ( (checkItems.EnPaper) && (checkItems.EnPaper.bankStatus == 1) && (checkItems.EnPaper.systemStatus==1)  )
+                                    ( (checkItems.EnPaper) && (checkItems.EnPaper.systemStatus==1)  )
                                     ?
                                     <span className="fn-mr-10"><Icon type="check" /></span>
                                     :
