@@ -76,11 +76,29 @@ const dataType = {
         errMsg: '身份证号码格式不正确'
     },
     //英文字母（区分大小写）、数字或符号组合(三选二 )
-    "pfxPassword":{
+    // "pfxPassword":{
+    //     reg: {
+    //         // 自定义 test 方法
+    //         test: function(value) {
+    //             const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[\W,_]+/];
+    //             let matchNum = 0;
+    //             regArr.map( (item,index) => {
+    //                 if(item.test(value)){
+    //                     matchNum++;
+    //                 }
+    //             });
+    //             let isMatch = matchNum >= 2;
+    //             return isMatch;
+    //         }
+    //     },
+    //     errMsg: '必须为英文字母（区分大小写）、数字或符号组合'
+    // },
+    //英文字母（区分大小写）、数字或符号组合(三选二 )
+    "password":{
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[\W,_]+/];
+                const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[_\-~\*\(\)\!@\#\$%\^\.•,&]+/];
                 let matchNum = 0;
                 regArr.map( (item,index) => {
                     if(item.test(value)){
@@ -97,6 +115,11 @@ const dataType = {
     "en+num":{
         reg:/^[A-Za-z0-9]+$/,
         errMsg:"英文（区分大小写）、数字"
+    },
+    //中文、英文（区分大小写）、可含半角标点符号•.,-_~ *()!@#$%^&
+    "cn+en+str":{
+        reg:/^[\u4e00-\u9fa5_\-~\*\(\)\!@\#\$%\^\.•,&a-zA-Z]+$/,
+        errMsg:"中文、英文（区分大小写）、常用字符"
     },
     //不能为今天或过去的日期(value必须为Date对象)
     "futureTime":{

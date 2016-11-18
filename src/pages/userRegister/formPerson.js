@@ -186,7 +186,8 @@ class Reg extends React.Component {
       realName: {
         rules: [
           {required: true, message: '真实姓名不能为空'},
-          ruleType('cn')
+          ruleType('cn+en+str'),
+          {max:50,message:'真实姓名长度不能超过50位'}
         ]
       },
       companyName: {
@@ -204,9 +205,9 @@ class Reg extends React.Component {
       loginPwd: {
         rules: [
           {required: true, message: '密码不能为空'},
-          {min: 8, max: 20, message: '请输入8-20位字符'},
           {validator: this.checkPassWord.bind(this)},
-          ruleType('en-num')
+          ruleType('password'),
+          {min: 8, max: 20, message: '请输入8-20位字符'}
         ]
       },
       conLoginPwd: {
