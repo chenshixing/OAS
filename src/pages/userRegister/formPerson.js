@@ -225,7 +225,19 @@ class Reg extends React.Component {
       smsCode: {
         rules: [
           {required: true, message: '短信验证码不能为空'},
-          {min: 6, max: 6, message: '请输入6位的短信验证码'}
+          {len :6, message: '请输入6位的短信验证码'}
+        ]
+      },
+      recommender:{
+        rules:[
+          ruleType('cn+en+str'),
+          {max: 50, message: '推荐人长度不能超多50位'},
+        ]
+      },
+      recommenderNo:{
+        rules:[
+          ruleType('cn+en+str'),
+          {max: 30, message: '推荐人长度不能超多30位'},
         ]
       }
     };
@@ -293,14 +305,14 @@ class Reg extends React.Component {
           {...formItemLayout}
           label="推荐人姓名"
         >
-          <Input {...getFieldProps('recommenderNo')} />
+          <Input {...getFieldProps('recommender',rules.recommender)} />
         </FormItem>
 
         <FormItem
           {...formItemLayout}
           label="推荐人编号"
         >
-          <Input {...getFieldProps('recommender')} />
+          <Input {...getFieldProps('recommenderNo',rules.recommenderNo)} />
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
