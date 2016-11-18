@@ -11,6 +11,8 @@ import ruleType from 'UTILS/ruleType';
 // 页面
 import Frame from 'COM/form/frame';
 
+import { Link } from 'react-router';
+
 
 //fetch
 import {
@@ -168,7 +170,7 @@ class ResetPassword extends React.Component {
                         </Form.Item>
                         <Form.Item wrapperCol={{span: 12, offset: 8}}>
                             <Button type="primary" htmlType="submit">确认提交</Button>
-                            <a style={{paddingLeft: 20}} href="#">取消</a>
+                            <Link style={{paddingLeft: 20}} to="/accountManagement/basicInformation">取消</Link>
                         </Form.Item>
                     </Form>
                 </div>
