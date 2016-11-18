@@ -1,10 +1,25 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
-import { Link } from 'react-router';
+import {
+    Link
+} from 'react-router';
 
 // antd 组件
 // antd 组件
-import {Form, Input, Checkbox, Steps, Row, Col, Button, Modal, Icon} from 'antd';
+import {
+    Form,
+    Input,
+    Checkbox,
+    Steps,
+    Row,
+    Col,
+    Button,
+    Modal,
+    Icon
+} from 'antd';
 const createForm = Form.create;
 const Step = Steps.Step;
 const FormItem = Form.Item;
@@ -13,7 +28,9 @@ import Frame from 'COM/form/frame';
 import AgreementModal from 'COM/agreementModal/index';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
@@ -26,12 +43,12 @@ class CompanyValidate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible : false,
-            agreementChecked : false,
-            agreementModalVisible : false,
-            pfxPassword : "",
-            protocolData : {
-                fileUrl : "#",
+            visible: false,
+            agreementChecked: false,
+            agreementModalVisible: false,
+            pfxPassword: "",
+            protocolData: {
+                fileUrl: "#",
             }
         }
     }
@@ -40,14 +57,14 @@ class CompanyValidate extends Component {
         this.loadData();
     }
 
-    loadData(){
+    loadData() {
         let me = this;
         let protocolData = me.state.protocolData;
-        fetch('/common/getCurrentProtocol.do',{
-            body : {
-                protocolType : 2
+        fetch('/common/getCurrentProtocol.do', {
+            body: {
+                protocolType: 2
             }
-        }).then(res =>{
+        }).then(res => {
             protocolData = res.data;
 
             me.setState({
@@ -56,107 +73,117 @@ class CompanyValidate extends Component {
         });
     }
 
-    agreementOnChange(e){
+    agreementOnChange(e) {
         this.setState({
-            agreementChecked : !this.state.agreementChecked
+            agreementChecked: !this.state.agreementChecked
         })
     }
 
-    next(){
+    next() {
         console.log("next");
         // 表单校验
         this.props.form.validateFieldsAndScroll((errors, data) => {
-          if (errors) {
-            console.log(errors);
-            return false;
-          }
-          console.log("passed");
-          this.submit(data);
+            if (errors) {
+                console.log(errors);
+                return false;
+            }
+            console.log("passed");
+            this.submit(data);
         });
     }
 
-    submit(submitData){
+    submit(submitData) {
         let protocolData = this.state.protocolData;
         // console.log(submitData);
-        this.setState({ visible: true });
+        this.setState({
+            visible: true
+        });
 
-        fetch('/companyVerification/saveTransactionPassword.do',{
-            body : {
-                system : 1,
-                pfxPassword : submitData.pfxPassword,
-                protocolId : protocolData.id,
-                protocolVersion : protocolData.protocolEdition,
-                protocolName : protocolData.protocolName
+        fetch('/companyVerification/saveTransactionPassword.do', {
+            body: {
+                system: 1,
+                pfxPassword: submitData.pfxPassword,
+                protocolId: protocolData.id,
+                protocolVersion: protocolData.protocolEdition,
+                protocolName: protocolData.protocolName
             }
-        },true,null,this.codeErrCallback.bind(this)).then(res =>{
+        }, true, null, this.codeErrCallback.bind(this)).then(res => {
             //  申请成功TODO
             this.props.history.push('/companyValidate/step4');
         });
     }
 
     //  code不等于200时回调
-    codeErrCallback(){
-        this.setState({ visible: false });
+    codeErrCallback() {
+        this.setState({
+            visible: false
+        });
     }
 
-    pfxPasswordOnChange(e){
+    pfxPasswordOnChange(e) {
         this.setState({
-            pfxPassword : e.target.value
+            pfxPassword: e.target.value
         })
     }
 
-    handleCancel(){
-        this.setState({ visible: false });
+    handleCancel() {
+        this.setState({
+            visible: false
+        });
     }
 
     //  协议
-    openAgreementModal(){
+    openAgreementModal() {
 
         this.setState({
-            agreementModalVisible:true,
+            agreementModalVisible: true,
         });
     }
-    hideAgreementModal(){
+    hideAgreementModal() {
         this.setState({
-            agreementModalVisible:false
+            agreementModalVisible: false
         });
     }
-    handleAgreement(){
+    handleAgreement() {
 
         this.setState({
-            agreementModalVisible:false,
+            agreementModalVisible: false,
         });
     }
-    handleAgreementonOK(){
+    handleAgreementonOK() {
         this.setState({
-            agreementModalVisible:false,
-            agreementChecked:true
+            agreementModalVisible: false,
+            agreementChecked: true
         });
     }
 
     render() {
         let me = this;
 
-    	const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+        const formItemLayout = {
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
 
         const pfxPasswordRule = {
-            validator : function(rule, value, callback) {
+            validator: function(rule, value, callback) {
                 if (!value) {
                     callback();
                 } else {
-                    const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[\W,_]+/];
+                    const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[\W,_]+/];
                     let matchNum = 0;
-                    regArr.map( (item,index) => {
-                        if(item.test(value)){
+                    regArr.map((item, index) => {
+                        if (item.test(value)) {
                             matchNum++;
                         }
                     });
-                    if(matchNum >= 2 && value.length >= 8 && value.length <= 20){
+                    if (matchNum >= 2 && value.length >= 8 && value.length <= 20) {
                         callback();
-                    }else{
+                    } else {
                         callback([new Error('8-20位英文字母（区分大小写）、数字或符号组合')]);
                     }
                 }
@@ -164,33 +191,44 @@ class CompanyValidate extends Component {
         };
 
         const rules = {
-            pfxPassword : {
-                rules:[
-                    {required: true, whitespace: true, message: '交易密码不能为空'},
-                    {min: 8, max: 20, message: '请输入8-20位字符'},
-                    ruleType('pfxPassword')
+            pfxPassword: {
+                rules: [{
+                        required: true,
+                        whitespace: true,
+                        message: '交易密码不能为空'
+                    }, {
+                        min: 8,
+                        max: 20,
+                        message: '请输入8-20位字符'
+                    },
+                    ruleType('password')
                 ]
             },
-            pfxPasswordComfirm : {
-                rules:[
-                    {required: true, whitespace: true, message: '请再次输入交易密码'},
-                    {validator: function(rule, value, callback) {
+            pfxPasswordComfirm: {
+                rules: [{
+                    required: true,
+                    whitespace: true,
+                    message: '请再次输入交易密码'
+                }, {
+                    validator: function(rule, value, callback) {
                         // console.log(rule)
                         if (!value) {
                             callback();
                         } else {
-                            if(value !== me.state.pfxPassword){
+                            if (value !== me.state.pfxPassword) {
                                 callback([new Error("两次密码输入不一致。")]);
-                            }else{
+                            } else {
                                 callback();
                             }
                         }
-                    }}
-                ]
+                    }
+                }]
             }
         };
 
-        const { getFieldProps } = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
 
         return (
             <div>

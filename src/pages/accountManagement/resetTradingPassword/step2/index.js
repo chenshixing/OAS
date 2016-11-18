@@ -1,7 +1,9 @@
 // react 相关库
 import React from 'react';
 import classNames from 'classNames';
-import {Link} from 'react-router';
+import {
+    Link
+} from 'react-router';
 
 // 页面组件
 import Frame from 'COM/form/frame';
@@ -12,7 +14,9 @@ import StepsBar from './StepsBar';
 import ruleType from 'UTILS/ruleType';
 
 
-import {fetch} from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 // antd 组件
 import {
@@ -27,6 +31,7 @@ import {
 const Step = Steps.Step;
 const createForm = Form.create;
 const FormItem = Form.Item;
+
 function noop() {
     return false;
 }
@@ -39,16 +44,16 @@ class Steps2 extends React.Component {
             rePassBarShow: false,
             passStrength: 'L', // 密码强度
             rePassStrength: 'L',
-            pwd:"",
-            conPwd:"",
+            pwd: "",
+            conPwd: "",
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         this.loadData()
     }
-    loadData(){
+    loadData() {
         //权限控制，如果没有参数 不要进来。
-        if(this.props.location.query.isCheck!="1"){
+        if (this.props.location.query.isCheck != "1") {
             this.props.history.push("/accountManagement")
         }
     }
@@ -59,18 +64,18 @@ class Steps2 extends React.Component {
                 console.log('Errors in form!!!');
                 return;
             }
-            fetch('/user/resetPwd.do',{
-                body:{
-                  "businessType": 3,
-                  "pwd": this.state.pwd,
-                  "conPwd": this.state.conPwd
+            fetch('/user/resetPwd.do', {
+                body: {
+                    "businessType": 3,
+                    "pwd": this.state.pwd,
+                    "conPwd": this.state.conPwd
                 }
             }).then(res => {
 
                 console.log(res)
-                //this.setState(res)
-                //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
-                //权限控制，跳转乱动枪毙
+                    //this.setState(res)
+                    //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
+                    //权限控制，跳转乱动枪毙
                 this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
             });
         });
@@ -88,15 +93,25 @@ class Steps2 extends React.Component {
                 strength = 'H';
             }
             if (type === 'pass') {
-                this.setState({passBarShow: true, passStrength: strength});
+                this.setState({
+                    passBarShow: true,
+                    passStrength: strength
+                });
             } else {
-                this.setState({rePassBarShow: true, rePassStrength: strength});
+                this.setState({
+                    rePassBarShow: true,
+                    rePassStrength: strength
+                });
             }
         } else {
             if (type === 'pass') {
-                this.setState({passBarShow: false});
+                this.setState({
+                    passBarShow: false
+                });
             } else {
-                this.setState({rePassBarShow: false});
+                this.setState({
+                    rePassBarShow: false
+                });
             }
         }
     }
@@ -106,7 +121,9 @@ class Steps2 extends React.Component {
         this.getPassStrenth(value, 'pass');
 
         if (form.getFieldValue('pass')) {
-            form.validateFields(['rePass'], {force: true});
+            form.validateFields(['rePass'], {
+                force: true
+            });
         }
 
         callback();
@@ -124,9 +141,7 @@ class Steps2 extends React.Component {
     }
 
     renderPassStrengthBar(type) {
-        const strength = type === 'pass'
-            ? this.state.passStrength
-            : this.state.rePassStrength;
+        const strength = type === 'pass' ? this.state.passStrength : this.state.rePassStrength;
         const classSet = classNames({
             'ant-pwd-strength': true,
             'ant-pwd-strength-low': strength === 'L',
@@ -155,48 +170,50 @@ class Steps2 extends React.Component {
 
     render() {
         console.log(this)
-        const {getFieldProps} = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
         const passProps = getFieldProps('pass', {
-            rules: [
-                {
-                    required: true,
-                    whitespace: true,
-                    message: '请填写密码'
-                }, {
-                    min: 8,
-                    max: 20,
-                    message: '请输入8-20位字符'
-                }, ruleType('pfxPassword')
-            ],
+            rules: [{
+                required: true,
+                whitespace: true,
+                message: '请填写密码'
+            }, {
+                min: 8,
+                max: 20,
+                message: '请输入8-20位字符'
+            }, ruleType('password')],
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
                 this.setState({
-                    pwd:e.target.value
+                    pwd: e.target.value
                 })
             }
         });
         const rePassProps = getFieldProps('rePass', {
-            rules: [
-                {
-                    required: true,
-                    whitespace: true,
-                    message: '请再次输入密码'
-                }, {
-                    min: 8,
-                    max: 20,
-                    message: '请输入8-20位字符'
-                }, {
-                    validator: this.checkPass2.bind(this)
-                }
-            ],
+            rules: [{
+                required: true,
+                whitespace: true,
+                message: '请再次输入密码'
+            }, {
+                min: 8,
+                max: 20,
+                message: '请输入8-20位字符'
+            }, {
+                validator: this.checkPass2.bind(this)
+            }],
             onChange: (e) => {
                 console.log('你的密码就是这样被盗的：', e.target.value);
                 this.setState({
-                    conPwd:e.target.value
+                    conPwd: e.target.value
                 })
             }
         });

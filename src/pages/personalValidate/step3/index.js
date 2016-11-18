@@ -8,13 +8,25 @@ import ReactDOM from 'react-dom';
 // 导入公共样式
 import 'ASSETS/less/main.less';
 // 自定义验证 rule
-import {ruleType,fetch} from 'UTILS';
+import {
+    ruleType,
+    fetch
+} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 import AgreementModal from 'COM/agreementModal/index';
 
 // antd 组件
-import { Button, Form, Input, Checkbox, Steps, Row, Col,message } from 'antd';
+import {
+    Button,
+    Form,
+    Input,
+    Checkbox,
+    Steps,
+    Row,
+    Col,
+    message
+} from 'antd';
 import classNames from 'classnames';
 const createForm = Form.create;
 const FormItem = Form.Item;
@@ -25,13 +37,13 @@ function noop() {
 }
 
 class PersonalValidate extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            agreementModalVisible:false,
-            agreementModalName:'',
+        this.state = {
+            agreementModalVisible: false,
+            agreementModalName: '',
             submitDis: true,
-            protocolData:{}
+            protocolData: {}
         };
     }
 
@@ -39,22 +51,22 @@ class PersonalValidate extends React.Component {
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
-                let data ={
+                let data = {
                     "system": "1",
-                    };
-                data.pfxPassword=values.rePassword;
-                data.protocolId=this.state.protocolData.id;
-                data.protocolVersion=this.state.protocolData.protocolEdition;
-                data.protocolName=this.state.protocolData.protocolName;
-                console.log('Submit!!!',data);
+                };
+                data.pfxPassword = values.rePassword;
+                data.protocolId = this.state.protocolData.id;
+                data.protocolVersion = this.state.protocolData.protocolEdition;
+                data.protocolName = this.state.protocolData.protocolName;
+                console.log('Submit!!!', data);
 
-                fetch('/personVerification/saveTransactionPassword.do',{
-                    body:data
-                }).then((res)=>{
+                fetch('/personVerification/saveTransactionPassword.do', {
+                    body: data
+                }).then((res) => {
                     this.props.history.push({
-                        pathname:'personalValidate/step4'
+                        pathname: 'personalValidate/step4'
                     });
-                },(res)=>{
+                }, (res) => {
                     // message.error(`提交失败！${res.message}`,5);
                     // switch(res.code){
                     //     case '004':
@@ -75,7 +87,9 @@ class PersonalValidate extends React.Component {
     }
 
     checkPassWordAgain(rule, value, callback) {
-        const { getFieldValue } = this.props.form;
+        const {
+            getFieldValue
+        } = this.props.form;
         if (value && value !== getFieldValue('password')) {
             callback('两次所填写的密码不一致，请重新输入');
         } else {
@@ -83,104 +97,122 @@ class PersonalValidate extends React.Component {
         }
     }
 
-    onPassWordBlur(e){
-        const value=e.target.value;
-        const { validateFields,getFieldError } = this.props.form;
-        console.log('pwd:',getFieldError('password'));
+    onPassWordBlur(e) {
+        const value = e.target.value;
+        const {
+            validateFields,
+            getFieldError
+        } = this.props.form;
+        console.log('pwd:', getFieldError('password'));
         if (value && !getFieldError('password')) {
-            validateFields(['rePassword'], { force: true });
+            validateFields(['rePassword'], {
+                force: true
+            });
         }
     }
 
-    validateAgreement(rule,value,callback){
-        console.log('请阅读并同意协议:',value);
-        if(value=='false'){
+    validateAgreement(rule, value, callback) {
+        console.log('请阅读并同意协议:', value);
+        if (value == 'false') {
             callback('请阅读并同意协议')
-        }else{
+        } else {
             callback();
         }
     }
 
     /*协议*/
-    openAgreementModal(){
+    openAgreementModal() {
 
         this.setState({
-            agreementModalVisible:true,
+            agreementModalVisible: true,
         });
     }
-    hideAgreementModal(){
+    hideAgreementModal() {
         this.setState({
-            agreementModalVisible:false
+            agreementModalVisible: false
         });
     }
-    handleAgreement(){
+    handleAgreement() {
 
         this.setState({
-            agreementModalVisible:false,
+            agreementModalVisible: false,
         });
     }
     agreementCheck(e) {
         this.setState({
-        submitDis: !e.target.checked,
+            submitDis: !e.target.checked,
         });
     }
-    handleAgreementonOK(){
-        this.setState({
-            agreementModalVisible:false,
-            submitDis:false
-        });
-    }
-    /*协议 end*/
+    handleAgreementonOK() {
+            this.setState({
+                agreementModalVisible: false,
+                submitDis: false
+            });
+        }
+        /*协议 end*/
 
     agreementCheck(e) {
         this.setState({
-        submitDis: !e.target.checked
+            submitDis: !e.target.checked
         });
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.initPage();
     }
 
-    initPage(){
+    initPage() {
         //获取此页面需要签署的协议
-        fetch('/common/getCurrentProtocol.do',{
-            body:{
+        fetch('/common/getCurrentProtocol.do', {
+            body: {
                 "protocolType": 1
             }
-        }).then((res)=>{
-            console.log('获取协议成功：',res.data);
+        }).then((res) => {
+            console.log('获取协议成功：', res.data);
             this.setState({
-                protocolData:res.data,
+                protocolData: res.data,
             });
-        },(res)=>{
+        }, (res) => {
             alert('获取协议失败，请重新获取！');
         })
     }
 
-    render(){
-        const { getFieldProps } = this.props.form;
+    render() {
+        const {
+            getFieldProps
+        } = this.props.form;
         // 表单校验
         const rules = {
             password: {
-                rules: [
-                    {required: true, message: '密码不能为空'},
-                    {min: 8, max: 20, message: '请输入8-20位字符'},
-                    ruleType('pfxPassword')
+                rules: [{
+                        required: true,
+                        message: '密码不能为空'
+                    }, {
+                        min: 8,
+                        max: 20,
+                        message: '请输入8-20位字符'
+                    },
+                    ruleType('password')
                 ]
             },
             rePassword: {
-                rules: [
-                    {required: true, message: '请再次输入密码'},
-                    {validator: this.checkPassWordAgain.bind(this)}
-                ]
+                rules: [{
+                    required: true,
+                    message: '请再次输入密码'
+                }, {
+                    validator: this.checkPassWordAgain.bind(this)
+                }]
             },
         };
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 10 },
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 10
+            },
         };
-        return(
+        return (
             <div>
                 <Steps size="default" current={2} className="fn-mb-30">
                     <Step title="填写基本信息" />

@@ -1,7 +1,11 @@
 // react 相关库
 import React from 'react';
 // antd 组件
-import { Button, Form, Input } from 'antd';
+import {
+    Button,
+    Form,
+    Input
+} from 'antd';
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
 // 页面
@@ -9,7 +13,9 @@ import Frame from 'COM/form/frame';
 
 
 //fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 
 //全局获取基本信息
@@ -21,17 +27,17 @@ console.log(globalState)
 class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
-            oldLoginPwd:"",
-            newLoginPwd:"",
-            conNewLoginPwd:"",
+        this.state = {
+            oldLoginPwd: "",
+            newLoginPwd: "",
+            conNewLoginPwd: "",
         }
     }
 
     componentDidMount() {
         //this.loadData()
     }
-    loadData(){
+    loadData() {
         //fetch("/user/checkUserInfo.do").then(res=>{
         //    console.log(res)
         //})
@@ -44,31 +50,33 @@ class ResetPassword extends React.Component {
                 return;
             }
 
-            fetch('/user/modifyLoginPwd.do',{
-                body:{
-                    oldLoginPwd:this.state.oldLoginPwd,
-                    newLoginPwd:this.state.newLoginPwd,
-                    conNewLoginPwd:this.state.conNewLoginPwd,
+            fetch('/user/modifyLoginPwd.do', {
+                body: {
+                    oldLoginPwd: this.state.oldLoginPwd,
+                    newLoginPwd: this.state.newLoginPwd,
+                    conNewLoginPwd: this.state.conNewLoginPwd,
                 }
             }).then(res => {
                 //alert(res)
                 console.log(res)
-                //this.setState(res)
-                //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
+                    //this.setState(res)
+                    //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
                 this.props.history.push("/accountManagement/resetPassword/step2")
             });
         });
     }
 
     checkPass(rule, value, callback) {
-        if(value) {
-            this.props.form.validateFields(['confirmPassword'], {force: true});
+        if (value) {
+            this.props.form.validateFields(['confirmPassword'], {
+                force: true
+            });
         }
         callback();
     }
 
     checkConfirmPass(rule, value, callback) {
-        if(value && value !== this.props.form.getFieldValue('password')) {
+        if (value && value !== this.props.form.getFieldValue('password')) {
             callback('两次输入密码不一致！');
         } else {
             callback();
@@ -78,42 +86,57 @@ class ResetPassword extends React.Component {
     render() {
         console.log(this)
         const props = {
-            labelCol: {span: 8},
-            wrapperCol: {span: 8},
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 8
+            },
         };
-        const {getFieldProps} = this.props.form; //用于和表单进行双向绑定
+        const {
+            getFieldProps
+        } = this.props.form; //用于和表单进行双向绑定
         const oldLoginPwd = getFieldProps('oldPassword', { //原登录密码
-            rules: [
-                {required: true, whitespace: true, message: '请输入原登录密码'},
-            ],
+            rules: [{
+                required: true,
+                whitespace: true,
+                message: '请输入原登录密码'
+            }, ],
             onChange: (e) => {
                 this.setState({
-                    oldLoginPwd:e.target.value
+                    oldLoginPwd: e.target.value
                 })
                 console.log('原密码：', e.target.value);
             }
         });
-        const newLoginPwd = getFieldProps('password', {//新登录密码
-            rules: [
-                {required: true, min: 8, max: 20, message: '请输入8-20个字符'},
-                {validator: this.checkPass.bind(this)},
-                ruleType('pfxPassword')
+        const newLoginPwd = getFieldProps('password', { //新登录密码
+            rules: [{
+                    required: true,
+                    min: 8,
+                    max: 20,
+                    message: '请输入8-20个字符'
+                }, {
+                    validator: this.checkPass.bind(this)
+                },
+                ruleType('password')
             ],
             onChange: (e) => {
                 this.setState({
-                    newLoginPwd:e.target.value
+                    newLoginPwd: e.target.value
                 })
                 console.log('新登录密码：', e.target.value);
             }
         });
-        const conNewLoginPwd = getFieldProps('confirmPassword', {//确认新登录密码
-            rules: [
-                {required: true, message: '请再次输入密码'},
-                {validator: this.checkConfirmPass.bind(this)},
-            ],
+        const conNewLoginPwd = getFieldProps('confirmPassword', { //确认新登录密码
+            rules: [{
+                required: true,
+                message: '请再次输入密码'
+            }, {
+                validator: this.checkConfirmPass.bind(this)
+            }, ],
             onChange: (e) => {
                 this.setState({
-                    conNewLoginPwd:e.target.value
+                    conNewLoginPwd: e.target.value
                 })
                 console.log('确认新登录密码：', e.target.value);
             }

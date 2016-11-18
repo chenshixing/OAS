@@ -21,7 +21,7 @@ export default class Authenticate extends React.Component {
     }
     loadConnectorType(item){
         let items = {
-            1:"个人",
+            1:"姓名",
             2:"企业法人",
             3:"经办人"
         }
