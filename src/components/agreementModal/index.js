@@ -71,6 +71,12 @@ class AgreementModal extends React.Component{
         };
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            iframeData:nextProps.iframeData
+        });
+    }
+
     handleOk(){
         console.log('AgreementModal ok');
         this.props.onOk();
@@ -82,13 +88,11 @@ class AgreementModal extends React.Component{
     }
 
     render(){
-        console.log("this=>")
-        console.log(this.state.iframeData.iframeHeight)
         return(
             <div className='agreementModal'>
                 {this.props.children}
                 <Modal
-                    title={this.props.iframeData.name}
+                    title={this.state.iframeData.name}
                     visible={this.props.visible}
                     maskClosable={false}
                     onCancel={this.handleCancel.bind(this)}
@@ -110,11 +114,11 @@ class AgreementModal extends React.Component{
                         frameBorder="no"
                         allowTransparency="true"
                         style={{
-                            border: 'none',
-                            width:"100%",
-                            display: 'block',
+                            "border": 'none',
+                            "width":"100%",
+                            "display": 'block',
                             "height":this.state.iframeData.iframeHeight,
-                            overflow: 'hidden'
+                            "overflow": 'hidden'
                         }}
                         name="dialog-iframe1478073723066"
                         >

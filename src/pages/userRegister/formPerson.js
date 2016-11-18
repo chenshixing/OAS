@@ -234,7 +234,6 @@ class Reg extends React.Component {
       labelCol: { span: 7 },
       wrapperCol: { span: 12 },
     };
-    console.log(this.state.agreementModalName)
     
     return (
       <Form horizontal>
