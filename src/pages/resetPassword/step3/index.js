@@ -43,15 +43,7 @@ class Step3 extends React.Component {
 
         }
     }
-    componentDidMount() {
-        this.loadData()
-    }
-    loadData() {
-        //权限控制 不能改，乱改动枪毙
-        if (this.props.location.query.isCheck != "1") {
-            this.props.history.push("/accountManagement")
-        }
-    }
+    
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
@@ -67,13 +59,15 @@ class Step3 extends React.Component {
                 }).then((res) => {
                     console.log('res:', res);
                     this.props.history.push({
-                        pathname: 'resetPassword/step4?isCheck=1',
+                        pathname: 'resetPassword/step4',
                         state: {
                             loginUrl: res.data && res.data.loginUrl
                         }
                     });
                 }, (res) => {
-                    message.error(`提交失败！${res.message}`, 5);
+                    if(res.code='400'){
+                        fetch('/common/getLoginCheckStatus.do');
+                    }
                 });
             }
 
@@ -81,9 +75,7 @@ class Step3 extends React.Component {
     }
 
     checkPassWordAgain(rule, value, callback) {
-        const {
-            getFieldValue
-        } = this.props.form;
+        const {getFieldValue} = this.props.form;
         if (value && value !== getFieldValue('password')) {
             callback('两次所填写的密码不一致，请重新输入');
         } else {
@@ -93,11 +85,7 @@ class Step3 extends React.Component {
 
     onPassWordBlur(e) {
         const value = e.target.value;
-        const {
-            validateFields,
-            getFieldError
-        } = this.props.form;
-        console.log('pwd:', getFieldError('password'));
+        const {validateFields,getFieldError} = this.props.form;
         if (value && !getFieldError('password')) {
             validateFields(['rePassword'], {
                 force: true
@@ -106,9 +94,7 @@ class Step3 extends React.Component {
     }
 
     render() {
-        const {
-            getFieldProps
-        } = this.props.form;
+        const {getFieldProps} = this.props.form;
         const formItemLayout = {
             labelCol: {
                 span: 8
@@ -141,6 +127,7 @@ class Step3 extends React.Component {
             },
         };
 
+        console.log(this)
         return (
             <div>
                 <Steps size="default" current={2} className="fn-mb-30">
