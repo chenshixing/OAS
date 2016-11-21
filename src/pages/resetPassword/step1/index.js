@@ -19,9 +19,9 @@ import {fetch,ruleType} from 'UTILS';
 import Frame from 'COM/form/frame';
 
 //全局获取基本信息
-import State from 'PAGES/redirect/state';
-const globalState = State.getState();
-import Store from 'store'
+// import State from 'PAGES/redirect/state';
+// const globalState = State.getState();
+// import Store from 'store'
 
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
@@ -67,6 +67,14 @@ class CompanyValidate extends React.Component {
             data: {
                 userType:e.target.value
             }
+        });
+    }
+
+    goToLogin(){
+        fetch('/common/getLoginCheckStatus.do').then((res)=>{
+            window.location.href=res.data.loginUrl;
+        },(res)=>{
+
         });
     }
 
@@ -194,7 +202,7 @@ class CompanyValidate extends React.Component {
                         <Row style={{ marginTop: 30 }}>
                             <Col span="12" offset="8">
                                 <Button key="submit" type="primary" size="large" onClick={this.handleNext}>下一步 </Button>
-                                <a href={globalState.sysInfo && globalState.sysInfo.logoutUrl}>重新登录</a>
+                                <a href='javascript:void(0)' className='fn-ml-30'  onClick={this.goToLogin.bind(this)}>重新登录</a>
                             </Col>
                         </Row>
 
