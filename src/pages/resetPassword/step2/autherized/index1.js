@@ -34,7 +34,9 @@ class Steps2 extends React.Component {
                 pathname:'/resetPassword/step2/autherized/index2'
             });
         },(res)=>{
-            // message.error(`(${res.code})${res.message}`,3);
+            if(res.code='400'){
+                fetch('/common/getLoginCheckStatus.do');
+            }
         });
     }
 
@@ -59,7 +61,9 @@ class Steps2 extends React.Component {
                 connectorType:res.data.connectorType
             });
         },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
+            if(res.code='400'){
+                fetch('/common/getLoginCheckStatus.do');
+            }
         });
     }
 
