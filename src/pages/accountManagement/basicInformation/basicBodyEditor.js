@@ -85,16 +85,9 @@ export default class basicBodyEditor extends React.Component {
         if (iSuccess) {
             result = (
                 <div className="fn-mb-50">
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={2}>
-                            {/*
-                                <span className="fn-mr-10"><Icon type="check"/></span>
-                            */}
-                        </Col>
-                        <Col span={12}>
-                            您已完成全部安全设置，请放心使用本系统的功能。
-                        </Col>
-                    </Row>
+                    <div>
+                        您已完成全部安全设置，请放心使用本系统的功能。
+                    </div>
                 </div>
 
             )
@@ -103,14 +96,9 @@ export default class basicBodyEditor extends React.Component {
             result = (
                 <div className="fn-mb-50">
 
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={1}>
-                            {/*<span className="error-FontColor1 fn-mr-10"><Icon type="cross"/></span>*/}
-                        </Col>
-                        <Col span={12}>
-                            建议您完成全部安全设置，以保障账户及资金安全。
-                        </Col>
-                    </Row>
+                    <div>
+                        建议您完成全部安全设置，以保障账户及资金安全。
+                    </div>
                 </div>
             )
         }
@@ -134,8 +122,8 @@ export default class basicBodyEditor extends React.Component {
         let items = {
             1:(
                 <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={2}>
+                    <div className="clearfix">
+                        <div className="basic-col-1">
                             {
                                 ( (checkItems.PerBasicInfo) && (checkItems.PerBasicInfo.bankStatus == 1) && (checkItems.PerBasicInfo.systemStatus==1)  )
                                 ?
@@ -144,20 +132,22 @@ export default class basicBodyEditor extends React.Component {
                                 <Icon type="cross" className="error-FontColor1" />
                             }
 
-                        </Col>
-                        <Col span={6}>
+                        </div>
+                        <div className="basic-col-2">
                             <h3>
                                 基本信息
                             </h3>
-                        </Col>
-                        <Col span={12}>您的基本信息已完善。如资料有变更，请及时更新，这将有助于加快您的业务申请进度。</Col>
-                    </Row>
+                        </div>
+                        <div className="basic-col-3">
+                            您的基本信息已完善。如资料有变更，请及时更新，这将有助于加快您的业务申请进度。
+                        </div>
+                    </div>
                 </div>
             ),
             2:(
                 <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={2}>
+                    <div className="clearfix">
+                        <div className="basic-col-1">
                             {
                                 ( (checkItems.EnBasicInfo) && (checkItems.EnBasicInfo.bankStatus == 1) && (checkItems.EnBasicInfo.systemStatus==1)  )
                                 ?
@@ -165,14 +155,16 @@ export default class basicBodyEditor extends React.Component {
                                 :
                                 <Icon type="cross" className="error-FontColor1" />
                             }
-                        </Col>
-                        <Col span={6}>
+                        </div>
+                        <div className="basic-col-2">
                             <h3>
                                 企业信息
                             </h3>
-                        </Col>
-                        <Col span={12}>企业的基本信息已完善。如资料有变更，请及时更新，这将有助于加快您的业务申请进度。</Col>
-                    </Row>
+                        </div>
+                        <div className="basic-col-3">
+                            企业的基本信息已完善。如资料有变更，请及时更新，这将有助于加快您的业务申请进度。
+                        </div>
+                    </div>
                 </div>
             )
 
@@ -195,9 +187,9 @@ export default class basicBodyEditor extends React.Component {
                     return (
 
                         <div key={index} className="fn-mt-10" >
-                            <Row type="flex" justify="start" align="middle">
+                            <div className="clearfix">
 
-                                <Col span={2}>
+                                <div className="basic-col-1">
                                     {
                                         item.checkPass>0
                                         ?
@@ -205,21 +197,19 @@ export default class basicBodyEditor extends React.Component {
                                         :
                                         <Icon type="cross" className="error-FontColor1" />
                                     }
-                                </Col>
+                                </div>
 
-                                <Col span={6}>
+                                <div className="basic-col-2">
                                     <h3>
                                         实名验证
                                     </h3>
-                                </Col>
+                                </div>
 
-                                <Col span={1}>
+                                <div className="basic-col-3">
                                     姓名：
-                                </Col>
-                                <Col span={7}>
                                     {item.realName}
-                                </Col>
-                                <Col span={8}>
+                                </div>
+                                <div className="basic-col-4">
                                     {
                                         item.checkPass>0
                                         ?
@@ -246,8 +236,8 @@ export default class basicBodyEditor extends React.Component {
                                             </span>
                                         </span>
                                     }
-                                </Col>
-                            </Row>
+                                </div>
+                            </div>
                         </div>
                     )
                 }
@@ -264,11 +254,11 @@ export default class basicBodyEditor extends React.Component {
                     };
                     return (
                         <div key={index} className="fn-mt-10">
-                            <Row type="flex" justify="start" align="middle">
+                            <div className="clearfix">
                                 {
                                     index==0
                                     ?
-                                    <Col span={2}>
+                                    <div className="basic-col-1">
                                         {
                                             result
                                             ?
@@ -276,35 +266,33 @@ export default class basicBodyEditor extends React.Component {
                                             :
                                             <Icon type="cross" className="error-FontColor1" />
                                         }
-                                    </Col>
+                                    </div>
                                     :
-                                    <Col span={2}>
+                                    <div className="basic-col-1">
                                         &nbsp;
-                                    </Col>
+                                    </div>
                                 }
                                 {
                                     index==0
                                     ?
-                                    <Col span={6}>
+                                    <div className="basic-col-2">
                                         <h3>
                                             实名验证
                                         </h3>
-                                    </Col>
+                                    </div>
                                     :
-                                    <Col span={6}>
+                                    <div className="basic-col-2">
                                         &nbsp;
-                                    </Col>
+                                    </div>
                                 }
 
 
-                                <Col span={2}>
+                                <div className="basic-col-2">
                                     { item.connectorType == 2 ? "法定代表人" : "委托代理人"}：
-                                </Col>
-                                <Col span={6}>
                                     {/*脱敏*/}
                                     {item.realName.replace(/^.*(.)$/,"***$1")}
-                                </Col>
-                                <Col span={8}>
+                                </div>
+                                <div className="basic-col-2">
                                     {
                                         item.checkPass>0
                                         ?
@@ -315,14 +303,14 @@ export default class basicBodyEditor extends React.Component {
                                             已验证
                                         </span>
                                         :
-                                        <span>
+                                        <span className="clearfix">
                                             <span
-                                                className="error-FontColor1"
-                                                style={{width:190,display:"inline-block"}}
+                                                className="error-FontColor1 pull-left"
+                                                style={{width:100,display:"inline-block"}}
                                                 >
                                                 未认证
                                             </span>
-                                            <span colSpan={2}>
+                                            <span  className="pull-left">
                                                 <Sms data={ smsData } >重新发送验证短信</Sms>
                                                 {/*
                                                     <a href="javascript:;" className="link-standard">
@@ -331,8 +319,8 @@ export default class basicBodyEditor extends React.Component {
                                             </span>
                                         </span>
                                     }
-                                </Col>
-                            </Row>
+                                </div>
+                            </div>
                         </div>
                     )
 
@@ -348,8 +336,8 @@ export default class basicBodyEditor extends React.Component {
         if(userType==2){
                 template = (
                     <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                        <Row type="flex" justify="start" align="middle">
-                            <Col span={2}>
+                        <div className="clearfix">
+                            <div className="basic-col-1">
                                 {
                                     ( (checkItems.EnPaper) && (checkItems.EnPaper.systemStatus==1)  )
                                     ?
@@ -358,23 +346,23 @@ export default class basicBodyEditor extends React.Component {
                                     <span className="error-FontColor1 fn-mr-10"><Icon type="cross" /></span>
                                 }
 
-                            </Col>
-                            <Col span={6}>
+                            </div>
+                            <div className="basic-col-2">
                                 <h3>
                                     证件资料
                                 </h3>
-                            </Col>
-                            <Col span={12}>
+                            </div>
+                            <div className="basic-col-3">
                                 如资料有变更，请及时更新。
-                            </Col>
-                            <Col span={4}>
+                            </div>
+                            <div className="basic-col-4">
                                 <Link to="/companyValidate/documentUpload" className="ant-btn ant-btn-primary">
                                     <Icon type="edit" />
                                     修改
                                 </Link>
-                            </Col>
+                            </div>
 
-                        </Row>
+                        </div>
                     </div>
                 )
 
@@ -388,24 +376,24 @@ export default class basicBodyEditor extends React.Component {
 
         template = (
             <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                <Row type="flex" justify="start" align="middle">
-                    <Col span={2}>
+                <div className="clearfix">
+                    <div className="basic-col-1">
                         <Icon type="check"/>
-                    </Col>
-                    <Col span={6}>
+                    </div>
+                    <div className="basic-col-2">
                         <h3>
                             登录密码
                         </h3>
-                    </Col>
-                    <Col span={12}>
+                    </div>
+                    <div className="basic-col-3">
                         修改更高级别的密码能提高帐号的安全性。
-                    </Col>
-                    <Col span={4}>
+                    </div>
+                    <div className="basic-col-4">
                         <Link className="ant-btn ant-btn-primary" to="/accountManagement/resetPassword/step1">
                             <Icon type="edit" />修改
                         </Link>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         )
 
@@ -418,8 +406,8 @@ export default class basicBodyEditor extends React.Component {
 
         template = (
             <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                <Row type="flex" justify="start" align="middle">
-                    <Col span={2}>
+                <div className="clearfix">
+                    <div className="basic-col-1">
                         {
                             getIsSetPayPassword==true
                             ?
@@ -428,24 +416,24 @@ export default class basicBodyEditor extends React.Component {
                             <Icon type="cross" className="error-FontColor1" />
                         }
 
-                    </Col>
-                    <Col span={6}>
+                    </div>
+                    <div className="basic-col-2">
                         <h3>
                             交易密码
                         </h3>
-                    </Col>
-                    <Col span={12}>
+                    </div>
+                    <div className="basic-col-3">
                         关联证书：保护账户资金安全，在修改资料、融资申请以及使用其他会员服务时，需要验证交易密码。
-                    </Col>
-                    <Col span={4}>
+                    </div>
+                    <div className="basic-col-4">
                         <Button
                             type="primary"
                             onClick={this.handleGetIsSetPayPasswordTemplateEditor.bind(this,getIsSetPayPassword)}
                             >
                             <Icon type="edit" />修改
                         </Button>
-                    </Col>
-                    </Row>
+                    </div>
+                </div>
             </div>
         )
 
@@ -466,8 +454,8 @@ export default class basicBodyEditor extends React.Component {
 
         template = (
             <div className="fn-mtb-10 basicinfo-border-bottom fn-pb-10">
-                <Row type="flex" justify="start" align="middle">
-                    <Col span={2}>
+                <div className="clearfix">
+                    <div className="basic-col-1">
                         {
                             item
                             ?
@@ -475,16 +463,16 @@ export default class basicBodyEditor extends React.Component {
                             :
                             <Icon type="cross" className="error-FontColor1" />
                         }
-                    </Col>
-                    <Col span={6}>
+                    </div>
+                    <div className="basic-col-2">
                         <h3>
                             绑定手机
                         </h3>
-                    </Col>
-                    <Col span={12}>
+                    </div>
+                    <div className="basic-col-3">
                         绑定手机号：{item}。保护账户资金安全，在修改资料、融资申请以及使用其他会员服务时，需要验证绑定手机。
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
         )
 
@@ -506,8 +494,8 @@ export default class basicBodyEditor extends React.Component {
         if(userType==1){
             template = (
                 <div className="fn-mtb-10 fn-pb-10">
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={2}>
+                    <div className="clearfix">
+                        <div className="basic-col-1">
                             {
                                 getCheckedBank.checkStatus && (getCheckedBank.checkStatus == 1 )
                                 ?
@@ -515,24 +503,24 @@ export default class basicBodyEditor extends React.Component {
                                 :
                                 <Icon type="cross" className="error-FontColor1"  />
                             }
-                        </Col>
-                        <Col span={6}>
+                        </div>
+                        <div className="basic-col-2">
                             <h3>
                                 银行账户
                             </h3>
-                        </Col>
-                        <Col span={12}>
+                        </div>
+                        <div className="basic-col-3">
                             默认账户：
                             <span>{getCheckedBank.bankName} | {getCheckedBank.cardNo}。</span>
-                        </Col>
-                    </Row>
+                        </div>
+                    </div>
                 </div>
             )
         }else if(userType==2){
             template = (
                 <div className="fn-mtb-10 fn-pb-10">
-                    <Row type="flex" justify="start" align="middle">
-                        <Col span={2}>
+                    <div className="clearfix">
+                        <div className="basic-col-1">
                             {
                                 ( (checkItems.EnAccount) && (checkItems.EnAccount.bankStatus == 1) && (checkItems.EnAccount.systemStatus==1)  )
                                 ?
@@ -541,13 +529,13 @@ export default class basicBodyEditor extends React.Component {
                                 <Icon type="cross" className="error-FontColor1"  />
                             }
 
-                        </Col>
-                        <Col span={6}>
+                        </div>
+                        <div className="basic-col-2">
                             <h3>
                                 对公账户
                             </h3>
-                        </Col>
-                        <Col span={12}>
+                        </div>
+                        <div className="basic-col-3">
                             默认账户：
                             {
                                 getCompanyAccountCheckStatus && getCompanyAccountCheckStatus.length>0
@@ -560,8 +548,8 @@ export default class basicBodyEditor extends React.Component {
                                 :
                                 <span>没有可用的银行账号</span>
                             }
-                        </Col>
-                    </Row>
+                        </div>
+                    </div>
                 </div>
             )
 
