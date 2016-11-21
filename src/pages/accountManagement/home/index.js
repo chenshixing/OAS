@@ -103,7 +103,7 @@ class Home extends React.Component {
     // }
 
     handleSubmit(e) {
-        
+
         //console.log(this.props.from.getFieldValue())
         //e.preventDefault();
 
@@ -304,8 +304,17 @@ class Home extends React.Component {
                     <div className="alert alert-warning fn-mt-10">
                         {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
                         {this.templateUserTypeManagement(this.state.data.userType)}
-                        <span className="fn-plr-10">|</span>
-                        上次登录时间：{this.state.data.lastLoginTime}
+                        {
+                            this.state.data.lastLoginTime
+                            ?
+                            <span>
+                                <span className="fn-plr-10">|</span>
+                                上次登录时间：
+                                {this.state.data.lastLoginTime}
+                            </span>
+                            :
+                            null
+                        }
                     </div>
                 </div>
 
