@@ -69,6 +69,11 @@ class CompanyValidate extends React.Component {
                             this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
                             break;
                     }
+
+                    if(res.code='400'){
+                        fetch('/common/getLoginCheckStatus.do');
+                    }
+
                  })
              }else{
                  console.log('Errors in form!!!');

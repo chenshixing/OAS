@@ -35,12 +35,21 @@ class Steps2 extends React.Component {
                 fetch('/user/checkResetPwdAutoCode.do',{
                     body:data
                 }).then((res)=>{
-                    //权限控制 不能改，乱改动枪毙
                     this.props.history.push({
-                        pathname:'/resetPassword/step3?isCheck=1'
+                        pathname:'/resetPassword/step3'
                     });
                 },(res)=>{
-                    // message.error(`提交失败！${res.message}`,5);
+                    switch(res.code){
+                        case '004':
+                            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                            break;
+                        case '005':
+                            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                            break;
+                    }
+                    if(res.code='400'){
+                        fetch('/common/getLoginCheckStatus.do');
+                    }
                 });
             }
         });
@@ -104,7 +113,9 @@ class Steps2 extends React.Component {
                 connectorType:res.data.connectorType
             });
         },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
+            if(res.code='400'){
+                fetch('/common/getLoginCheckStatus.do');
+            }
         });
     }
 

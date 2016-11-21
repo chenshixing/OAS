@@ -34,7 +34,7 @@ class Steps2 extends React.Component {
                 pathname:'/resetPassword/step2/autherized/index2'
             });
         },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
+            // message.error(`(${res.code})${res.message}`,3);
         });
     }
 

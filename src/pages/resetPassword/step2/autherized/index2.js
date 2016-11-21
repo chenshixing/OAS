@@ -84,7 +84,10 @@ class Steps2 extends React.Component {
             }
         },(res)=>{
             // fetch error
-            message.error(res.message, 3)
+            // message.error(res.message, 3)
+            if(res.code='400'){
+                fetch('/common/getLoginCheckStatus.do');
+            }
         });
     }
 
