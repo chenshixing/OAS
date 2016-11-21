@@ -227,19 +227,19 @@ class Steps2 extends React.Component {
                 <StepsBar />
                 <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
-                        <FormItem {...formItemLayout} label="设置交易密码">
+                        <FormItem {...formItemLayout} label="设置交易密码" hasFeedback>
                             <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"  {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
-                            {this.state.passBarShow
+                            {/*this.state.passBarShow
                                 ? this.renderPassStrengthBar('pass')
-                                : null}
+                                : null*/}
                         </FormItem>
 
 
-                        <FormItem {...formItemLayout} label="确认交易密码">
+                        <FormItem {...formItemLayout} label="确认交易密码" hasFeedback>
                             <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合" {...rePassProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="rePass"/>
-                            {this.state.rePassBarShow
+                            {/*this.state.rePassBarShow
                                 ? this.renderPassStrengthBar('rePass')
-                                : null}
+                                : null*/}
                         </FormItem>
 
                         <Row>

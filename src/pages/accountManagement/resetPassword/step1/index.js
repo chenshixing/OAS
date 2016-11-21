@@ -102,7 +102,9 @@ class ResetPassword extends React.Component {
             rules: [{
                 required: true,
                 whitespace: true,
-                message: '请输入原登录密码'
+                min: 8,
+                max: 20,
+                message: '请输入8-20个字符的原登录密码'
             }, ],
             onChange: (e) => {
                 this.setState({
@@ -135,7 +137,7 @@ class ResetPassword extends React.Component {
                 message: '请再次输入密码'
             }, {
                 validator: this.checkConfirmPass.bind(this)
-            }, ],
+            },ruleType('password') ],
             onChange: (e) => {
                 this.setState({
                     conNewLoginPwd: e.target.value
@@ -150,7 +152,7 @@ class ResetPassword extends React.Component {
                         <Form.Item {...props} label="登录名">
                             <label>{globalState.data.loginName}</label>
                         </Form.Item>
-                        <Form.Item {...props} label="原登录密码" hasFeedback required>
+                        <Form.Item {...props} label="原登录密码"   required>
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder=""
