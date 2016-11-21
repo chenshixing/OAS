@@ -73,7 +73,7 @@ class Step3 extends React.Component {
                         }
                     });
                 }, (res) => {
-                    message.error(`提交失败！${res.message}`, 5);
+                    // message.error(`提交失败！${res.message}`, 5);
                 });
             }
 

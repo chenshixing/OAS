@@ -40,7 +40,7 @@ class Steps2 extends React.Component {
                         pathname:'/resetPassword/step3?isCheck=1'
                     });
                 },(res)=>{
-                    message.error(`提交失败！${res.message}`,5);
+                    // message.error(`提交失败！${res.message}`,5);
                 });
             }
         });
