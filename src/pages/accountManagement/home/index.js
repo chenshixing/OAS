@@ -305,7 +305,7 @@ class Home extends React.Component {
                         {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
                         {this.templateUserTypeManagement(this.state.data.userType)}
                         {
-                            this.state.data.lastLoginTime
+                            this.state.data.lastLoginTime.length>0
                             ?
                             <span>
                                 <span className="fn-plr-10">|</span>

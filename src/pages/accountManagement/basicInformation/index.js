@@ -148,7 +148,13 @@ export default class BasicInformation extends React.Component {
         return (
             <div>
               {/*个人和企业写一起了。*/}
-               <BasicBodyEditor {...this.state} />
+              {
+                  this.state.data.getRelatedPersonInfo.length>0
+                  ?
+                  <BasicBodyEditor {...this.state} />
+                  :
+                  null
+              }
 
 
             </div>
