@@ -30,7 +30,7 @@ export default class Authenticate extends React.Component {
     render() {
         console.log(this)
         return (
-            <Frame title="验证身份" small="（您的账户已实名认证，为了您的账户安全，请使用实名认证资料进行校验。）">
+            <Frame title="您的账户已实名认证，为了您的账户安全，请使用实名认证资料进行校验。">
                 <Form horizontal className="fn-mt-30">
                     <FormItem
                         id="control-input"

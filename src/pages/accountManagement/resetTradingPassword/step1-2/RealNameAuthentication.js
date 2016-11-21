@@ -70,7 +70,7 @@ export default class RealNameAuthentication extends React.Component {
     }
     loadConnectorType(item){
         let items = {
-            1:"委托代理人",
+            1:"姓名",
             2:"企业法人",
             3:"经办人"
         }
@@ -147,13 +147,13 @@ export default class RealNameAuthentication extends React.Component {
                         您的实名认证未完成，请尽快完成。
                     </p>
                 </Modal>
-                <Frame title="实名认证" className="">
+                <Frame title="您的账户已实名认证，为了您的账户安全，请使用实名认证资料进行校验。" className="">
                     <Row className="fn-mt-30">
                         <Col span={12} offset={6}>
                             <p className="fn-ma-10">
                                 {/*姓名（1：经办人,2：法人，3：个人）*/}
                                 {this.loadConnectorType(this.props.getDesensitizeMobile.connectorType)}：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
-                                <Sms data={ smsData } >没有收到短信，重新发送</Sms>
+                                <Sms data={ smsData } >没有收到短信，重新发送。</Sms>
                             </p>
                             <p>
                                 请下载实名认证APP进行人脸识别，验证成功后方可重置交易密码。
