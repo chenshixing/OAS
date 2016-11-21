@@ -153,7 +153,7 @@ export default class BasicInformation extends React.Component {
                   ?
                   <BasicBodyEditor {...this.state} />
                   :
-                  null
+                  <span>正在请求接口...</span>
               }
 
 
