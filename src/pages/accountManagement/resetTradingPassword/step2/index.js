@@ -1,6 +1,6 @@
 // react 相关库
 import React from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import {
     Link
 } from 'react-router';
