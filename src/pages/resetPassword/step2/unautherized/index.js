@@ -10,7 +10,7 @@ import { Alert, Steps, Button,Form,Input,message,Modal } from 'antd';
 import { Link } from 'react-router';
 const Step = Steps.Step;
 const FormItem = Form.Item;
-import {fetch} from 'UTILS';
+import {fetch,ruleType} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -119,6 +119,12 @@ class Steps2 extends React.Component {
         });
     }
 
+    handleKeyDown(event){
+        if(event.keyCode == 32){
+        return event.preventDefault();
+        }
+    }
+
     render() {
         const {getFieldProps} = this.props.form;
         const formItemLayout = {
@@ -128,8 +134,9 @@ class Steps2 extends React.Component {
         const rules={
             smsCode: {
                 rules: [
-                {required: true, message: '短信验证码不能为空'},
-                {min: 6, max: 6, message: '请输入6位的短信验证码'}
+                    {required: true, message: '短信验证码不能为空'},
+                    ruleType('number'),
+                    {len:6, message: '请输入6位的短信验证码'}
                 ]
             }
         }
@@ -155,7 +162,7 @@ class Steps2 extends React.Component {
                             label="短信验证码"
                             required
                             >
-                            <Input className="smsCodeInput" style={{width:'200px',marginRight:'20px'}} {...getFieldProps('smsCode', rules.smsCode)} />
+                            <Input className="smsCodeInput" style={{width:'200px',marginRight:'20px'}} {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown}  />
                             <Button className="ant-search-btn" disabled={this.state.isBtnSmsCodeDisabled} onClick={this.getVerifyCode.bind(this)}>{this.state.btnSmsCodeText}</Button>
                             </FormItem>
                         <FormItem wrapperCol={{ span: 8, offset: 8 }} style={{ marginTop: 24 }}>

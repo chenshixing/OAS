@@ -165,7 +165,7 @@ class PersonalValidate extends React.Component {
         //获取此页面需要签署的协议
         fetch('/common/getCurrentProtocol.do', {
             body: {
-                "protocolType": 1
+                "protocolType": 2
             }
         }).then((res) => {
             console.log('获取协议成功：', res.data);
@@ -173,7 +173,8 @@ class PersonalValidate extends React.Component {
                 protocolData: res.data,
             });
         }, (res) => {
-            alert('获取协议失败，请重新获取！');
+            // alert('获取协议失败，请重新获取！');
+            
         })
     }
 

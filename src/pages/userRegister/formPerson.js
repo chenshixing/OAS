@@ -178,6 +178,12 @@ class Reg extends React.Component {
       })
   }
 
+  handleKeyDown(event){
+    if(event.keyCode == 32){
+      return event.preventDefault();
+    }
+  }
+
   render() {
     const { getFieldProps } = this.props.form;
 
@@ -225,6 +231,7 @@ class Reg extends React.Component {
       smsCode: {
         rules: [
           {required: true, message: '短信验证码不能为空'},
+          ruleType('number'),
           {len :6, message: '请输入6位的短信验证码'}
         ]
       },
@@ -297,7 +304,7 @@ class Reg extends React.Component {
           label="短信验证码"
           required
         >
-          <Input className="smsCodeInput" {...getFieldProps('smsCode', rules.smsCode)} />
+          <Input className="smsCodeInput" {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown} />
           <Button className="ant-search-btn" disabled={this.state.isBtnSmsCodeDisabled} onClick={this.getVerifyCode.bind(this)}>{this.state.btnSmsCodeText}</Button>
         </FormItem>
 
