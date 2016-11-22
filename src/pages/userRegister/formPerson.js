@@ -238,13 +238,13 @@ class Reg extends React.Component {
       recommender:{
         rules:[
           ruleType('cn+en+str'),
-          {max: 50, message: '推荐人长度不能超多50位'},
+          {max: 50, message: '推荐人长度不能超过50位'},
         ]
       },
       recommenderNo:{
         rules:[
           ruleType('cn+en+str'),
-          {max: 30, message: '推荐人长度不能超多30位'},
+          {max: 30, message: '推荐人长度不能超过30位'},
         ]
       }
     };
