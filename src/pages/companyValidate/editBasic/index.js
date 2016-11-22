@@ -186,8 +186,8 @@ class CompanyValidate extends React.Component {
             me.props.form.setFieldsValue(renderData);
             // console.log(data);
             // console.log(renderData);
-        }).catch(reason => {
-            console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 

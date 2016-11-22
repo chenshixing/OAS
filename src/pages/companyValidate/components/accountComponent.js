@@ -1,7 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
 // antd 组件
-import { Form, Input, Select, Radio, Row, Col} from 'antd';
+import {
+    Form,
+    Input,
+    Select,
+    Radio,
+    Row,
+    Col
+} from 'antd';
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -10,7 +20,9 @@ const Option = Select.Option;
 import OffLinePayTable from '../components/offlinePayTable';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 class Account extends Component {
     static propTypes = {
@@ -20,23 +32,23 @@ class Account extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        	data:{
-        		provinces : [],
-	            cities : [],
-	            bankList : [],
-	            cityPlaceHolder : "请先选择省份",
-	            cityDisabled : true,
-	            branchDisabled : true,
-	            branchPlaceHolder : "请先选择开户行和所在城市",
-	            branches : [],
-	            validateType:'OffLinePayAuth',
-	            map : {
-	                bank : {},
-	                province : {},
-	                city: {},
-	                branch : {}
-	            }
-        	}
+            data: {
+                provinces: [],
+                cities: [],
+                bankList: [],
+                cityPlaceHolder: "请先选择省份",
+                cityDisabled: true,
+                branchDisabled: true,
+                branchPlaceHolder: "请先选择开户行和所在城市",
+                branches: [],
+                validateType: 'OffLinePayAuth',
+                map: {
+                    bank: {},
+                    province: {},
+                    city: {},
+                    branch: {}
+                }
+            }
         }
     }
 
@@ -44,7 +56,7 @@ class Account extends Component {
         this.loadData(this.dataRender.bind(this));
     }
 
-    loadData(callBack){
+    loadData(callBack) {
         let me = this;
         let data = me.state.data;
         //  银行列表信息
@@ -60,52 +72,54 @@ class Account extends Component {
             data.provinces = res[1].data;
             // console.log(data.provinces);
             //  配置映射表
-            data.bankList.map( (item,index) => {
+            data.bankList.map((item, index) => {
                 data.map.bank[item.B_BankID] = item.BankName;
             });
-            data.provinces.map( (item,index) => {
+            data.provinces.map((item, index) => {
                 data.map.province[item.B_BankAreaID] = item.AreaName;
             });
 
             me.setState({
-                data : data
+                data: data
             });
 
             callBack && callBack();
-        }).catch(reason => {
-            console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 
-    dataRender(){
-    	let me = this;
+    dataRender() {
+        let me = this;
         let data = me.state.data;
-        if(!me.props.isGetInfo){
+        if (!me.props.isGetInfo) {
             return false;
         }
         //  获取企业对公账户信息
         fetch('/companyVerification/getBankAccountInfo.do').then(res => {
-            if(res.code == 200){
+            if (res.code == 200) {
                 //  提交成功TODO
                 let fieldsValue = res.data;
-                if(!fieldsValue){ return false; }
+                if (!fieldsValue) {
+                    return false;
+                }
                 //  开户行处理
-                if(fieldsValue.bankId){
+                if (fieldsValue.bankId) {
                     //  存在开户行时TODO
                     data.bankId = fieldsValue.bankId;
                 }
 
                 //  所在省份处理
-                if(fieldsValue.provinceId){
+                if (fieldsValue.provinceId) {
                     data.provinceId = fieldsValue.provinceId;
                     data.cityPlaceHolder = "请选择城市";
                     data.cityDisabled = false;
                     let param = {
-                        data : {
-                            provinceId : fieldsValue.provinceId
+                        data: {
+                            provinceId: fieldsValue.provinceId
                         }
                     }
-                    if(fieldsValue.cityId){
+                    if (fieldsValue.cityId) {
                         //  存在城市时TODO
                         data.cityId = fieldsValue.cityId;
                     }
@@ -115,7 +129,9 @@ class Account extends Component {
                 //  分支行处理
                 me._getBranch(true);
 
-                me.setState({ data });
+                me.setState({
+                    data
+                });
                 me.props.form.setFieldsValue(fieldsValue);
             }
         });
@@ -123,7 +139,7 @@ class Account extends Component {
     }
 
     //  获取城市列表
-    getCityList(param){
+    getCityList(param) {
         // param : {
         //     data : {
         //         provinceId : {provinceId}   string
@@ -132,86 +148,88 @@ class Account extends Component {
         // }
         let me = this;
         let data = me.state.data;
-        fetch('/bank/citys.do',{
-            body : param.data
+        fetch('/bank/citys.do', {
+            body: param.data
         }).then(res => {
-            if(res.code == 200){
+            if (res.code == 200) {
                 data.cities = res.data;
                 //  配置映射表
-                data.cities.map( (item,index) => {
+                data.cities.map((item, index) => {
                     data.map.city[item.B_BankAreaID] = item.AreaName;
                 });
                 param.callBack && param.callBack();
 
                 me.setState({
-                    data : data
+                    data: data
                 });
             }
         });
     }
 
-    onCardNoChange(e,value){
+    onCardNoChange(e, value) {
         let me = this;
         let data = me.state.data;
         let cardNo = value ? value : e.target.value;
-        if(cardNo.length < 5){ return false; }      //  输入银行账号长度大于4才去请求匹配开户行
-        fetch('/bank/cardNumber.do',{
-            body:{
-              "cardNumber": cardNo
+        if (cardNo.length < 5) {
+            return false;
+        } //  输入银行账号长度大于4才去请求匹配开户行
+        fetch('/bank/cardNumber.do', {
+            body: {
+                "cardNumber": cardNo
             }
-        },false).then(res => {
-            if(res.code == 200 && res.data && res.data.B_BankID){
+        }, false).then(res => {
+            if (res.code == 200 && res.data && res.data.B_BankID) {
                 let bankId = res.data.B_BankID;
-                if(data.bankId == bankId){
+                if (data.bankId == bankId) {
                     //  如果返回的bankId没有改变,不进行任何操作
                     return false;
                 }
                 data.bankId = bankId;
                 me.setState({
-                    data : data
+                    data: data
                 });
                 me.props.form.setFieldsValue({
-                    bankId : bankId,
-                    branchBankId : undefined
+                    bankId: bankId,
+                    branchBankId: undefined
                 });
             }
         });
     }
 
-    onProvinceChange(value){
+    onProvinceChange(value) {
         let me = this;
         let data = me.state.data;
-        if(data.provinceId == value){
+        if (data.provinceId == value) {
             //  如果省份Id没有改变，不执行任何操作
             return false;
         }
-        let callBack = function(){
+        let callBack = function() {
             data.cityId = undefined;
             data.cityPlaceHolder = "请选择城市";
             data.cityDisabled = false;
             data.branchPlaceHolder = "请先选择开户行和所在城市";
             data.branchDisabled = true;
             // 配置映射表
-            data.cities.map( (item,index) => {
+            data.cities.map((item, index) => {
                 data.map.city[item.B_BankAreaID] = item.AreaName;
             });
             me.props.form.setFieldsValue({
-                cityId : undefined,
-                branchBankId : undefined
+                cityId: undefined,
+                branchBankId: undefined
             });
         }
         let param = {
-            data :{
-                provinceId : value
+            data: {
+                provinceId: value
             },
-            callBack : callBack
+            callBack: callBack
         }
         me.getCityList(param);
     }
 
-    onBankChange(value){
+    onBankChange(value) {
         let data = this.state.data;
-        if(data.bankId == value){
+        if (data.bankId == value) {
             return false;
         }
         data.bankId = value;
@@ -219,42 +237,42 @@ class Account extends Component {
         this._getBranch();
     }
 
-    onCityChange(value){
+    onCityChange(value) {
         let data = this.state.data;
-        if(data.cityId == value){
+        if (data.cityId == value) {
             return false;
         }
         data.cityId = value;
         this._getBranch();
     }
 
-    _getBranch(isRender){
+    _getBranch(isRender) {
         let me = this;
         let data = me.state.data;
         // console.log(data);
-        if( data.bankId && data.cityId ){
-            fetch('/bank/branchlist.do',{
-                body:{
-                  "bankId": data.bankId,
-                  "cityId": data.cityId
+        if (data.bankId && data.cityId) {
+            fetch('/bank/branchlist.do', {
+                body: {
+                    "bankId": data.bankId,
+                    "cityId": data.cityId
                 }
             }).then(res => {
-                if(res.code == 200){
+                if (res.code == 200) {
                     data.branches = res.data;
                     data.branchPlaceHolder = "请选择分支行";
                     data.branchDisabled = false;
 
                     //  配置映射表
-                    data.branches.map( (item,index) => {
+                    data.branches.map((item, index) => {
                         data.map.branch[item.BranchBankCode] = item.BranchBankName;
                     });
                     me.setState({
-                        data : data
+                        data: data
                     });
-                    if(!isRender){
+                    if (!isRender) {
                         //  不是初始化Render
                         me.props.form.setFieldsValue({
-                            branchBankId : undefined
+                            branchBankId: undefined
                         });
                     }
                 }
@@ -264,8 +282,10 @@ class Account extends Component {
 
     onValidateTypeChange(e) {
         console.log('radio checked', e.target.value);
-        let data=this.state.data;
-        if(data.validateType === e.target.value){ return false;}
+        let data = this.state.data;
+        if (data.validateType === e.target.value) {
+            return false;
+        }
         data.validateType = e.target.value;
         this.setState({
             data: data
@@ -274,12 +294,19 @@ class Account extends Component {
 
     render() {
 
-		const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+        const formItemLayout = {
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
 
-        const { getFieldProps, rules } = this.props;
+        const {
+            getFieldProps,
+            rules
+        } = this.props;
 
         return (
             <div>

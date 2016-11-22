@@ -1,15 +1,28 @@
-import React, { Component, PropTypes } from 'react';
-import {Link} from 'react-router';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    Link
+} from 'react-router';
 
 // antd 组件
-import { Row, Col, Icon, Button, Table} from 'antd';
+import {
+    Row,
+    Col,
+    Icon,
+    Button,
+    Table
+} from 'antd';
 
 //  业务组件
 import InfoRow from './infoRow';
 import Map from 'PAGES/companyValidate/components/map';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 //  全局状态
 import State from 'PAGES/redirect/state';
@@ -23,32 +36,32 @@ class TipsRow extends Component {
 
     constructor(props) {
         super(props);
-        this.state = Object.assign({},this.props,{
-        	data : {
-                basicData : {
-                    passed : true
+        this.state = Object.assign({}, this.props, {
+            data: {
+                basicData: {
+                    passed: true
                 },
-                tipsRow : "",
-                logoutUrl : sysInfo && sysInfo.logoutUrl || "javaScript:void(0);"
+                tipsRow: "",
+                logoutUrl: sysInfo && sysInfo.logoutUrl || "javaScript:void(0);"
             }
         });
     }
 
     //  重新获取状态刷新时更新状态
     componentWillReceiveProps(nextProps) {
-        let state = Object.assign({},this.state,nextProps);
+        let state = Object.assign({}, this.state, nextProps);
         this.setState(state);
         this.loadData();
     }
 
     componentDidMount() {
-        if(this.props.isReload){
+        if (this.props.isReload) {
             return false;
         }
         this.loadData();
     }
 
-    loadData(){
+    loadData() {
         let me = this;
         let data = me.state.data;
         //  身份实名认证
@@ -58,33 +71,33 @@ class TipsRow extends Component {
         //  企业资料补充
         let p3 = fetch('/paper/getCompanyPaperInfoStatus.do');
 
-        Promise.all([p1,p2,p3]).then(res => {
+        Promise.all([p1, p2, p3]).then(res => {
             // console.log(res);
 
             //  身份实名认证数据处理
             let user = {};
-            res[0].data.map( (item,index) => {
-              let userData = {
-                name : item.realName,
-                connectorType : item.connectorType,
-                identityCode : item.identityCode,
-                passed : Map.identityMap.passType[item.checkPass]
-              }
-              let dataType = Map.identityMap.type[item.connectorType];
-              user[dataType + "Data"] = userData;
+            res[0].data.map((item, index) => {
+                let userData = {
+                    name: item.realName,
+                    connectorType: item.connectorType,
+                    identityCode: item.identityCode,
+                    passed: Map.identityMap.passType[item.checkPass]
+                }
+                let dataType = Map.identityMap.type[item.connectorType];
+                user[dataType + "Data"] = userData;
             });
 
             //  企业对公账户认证数据处理
             let accountItem = res[1].data[0];
             let accountData = {
-                accountValidateType : Map.accountMap.type[accountItem.accountValidateType],
-                passed : Map.accountMap.passType[accountItem.checkStatus]
+                accountValidateType: Map.accountMap.type[accountItem.accountValidateType],
+                passed: Map.accountMap.passType[accountItem.checkStatus]
             }
 
             //  企业资料补充
             let informationData = {
-                lackFiles : res[2].data.lackFiles,
-                passed : Map.supplementMap.passType[res[2].data.status]
+                lackFiles: res[2].data.lackFiles,
+                passed: Map.supplementMap.passType[res[2].data.status]
             }
 
             data.tipsRow = <Row className="tipsRow">
@@ -100,14 +113,14 @@ class TipsRow extends Component {
                             </Row>;
 
             me.setState({
-                data : data
+                data: data
             });
-        }).catch(reason => {
-          console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 
-    logout(){
+    logout() {
         let url = (__DEV__ ? `/api` : ``) + `/logout.do`;
         location.href = url;
     }

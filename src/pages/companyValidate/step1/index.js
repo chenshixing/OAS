@@ -6,10 +6,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { Link } from 'react-router';
+import {
+    Link
+} from 'react-router';
 
 // antd 组件
-import { Form, Input, Select, Button, Upload, Icon, Steps, Radio, DatePicker, Checkbox, Row, Col, Modal, message } from 'antd';
+import {
+    Form,
+    Input,
+    Select,
+    Button,
+    Upload,
+    Icon,
+    Steps,
+    Radio,
+    DatePicker,
+    Checkbox,
+    Row,
+    Col,
+    Modal,
+    message
+} from 'antd';
 const createForm = Form.create;
 const Step = Steps.Step;
 const RadioGroup = Radio.Group;
@@ -24,7 +41,9 @@ import Frame from 'COM/form/frame';
 import Account from '../components/accountComponent';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 //  引入moment
 import moment from 'moment';
@@ -36,32 +55,32 @@ const globalState = State.getState().data;
 // 页面组件（导出）
 class CompanyValidate extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            loading:false,
-            display : 'block',
-            visible : false,
-            data:{
+        this.state = {
+            loading: false,
+            display: 'block',
+            visible: false,
+            data: {
                 companyName: globalState.showName ? globalState.showName : "",
-                companyPaperType:2,
-                isLongEndTime:false,
-                writerType : 1
+                companyPaperType: 2,
+                isLongEndTime: false,
+                writerType: 1
             }
         }
 
-        this.onLongEndTimeChange=this.onLongEndTimeChange.bind(this);
+        this.onLongEndTimeChange = this.onLongEndTimeChange.bind(this);
     }
 
     componentDidMount() {
         this.dataRender();
     }
 
-    dataRender(){
+    dataRender() {
         let me = this;
         // console.log(me);
         let data = me.state.data;
-        if(me.props.location.query.getInfo != 1){
+        if (me.props.location.query.getInfo != 1) {
             //  没有传参获取时就不获取
             return false;
         }
@@ -71,26 +90,26 @@ class CompanyValidate extends React.Component {
         //  获取关系人信息
         let p2 = fetch('/companyVerification/getConnectorInfo.do');
 
-        Promise.all([p1,p2]).then(res => {
-            let fieldsValue = Object.assign({},res[0].data,res[1].data);
+        Promise.all([p1, p2]).then(res => {
+            let fieldsValue = Object.assign({}, res[0].data, res[1].data);
             // console.log(fieldsValue);
             //  企业名称处理
             data.companyName = fieldsValue.companyName;
             //  营业执照类型处理
             data.companyPaperType = fieldsValue.companyPaperType;
             //  营业执照到期日处理
-            if(fieldsValue.registrationExtendField2 != "长期"){
+            if (fieldsValue.registrationExtendField2 != "长期") {
                 //  用date对象渲染数据
                 fieldsValue.registrationExtendField2 = moment(fieldsValue.registrationExtendField2)._d;
                 data.isLongEndTime = false;
-            }else{
+            } else {
                 fieldsValue.registrationExtendField2 = undefined;
-                data.isLongEndTime = fieldsValue.isLongEndTime = teue;
+                data.isLongEndTime = fieldsValue.isLongEndTime = true;
             }
             //  填写人的身份处理
             data.writerType = fieldsValue.writerType;
             let display = "block";
-            if(data.writerType == 1){
+            if (data.writerType == 1) {
                 //  委托代理人
                 fieldsValue.name = fieldsValue.client.name;
                 fieldsValue.mobile = fieldsValue.client.mobile;
@@ -98,7 +117,7 @@ class CompanyValidate extends React.Component {
                 fieldsValue.corporationName = fieldsValue.corperator.name;
                 fieldsValue.corporationMobile = fieldsValue.corperator.mobile;
                 fieldsValue.corporationEmail = fieldsValue.corperator.email;
-            }else if(data.writerType == 2){
+            } else if (data.writerType == 2) {
                 //  法定代表人TODO
                 display = "none";
                 fieldsValue.name = fieldsValue.corperator.name;
@@ -109,89 +128,93 @@ class CompanyValidate extends React.Component {
             delete fieldsValue.corporator;
 
             me.setState({
-                display : display,
-                data : data
+                display: display,
+                data: data
             });
             me.props.form.setFieldsValue(fieldsValue);
 
-        }).catch(reason => {
-          console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 
-    onCompanyNameChange(e){
+    onCompanyNameChange(e) {
         let data = this.state.data;
         data.companyName = e.target.value;
         this.setState({
-            data : data
+            data: data
         });
     }
 
     onWriterTypeChange(e) {
         console.log('radio checked', e.target.value);
         let display = e.target.value == "1" ? "block" : "none";
-        if(this.state.display == display){ return false;}
+        if (this.state.display == display) {
+            return false;
+        }
         let data = this.state.data;
         data.writerType = e.target.value;
-        if(e.target.value == "2"){
+        if (e.target.value == "2") {
             this.warning();
         }
         this.setState({
-            display : display,
-            data : data
+            display: display,
+            data: data
         });
     }
 
     warning() {
-      Modal.warning({
-        title: '提示',
-        content: '您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。',
-      });
+        Modal.warning({
+            title: '提示',
+            content: '您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。',
+        });
     }
 
     onCompanyPaperTypeChange(e) {
         console.log('radio checked', e.target.value);
-        let data=this.state.data;
-        data.companyPaperType=e.target.value;
+        let data = this.state.data;
+        data.companyPaperType = e.target.value;
         this.setState({
             data: data
         });
     }
 
-    onLongEndTimeChange(e){
-        console.log('e:',e.target.checked);
-        let data=this.state.data;
-        data.isLongEndTime=e.target.checked;
+    onLongEndTimeChange(e) {
+        console.log('e:', e.target.checked);
+        let data = this.state.data;
+        data.isLongEndTime = e.target.checked;
         // if(e.target.checked){
         //     this.props.form.setFieldsValue({registrationExtendField2:""});
         // }
-        this.setState({data:data});
-    }
-
-    //  点击下一步
-    next(){
-        let me = this;
-        // 表单校验
-        this.props.form.validateFieldsAndScroll((errors, data) => {
-          if (errors) {
-            console.log(errors);
-            console.log(data);
-            return false;
-          }
-          console.log("passed");
-          // console.log(data);
-          // 验证通过TODO
-          let submitData = me._getSubmitData(data);
-          me.submit(submitData);
+        this.setState({
+            data: data
         });
     }
 
-    submit(submitData){
+    //  点击下一步
+    next() {
+        let me = this;
+        // 表单校验
+        this.props.form.validateFieldsAndScroll((errors, data) => {
+            if (errors) {
+                console.log(errors);
+                console.log(data);
+                return false;
+            }
+            console.log("passed");
+            // console.log(data);
+            // 验证通过TODO
+            let submitData = me._getSubmitData(data);
+            me.submit(submitData);
+        });
+    }
+
+    submit(submitData) {
         console.log(submitData);
-        fetch('/companyVerification/saveBasicInfo.do',{
-            body : submitData
+        fetch('/companyVerification/saveBasicInfo.do', {
+            body: submitData
         }).then(res => {
-            if(res.code == 200){
+            if (res.code == 200) {
                 //  提交成功TODO
                 console.log('next finish');
                 this.props.history.push('/companyValidate/step2');
@@ -200,7 +223,7 @@ class CompanyValidate extends React.Component {
     }
 
     //  获取提交数据
-    _getSubmitData(data){
+    _getSubmitData(data) {
         let map = this.refs.Account.state.data.map;
         let submitData = data;
 
@@ -214,44 +237,44 @@ class CompanyValidate extends React.Component {
         submitData.branchBankName = map.branch[submitData.branchBankId];
 
         // 证件类型
-        if(submitData.companyPaperType == 2){
+        if (submitData.companyPaperType == 2) {
             //  普通营业执照TODO
             delete submitData.socialCreditPaperNo;
-        }else if(submitData.companyPaperType == 3){
+        } else if (submitData.companyPaperType == 3) {
             //  社会信用证TODO
             delete submitData.registrationPaperNo;
             delete submitData.orgInsCodePaperNo;
         }
 
         //  营业执照到期日
-        if(submitData.isLongEndTime){
+        if (submitData.isLongEndTime) {
             submitData.registrationExtendField2 = "长期";
-        }else{
+        } else {
             submitData.registrationExtendField2 = moment(submitData.registrationExtendField2).format('YYYY-MM-DD hh:mm:ss');
         }
         delete submitData.isLongEndTime;
 
         // 填写人类型
-        let client  = {
-            name : submitData.name,
-            mobile : submitData.mobile,
-            email : submitData.email
+        let client = {
+            name: submitData.name,
+            mobile: submitData.mobile,
+            email: submitData.email
         };
         let corperator = undefined;
-        if(submitData.writerType == 1){
+        if (submitData.writerType == 1) {
             //  委托代理人TODO
             corperator = {
-                name : submitData.corporationName,
-                mobile : submitData.corporationMobile,
-                email : submitData.corporationEmail
+                name: submitData.corporationName,
+                mobile: submitData.corporationMobile,
+                email: submitData.corporationEmail
             };
         }
         let companyConnectorInfoDto = {
-            writerType : submitData.writerType,
-            client : client
+            writerType: submitData.writerType,
+            client: client
         }
 
-        if(corperator){
+        if (corperator) {
             companyConnectorInfoDto.corperator = corperator;
         }
         submitData.companyConnectorInfoDto = companyConnectorInfoDto;
@@ -263,8 +286,8 @@ class CompanyValidate extends React.Component {
         delete submitData.corporationMobile;
         delete submitData.corporationEmail;
 
-        for (let prop in submitData){
-            if(submitData[prop] === undefined){
+        for (let prop in submitData) {
+            if (submitData[prop] === undefined) {
                 delete submitData[prop];
             }
         }
@@ -283,16 +306,22 @@ class CompanyValidate extends React.Component {
         const rulesFill = this.state.data.writerType === 1 ? formValidation.rulesAgent : {};
         // console.log(rulesFill);
         // 根据不同类型选择验证机制
-        let rules = Object.assign({},formValidation.rulesBase,rulesBusiness,rulesFill);
+        let rules = Object.assign({}, formValidation.rulesBase, rulesBusiness, rulesFill);
 
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
 
-        const { getFieldProps } = this.props.form;
-        const displayTypeCommon=this.state.data.companyPaperType == 2 ? 'block' : 'none';
-        const displayTypeMultiple=this.state.data.companyPaperType == 3 ? 'block' : 'none';
+        const {
+            getFieldProps
+        } = this.props.form;
+        const displayTypeCommon = this.state.data.companyPaperType == 2 ? 'block' : 'none';
+        const displayTypeMultiple = this.state.data.companyPaperType == 3 ? 'block' : 'none';
 
         return (
             <div>
