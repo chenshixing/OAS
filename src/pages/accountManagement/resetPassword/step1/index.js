@@ -105,7 +105,7 @@ class ResetPassword extends React.Component {
                 min: 8,
                 max: 20,
                 message: '请输入8-20个字符的原登录密码'
-            }, ],
+            }, ruleType('password')],
             onChange: (e) => {
                 this.setState({
                     oldLoginPwd: e.target.value
