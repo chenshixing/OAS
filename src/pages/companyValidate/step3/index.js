@@ -120,12 +120,6 @@ class CompanyValidate extends Component {
         });
     }
 
-    pfxPasswordOnChange(e) {
-        this.setState({
-            pfxPassword: e.target.value
-        })
-    }
-
     handleCancel() {
         this.setState({
             visible: false
@@ -157,6 +151,31 @@ class CompanyValidate extends Component {
         });
     }
 
+    _pfxPasswordComfirmCheck(rule, value, callback) {
+        let me = this;
+        // console.log(rule)
+        if (!value) {
+            callback();
+        } else {
+            if (value !== me.props.form.getFieldValue('pfxPassword')) {
+                callback([new Error("两次密码输入不一致。")]);
+            } else {
+                callback();
+            }
+        }
+    }
+
+    _pfxPasswordCheck(rule, value, callback) {
+        let me = this;
+        if (value) {
+            //  强制执行确认交易密码的校验
+            me.props.form.validateFields(['pfxPasswordComfirm'], {
+                force: true
+            });
+        }
+        callback();
+    }
+
     render() {
         let me = this;
 
@@ -169,27 +188,6 @@ class CompanyValidate extends Component {
             },
         };
 
-        const pfxPasswordRule = {
-            validator: function(rule, value, callback) {
-                if (!value) {
-                    callback();
-                } else {
-                    const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[\W,_]+/];
-                    let matchNum = 0;
-                    regArr.map((item, index) => {
-                        if (item.test(value)) {
-                            matchNum++;
-                        }
-                    });
-                    if (matchNum >= 2 && value.length >= 8 && value.length <= 20) {
-                        callback();
-                    } else {
-                        callback([new Error('8-20位英文字母（区分大小写）、数字或符号组合')]);
-                    }
-                }
-            }
-        };
-
         const rules = {
             pfxPassword: {
                 rules: [{
@@ -200,6 +198,8 @@ class CompanyValidate extends Component {
                         min: 8,
                         max: 20,
                         message: '请输入8-20位字符'
+                    }, {
+                        validator: this._pfxPasswordCheck.bind(this)
                     },
                     ruleType('password')
                 ]
@@ -210,18 +210,7 @@ class CompanyValidate extends Component {
                     whitespace: true,
                     message: '请再次输入交易密码'
                 }, {
-                    validator: function(rule, value, callback) {
-                        // console.log(rule)
-                        if (!value) {
-                            callback();
-                        } else {
-                            if (value !== me.state.pfxPassword) {
-                                callback([new Error("两次密码输入不一致。")]);
-                            } else {
-                                callback();
-                            }
-                        }
-                    }
+                    validator: this._pfxPasswordComfirmCheck.bind(this)
                 }]
             }
         };
@@ -245,7 +234,7 @@ class CompanyValidate extends Component {
 	                        label="设置交易密码"
 	                        required
 	                    >
-	                        <Input type="password" {...getFieldProps('pfxPassword',Object.assign({},rules.pfxPassword,{ onChange : this.pfxPasswordOnChange.bind(this) }))} placeholder="8-20位英文字母（区分大小写）、数字或符号组合"/>
+	                        <Input type="text" {...getFieldProps('pfxPassword',Object.assign({},rules.pfxPassword))} placeholder="8-20位英文字母（区分大小写）、数字或符号组合"/>
 	                    </FormItem>
 
 	                    <FormItem
@@ -253,7 +242,7 @@ class CompanyValidate extends Component {
 	                        label="确认交易密码"
 	                        required
 	                    >
-	                        <Input type="password" {...getFieldProps('pfxPasswordComfirm',rules.pfxPasswordComfirm)} placeholder="请再次输入交易密码"/>
+	                        <Input type="text" {...getFieldProps('pfxPasswordComfirm',rules.pfxPasswordComfirm)} placeholder="请再次输入交易密码"/>
 	                    </FormItem>
 
 	                    <Row>
