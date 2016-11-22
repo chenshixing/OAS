@@ -38,13 +38,13 @@ import {
 import moment from 'moment';
 
 const map = {
-    companyPaperType : {
-        2 : "普通营业执照",
-        3 : "多证合一营业执照"
+    companyPaperType: {
+        2: "普通营业执照",
+        3: "多证合一营业执照"
     },
-    validateType : {
-        "OffLinePayAuth" : "线下支付小额验证金核验",
-        "OffLineSubmitInfo" : "线下提交账户资料核验"
+    validateType: {
+        "OffLinePayAuth": "线下支付小额验证金核验",
+        "OffLineSubmitInfo": "线下提交账户资料核验"
     }
 }
 
@@ -56,33 +56,33 @@ class CompanyValidate extends React.Component {
         this.state = {
             loading: false,
             data: {
-                companyInfo : {
-                    commonDisplay : "none",
-                    multipleDisplay : "none",
-                    companyName : "",
-                    companyPaperType : "",
-                    registrationPaperNo : "",
-                    registrationExtendField2 : "",
-                    orgInsCodePaperNo : "",
-                    socialCreditPaperNo : ""
+                companyInfo: {
+                    commonDisplay: "none",
+                    multipleDisplay: "none",
+                    companyName: "",
+                    companyPaperType: "",
+                    registrationPaperNo: "",
+                    registrationExtendField2: "",
+                    orgInsCodePaperNo: "",
+                    socialCreditPaperNo: ""
                 },
                 companyConnectorInfoDto: {
-                  clientDisplay : "block",
-                  writerType : 1,
-                  client : {
-                    name : "",
-                    mobile : "",
-                    email : ""
-                  },
-                  corperator : {
-                    name : "",
-                    mobile : "",
-                    email : ""
-                  }
+                    clientDisplay: "block",
+                    writerType: 1,
+                    client: {
+                        name: "",
+                        mobile: "",
+                        email: ""
+                    },
+                    corperator: {
+                        name: "",
+                        mobile: "",
+                        email: ""
+                    }
                 },
-                bankAccountInfo : {
-                    "payDisplay" : "block",
-                    "submitDisplay" : "none",
+                bankAccountInfo: {
+                    "payDisplay": "block",
+                    "submitDisplay": "none",
                     "accountName": "",
                     "cardNo": "",
                     "bankName": "",
@@ -118,14 +118,14 @@ class CompanyValidate extends React.Component {
             let companyInfo = res[0].data;
             companyInfo.commonDisplay = "block";
             companyInfo.multipleDisplay = "none";
-            if( companyInfo.companyPaperType == 3){
+            if (companyInfo.companyPaperType == 3) {
                 //  多证合一营业执照TODO
                 companyInfo.commonDisplay = "none";
                 companyInfo.multipleDisplay = "block";
             }
             companyInfo.companyPaperType = map.companyPaperType[companyInfo.companyPaperType];
             //  营业执照到期日处理
-            if(companyInfo.registrationExtendField2 != "长期"){
+            if (companyInfo.registrationExtendField2 != "长期") {
                 companyInfo.registrationExtendField2 = moment(companyInfo.registrationExtendField2).format("YYYY-MM-DD");
             }
             data.companyInfo = companyInfo;
@@ -134,7 +134,7 @@ class CompanyValidate extends React.Component {
             let companyConnectorInfoDto = res[1].data;
 
             companyConnectorInfoDto.clientDisplay = "block";
-            if(companyConnectorInfoDto.writerType == 2){
+            if (companyConnectorInfoDto.writerType == 2) {
                 //  填写人为法定代表人TODO
                 companyConnectorInfoDto.clientDisplay = "none";
             }
@@ -144,7 +144,7 @@ class CompanyValidate extends React.Component {
             let bankAccountInfo = res[2].data;
             bankAccountInfo.payDisplay = "block";
             bankAccountInfo.submitDisplay = "none";
-            if(bankAccountInfo.validateType == "OffLineSubmitInfo"){
+            if (bankAccountInfo.validateType == "OffLineSubmitInfo") {
                 bankAccountInfo.payDisplay = "none";
                 bankAccountInfo.submitDisplay = "block";
             }
@@ -152,25 +152,25 @@ class CompanyValidate extends React.Component {
             data.bankAccountInfo = bankAccountInfo;
 
             me.setState({
-                data : data
+                data: data
             });
-        }).catch(reason => {
-            console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 
-    next(){
-        fetch('/companyVerification/confirmBasicInfo.do',{
-            body : {}
+    next() {
+        fetch('/companyVerification/confirmBasicInfo.do', {
+            body: {}
         }).then(res => {
-            if(res.code == 200){
+            if (res.code == 200) {
                 //  提交成功TODO
                 this.props.history.push('/companyValidate/step3');
             }
         });
     }
 
-    goBack(){
+    goBack() {
         this.props.history.push('/companyValidate/step1?getInfo=1');
     }
 
@@ -275,7 +275,7 @@ class FormItemDefault extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            display : this.props.display ? this.props.display : "block"
+            display: this.props.display ? this.props.display : "block"
         }
     }
 
@@ -286,7 +286,7 @@ class FormItemDefault extends React.Component {
         display = nextProps.text ? display : 'none';
 
         this.setState({
-            display : display
+            display: display
         });
     }
 

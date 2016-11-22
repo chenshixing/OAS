@@ -1,6 +1,8 @@
 // react 相关库
 import React from 'react';
-import {Link} from 'react-router';
+import {
+    Link
+} from 'react-router';
 
 //less
 import './style.less'
@@ -30,7 +32,9 @@ function noop() {
 }
 
 //fetch
-import {fetch} from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 // 自定义验证 rule
 import ruleType from 'UTILS/ruleType';
 // 页面
@@ -44,7 +48,7 @@ class Home extends React.Component {
             data: {
                 name: "",
                 lastLoginTime: "",
-                getUserServiceList:[]
+                getUserServiceList: []
             },
             isInviteCode: true
         }
@@ -82,25 +86,27 @@ class Home extends React.Component {
             //验证不通过，就跳转到验证页面
             if (values[2].data.bankCheckStatus == 1 && values[2].data.step == 999) {
                 console.log("成功")
-                //return true
+                    //return true
             } else {
                 //this.props.history.push("/accountManagement/basicInformation")
             }
 
             this.forceUpdate();
-        }).catch(reason => {
-            console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
     handleAddBusiness() {
-        this.setState({visible: true});
-    }
-    // handleSubmit2(){
-    //
-    //     let data = {"serviceChannelNo":"20161031160941","serviceChannelName":"单元测试20161031160941","serviceURL":"http://www.baidu.com3"};
-    //     this.state.data.getUserServiceList.push(data)
-    //     this.forceUpdate();
-    // }
+            this.setState({
+                visible: true
+            });
+        }
+        // handleSubmit2(){
+        //
+        //     let data = {"serviceChannelNo":"20161031160941","serviceChannelName":"单元测试20161031160941","serviceURL":"http://www.baidu.com3"};
+        //     this.state.data.getUserServiceList.push(data)
+        //     this.forceUpdate();
+        // }
 
     handleSubmit(e) {
 
@@ -114,9 +120,9 @@ class Home extends React.Component {
             }
             console.log('Submit!!!');
             console.log(values);
-            fetch('/service/addService.do',{
-                body:{
-                    "inviteCode":this.state.inviteCodeValue
+            fetch('/service/addService.do', {
+                body: {
+                    "inviteCode": this.state.inviteCodeValue
                 }
             }).then(res => {
                 //console.log(res)
@@ -130,10 +136,12 @@ class Home extends React.Component {
                 //console.log(res)
                 let resData = res.data
                 this.state.data.getUserServiceList.push(resData)
-                this.props.form.setFieldsValue({name:""});
+                this.props.form.setFieldsValue({
+                    name: ""
+                });
                 this.setState({
-                    inviteCodeValue:"",
-                    visible:false
+                    inviteCodeValue: "",
+                    visible: false
                 })
                 this.openNotification();
                 //this.setState({visible: false});
@@ -146,25 +154,31 @@ class Home extends React.Component {
     }
     handleCancel(e) {
         console.log(e);
-        this.setState({visible: false});
+        this.setState({
+            visible: false
+        });
     }
     handleChange(value) {
-        if (value === "isInviteCode") {
-            this.setState({isInviteCode: true})
-        } else {
-            this.setState({isInviteCode: false})
+            if (value === "isInviteCode") {
+                this.setState({
+                    isInviteCode: true
+                })
+            } else {
+                this.setState({
+                    isInviteCode: false
+                })
+            }
+            console.log(`selected ${value}`);
         }
-        console.log(`selected ${value}`);
-    }
-    //个人用户或者企业用户
+        //个人用户或者企业用户
     templateUserType(item) {
-        let items = {
-            1: <Tag color="blue">个人用户</Tag>,
-            2: <Tag color="blue">企业用户</Tag>
-        };
-        return items[item]
-    }
-    //个人账户管理或者企业账户管理
+            let items = {
+                1: <Tag color="blue">个人用户</Tag>,
+                2: <Tag color="blue">企业用户</Tag>
+            };
+            return items[item]
+        }
+        //个人账户管理或者企业账户管理
     templateUserTypeManagement(item) {
         let items = {
             1: <Link to="/accountManagement/basicInformation">个人账户管理</Link>,
@@ -174,7 +188,9 @@ class Home extends React.Component {
     }
     handleInviteCodeValue(e) {
 
-        this.setState({inviteCodeValue: e.target.value})
+        this.setState({
+            inviteCodeValue: e.target.value
+        })
     }
 
     render() {
@@ -184,7 +200,9 @@ class Home extends React.Component {
             getUserServiceList
         } = this.state.data;
 
-        const {getFieldProps} = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 span: 7
@@ -194,27 +212,26 @@ class Home extends React.Component {
             }
         };
         const nameProps = getFieldProps('name', {
-            rules: [
-                {
-                    required: true,
-                    message: '请输入邀请码'
-                }
-            ],
-            onChange:(e)=>{
+            rules: [{
+                required: true,
+                message: '请输入邀请码'
+            }],
+            onChange: (e) => {
                 this.setState({
-                    inviteCodeValue:e.target.value
+                    inviteCodeValue: e.target.value
                 })
             }
         });
 
-        return (
-            <div style={{
-                minHeight: "700px"
-            }}
+        return ( < div style = {
+                {
+                    minHeight: "700px"
+                }
+            }
 
             >
 
-                <Modal
+            <Modal
                     title="添加业务"
                     visible={this.state.visible}
                     onOk={this.handleSubmit.bind(this)}
@@ -269,27 +286,28 @@ class Home extends React.Component {
                         null
                     }
 
-                </Modal>
-                {/*
-                <div className="fn-pa-20">
-                    首页
+                </Modal> {
+                /*
+                                <div className="fn-pa-20">
+                                    首页
 
-                    <p>
-                        <Link to="/accountManagement/home">账户管理首页</Link>
-                    </p>
-                    <p>
-                        <Link to="/accountManagement/basicInformation">账户管理基本信息</Link>
-                    </p>
-                    <p>
-                        <Link to="/accountManagement/resetPassword/step1">账户管理修改密码</Link>
-                    </p>
-                    <p>
-                        <Link to="/accountManagement/resetTradingPassword/step1">账户管理修改交易密码</Link>
-                    </p>
-                </div>
-                */}
+                                    <p>
+                                        <Link to="/accountManagement/home">账户管理首页</Link>
+                                    </p>
+                                    <p>
+                                        <Link to="/accountManagement/basicInformation">账户管理基本信息</Link>
+                                    </p>
+                                    <p>
+                                        <Link to="/accountManagement/resetPassword/step1">账户管理修改密码</Link>
+                                    </p>
+                                    <p>
+                                        <Link to="/accountManagement/resetTradingPassword/step1">账户管理修改交易密码</Link>
+                                    </p>
+                                </div>
+                                */
+            }
 
-                <div className="fn-ptb-20 ">
+            <div className="fn-ptb-20 ">
                     <div className="ant-card-head" style={{
                         padding: 0
                     }}>
@@ -301,56 +319,52 @@ class Home extends React.Component {
                         </h3>
                     </div>
 
-                    <div className="alert alert-warning fn-mt-10">
-                        {/*@:data {string} userType 用户类型(1:个人,2:企业)*/}
-                        {this.templateUserTypeManagement(this.state.data.userType)}
-                        {
-                            this.state.data.lastLoginTime
-                            ?
-                            <span>
+            < div className = "alert alert-warning fn-mt-10" > { /*@:data {string} userType 用户类型(1:个人,2:企业)*/ } {
+                this.templateUserTypeManagement(this.state.data.userType)
+            } {
+                this.state.data.lastLoginTime.length > 0 ?
+                    <span>
                                 <span className="fn-plr-10">|</span>
                                 上次登录时间：
                                 {this.state.data.lastLoginTime}
-                            </span>
-                            :
-                            null
-                        }
-                    </div>
-                </div>
+                            </span> :
+                    null
+            } < /div> < /div>
 
-                <div>
-                    <div className="ant-card-head fn-mb-20" style={{
-                        padding: 0
-                    }}>
-                        <h3 className="ant-card-head-title">
+            < div >
+            < div className = "ant-card-head fn-mb-20"
+            style = {
+                {
+                    padding: 0
+                }
+            } >
+            <h3 className="ant-card-head-title">
                             我的业务
-                        </h3>
-                    </div>
+                        </h3> < /div>
 
-                    <Row>
+            < Row >
 
-                        {
-                            getUserServiceList && getUserServiceList.map((item, index) => {
-                                return (
-                                    <a key={index} href={item.serviceURL}>
+            {
+                getUserServiceList && getUserServiceList.map((item, index) => {
+                    return (
+                        <a key={index} href={item.serviceURL}>
                                         <Col span="6">
                                             <Card>{item.serviceChannelName}</Card>
                                         </Col>
                                     </a>
-                                )
-                            })
-                        }
+                    )
+                })
+            }
 
-                        <a href="javascript:;" onClick={this.handleAddBusiness.bind(this)}>
+            <a href="javascript:;" onClick={this.handleAddBusiness.bind(this)}>
                             <Col span="6">
                                 <Card><Icon type="plus"/>添加业务</Card>
                             </Col>
                         </a>
 
-                    </Row>
+            < /Row>
 
-                </div>
-            </div>
+            < /div> < /div>
         );
     }
 }

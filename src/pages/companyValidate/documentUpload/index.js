@@ -1,8 +1,22 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
-import { Link } from 'react-router';
+import {
+    Link
+} from 'react-router';
 // antd 组件
-import { Form, Button, Upload, Row, Col, Icon, Modal, message} from 'antd';
+import {
+    Form,
+    Button,
+    Upload,
+    Row,
+    Col,
+    Icon,
+    Modal,
+    message
+} from 'antd';
 
 // 页面组件
 import Frame from 'COM/form/frame';
@@ -11,7 +25,9 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
@@ -24,14 +40,14 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isCommon : true,
-            limit : 5,
-            fileList : {
-                registration : [],
-                orgInsCode : [],
-                socialCredit : [],
-                identityProof : [],
-                deletegatePromiseLetter : []
+            isCommon: true,
+            limit: 5,
+            fileList: {
+                registration: [],
+                orgInsCode: [],
+                socialCredit: [],
+                identityProof: [],
+                deletegatePromiseLetter: []
             },
         }
     }
@@ -40,19 +56,19 @@ class DocumentUpload extends Component {
         this.loadData();
     }
 
-    loadData(){
+    loadData() {
         let me = this;
         //  证件查询
         let p1 = fetch('/paper/searchCompany.do');
         //  获取企业信息
         let p2 = fetch('/companyVerification/getCompanyInfo.do');
 
-        Promise.all([p1,p2]).then(res => {
+        Promise.all([p1, p2]).then(res => {
             let fileList = me.state.fileList;
             let fileData = res[0].data;
-            for( let prop in fileData){
-                fileData[prop].map( (item,index) =>{
-                    let uid = prop + '_' + new Date()/1 + '_' + index;
+            for (let prop in fileData) {
+                fileData[prop].map((item, index) => {
+                    let uid = prop + '_' + new Date() / 1 + '_' + index;
                     let file = {
                         uid: uid,
                         name: item.fileName,
@@ -65,15 +81,15 @@ class DocumentUpload extends Component {
             }
 
             me.setState({
-                isCommon : res[1].data.companyPaperType == 2,
-                fileList : fileList
+                isCommon: res[1].data.companyPaperType == 2,
+                fileList: fileList
             });
-        }).catch(reason => {
-            console.log(reason)
+        }).catch(err => {
+            throw err;
         });
     }
 
-    _getFileList(info){
+    _getFileList(info) {
         let fileList = info.fileList;
 
         // 1. 上传列表数量的限制
@@ -82,25 +98,25 @@ class DocumentUpload extends Component {
 
         // 2. 读取远程路径并显示链接
         fileList = fileList.map((file) => {
-          if (file.response) {
-            // 组件会将 file.url 作为链接进行展示
-            file.url = file.response.data.linkUrl;
-          }
-          return file;
+            if (file.response) {
+                // 组件会将 file.url 作为链接进行展示
+                file.url = file.response.data.linkUrl;
+            }
+            return file;
         });
 
         // 3. 按照服务器返回信息筛选成功上传的文件
         fileList = fileList.filter((file) => {
-          if (file.response) {
-            return file.response.code == '200';
-          }
-          return true;
+            if (file.response) {
+                return file.response.code == '200';
+            }
+            return true;
         });
 
         return fileList;
     }
 
-    _warning(){
+    _warning() {
         let me = this;
         Modal.warning({
             title: '图片最多上传' + me.state.limit + '张',
@@ -108,7 +124,7 @@ class DocumentUpload extends Component {
         });
     }
 
-    tipsShow(){
+    tipsShow() {
         let me = this;
         Modal.success({
             title: '提示',
@@ -120,7 +136,7 @@ class DocumentUpload extends Component {
     }
 
     socialCreditChange(info) {
-        if(info.fileList.length > this.state.limit){
+        if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
@@ -130,11 +146,13 @@ class DocumentUpload extends Component {
         let fileList = this.state.fileList;
         fileList.socialCredit = fList;
 
-        this.setState({ fileList });
+        this.setState({
+            fileList
+        });
     }
 
     registrationChange(info) {
-        if(info.fileList.length > this.state.limit){
+        if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
@@ -144,11 +162,13 @@ class DocumentUpload extends Component {
         let fileList = this.state.fileList;
         fileList.registration = fList;
 
-        this.setState({ fileList });
+        this.setState({
+            fileList
+        });
     }
 
     orgInsCodeChange(info) {
-        if(info.fileList.length > this.state.limit){
+        if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
@@ -158,11 +178,13 @@ class DocumentUpload extends Component {
         let fileList = this.state.fileList;
         fileList.orgInsCode = fList;
 
-        this.setState({ fileList });
+        this.setState({
+            fileList
+        });
     }
 
     identityProofChange(info) {
-        if(info.fileList.length > this.state.limit){
+        if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
@@ -172,11 +194,13 @@ class DocumentUpload extends Component {
         let fileList = this.state.fileList;
         fileList.identityProof = fList;
 
-        this.setState({ fileList });
+        this.setState({
+            fileList
+        });
     }
 
     deletegatePromiseLetterChange(info) {
-        if(info.fileList.length > this.state.limit){
+        if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
@@ -186,17 +210,19 @@ class DocumentUpload extends Component {
         let fileList = this.state.fileList;
         fileList.deletegatePromiseLetter = fList;
 
-        this.setState({ fileList });
+        this.setState({
+            fileList
+        });
     }
 
-    submit(){
+    submit() {
         let me = this;
         let data = me._getSubmitData();
         console.log(data);
-        fetch('/paper/saveCompany.do',{
-            body : data
+        fetch('/paper/saveCompany.do', {
+            body: data
         }).then(res => {
-            if(res.code == 200){
+            if (res.code == 200) {
                 console.log(res);
                 //  提交成功TODO
                 me.tipsShow();
@@ -204,13 +230,13 @@ class DocumentUpload extends Component {
         });
     }
 
-    _getSubmitData(){
+    _getSubmitData() {
         let data = {};
 
         let fileList = this.state.fileList;
-        for( let prop in fileList ){
+        for (let prop in fileList) {
             data[prop] = [];
-            fileList[prop].map( (item,index) => {
+            fileList[prop].map((item, index) => {
                 let file = item.data ? item.data : item.response.data;
                 data[prop].push(file);
             })
@@ -219,7 +245,7 @@ class DocumentUpload extends Component {
         return data;
     }
 
-    goBack(){
+    goBack() {
         this.props.history.goBack();
     }
 
@@ -231,47 +257,51 @@ class DocumentUpload extends Component {
     }
 
     render() {
-    	// let rules={
-     //        socialCredit:{
-     //            rules:[
-     //                {required: true, message: '请上传统一社会信用代码证'},
-     //            ],
-     //            valuePropName: 'fileList',
-     //            normalize: this.normFile
-     //        },
-    	// 	registration:{
-     //            rules:[
-     //                {required: true, message: '请上传营业执照'},
-     //            ],
-     //            valuePropName: 'fileList',
-     //            normalize: this.normFile
-     //        },
-     //        orgInsCode:{
-     //            rules:[
-     //                {required: true, message: '请上传组织机构代码证'},
-     //            ],
-     //            valuePropName: 'fileList',
-     //            normalize: this.normFile
-     //        },
-     //        identityProof:{
-     //            rules:[
-     //                {required: true, message: '请上传企业法定代表人身份证明书'},
-     //            ],
-     //            valuePropName: 'fileList',
-     //            normalize: this.normFile
-     //        },
-     //        deletegatePromiseLetter:{
-     //            rules:[
-     //                {required: true, message: '请上传承诺函及授权委托书'},
-     //            ],
-     //            valuePropName: 'fileList',
-     //            normalize: this.normFile
-     //        },
-    	// };
+        // let rules={
+        //        socialCredit:{
+        //            rules:[
+        //                {required: true, message: '请上传统一社会信用代码证'},
+        //            ],
+        //            valuePropName: 'fileList',
+        //            normalize: this.normFile
+        //        },
+        // 	registration:{
+        //            rules:[
+        //                {required: true, message: '请上传营业执照'},
+        //            ],
+        //            valuePropName: 'fileList',
+        //            normalize: this.normFile
+        //        },
+        //        orgInsCode:{
+        //            rules:[
+        //                {required: true, message: '请上传组织机构代码证'},
+        //            ],
+        //            valuePropName: 'fileList',
+        //            normalize: this.normFile
+        //        },
+        //        identityProof:{
+        //            rules:[
+        //                {required: true, message: '请上传企业法定代表人身份证明书'},
+        //            ],
+        //            valuePropName: 'fileList',
+        //            normalize: this.normFile
+        //        },
+        //        deletegatePromiseLetter:{
+        //            rules:[
+        //                {required: true, message: '请上传承诺函及授权委托书'},
+        //            ],
+        //            valuePropName: 'fileList',
+        //            normalize: this.normFile
+        //        },
+        // };
 
-		const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+        const formItemLayout = {
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
         let url = '/common/fileupload.do';
         const upLoadProps = {
@@ -282,23 +312,25 @@ class DocumentUpload extends Component {
             }
         };
 
-        const socialCreditUpLoadProps = Object.assign({},upLoadProps,{
-            onChange : this.socialCreditChange.bind(this)
+        const socialCreditUpLoadProps = Object.assign({}, upLoadProps, {
+            onChange: this.socialCreditChange.bind(this)
         });
-        const registrationUpLoadProps = Object.assign({},upLoadProps,{
-            onChange : this.registrationChange.bind(this)
+        const registrationUpLoadProps = Object.assign({}, upLoadProps, {
+            onChange: this.registrationChange.bind(this)
         });
-        const orgInsCodeUpLoadProps = Object.assign({},upLoadProps,{
-            onChange : this.orgInsCodeChange.bind(this)
+        const orgInsCodeUpLoadProps = Object.assign({}, upLoadProps, {
+            onChange: this.orgInsCodeChange.bind(this)
         });
-        const identityProofUpLoadProps = Object.assign({},upLoadProps,{
-            onChange : this.identityProofChange.bind(this)
+        const identityProofUpLoadProps = Object.assign({}, upLoadProps, {
+            onChange: this.identityProofChange.bind(this)
         });
-        const deletegatePromiseLetterUpLoadProps = Object.assign({},upLoadProps,{
-            onChange : this.deletegatePromiseLetterChange.bind(this)
+        const deletegatePromiseLetterUpLoadProps = Object.assign({}, upLoadProps, {
+            onChange: this.deletegatePromiseLetterChange.bind(this)
         });
 
-        const { getFieldProps } = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
 
         return (
             <Frame title="企业证件扫描件" small="(请提供原件照片或彩色扫描件。注：正副本均可。)">
