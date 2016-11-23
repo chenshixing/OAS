@@ -12,6 +12,8 @@ import { Spin } from 'antd';
 import State from './state';
 import rState from 'PAGES/redirect/state';
 
+import { fetch } from 'UTILS';
+
 export default class Index extends React.Component{
     constructor(props) {
         super(props);
