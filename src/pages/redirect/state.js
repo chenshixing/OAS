@@ -17,10 +17,6 @@ class State {
                 "bankCheckStatus": 0, // 银行审核状态，-1：审核中，0：审核不通过，1：审核通过
                 "showName": "", // 显示用户名称
                 "loginName": "" // 登录名
-            },
-            sysInfo: {
-                "logoutUrl": "", // 登出地址
-                "appQrcodeUtl": "" // app二维码地址
             }
         };
         this.sessionId = 'redirect_state';

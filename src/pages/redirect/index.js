@@ -11,6 +11,8 @@ import { fetch } from 'UTILS';
 
 import State from './state';
 
+import LayoutsState from 'PAGES/Layouts/state';
+
 // 页面
 export default class Redirect extends React.Component {
     constructor(props) {
@@ -18,15 +20,18 @@ export default class Redirect extends React.Component {
         this.state = State.bind(this).getState();
     }
     componentDidMount() {
-        Promise.all([
-            fetch('/common/getLoginCheckStatus.do'),
-            fetch('/common/getSystemInfo.do')
-        ]).then(([res, info]) => {
+        fetch('/common/getLoginCheckStatus.do').then(res => {
             const {step, userType, bankCheckStatus} = res.data;
             const type = {
                 "1": "personalValidate",
                 "2": "companyValidate"
             }[userType];
+
+            // save data
+            State.setState({
+                data: res.data,
+                sysInfo: LayoutsState.getState().sysInfo
+            });
 
             setTimeout(() => {
                 // 业务判断
@@ -53,12 +58,6 @@ export default class Redirect extends React.Component {
             // } else { // 未完成流程，跳转到信息补充提示页
             //     return this.props.history.push(`personalValidate/step${step}`);
             // }
-
-            // save data
-            State.setState({
-                data: res.data,
-                sysInfo: info.data
-            });
 
         });
         // OAS日志接口
