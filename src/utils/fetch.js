@@ -97,7 +97,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                         reject(res);
 
                         //  当返回code不等于200时，自定义错误处理，codeErrCallback返回false不继续往下走
-                        if(codeErrCallback && codeErrCallback() === false){
+                        if(codeErrCallback && codeErrCallback(res) === false){
                             return;
                         }
 
