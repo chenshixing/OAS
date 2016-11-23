@@ -309,7 +309,8 @@ class DocumentUpload extends Component {
             action: __DEV__ ? `/api${url}` : url,
             headers: {
                 authorization: 'authorization-text',
-            }
+            },
+            accept: 'image/*'
         };
 
         const socialCreditUpLoadProps = Object.assign({}, upLoadProps, {
