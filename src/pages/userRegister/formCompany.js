@@ -85,24 +85,25 @@ class Reg extends React.Component {
   getVerifyCode() {
     var that=this;
     //获取验证码
-    const num = this.props.form.getFieldValue('mobile');
-    if(!num){
-      Modal.warning({
-        title: '提示',
-        content: '请先输入电话号码',
-      });
-      return;
-    }
-    // 获取验证码
-    fetch('/common/smsAutoCode.do', {
-      body: {
-        "mobile": num,
-        "businessType": "register"
+    this.props.form.validateFields(['mobile'],(errors,values)=>{
+      console.log(errors,values);
+      if(!errors){
+        fetch('/common/smsAutoCode.do', {
+          body: {
+            "mobile": values.mobile,
+            "businessType": "register"
+          }
+        }).then(res => {
+          console.log('短信验证码获取成功：',res);
+          message.success('短信验证码获取成功');
+          countDown();
+        });
+      }else{
+          Modal.warning({
+            title: '提示',
+            content: errors.mobile.errors[0].message,
+          });
       }
-    }).then(res => {
-      console.log('短信验证码获取成功：',res);
-      message.success('短信验证码获取成功');
-      countDown();
     });
 
     function countDown(){

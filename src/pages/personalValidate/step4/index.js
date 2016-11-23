@@ -24,7 +24,7 @@ import {fetch} from 'UTILS';
 export default class PersonalValidate extends React.Component {
     constructor(props){
         super(props);
-        // this.state = State.bind(this).getState();
+        State.bind(this);
     }
 
     componentDidMount(){
