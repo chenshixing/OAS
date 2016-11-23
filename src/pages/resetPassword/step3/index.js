@@ -4,7 +4,7 @@
  */
 // react 相关库
 import React from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import {
     Link
 } from 'react-router';
@@ -43,7 +43,7 @@ class Step3 extends React.Component {
 
         }
     }
-    
+
     handleSubmit() {
         this.props.form.validateFields((errors, values) => {
             if (!errors) {
