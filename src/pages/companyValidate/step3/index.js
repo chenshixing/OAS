@@ -176,6 +176,10 @@ class CompanyValidate extends Component {
         callback();
     }
 
+    onPaste(event) {
+        return event.preventDefault();
+    }
+
     render() {
         let me = this;
 
@@ -234,7 +238,7 @@ class CompanyValidate extends Component {
 	                        label="设置交易密码"
 	                        required
 	                    >
-	                        <Input type="password" {...getFieldProps('pfxPassword',Object.assign({},rules.pfxPassword))} placeholder="8-20位英文字母（区分大小写）、数字或符号组合"/>
+	                        <Input type="password" {...getFieldProps('pfxPassword',Object.assign({},rules.pfxPassword))} onPaste={ this.onPaste.bind(this) } placeholder="8-20位英文字母（区分大小写）、数字或符号组合" />
 	                    </FormItem>
 
 	                    <FormItem
@@ -242,7 +246,7 @@ class CompanyValidate extends Component {
 	                        label="确认交易密码"
 	                        required
 	                    >
-	                        <Input type="password" {...getFieldProps('pfxPasswordComfirm',rules.pfxPasswordComfirm)} placeholder="请再次输入交易密码"/>
+	                        <Input type="password" {...getFieldProps('pfxPasswordComfirm',rules.pfxPasswordComfirm)} onPaste={ this.onPaste.bind(this) } placeholder="请再次输入交易密码"/>
 	                    </FormItem>
 
 	                    <Row>
