@@ -29,6 +29,7 @@ class Reg extends React.Component {
       protocolData:{},
       // submitDisCheck:false
     };
+    this.timer=null;
   }
   handleSubmit(e) {
     e.preventDefault();
@@ -104,14 +105,14 @@ class Reg extends React.Component {
         });
 
         var count=60;
-        let timer = setInterval(()=>{
+        that.timer = setInterval(()=>{
             count--;
             if(count>0){
                 that.setState({
                     btnSmsCodeText:`${count}秒后重新获取`
                 });
             }else{
-                clearInterval(timer);
+                clearInterval(that.timer);
                 that.setState({
                     btnSmsCodeText:`获取验证码`,
                     isBtnSmsCodeDisabled:false
@@ -158,6 +159,12 @@ class Reg extends React.Component {
 
   componentDidMount(){
     this.initPage();
+  }
+
+  componentWillUnmount(){
+    if(this.timer){
+      clearInterval(this.timer);
+    }
   }
 
   initPage(){

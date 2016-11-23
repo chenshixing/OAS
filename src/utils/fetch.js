@@ -79,7 +79,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                         //  当返回code不等于200时
                         codeErrCallback && codeErrCallback();
                         // 本地联调用到的专用登录页
-                        if(__DEV__ && (res.code == "001" || res.code == "003")){
+                        if(__DEV__ && (res.code == "001")){
                             return location.href = `${location.origin}${location.pathname}#/userLogin`;
                         }
 
