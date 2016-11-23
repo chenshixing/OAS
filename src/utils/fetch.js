@@ -76,8 +76,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                     if( res.code == 200 ) {
                         resolve(res);
                     } else {
-                        //  当返回code不等于200时
-                        codeErrCallback && codeErrCallback();
+                        
                         // 本地联调用到的专用登录页
                         if(__DEV__ && (res.code == "001" || res.code == "003")){
                             return location.href = `${location.origin}${location.pathname}#/userLogin`;
@@ -96,6 +95,11 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                         // 处理错误
                         reject(res);
+
+                        //  当返回code不等于200时，自定义错误处理，codeErrCallback返回false不继续往下走
+                        if(codeErrCallback && codeErrCallback() === false){
+                            return;
+                        }
 
                         if(res.message){
                              message.error(`错误提示：(${res.code})`+res.message,3);
