@@ -7,8 +7,6 @@
 // react 相关库
 import React from 'react';
 
-import store from 'store';
-
 // antd 组件
 import { Button, Form, Input, Checkbox, Modal,message } from 'antd';
 const createForm = Form.create;
@@ -42,7 +40,6 @@ class Reg extends React.Component {
         console.log('Submit!!!',data);
         fetch('/register/post.do',{body:data}).then((res)=>{
           console.log('注册成功');
-          store.set('loginUrl',res.data.loginUrl);
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');

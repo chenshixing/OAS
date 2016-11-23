@@ -7,9 +7,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Link} from 'react-router';
 
-//  全局状态codeimg
-import State from 'PAGES/redirect/state';
-const codeimg = State.getState().sysInfo.appQrcodeUrl;
+//  获取全局sysInfo
+import State from 'PAGES/Layouts/state';
+const logoutUrl = State.getState() && State.getState().sysInfo && State.getState().sysInfo.logoutUrl;
 
 // antd 组件
 import { Alert, Steps, Button } from 'antd';
@@ -18,14 +18,10 @@ const Step = Steps.Step;
 // 页面组件
 import Frame from 'COM/form/frame';
 
-import store from 'store';
-
-
 class RegisterResult extends React.Component{
     constructor(props){
         super(props);
         this.state={};
-        this.loginUrl=store.get('loginUrl');
     }
 
     render(){
@@ -41,7 +37,7 @@ class RegisterResult extends React.Component{
                         />
                         <div className="text-align-center fn-mt-30">
                             <Button type="primary"> 
-                                <a href={this.loginUrl}>&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                                <a href={logoutUrl}>&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
                             </Button>
                         </div>
                     </div>

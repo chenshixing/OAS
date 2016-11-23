@@ -15,7 +15,6 @@ const InputGroup = Input.Group;
 
 import { Link } from 'react-router';
 import AgreementModal from 'COM/agreementModal'
-import store from 'store';
 
 // 自定义验证 rule 及 fetch 方法
 import { ruleType, fetch } from 'UTILS';
@@ -44,7 +43,6 @@ class Reg extends React.Component {
             body:data
           }).then((res)=>{
             console.log('res:',res);
-            store.set('loginUrl',res.data.loginUrl);
             window.location.href='#/userRegister/result';
           })
       }else{
