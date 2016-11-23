@@ -88,9 +88,9 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                         if(res.code == 401){
                             //res.data = res.data.replace(/\?.*/, '');
                             //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
-                            //const url = `${res.data}${encodeURIComponent('?callback=' + location.pathname)}`;
-                            const loginUrl = State.getState().sysInfo.loginUrl;
-                            const url = loginUrl;
+                            const url = `${res.data}${encodeURIComponent('?callback=' + location.pathname)}`;
+                            //const loginUrl = State.getState().sysInfo.loginUrl;
+                            //const url = loginUrl;
                             return location.href = url;
                         }
                         //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
