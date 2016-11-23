@@ -41,20 +41,22 @@ const rulesBase = {
     email: {
         rules: [
             ruleType('email'), {
-                max: 50,
-                message: '请输入50位以内的字符'
+                max: 99,
+                message: '请输入99位以内的字符'
             },
         ]
     },
     cardNo: {
         rules: [{
-            required: true,
-            message: '银行账号不能为空'
-        }, {
-            min: 5,
-            max: 30,
-            message: '请输入5-30位字符'
-        }, ]
+                required: true,
+                message: '银行账号不能为空'
+            }, {
+                min: 5,
+                max: 30,
+                message: '请输入5-30位字符'
+            },
+            ruleType('num+minus')
+        ]
     },
     bankId: {
         rules: [{
@@ -88,8 +90,8 @@ const rulesCommon = {
             type: 'string',
             message: '营业执照注册号不能为空'
         }, {
-            max: 50,
-            message: '请输入50位以内的字符'
+            max: 30,
+            message: '请输入30位以内的字符'
         }, ]
     },
     orgInsCodePaperNo: {

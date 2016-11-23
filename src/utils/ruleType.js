@@ -76,11 +76,11 @@ const dataType = {
         errMsg: '身份证号码格式不正确'
     },
     //英文字母（区分大小写）、数字或符号组合(三选二 )
-    "password":{
+    "password": {
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                const regArr = [/[0-9]\d*/,/[A-Za-z]+/,/[_\-~\*\(\)\!@\#\$%\^\.•,&]+/];
+                const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[_\-~\*\(\)\!@\#\$%\^\.•,&]+/];
                 let matchNum = 0;
                 regArr.map((item, index) => {
                     if (item.test(value)) {
@@ -99,9 +99,9 @@ const dataType = {
         errMsg: "英文（区分大小写）、数字"
     },
     //中文、英文（区分大小写）、可含半角标点符号•.,-_~ *()!@#$%^&
-    "cn+en+str":{
-        reg:/^[\u4e00-\u9fa5_\-~\*\(\)\!@\#\$%\^\.•,&a-zA-Z]+$/,
-        errMsg:"中文、英文（区分大小写）、常用字符"
+    "cn+en+str": {
+        reg: /^[\u4e00-\u9fa5_\-~\*\(\)\!@\#\$%\^\.•,&a-zA-Z]+$/,
+        errMsg: "中文、英文（区分大小写）、常用字符"
     },
     //不能为今天或过去的日期(value必须为Date对象)
     "futureTime": {
@@ -112,7 +112,23 @@ const dataType = {
             }
         },
         errMsg: '非法日期'
-    }
+    },
+    //  匹配数字和半角标点符号-
+    "num+minus": {
+        reg: {
+            // 自定义 test 方法
+            test: function(value) {
+                let reg = new RegExp(/([1-9]|-)+/);
+
+                if (!value.match(reg)) {
+                    return false;
+                }
+
+                return value.match(reg)[0].length == value.length;
+            }
+        },
+        errMsg: '必须为数字或半角符号-'
+    },
 };
 
 // 生成 Ant 验证规则 rule
