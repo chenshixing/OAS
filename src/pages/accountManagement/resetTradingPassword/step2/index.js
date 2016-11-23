@@ -1,6 +1,6 @@
 // react 相关库
 import React from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import {
     Link
 } from 'react-router';
@@ -77,6 +77,10 @@ class Steps2 extends React.Component {
                     //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
                     //权限控制，跳转乱动枪毙
                 this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
+            }, (res) => {
+                if(res.code='400'){
+                    this.props.history.push('/accountManagement/basicInformation');
+                }
             });
         });
     }

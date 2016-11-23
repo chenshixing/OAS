@@ -25,6 +25,13 @@ export default class Index extends React.Component{
             loading: bool
         });
     }
+    componentDidMount() {
+        fetch('/common/getSystemInfo.do').then(res => {
+            State.setState({
+                sysInfo: res.data
+            });
+        })
+    }
     render() {
       return (
           <Spin spinning={this.state.loading}>
