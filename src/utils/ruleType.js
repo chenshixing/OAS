@@ -119,8 +119,9 @@ const dataType = {
         reg: {
             // 自定义 test 方法
             test: function(value) {
+                value = value.toString();
                 let reg = new RegExp(/([1-9]|-)+/);
-
+                // console.log(value.match(reg));
                 if (!value.match(reg)) {
                     return false;
                 }
