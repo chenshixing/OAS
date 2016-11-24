@@ -44,22 +44,15 @@ class Reg extends React.Component {
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
-          // switch(res.code){
-          //   case '004':
-          //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-          //     break;
-          //   case '005':
-          //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-          //     break;
-          //   case '301':
-          //     this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
-          //     break;
-          // }
+          if(res.fieldName){
+            this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+          }
         });
       }
 
     });
   }
+  
   checkPassWord(rule, value, callback) {
     const { validateFields } = this.props.form;
     if (value) {

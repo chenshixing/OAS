@@ -125,6 +125,10 @@ class Steps2 extends React.Component {
         }
     }
 
+    noop(event) {
+        return event.preventDefault();
+    }
+
     render() {
         const {getFieldProps} = this.props.form;
         const formItemLayout = {
@@ -162,7 +166,7 @@ class Steps2 extends React.Component {
                             label="短信验证码"
                             required
                             >
-                            <Input className="smsCodeInput" style={{width:'200px',marginRight:'20px'}} {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown}  />
+                            <Input className="smsCodeInput" style={{width:'200px',marginRight:'20px'}} {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown}  onPaste={this.noop.bind(this)}  />
                             <Button className="ant-search-btn" disabled={this.state.isBtnSmsCodeDisabled} onClick={this.getVerifyCode.bind(this)}>{this.state.btnSmsCodeText}</Button>
                             </FormItem>
                         <FormItem wrapperCol={{ span: 8, offset: 8 }} style={{ marginTop: 24 }}>
