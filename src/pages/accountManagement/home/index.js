@@ -223,14 +223,10 @@ class Home extends React.Component {
             }
         });
 
-        return ( < div style = {
-                {
+        return (
+            <div style = {{
                     minHeight: "700px"
-                }
-            }
-
-            >
-
+                }}>
             <Modal
                     title="添加业务"
                     visible={this.state.visible}
@@ -261,20 +257,7 @@ class Home extends React.Component {
                         ?
                         <Form>
                             <Row>
-                                {/*
-                            <Col span={4} offset={6}>
-                                <label className="ant-form-item-label">邀请码:</label>
-                            </Col>
-                            */}
                                 <Col span={12} offset={6}>
-                                    {/*
-                                <Input
-                                    type="text"
-                                    placeholder="请输入邀请码"
-                                    value={this.state.inviteCodeValue}
-                                    onChange={this.handleInviteCodeValue.bind(this)}
-                                    />
-                                */}
                                     <FormItem {...formItemLayout} label="邀请码" >
                                         <Input  {...nameProps} placeholder="请输入邀请码"/>
                                     </FormItem>
@@ -286,27 +269,7 @@ class Home extends React.Component {
                         null
                     }
 
-                </Modal> {
-                /*
-                                <div className="fn-pa-20">
-                                    首页
-
-                                    <p>
-                                        <Link to="/accountManagement/home">账户管理首页</Link>
-                                    </p>
-                                    <p>
-                                        <Link to="/accountManagement/basicInformation">账户管理基本信息</Link>
-                                    </p>
-                                    <p>
-                                        <Link to="/accountManagement/resetPassword/step1">账户管理修改密码</Link>
-                                    </p>
-                                    <p>
-                                        <Link to="/accountManagement/resetTradingPassword/step1">账户管理修改交易密码</Link>
-                                    </p>
-                                </div>
-                                */
-            }
-
+                </Modal>
             <div className="fn-ptb-20 ">
                     <div className="ant-card-head" style={{
                         padding: 0
@@ -319,30 +282,30 @@ class Home extends React.Component {
                         </h3>
                     </div>
 
-            < div className = "alert alert-warning fn-mt-10" > { /*@:data {string} userType 用户类型(1:个人,2:企业)*/ } {
-                this.templateUserTypeManagement(this.state.data.userType)
-            } {
-                this.state.data.lastLoginTime.length > 0 ?
-                    <span>
-                                <span className="fn-plr-10">|</span>
-                                上次登录时间：
-                                {this.state.data.lastLoginTime}
-                            </span> :
-                    null
-            } < /div> < /div>
-
-            < div >
-            < div className = "ant-card-head fn-mb-20"
-            style = {
-                {
-                    padding: 0
+                <div className = "alert alert-warning fn-mt-10" > { /*@:data {string} userType 用户类型(1:个人,2:企业)*/ }
+                    {this.templateUserTypeManagement(this.state.data.userType)}
+                    {this.state.data.lastLoginTime&&this.state.data.lastLoginTime.length > 0 ?
+                        <span>
+                                    <span className="fn-plr-10">|</span>
+                                    上次登录时间：
+                                    {this.state.data.lastLoginTime}
+                                </span> :
+                        null
                 }
-            } >
-            <h3 className="ant-card-head-title">
-                            我的业务
-                        </h3> < /div>
+                </div>
+            </div>
 
-            < Row >
+            <div>
+            <div className = "ant-card-head fn-mb-20"
+                style = {{
+                        padding: 0
+                    }} >
+                    <h3 className="ant-card-head-title">
+                        我的业务
+                    </h3>
+            </div>
+
+            <Row>
 
             {
                 getUserServiceList && getUserServiceList.map((item, index) => {
@@ -362,9 +325,10 @@ class Home extends React.Component {
                             </Col>
                         </a>
 
-            < /Row>
+            </Row>
 
-            < /div> < /div>
+            </div>
+        </div>
         );
     }
 }

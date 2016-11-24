@@ -65,16 +65,25 @@ class ResetPassword extends React.Component {
                     //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
                 this.props.history.push("/accountManagement/resetPassword/step2")
             }, (res) => {
-                if(res.code='400'){
-                    this.props.history.push('/accountManagement/basicInformation');
+                if(res.fieldName){
+                    this.props.form.setFields({
+                        [res.fieldName]:{
+                            "value":this.props.form.getFieldValue(res.fieldName),
+                            "errors":[new Error(res.message)]
+                        }
+                    });
                 }
             });
         });
     }
+    //不让复制
+    noop(event) {
+      return event.preventDefault();
+    }
 
     checkPass(rule, value, callback) {
         if (value) {
-            this.props.form.validateFields(['confirmPassword'], {
+            this.props.form.validateFields(['conNewLoginPwd'], {
                 force: true
             });
         }
@@ -82,7 +91,7 @@ class ResetPassword extends React.Component {
     }
 
     checkConfirmPass(rule, value, callback) {
-        if (value && value !== this.props.form.getFieldValue('password')) {
+        if (value && value !== this.props.form.getFieldValue('newLoginPwd')) {
             callback('两次输入密码不一致！');
         } else {
             callback();
@@ -102,7 +111,7 @@ class ResetPassword extends React.Component {
         const {
             getFieldProps
         } = this.props.form; //用于和表单进行双向绑定
-        const oldLoginPwd = getFieldProps('oldPassword', { //原登录密码
+        const oldLoginPwd = getFieldProps('oldLoginPwd', { //原登录密码
             rules: [{
                 required: true,
                 whitespace: true,
@@ -117,7 +126,7 @@ class ResetPassword extends React.Component {
                 console.log('原密码：', e.target.value);
             }
         });
-        const newLoginPwd = getFieldProps('password', { //新登录密码
+        const newLoginPwd = getFieldProps('newLoginPwd', { //新登录密码
             rules: [{
                     required: true,
                     min: 8,
@@ -135,7 +144,7 @@ class ResetPassword extends React.Component {
                 console.log('新登录密码：', e.target.value);
             }
         });
-        const conNewLoginPwd = getFieldProps('confirmPassword', { //确认新登录密码
+        const conNewLoginPwd = getFieldProps('conNewLoginPwd', { //确认新登录密码
             rules: [{
                 required: true,
                 message: '请再次输入密码'
@@ -160,18 +169,29 @@ class ResetPassword extends React.Component {
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder=""
+                                   onPaste={this.noop.bind(this)}
+                                   onCopy={this.noop.bind(this)}
+                                   onCut={this.noop.bind(this)}
                                 {...oldLoginPwd}/>
                         </Form.Item>
                         <Form.Item {...props} label="新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+
+                                   onPaste={this.noop.bind(this)}
+                                   onCopy={this.noop.bind(this)}
+                                   onCut={this.noop.bind(this)}
                                 {...newLoginPwd}/>
                         </Form.Item>
                         <Form.Item {...props} label="确认新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
                                    placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+
+                                   onPaste={this.noop.bind(this)}
+                                   onCopy={this.noop.bind(this)}
+                                   onCut={this.noop.bind(this)}
                                 {...conNewLoginPwd} />
                         </Form.Item>
                         <Form.Item wrapperCol={{span: 12, offset: 8}}>

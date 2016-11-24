@@ -57,6 +57,10 @@ class Steps2 extends React.Component {
             this.props.history.push("/accountManagement")
         }
     }
+    //不让复制
+    noop(event) {
+      return event.preventDefault();
+    }
     handleSubmit() {
         console.log(this)
         this.props.form.validateFields((errors, values) => {
@@ -77,10 +81,6 @@ class Steps2 extends React.Component {
                     //window.location.href="/#/accountManagement/resetTradingPassword/step3?_k=aam5lv"
                     //权限控制，跳转乱动枪毙
                 this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
-            }, (res) => {
-                if(res.code='400'){
-                    this.props.history.push('/accountManagement/basicInformation');
-                }
             });
         });
     }
@@ -225,6 +225,7 @@ class Steps2 extends React.Component {
             }
         });
 
+
         return (
             <div>
                 {/*步骤*/}
@@ -232,7 +233,15 @@ class Steps2 extends React.Component {
                 <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem {...formItemLayout} label="设置交易密码" hasFeedback>
-                            <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"  {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
+                            <Input
+                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                {...passProps}
+                                type="password"
+                                onPaste={this.noop.bind(this)}
+                                onCopy={this.noop.bind(this)}
+                                onCut={this.noop.bind(this)}
+                                autoComplete="off"
+                                id="pass"/>
                             {/*this.state.passBarShow
                                 ? this.renderPassStrengthBar('pass')
                                 : null*/}
@@ -240,7 +249,15 @@ class Steps2 extends React.Component {
 
 
                         <FormItem {...formItemLayout} label="确认交易密码" hasFeedback>
-                            <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合" {...rePassProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="rePass"/>
+                            <Input
+                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                {...rePassProps}
+                                type="password"
+                                onPaste={this.noop.bind(this)}
+                                onCopy={this.noop.bind(this)}
+                                onCut={this.noop.bind(this)}
+                                autoComplete="off"
+                                id="rePass"/>
                             {/*this.state.rePassBarShow
                                 ? this.renderPassStrengthBar('rePass')
                                 : null*/}
