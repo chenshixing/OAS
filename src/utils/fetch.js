@@ -114,6 +114,9 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                     }
                 })
                 .catch(err=> {
+                    // 隐藏loading图标
+                    showLoading && State.hideLoading && State.hideLoading();
+                    
                     if(errCallback){
                         return errCallback();
                     }
