@@ -34,25 +34,30 @@ class Reg extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((errors, values) => {
+
+      console.log(errors,values);
+
       if(!errors){
         var data=values;
         data.userType=1;
         data.protocolId=this.state.protocolData.id;
         console.log('Submit!!!',data);
+
         fetch('/register/post.do',{body:data}).then((res)=>{
           console.log('注册成功');
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
-          if(res.fieldName){
-            this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
-          }
+            if(res.fieldName){
+              this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+            }
         });
+
       }
 
     });
   }
-  
+
   checkPassWord(rule, value, callback) {
     const { validateFields } = this.props.form;
     if (value) {
@@ -214,7 +219,7 @@ class Reg extends React.Component {
         rules: [
           {required: true, message: '密码不能为空'},
           {validator: this.checkPassWord.bind(this)},
-          ruleType('password1'),
+          ruleType('password'),
           {min: 8, max: 20, message: '请输入8-20位字符'}
         ]
       },

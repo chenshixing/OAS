@@ -64,11 +64,12 @@ class PersonalValidate extends React.Component {
                 pathname: '/personalValidate/step2'
             });
         },(res)=>{
-            if(res.code=='002'){
-                this.props.form.setFields({"IdCard":{"errors":[new Error(res.message)]}});
+        
+            if(res.fieldName){
+                this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
             }
             this.setState({ loading: false, visible: false });
-            // message.error(`(${res.code})${res.message}`);
+            
         });
     }
 

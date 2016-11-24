@@ -62,6 +62,16 @@ class Step3 extends React.Component {
                         }
                     });
                 }, (res) => {
+
+                    if(res.fieldName){
+                        if(res.fieldName=='pwd'){
+                            this.props.form.setFields({'password':{"errors":[new Error(res.message)]}});
+                        }else if(res.fieldName=='conPwd'){
+                            this.props.form.setFields({'rePassword':{"errors":[new Error(res.message)]}});
+                        }
+                        
+                    }
+
                     if(res.code='400'){
                         fetch('/common/getLoginCheckStatus.do');
                     }

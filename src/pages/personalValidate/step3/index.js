@@ -63,18 +63,13 @@ class PersonalValidate extends React.Component {
                         pathname: 'personalValidate/step4'
                     });
                 }, (res) => {
-                    // message.error(`提交失败！${res.message}`,5);
-                    // switch(res.code){
-                    //     case '004':
-                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    //     case '005':
-                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    //     case '301':
-                    //         this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    // }
+                    if(res.fieldName){
+                        if(res.fieldName=='pfxPassword'){
+                            this.props.form.setFields({'password':{"errors":[new Error(res.message)]}});
+                        }else{
+                            this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                        }
+                    }
                 });
             }
 

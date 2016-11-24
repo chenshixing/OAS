@@ -45,23 +45,13 @@ class Reg extends React.Component {
           }).then((res)=>{
             console.log('res:',res);
             window.location.href='#/userRegister/result';
+          },(res)=>{
+            if(res.fieldName){
+              this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+            }
           })
       }else{
         console.log('请填完必填信息再提交...');
-        // switch(res.code){
-        //   case '004':
-        //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-        //     break;
-        //   case '005':
-        //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-        //     break;
-        //   case '301':
-        //     this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
-        //     break;
-        //   case '302':
-        //     this.props.form.setFields({"companyName":{"errors":[new Error(res.message)]}});
-        //     break;
-        // }
       }
 
     });

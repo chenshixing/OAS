@@ -53,21 +53,9 @@ class CompanyValidate extends React.Component {
                         pathname:nextStep
                      });
                  },(res)=>{
-                    //  message.error(`(${res.code})${res.message}`,3);
-                    // switch(res.code){
-                    //     case '302':
-                    //         this.props.form.setFields({"companyName":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    //     case '304':
-                    //         this.props.form.setFields({"realName":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    //     case '300':
-                    //         this.props.form.setFields({"userNo":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    //     case '301':
-                    //         this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
-                    //         break;
-                    // }
+                    if(res.fieldName){
+                        this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                    }
 
                     if(res.code='400'){
                         fetch('/common/getLoginCheckStatus.do');
