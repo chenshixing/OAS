@@ -94,19 +94,23 @@ class TipsRow extends Component {
                 let dataType = Map.identityMap.type[item.connectorType];
                 user[dataType + "Data"] = userData;
             });
+            if (user.agentData) {
+                user.agentData = Object.assign({}, user.agentData, checkStatus.EnOperator);
+            }
+            user.corporationData = Object.assign({}, user.corporationData, checkStatus.EnLegalPerson);
 
             //  企业对公账户认证数据处理
             let accountItem = res[1].data[0];
-            let accountData = {
+            let accountData = Object.assign({}, {
                 accountValidateType: Map.accountMap.type[accountItem.accountValidateType],
                 passed: Map.accountMap.passType[accountItem.checkStatus]
-            }
+            }, checkStatus.EnAccount);
 
             //  企业资料补充
-            let informationData = {
+            let informationData = Object.assign({}, {
                 lackFiles: res[2].data.lackFiles,
                 passed: Map.supplementMap.passType[res[2].data.status]
-            }
+            }, checkStatus.EnPaper);
 
             data.tipsRow = <Row className="tipsRow">
                                 <InfoRow type="basic" pageType={ this.state.pageType } data={ this.state.data.basicData } />
