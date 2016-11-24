@@ -511,7 +511,7 @@ export default class basicBodyEditor extends React.Component {
                         </div>
                         <div className="basic-col-3">
                             默认账户：
-                            <span>{getCheckedBank.bankName} | {getCheckedBank.cardNo}。</span>
+                            <span>{getCheckedBank.bankName} | {getCheckedBank.cardNo&&getCheckedBank.cardNo.replace(/^(.{4}).*(.{4})$/,"$1***********$2")}。</span>
                         </div>
                     </div>
                 </div>

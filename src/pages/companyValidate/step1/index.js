@@ -210,6 +210,7 @@ class CompanyValidate extends React.Component {
     }
 
     submit(submitData) {
+        let me = this;
         console.log(submitData);
         fetch('/companyVerification/saveBasicInfo.do', {
             body: submitData
@@ -218,6 +219,16 @@ class CompanyValidate extends React.Component {
                 //  提交成功TODO
                 console.log('next finish');
                 this.props.history.push('/companyValidate/step2');
+            }
+        }, (res) => {
+            //  校验不通过TODO
+            if (res.fieldName) {
+                me.props.form.setFields({
+                    [res.fieldName]: {
+                        value: me.props.form.getFieldValue(res.fieldName),
+                        errors: [new Error(res.message)]
+                    }
+                });
             }
         });
     }

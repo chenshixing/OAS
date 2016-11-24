@@ -57,6 +57,10 @@ class Steps2 extends React.Component {
             this.props.history.push("/accountManagement")
         }
     }
+    //不让复制
+    noop(event) {
+      return event.preventDefault();
+    }
     handleSubmit() {
         console.log(this)
         this.props.form.validateFields((errors, values) => {
@@ -78,8 +82,13 @@ class Steps2 extends React.Component {
                     //权限控制，跳转乱动枪毙
                 this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
             }, (res) => {
-                if(res.code='400'){
-                    this.props.history.push('/accountManagement/basicInformation');
+                if(res.fieldName){
+                    this.props.form.setFields({
+                        [res.fieldName]:{
+                            "value":this.props.form.getFieldValue(res.fieldName),
+                            "errors":[new Error(res.message)]
+                        }
+                    });
                 }
             });
         });
@@ -96,7 +105,7 @@ class Steps2 extends React.Component {
             } else {
                 strength = 'H';
             }
-            if (type === 'pass') {
+            if (type === 'pwd') {
                 this.setState({
                     passBarShow: true,
                     passStrength: strength
@@ -108,7 +117,7 @@ class Steps2 extends React.Component {
                 });
             }
         } else {
-            if (type === 'pass') {
+            if (type === 'pwd') {
                 this.setState({
                     passBarShow: false
                 });
@@ -122,10 +131,10 @@ class Steps2 extends React.Component {
 
     checkPass(rule, value, callback) {
         const form = this.props.form;
-        this.getPassStrenth(value, 'pass');
+        this.getPassStrenth(value, 'pwd');
 
-        if (form.getFieldValue('pass')) {
-            form.validateFields(['rePass'], {
+        if (form.getFieldValue('pwd')) {
+            form.validateFields(['conPwd'], {
                 force: true
             });
         }
@@ -136,9 +145,9 @@ class Steps2 extends React.Component {
 
     checkPass2(rule, value, callback) {
         const form = this.props.form;
-        this.getPassStrenth(value, 'rePass');
+        this.getPassStrenth(value, 'conPwd');
 
-        if (value && value !== form.getFieldValue('pass')) {
+        if (value && value !== form.getFieldValue('pwd')) {
             callback('两次输入密码不一致！');
         } else {
             callback();
@@ -146,7 +155,7 @@ class Steps2 extends React.Component {
     }
 
     renderPassStrengthBar(type) {
-        const strength = type === 'pass' ? this.state.passStrength : this.state.rePassStrength;
+        const strength = type === 'pwd' ? this.state.passStrength : this.state.rePassStrength;
         const classSet = classNames({
             'ant-pwd-strength': true,
             'ant-pwd-strength-low': strength === 'L',
@@ -186,7 +195,7 @@ class Steps2 extends React.Component {
                 span: 12
             },
         };
-        const passProps = getFieldProps('pass', {
+        const passProps = getFieldProps('pwd', {
             rules: [{
                 required: true,
                 whitespace: true,
@@ -205,7 +214,7 @@ class Steps2 extends React.Component {
                 })
             }
         });
-        const rePassProps = getFieldProps('rePass', {
+        const rePassProps = getFieldProps('conPwd', {
             rules: [{
                 required: true,
                 whitespace: true,
@@ -225,6 +234,7 @@ class Steps2 extends React.Component {
             }
         });
 
+
         return (
             <div>
                 {/*步骤*/}
@@ -232,17 +242,33 @@ class Steps2 extends React.Component {
                 <Frame title="重置交易密码" small=" 用于对融资申请、修改账号信息等操作，请勿与登录密码一致。" className="">
                     <Form horizontal  className="fn-mt-30">
                         <FormItem {...formItemLayout} label="设置交易密码" hasFeedback>
-                            <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"  {...passProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="pass"/>
+                            <Input
+                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                {...passProps}
+                                type="password"
+                                onPaste={this.noop.bind(this)}
+                                onCopy={this.noop.bind(this)}
+                                onCut={this.noop.bind(this)}
+                                autoComplete="off"
+                                id="pwd"/>
                             {/*this.state.passBarShow
-                                ? this.renderPassStrengthBar('pass')
+                                ? this.renderPassStrengthBar('pwd')
                                 : null*/}
                         </FormItem>
 
 
                         <FormItem {...formItemLayout} label="确认交易密码" hasFeedback>
-                            <Input placeholder="8-20位英文字母（区分大小写）、数字或符号的组合" {...rePassProps} type="password" onContextMenu={noop} onPaste={noop} onCopy={noop} onCut={noop} autoComplete="off" id="rePass"/>
+                            <Input
+                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                {...rePassProps}
+                                type="password"
+                                onPaste={this.noop.bind(this)}
+                                onCopy={this.noop.bind(this)}
+                                onCut={this.noop.bind(this)}
+                                autoComplete="off"
+                                id="conPwd"/>
                             {/*this.state.rePassBarShow
-                                ? this.renderPassStrengthBar('rePass')
+                                ? this.renderPassStrengthBar('conPwd')
                                 : null*/}
                         </FormItem>
 

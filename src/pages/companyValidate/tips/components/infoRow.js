@@ -133,14 +133,16 @@ class InfoRow extends Component {
     }
 
     basic() {
-        if (this.state.pageType === 'check') {
+        let data = this.state.data;
+        if (data.systemStatus == 1 && data.bankStatus == 0) {
+            return (
+                <Col span={12}>
+                    <Link to='/companyValidate/editBasic'>修改资料</Link>
+                </Col>
+            );
+        } else {
             return false;
         }
-        return (
-            <Col span={12}>
-				<Link to='/companyValidate/editBasic'>修改资料</Link>
-			</Col>
-        );
     }
 
     _realName() {
@@ -155,8 +157,11 @@ class InfoRow extends Component {
             smsBtn = <Sms data={ smsData }>重新发送验证短信</Sms>;
         }
 
-        /*审核不通过可以修改认证资料*/
-        let editBtn = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname'>修改资料</Link> : "";
+        /*根据需求是否可以修改认证资料*/
+        let editBtn = "";
+        if ((data.systemStatus == -1 && data.bankStatus == 2) || (data.systemStatus == -1 && data.bankStatus == 0) || (data.systemStatus == 1 && data.bankStatus == 0)) {
+            editBtn = <Link to='/companyValidate/editRealname'>修改资料</Link>
+        }
         return (
             <Col span={12}>
 				<Row>
@@ -179,55 +184,64 @@ class InfoRow extends Component {
 
     information() {
         let informationData = this.state.data;
-        let information = this.state.information;
-        return (
-            <Col span={12}>
-                <Row>
-                    <Col span={24}>
-                        你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)} size="small">手机APP提交</Button> 。
-                    </Col>
-                </Row>
-                { !informationData.lackFiles.length ? "" :
-                    <div>
-                        <Row>
-                            <Col span={24}>以下资料未上传：</Col>
-                        </Row>
-                        <Row>
-                            {
-                                informationData.lackFiles.map( (item,index) => {
-                                   return (
-                                        <Col span={information.map[item.fileKey].span} key={index}><span className="fn-mr-5">&bull;</span>{information.map[item.fileKey].name}</Col>
-                                   );
-                                })
-                            }
-                        </Row>
-                    </div>
-                }
-				<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
-			</Col>
-        );
+        if (!informationData.passed || (data.systemStatus == 1 && data.bankStatus == 0)) {
+            let information = this.state.information;
+            return (
+                <Col span={12}>
+                    <Row>
+                        <Col span={24}>
+                            你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)} size="small">手机APP提交</Button> 。
+                        </Col>
+                    </Row>
+                    { !informationData.lackFiles.length ? "" :
+                        <div>
+                            <Row>
+                                <Col span={24}>以下资料未上传：</Col>
+                            </Row>
+                            <Row>
+                                {
+                                    informationData.lackFiles.map( (item,index) => {
+                                       return (
+                                            <Col span={information.map[item.fileKey].span} key={index}><span className="fn-mr-5">&bull;</span>{information.map[item.fileKey].name}</Col>
+                                       );
+                                    })
+                                }
+                            </Row>
+                        </div>
+                    }
+                    <SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
+                </Col>
+            );
+        } else {
+            return false;
+        }
     }
 
     account() {
         let accountData = this.state.data;
-        if (accountData.passed) {
-            return false;
-        }
         let accountValidateType = accountData.accountValidateType;
         // console.log(accountValidateType);
         if (accountValidateType === "bond") {
-            return (
-                <Col span={12} className="tableCol">
-                    <CountDown />
-                    <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
-                    <Table dataSource={offlinePayTableInfo.dataSource} columns={offlinePayTableInfo.columns} pagination={false}/>
-                    <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
-                </Col>
-            )
+            if ((accountData.systemStatus == -1 && accountData.bankStatus == -1) || (accountData.systemStatus == 0 && accountData.bankStatus == -1)) {
+                return (
+                    <Col span={12} className="tableCol">
+                        <CountDown />
+                        <p>如您确定已向下面的指定账户支付 <strong>0.10</strong> 元，请联系客服。</p>
+                        <Table dataSource={offlinePayTableInfo.dataSource} columns={offlinePayTableInfo.columns} pagination={false}/>
+                        <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
+                    </Col>
+                )
+            } else {
+                return false;
+            }
         } else if (accountValidateType === "information") {
-            return (
-                <Col span={12} className="tableCol"><strong className="fs-14">需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</strong></Col>
-            )
+            if (accountData.systemStatus == 1 && accountData.bankStatus == 0) {
+                return (
+                    <Col span={12} className="tableCol"><strong className="fs-14">需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</strong></Col>
+                )
+            } else {
+                return false;
+            }
         }
     }
 
@@ -248,7 +262,7 @@ class InfoRow extends Component {
         let itemData = this.state[this.state.type];
         //  是否有操作按钮
         let hasOperation = true;
-        if (this.state.pageType === "supplement" || data.passed) {
+        if (this.state.pageType === "supplement") {
             hasOperation = false;
         }
         return (

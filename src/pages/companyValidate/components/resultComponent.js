@@ -156,10 +156,6 @@ export default class ResultComponent extends React.Component {
     });
   }
 
-  goBack() {
-    this.props.history.goBack();
-  }
-
   finish() {
     let me = this;
     fetch('/common/getLoginCheckStatus.do').then(res => {
@@ -195,7 +191,7 @@ export default class ResultComponent extends React.Component {
   }
 
   render() {
-    let linkBtn = this.props.pageType == "result" ? <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">稍后认证，返回</Button> : "";
+    let linkBtn = this.props.pageType == "result" ? <Button type="ghost" onClick={ this.goToTips.bind(this) } className="fn-ml-20">稍后认证，返回</Button> : "";
     return (
       <div className="form-frame">
                 <Row className="fn-mt-30">

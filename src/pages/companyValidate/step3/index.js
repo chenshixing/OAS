@@ -93,7 +93,8 @@ class CompanyValidate extends Component {
     }
 
     submit(submitData) {
-        let protocolData = this.state.protocolData;
+        let me = this;
+        let protocolData = me.state.protocolData;
         // console.log(submitData);
         this.setState({
             visible: true
@@ -110,6 +111,16 @@ class CompanyValidate extends Component {
         }, true, null, this.codeErrCallback.bind(this)).then(res => {
             //  申请成功TODO
             this.props.history.push('/companyValidate/step4');
+        }, (res) => {
+            //  校验不通过TODO
+            if (res.fieldName) {
+                me.props.form.setFields({
+                    [res.fieldName]: {
+                        value: me.props.form.getFieldValue(res.fieldName),
+                        errors: [new Error(res.message)]
+                    }
+                });
+            }
         });
     }
 

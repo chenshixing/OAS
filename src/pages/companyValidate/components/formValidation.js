@@ -100,7 +100,8 @@ const rulesCommon = {
             type: 'string',
             message: '组织机构代码证不能为空'
         }, {
-            max: 50,
+            min: 9,
+            max: 15,
             message: '请输入50位以内的字符'
         }, ]
     }
@@ -113,7 +114,8 @@ const rulesMultiple = {
             type: 'string',
             message: '统一社会信用代码不能为空'
         }, {
-            max: 50,
+            min: 13,
+            max: 20,
             message: '请输入50位以内的字符'
         }, ]
     },

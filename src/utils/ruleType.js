@@ -58,7 +58,7 @@ const dataType = {
     // 手机
     "mobile": {
         // reg: /^13[0-9]{9}$|14[0-9]{9}$|15[0-9]{9}$|17[0-9]{9}$|18[0-9]{9}$/,
-        reg: /^13[0-9]{9}|147[0-9]{8}|15[0-9]{9}|17(0|7){1}[0-9]{8}|18[0-9]{9}$/,
+        reg: /^13[0-9]{9}$|147[0-9]{8}$|15[0-9]{9}$|17(0|7){1}$[0-9]{8}$|18[0-9]{9}$/,
         errMsg: '手机格式不正确'
     },
     // email
@@ -119,8 +119,8 @@ const dataType = {
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                let reg = new RegExp(/([1-9]|-)+/);
-
+                value = value.toString();
+                let reg = new RegExp(/([0-9]|-)+/);
                 if (!value.match(reg)) {
                     return false;
                 }
