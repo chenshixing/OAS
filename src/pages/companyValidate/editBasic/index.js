@@ -414,7 +414,8 @@ class CompanyValidate extends React.Component {
             if (res.fieldName) {
                 me.props.form.setFields({
                     [res.fieldName]: {
-                        "errors": [new Error(res.message)]
+                        value: me.props.form.getFieldValue(res.fieldName),
+                        errors: [new Error(res.message)]
                     }
                 });
             }
