@@ -1,8 +1,21 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
-import { Link } from 'react-router';
+import {
+    Link
+} from 'react-router';
 // antd 组件
-import { Form, Input, Button, Radio, Row, Col, Modal } from 'antd';
+import {
+    Form,
+    Input,
+    Button,
+    Radio,
+    Row,
+    Col,
+    Modal
+} from 'antd';
 
 const createForm = Form.create;
 const RadioGroup = Radio.Group;
@@ -16,7 +29,9 @@ import ComfirmContent from '../components/comfirmContent';
 import formValidation from '../components/formValidation';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 class EditRealName extends Component {
     static propTypes = {
@@ -26,11 +41,11 @@ class EditRealName extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        	display : "block",
-        	data:{
-        		writerType : '1',
-                original : {}
-        	}
+            display: "block",
+            data: {
+                writerType: '1',
+                original: {}
+            }
         }
     }
 
@@ -38,7 +53,7 @@ class EditRealName extends Component {
         this.loadData();
     }
 
-    loadData(){
+    loadData() {
         let me = this;
         let data = me.state.data;
         fetch('/companyVerification/getConnectorInfo.do').then(res => {
@@ -53,28 +68,28 @@ class EditRealName extends Component {
 
             data.writerType = companyConnectorInfoDto.writerType.toString();
             let display = "block";
-            if(data.writerType == "2"){
+            if (data.writerType == "2") {
                 //  法定代表人
                 display = "none";
             }
 
-            for(let prop in companyConnectorInfoDto.client){
+            for (let prop in companyConnectorInfoDto.client) {
                 renderData[prop] = prop == "mobile" ? companyConnectorInfoDto.client[prop].toString() : companyConnectorInfoDto.client[prop];
             }
-            for(let prop in companyConnectorInfoDto.corperator){
+            for (let prop in companyConnectorInfoDto.corperator) {
                 renderData["corporation" + me._firstUpperCase(prop)] = prop == "mobile" ? companyConnectorInfoDto.corperator[prop].toString() : companyConnectorInfoDto.corperator[prop];
             }
 
             me.setState({
-                display : display,
-                data : data
+                display: display,
+                data: data
             });
 
             me.props.form.setFieldsValue(renderData);
         });
     }
 
-    _firstUpperCase(name){
+    _firstUpperCase(name) {
         let nameArr = name.split("");
         nameArr[0] = nameArr[0].toLocaleUpperCase();
         return nameArr.join("");
@@ -83,40 +98,42 @@ class EditRealName extends Component {
     onWriterTypeChange(e) {
         console.log('radio checked', e.target.value);
         let display = e.target.value == "1" ? "block" : "none";
-        if(this.state.display == display){ return false;}
-        if(e.target.value == "2"){
+        if (this.state.display == display) {
+            return false;
+        }
+        if (e.target.value == "2") {
             this.warning();
         }
         this.setState({
-            display : display
+            display: display
         });
     }
 
     warning() {
-      Modal.warning({
-        title: '提示',
-        content: '您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。',
-      });
-    }
-
-    next(){
-        let me = this;
-        // 表单校验
-        this.props.form.validateFieldsAndScroll((errors, data) => {
-          if (errors) {
-            console.log(errors);
-            console.log(data);
-            return false;
-          }
-          console.log("passed");
-          // console.log(data);
-          // 验证通过TODO
-          let submitData = me._getSubmitData(data);
-          me.confirm(submitData);
+        Modal.warning({
+            title: '提示',
+            content: '您将以法定代表人身份作为该企业账号的全权委托代理人，日后使用该账号发起的融资申请必须由法定代表人本人操作。',
         });
     }
 
-    confirm(submitData){
+    next() {
+        let me = this;
+        // 表单校验
+        this.props.form.validateFieldsAndScroll((errors, data) => {
+            if (errors) {
+                console.log(errors);
+                console.log(data);
+                return false;
+            }
+            console.log("passed");
+            // console.log(data);
+            // 验证通过TODO
+            let submitData = me._getSubmitData(data);
+            me.confirm(submitData);
+        });
+    }
+
+    confirm(submitData) {
         let me = this;
         Modal.confirm({
             title: '信息确认',
@@ -131,63 +148,76 @@ class EditRealName extends Component {
     }
 
     //  确定窗口数据渲染
-    getConfirmContent(submitData){
+    getConfirmContent(submitData) {
         // console.log(submitData);
         let me = this;
         let companyConnectorInfoDto = submitData;
         let client = companyConnectorInfoDto.client;
         let corperator = companyConnectorInfoDto.corperator;
-        let kvp = Object.assign({},client);
-        if(submitData.writerType == 1){
+        let kvp = Object.assign({}, client);
+        if (submitData.writerType == 1) {
             //  委托代理人TODO
-            for( let prop in corperator){
+            for (let prop in corperator) {
                 kvp["corporation" + me._firstUpperCase(prop)] = corperator[prop];
             }
-        }else if(submitData.writerType == 2){
+        } else if (submitData.writerType == 2) {
             //  法定代表人TODO
-            for( let prop in kvp){
+            for (let prop in kvp) {
                 kvp["corporation" + me._firstUpperCase(prop)] = kvp[prop];
                 delete kvp[prop];
             }
         }
-        let sort = ["corporationName","corporationMobile","corporationEmail","name","mobile","email"];
+        let sort = ["corporationName", "corporationMobile", "corporationEmail", "name", "mobile", "email"];
         let map = {
-            corporationName : "法定代表人姓名",
-            corporationMobile : "法定代表人常用手机号码",
-            corporationEmail : "法定代表人联系邮箱",
-            name : "代理人姓名",
-            mobile : "代理人常用手机号码",
-            email : "代理人联系邮箱"
+            corporationName: "法定代表人姓名",
+            corporationMobile: "法定代表人常用手机号码",
+            corporationEmail: "法定代表人联系邮箱",
+            name: "代理人姓名",
+            mobile: "代理人常用手机号码",
+            email: "代理人联系邮箱"
         }
-        let data = {kvp,sort,map};
+        let data = {
+            kvp,
+            sort,
+            map
+        };
         return (
             <ComfirmContent data={data} type="realName" />
         )
     }
 
-    submit(submitData){
+    submit(submitData) {
         console.log(submitData);
         let me = this;
-        if(me._isObjectValueEqual(submitData, this.state.data.original)){
+        if (me._isObjectValueEqual(submitData, this.state.data.original)) {
             //  没有修改任何信息
             me.props.history.push('/companyValidate/tips/check');
             return false;
         }
-        fetch('/companyVerification/modifyConnectorInfo.do',{
-            body : submitData,
+        fetch('/companyVerification/modifyConnectorInfo.do', {
+            body: submitData,
         }).then(res => {
             //  修改完成TODO
-            if(res.data == 201 || res.data == 202){
+            if (res.data == 201 || res.data == 202) {
                 // 201或202-代表有修改跳转至提交结果页
                 me.props.history.push('/companyValidate/result');
-            }else if(!res.data){
+            } else if (!res.data) {
                 // 空则跳转至审核不通过提示页(弹窗确认)
                 me.tipsShow();
+            }
+        }, (res) => {
+            //  校验不通过TODO
+            if (res.fieldName) {
+                me.props.form.setFields({
+                    [res.fieldName]: {
+                        "errors": [new Error(res.message)]
+                    }
+                });
             }
         });
     }
 
-    tipsShow(){
+    tipsShow() {
         let me = this;
         Modal.success({
             title: '提示',
@@ -198,23 +228,23 @@ class EditRealName extends Component {
         });
     }
 
-    _getSubmitData(data){
+    _getSubmitData(data) {
         let submitData = data;
         // 填写人类型
         let client = client = {
-            name : submitData.name,
-            mobile : submitData.mobile,
-            email : submitData.email
+            name: submitData.name,
+            mobile: submitData.mobile,
+            email: submitData.email
         };
         let corperator = {
-            name : submitData.corporationName,
-            mobile : submitData.corporationMobile.toString(),
-            email : submitData.corporationEmail
+            name: submitData.corporationName,
+            mobile: submitData.corporationMobile.toString(),
+            email: submitData.corporationEmail
         };
         let companyConnectorInfoDto = {
-            writerType : submitData.writerType,
-            client : client,
-            corperator : corperator
+            writerType: submitData.writerType,
+            client: client,
+            corperator: corperator
         }
 
         delete submitData.writerType;
@@ -245,7 +275,7 @@ class EditRealName extends Component {
         }
 
         let _isObject = (obj) => {
-           return Object.prototype.toString.call(obj).match(/^\[object\s(.*)\]$/)[1].toLocaleLowerCase() == "object";
+            return Object.prototype.toString.call(obj).match(/^\[object\s(.*)\]$/)[1].toLocaleLowerCase() == "object";
         }
 
         for (var i = 0; i < aProps.length; i++) {
@@ -253,11 +283,11 @@ class EditRealName extends Component {
 
             // If values of same property are not equal,
             // objects are not equivalent
-            if(_isObject(a[propName])){
-                if (!me._isObjectValueEqual(a[propName],b[propName])) {
+            if (_isObject(a[propName])) {
+                if (!me._isObjectValueEqual(a[propName], b[propName])) {
                     return false;
                 }
-            }else{
+            } else {
                 if (a[propName] !== b[propName]) {
                     return false;
                 }
@@ -270,7 +300,7 @@ class EditRealName extends Component {
         return true;
     }
 
-    goBack(){
+    goBack() {
         this.props.history.goBack();
     }
 
@@ -280,14 +310,20 @@ class EditRealName extends Component {
         const rulesFill = this.state.data.writerType == '1' ? formValidation.rulesAgent : {};
 
         // 根据不同类型选择验证机制
-        const rules = Object.assign({},formValidation.rulesBase,rulesFill);
+        const rules = Object.assign({}, formValidation.rulesBase, rulesFill);
 
-    	const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 12 },
+        const formItemLayout = {
+            labelCol: {
+                span: 8
+            },
+            wrapperCol: {
+                span: 12
+            },
         };
 
-        const { getFieldProps } = this.props.form;
+        const {
+            getFieldProps
+        } = this.props.form;
 
         return (
             <Frame title="填写人信息" small="（请务必与授权书的资料保持一致。）">

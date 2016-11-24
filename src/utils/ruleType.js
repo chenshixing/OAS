@@ -120,8 +120,7 @@ const dataType = {
             // 自定义 test 方法
             test: function(value) {
                 value = value.toString();
-                let reg = new RegExp(/([1-9]|-)+/);
-                // console.log(value.match(reg));
+                let reg = new RegExp(/([0-9]|-)+/);
                 if (!value.match(reg)) {
                     return false;
                 }

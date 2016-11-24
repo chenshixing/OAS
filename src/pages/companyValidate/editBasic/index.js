@@ -409,6 +409,15 @@ class CompanyValidate extends React.Component {
                     me.props.history.push('/companyValidate/tips/check');
                 }
             }
+        }, (res) => {
+            //  校验不通过TODO
+            if (res.fieldName) {
+                me.props.form.setFields({
+                    [res.fieldName]: {
+                        "errors": [new Error(res.message)]
+                    }
+                });
+            }
         });
     }
 
