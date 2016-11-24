@@ -21,7 +21,8 @@ import Map from 'PAGES/companyValidate/components/map';
 
 //  引入fetch
 import {
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 
 //  全局状态
@@ -70,10 +71,17 @@ class TipsRow extends Component {
         let p2 = fetch('/user/getCompanyAccountCheckStatus.do');
         //  企业资料补充
         let p3 = fetch('/paper/getCompanyPaperInfoStatus.do');
+        //  获取用户审核状态
+        let p4 = fetch('/user/getUserCheckStatus.do');
 
-        Promise.all([p1, p2, p3]).then(res => {
-            // console.log(res);
+        Promise.all([p1, p2, p3, p4]).then(res => {
+            console.log(res);
+            let checkStatus = helper.convertUserCheckStatus(res[3].data.checkItems);
+            console.log(checkStatus);
 
+            //  企业基本信息
+            data.basicData = Object.assign({}, data.basicData, checkStatus.EnBasicInfo);
+            data.basicData.passed = (data.basicData.bankStatus == -1 && data.basicData.systemStatus == -1) ? false : true;
             //  身份实名认证数据处理
             let user = {};
             res[0].data.map((item, index) => {

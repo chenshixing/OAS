@@ -248,7 +248,7 @@ class InfoRow extends Component {
         let itemData = this.state[this.state.type];
         //  是否有操作按钮
         let hasOperation = true;
-        if (this.state.pageType === "supplement" || data.passed) {
+        if (this.state.pageType === "supplement") {
             hasOperation = false;
         }
         return (
