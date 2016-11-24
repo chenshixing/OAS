@@ -13,8 +13,9 @@ const SUB = React.createClass({
   },
 
   routerWillLeave(nextLocation) {
-    if (!this.state.isSaved)
-      return '确认离开？';
+    if (!this.state.isSaved){
+      return this.props.history.push(`test`);
+    }
   },
 
   render() {
