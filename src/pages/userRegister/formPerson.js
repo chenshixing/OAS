@@ -49,7 +49,11 @@ class Reg extends React.Component {
         },(res)=>{
           console.log('注册失败');
             if(res.fieldName){
-              this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+              const {form} = this.props;
+              form.setFields({[res.fieldName]:{
+                "errors":[new Error(res.message)],
+                'value':form.getFieldValue(res.fieldName)
+              }});
             }
         });
 
