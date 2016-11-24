@@ -11,7 +11,7 @@ const TEST = React.createClass({
   mixins: [ RouteContext ],
 
   render() {
-    return <Sub />
+    return <Sub history={this.props.history} />
   }
 
 });
