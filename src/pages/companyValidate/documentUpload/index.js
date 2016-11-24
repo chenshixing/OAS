@@ -240,8 +240,8 @@ class DocumentUpload extends Component {
         return data;
     }
 
-    goBack() {
-        this.props.history.goBack();
+    noEdit() {
+        this.props.history.push('/companyValidate/tips/check');
     }
 
     normFile(e) {
@@ -435,7 +435,7 @@ class DocumentUpload extends Component {
                     <Row style={{ marginTop: 30 }}>
                         <Col span="12" offset="8">
                             <Button type="primary" onClick={ this.submit.bind(this) }>提交</Button>
-                            <Button type="ghost" onClick={ this.goBack.bind(this) } className="fn-ml-20">暂不修改</Button>
+                            <Button type="ghost" onClick={ this.noEdit.bind(this) } className="fn-ml-20">暂不修改</Button>
                         </Col>
                     </Row>
 
