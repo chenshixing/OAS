@@ -101,7 +101,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                             return;
                         }
 
-                        if(res.message){
+                        if(res.message && !res.fieldName){
                              message.error(`错误提示：(${res.code})`+res.message,3);
                         }
 

@@ -58,14 +58,11 @@ class DocumentUpload extends Component {
 
     loadData() {
         let me = this;
-        //  证件查询
-        let p1 = fetch('/paper/searchCompany.do');
-        //  获取企业信息
-        let p2 = fetch('/companyVerification/getCompanyInfo.do');
 
-        Promise.all([p1, p2]).then(res => {
+        //  证件查询
+        fetch('/paper/searchCompany.do').then(res => {
             let fileList = me.state.fileList;
-            let fileData = res[0].data;
+            let fileData = res.data;
             for (let prop in fileData) {
                 fileData[prop].map((item, index) => {
                     let uid = prop + '_' + new Date() / 1 + '_' + index;
@@ -81,11 +78,9 @@ class DocumentUpload extends Component {
             }
 
             me.setState({
-                isCommon: res[1].data.companyPaperType == 2,
+                isCommon: !res.data['socialCredit'], //  通过是否拥有社会信用证来判断
                 fileList: fileList
             });
-        }).catch(err => {
-            throw err;
         });
     }
 
@@ -130,7 +125,7 @@ class DocumentUpload extends Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/check?reloadStatus=1');
+                me.props.history.push('/companyValidate/tips/check');
             },
         });
     }

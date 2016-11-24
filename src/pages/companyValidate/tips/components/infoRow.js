@@ -1,12 +1,25 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
 
-import {Link} from 'react-router';
+import {
+    Link
+} from 'react-router';
 
 // antd 组件
-import { Row, Col, Button, Table} from 'antd';
+import {
+    Row,
+    Col,
+    Button,
+    Table
+} from 'antd';
 
 //	业务组件
-import { IdentityModal, SupplementModal } from 'BCOM/Modal/index';
+import {
+    IdentityModal,
+    SupplementModal
+} from 'BCOM/Modal/index';
 
 import CountDown from './countDown';
 import Sms from 'BCOM/Sms/index';
@@ -24,66 +37,66 @@ class InfoRow extends Component {
 
     constructor(props) {
         super(props);
-        this.state = Object.assign({},this.props,{
-        	identityVisible : false,	//	用于实名认证弹窗
-        	supplementVisible : false,	//	用于手机APP提交弹窗
-        	basic : {
-        		name : '企业基本资料',
-        		status : {
-        			0 : '未提交',
-        			1 : '已提交'
-        		},
-        	},
-        	corporation : {
-        		name : '法定代表人认证',
-        		status : {
-        			0 : '待认证',
-        			1 : '已认证'
-        		},
-        	},
-        	agent : {
-        		name : '委托代理人认证',
-        		status : {
-        			0 : '待认证',
-        			1 : '已认证'
-        		},
-        	},
-        	information : {
-        		name : '证件资料上传',
-        		status : {
-        			0 : '待提交',
-        			1 : '已提交'
-        		},
-                map : {
-                    Registration : {
-                        name : '营业执照',
-                        span : 4,
+        this.state = Object.assign({}, this.props, {
+            identityVisible: false, //	用于实名认证弹窗
+            supplementVisible: false, //	用于手机APP提交弹窗
+            basic: {
+                name: '企业基本资料',
+                status: {
+                    0: '未提交',
+                    1: '已提交'
+                },
+            },
+            corporation: {
+                name: '法定代表人认证',
+                status: {
+                    0: '待认证',
+                    1: '已认证'
+                },
+            },
+            agent: {
+                name: '委托代理人认证',
+                status: {
+                    0: '待认证',
+                    1: '已认证'
+                },
+            },
+            information: {
+                name: '证件资料上传',
+                status: {
+                    0: '待提交',
+                    1: '已提交'
+                },
+                map: {
+                    Registration: {
+                        name: '营业执照',
+                        span: 4,
                     },
-                    OrgInsCode : {
-                        name : '组织机构代码证',
-                        span : 5,
+                    OrgInsCode: {
+                        name: '组织机构代码证',
+                        span: 5,
                     },
-                    SocialCredit : {
-                        name : '社会信用证代码证',
-                        span : 9,
+                    SocialCredit: {
+                        name: '社会信用证代码证',
+                        span: 9,
                     },
-                    IdentityProof : {
-                        name : '企业法人身份证明书',
-                        span : 7,
+                    IdentityProof: {
+                        name: '企业法人身份证明书',
+                        span: 7,
                     },
-                    DeletegatePromiseLetter : {
-                        name : '承诺函及授权委托书',
-                        span : 8,
+                    DeletegatePromiseLetter: {
+                        name: '承诺函及授权委托书',
+                        span: 8,
                     },
                 }
-        	},
-        	account : {
-        		name : '对公账户验证',
-        		status : {
-        			0 : this.props.data.accountValidateType == "bond" ? '未收到验证金' : '待提交资料',
-        			1 : '已认证'
-        		},
-        	}
+            },
+            account: {
+                name: '对公账户验证',
+                status: {
+                    0: this.props.data.accountValidateType == "bond" ? '未收到验证金' : '待提交资料',
+                    1: '已认证'
+                },
+            }
         });
     }
 
@@ -92,49 +105,49 @@ class InfoRow extends Component {
     // }
 
     showIdentityModal() {
-	    this.setState({
-	      identityVisible: true,
-	    });
-	    console.log(this);
-	}
-
-	closeIdentityModal() {
-	    this.setState({
-	      identityVisible: false,
-	    });
-	    console.log(this);
-	}
-
-	showSupplementModal() {
-	    this.setState({
-	      supplementVisible: true,
-	    });
-	    console.log(this);
-	}
-
-	closeSupplementModal() {
-	    this.setState({
-	      supplementVisible: false,
-	    });
-	    console.log(this);
-	}
-
-    basic(){
-        if( this.state.pageType === 'check' ){
-            return false;
-        }
-		return (
-			<Col span={12}>
-				<Link to='/companyValidate/editBasic'>修改资料</Link>
-			</Col>
-    	);
+        this.setState({
+            identityVisible: true,
+        });
+        console.log(this);
     }
 
-    _realName(){
+    closeIdentityModal() {
+        this.setState({
+            identityVisible: false,
+        });
+        console.log(this);
+    }
+
+    showSupplementModal() {
+        this.setState({
+            supplementVisible: true,
+        });
+        console.log(this);
+    }
+
+    closeSupplementModal() {
+        this.setState({
+            supplementVisible: false,
+        });
+        console.log(this);
+    }
+
+    basic() {
+        if (this.state.pageType === 'check') {
+            return false;
+        }
+        return (
+            <Col span={12}>
+				<Link to='/companyValidate/editBasic'>修改资料</Link>
+			</Col>
+        );
+    }
+
+    _realName() {
         let data = this.state.data;
         /*已认证不需要重新发送验证短信*/
         let smsBtn = "";
-        if(!data.passed){
+        if (!data.passed) {
             let smsData = {
                 businesstype: 1,
                 connectorType: data.connectorType
@@ -142,10 +155,10 @@ class InfoRow extends Component {
             smsBtn = <Sms data={ smsData }>重新发送验证短信</Sms>;
         }
 
-    	/*审核不通过可以修改认证资料*/
-    	let editBtn = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname'>修改资料</Link> : "";
-    	return (
-    		<Col span={12}>
+        /*审核不通过可以修改认证资料*/
+        let editBtn = this.state.pageType === "disapproval" ? <Link to='/companyValidate/editRealname'>修改资料</Link> : "";
+        return (
+            <Col span={12}>
 				<Row>
 					<Col span={8}>{smsBtn}</Col>
                     <Col span={4}>{editBtn}</Col>
@@ -153,22 +166,22 @@ class InfoRow extends Component {
 				</Row>
 				<IdentityModal visible={ this.state.identityVisible } closeCallBack={ this.closeIdentityModal.bind(this) }/>
 			</Col>
-    	);
+        );
     }
 
-    corporation(){
-    	return this._realName();
+    corporation() {
+        return this._realName();
     }
 
-    agent(){
-		return this._realName();
+    agent() {
+        return this._realName();
     }
 
-    information(){
+    information() {
         let informationData = this.state.data;
         let information = this.state.information;
-    	return (
-    		<Col span={12}>
+        return (
+            <Col span={12}>
                 <Row>
                     <Col span={24}>
                         你可以 <Link to='/companyValidate/documentUpload'>线上提交</Link> 或者使用 <Button type="primary" onClick={this.showSupplementModal.bind(this)} size="small">手机APP提交</Button> 。
@@ -192,17 +205,17 @@ class InfoRow extends Component {
                 }
 				<SupplementModal visible={ this.state.supplementVisible } closeCallBack={ this.closeSupplementModal.bind(this) }/>
 			</Col>
-    	);
+        );
     }
 
-    account(){
+    account() {
         let accountData = this.state.data;
-    	if(accountData.passed){
-    		return false;
-    	}
+        if (accountData.passed) {
+            return false;
+        }
         let accountValidateType = accountData.accountValidateType;
         // console.log(accountValidateType);
-        if(accountValidateType === "bond"){
+        if (accountValidateType === "bond") {
             return (
                 <Col span={12} className="tableCol">
                     <CountDown />
@@ -211,7 +224,7 @@ class InfoRow extends Component {
                     <p>如对公账户信息有误，请点击 <Link to='/companyValidate/editBasic'>修改对公账户</Link>。</p>
                 </Col>
             )
-        }else if(accountValidateType === "information"){
+        } else if (accountValidateType === "information") {
             return (
                 <Col span={12} className="tableCol"><strong className="fs-14">需要您提供对公账户的相关资料，具体请联系核心企业或企业合作分行。</strong></Col>
             )
@@ -219,33 +232,33 @@ class InfoRow extends Component {
     }
 
     render() {
-    	let data = this.state.data;
+        let data = this.state.data;
 
-    	//	代表人实名认真需要加上名字
-    	let personName = '';
-    	if (data.name) {
-			personName = '：' + data.name;
-    	}
+        //	代表人实名认真需要加上名字
+        let personName = '';
+        if (data.name) {
+            personName = '：' + data.name;
+        }
 
-    	//	状态信息
-    	let statusClassName = data.passed ? 'success-FontColor1' : 'error-FontColor1';
-    	let statusType = data.passed ? 1 : 0;
+        //	状态信息
+        let statusClassName = data.passed ? 'success-FontColor1' : 'error-FontColor1';
+        let statusType = data.passed ? 1 : 0;
 
-    	//	拿到相对项的静态信息
-    	let itemData = this.state[this.state.type];
+        //	拿到相对项的静态信息
+        let itemData = this.state[this.state.type];
         //  是否有操作按钮
         let hasOperation = true;
-        if(this.state.pageType === "supplement" || (this.state.pageType === "check" && data.passed)){
+        if (this.state.pageType === "supplement" || data.passed) {
             hasOperation = false;
         }
-        return(
-    		<Row className="infoRow">
+        return (
+            <Row className="infoRow">
                 <Col span={6}>{itemData.name}{personName}</Col>
                 <Col span={6}><span className={statusClassName}>{ itemData.status[statusType] }</span></Col>
             	{/*核身信息补充提示页没有操作*/}
                 {hasOperation ? this[this.state.type]() : ""}
             </Row>
-    	);
+        );
     }
 }
 

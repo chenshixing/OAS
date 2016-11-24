@@ -180,7 +180,7 @@ export default class ResultComponent extends React.Component {
   }
 
   goToTips() {
-    this.props.history.push('/companyValidate/tips/check?reloadStatus=1');
+    this.props.history.push('/companyValidate/tips/check');
   }
 
   tipsShow() {

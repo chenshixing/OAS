@@ -2,20 +2,32 @@
  * 核审提示页(企业)
  * limit
  */
-import React, { Component, PropTypes } from 'react';
-import {Link} from 'react-router';
+import React, {
+    Component,
+    PropTypes
+} from 'react';
+import {
+    Link
+} from 'react-router';
 
 // antd 组件
-import { Row, Col, Icon, Button} from 'antd';
+import {
+    Row,
+    Col,
+    Icon,
+    Button
+} from 'antd';
 
 //  业务组件
 import TipsContent from '../components/tipsContent';
 
 //  样式
-import  '../style.less';
+import '../style.less';
 
 //  引入fetch
-import { fetch } from 'UTILS';
+import {
+    fetch
+} from 'UTILS';
 
 //  全局状态
 import State from 'PAGES/redirect/state';
@@ -38,8 +50,8 @@ class Check extends Component {
         super(props);
 
         this.state = {
-            pageType : this._getPageType(),
-            showName : globalState.showName ? globalState.showName : ""
+            pageType: this._getPageType(),
+            showName: globalState.showName ? globalState.showName : ""
         }
     }
 
@@ -47,51 +59,51 @@ class Check extends Component {
         this._refreshStatus();
     }
 
-    _refreshStatus(){
+    _refreshStatus() {
         let me = this;
-        if(me.props.location.query.reloadStatus != 1){
-            //  没有传参需要刷新缓存则不用更新缓存
-            return false;
-        }
+
         fetch('/common/getLoginCheckStatus.do').then(res => {
             globalState = res.data;
             me.setState({
-                pageType : me._getPageType(),
-                showName : globalState.showName ? globalState.showName : ""
+                pageType: me._getPageType(),
+                showName: globalState.showName ? globalState.showName : ""
             });
         });
     }
 
-    _getPageType(){
+    _getPageType() {
         //  没有完成 核身信息补充提示页
         let pageType = "supplement";
-        if(globalState.step == 999){
+        if (globalState.step == 999) {
             //  完成
-            if(globalState.bankCheckStatus == -1){
+            if (globalState.bankCheckStatus == -1) {
                 //  审核中提示页
                 pageType = "check";
-            }else if(globalState.bankCheckStatus == 0){
+            } else if (globalState.bankCheckStatus == 0) {
                 //  审核不通过提示页
                 pageType = "disapproval";
+            } else {
+                //  审核通过
+                this.props.history.push(`accountManagement`);
             }
         }
         return pageType;
     }
 
-    headerRender(){
+    headerRender() {
         //  中转
         return this["_" + this.state.pageType]();
     }
 
-    continueToFill(){
+    continueToFill() {
         let step = 1;
-        if(globalState && globalState.step){
+        if (globalState && globalState.step) {
             step = globalState.step == 0 ? 1 : globalState.step;
         }
         this.props.history.push('/companyValidate/step' + step);
     }
 
-    _supplement(){
+    _supplement() {
         return (
             <Row className="tipsRow">
                 <Col span={3} className="text-align-center">
@@ -106,7 +118,7 @@ class Check extends Component {
         );
     }
 
-    _check(){
+    _check() {
         return (
             <Row className="tipsRow">
                 <Col span={3} className="text-align-center">
@@ -120,7 +132,7 @@ class Check extends Component {
         );
     }
 
-    _disapproval(){
+    _disapproval() {
         return (
             <Row className="tipsRow">
                 <Col span={3} className="text-align-center">
@@ -139,7 +151,7 @@ class Check extends Component {
         return (
             <div className="tipsBox">
                 { this.headerRender() }
-                <TipsContent pageType={ this.state.pageType } isReload={ this.props.location.query.reloadStatus == 1 } />
+                <TipsContent pageType={ this.state.pageType } isReload={ true } />
             </div>
         );
     }
