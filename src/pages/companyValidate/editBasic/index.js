@@ -238,7 +238,7 @@ class CompanyValidate extends React.Component {
             title: '提示',
             content: '资料修改成功。',
             onOk() {
-                me.props.history.push('/companyValidate/tips/check?reloadStatus=1');
+                me.props.history.push('/companyValidate/tips/check');
             },
         });
     }
