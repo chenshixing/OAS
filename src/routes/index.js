@@ -336,6 +336,15 @@ const routes = {
           }
         },
         /***************重置登录密码(密码找回) end ***************/
+        // test
+        {
+          path: 'test',
+          getComponent(nextState, cb) {
+            require.ensure([], (require) => {
+              cb(null, require('PAGES/test').default);
+            });
+          }
+        },
         // 404
         {
           path: '*',
