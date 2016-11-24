@@ -32,9 +32,6 @@ const Step = Steps.Step;
 const createForm = Form.create;
 const FormItem = Form.Item;
 
-function noop() {
-    return false;
-}
 // 页面
 class Step3 extends React.Component {
     constructor(props) {
@@ -93,6 +90,10 @@ class Step3 extends React.Component {
         }
     }
 
+    noop(event) {
+        return event.preventDefault();
+    }
+
     render() {
         const {getFieldProps} = this.props.form;
         const formItemLayout = {
@@ -143,7 +144,7 @@ class Step3 extends React.Component {
                                 label="设置登录密码"
                                 required
                             >
-                                <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" />
+                                <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off"  onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" />
                             </FormItem>
 
                             <FormItem
@@ -151,7 +152,7 @@ class Step3 extends React.Component {
                                 label="确认登录密码"
                                 required
                             >
-                                <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off" />
+                                <Input {...getFieldProps('rePassword', rules.rePassword)} type="password" autoComplete="off"  onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} />
                             </FormItem>
 
                         <Row>

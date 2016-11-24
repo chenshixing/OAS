@@ -39,14 +39,14 @@ class Steps2 extends React.Component {
                         pathname:'/resetPassword/step3'
                     });
                 },(res)=>{
-                    switch(res.code){
-                        case '004':
-                            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-                            break;
-                        case '005':
-                            this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-                            break;
-                    }
+                    // switch(res.code){
+                    //     case '004':
+                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                    //         break;
+                    //     case '005':
+                    //         this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+                    //         break;
+                    // }
                     if(res.code='400'){
                         fetch('/common/getLoginCheckStatus.do');
                     }

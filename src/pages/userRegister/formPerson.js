@@ -44,17 +44,17 @@ class Reg extends React.Component {
           window.location.href='#/userRegister/result';
         },(res)=>{
           console.log('注册失败');
-          switch(res.code){
-            case '004':
-              this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-              break;
-            case '005':
-              this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
-              break;
-            case '301':
-              this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
-              break;
-          }
+          // switch(res.code){
+          //   case '004':
+          //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+          //     break;
+          //   case '005':
+          //     this.props.form.setFields({"smsCode":{"errors":[new Error(res.message)]}});
+          //     break;
+          //   case '301':
+          //     this.props.form.setFields({"mobile":{"errors":[new Error(res.message)]}});
+          //     break;
+          // }
         });
       }
 
@@ -121,6 +121,10 @@ class Reg extends React.Component {
         },1000)
     }
 
+  }
+
+  noop(event) {
+      return event.preventDefault();
   }
 
   /*协议*/
@@ -217,7 +221,7 @@ class Reg extends React.Component {
         rules: [
           {required: true, message: '密码不能为空'},
           {validator: this.checkPassWord.bind(this)},
-          ruleType('password'),
+          ruleType('password1'),
           {min: 8, max: 20, message: '请输入8-20位字符'}
         ]
       },
@@ -285,7 +289,7 @@ class Reg extends React.Component {
           label="登录密码"
           required
         >
-          <Input type="password" autoComplete="off" placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
+          <Input type="password" autoComplete="off" onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
         </FormItem>
 
         <FormItem
@@ -293,7 +297,7 @@ class Reg extends React.Component {
           label="确认密码"
           required
         >
-          <Input type="password" autoComplete="off" {...getFieldProps('conLoginPwd', rules.conLoginPwd)} />
+          <Input type="password" autoComplete="off" onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} {...getFieldProps('conLoginPwd', rules.conLoginPwd)} />
         </FormItem>
 
         <FormItem
@@ -309,7 +313,7 @@ class Reg extends React.Component {
           label="短信验证码"
           required
         >
-          <Input className="smsCodeInput" {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown} />
+          <Input className="smsCodeInput" onPaste={this.noop.bind(this)} {...getFieldProps('smsCode', rules.smsCode)} onKeyDown={this.handleKeyDown} />
           <Button className="ant-search-btn" disabled={this.state.isBtnSmsCodeDisabled} onClick={this.getVerifyCode.bind(this)}>{this.state.btnSmsCodeText}</Button>
         </FormItem>
 
