@@ -40,7 +40,24 @@ export default class RealNameAuthentication extends React.Component {
 
     }
     handleRealNameComplete() {
-        this.props.handleSend()
+
+        fetch('/user/getAccountRealCheckStatus.do', {
+            body: {
+                "businessType": 3
+            }
+        }, false).then(res => {
+            if (res.code == 200 && res.data.checkPass == 1) {
+                //window.location.href = '/#/accountManagement/resetTradingPassword/step2?_k=c8odmq';
+                //this.props.history.push("/accountManagement/resetTradingPassword/step2");
+                //权限控制，跳转乱动枪毙
+                this.props.history.push({
+                    pathname: '/accountManagement/resetTradingPassword/step2?isCheck=1'
+                })
+            }else{
+                message.error('您的实名认证未完成，请尽快完成。');
+            }
+        })
+
         //window.location.href = '/#/accountManagement/resetTradingPassword/Step2';
     }
     handleNoRealNameComplete(){
@@ -169,13 +186,14 @@ export default class RealNameAuthentication extends React.Component {
                     <Row className="text-align-center fn-mt-30">
                         <p>
                             实名认证成功后页面自动跳转，如没有跳转请点击
-                            {
+                            <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
+                            {/*
                                 getAccountRealCheckStatus && getAccountRealCheckStatus.checkStatus==1
                                 ?
                                 <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
                                 :
                                 <Button type="primary" onClick={this.handleNoRealNameComplete.bind(this)}>已完成认证</Button>
-                            }
+                            */}
 
                         </p>
                     </Row>
