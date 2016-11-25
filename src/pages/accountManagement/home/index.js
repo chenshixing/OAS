@@ -93,6 +93,7 @@ class Home extends React.Component {
 
             this.forceUpdate();
         }).catch(err => {
+            message.error(err)
             throw err;
         });
     }

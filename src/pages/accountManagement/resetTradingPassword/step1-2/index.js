@@ -169,6 +169,7 @@ export default class Steps1 extends React.Component {
                 //console.log(values[3].data)
             this.forceUpdate();
         }).catch(err => {
+            message.error(err)
             throw err;
         });
     }
