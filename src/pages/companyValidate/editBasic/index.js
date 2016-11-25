@@ -46,16 +46,12 @@ import Account from '../components/accountComponent';
 
 //  引入fetch
 import {
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 
 //  引入moment
 import moment from 'moment';
-
-//  引入辅助函数
-import {
-    helper
-} from 'UTILS'
 
 const propsMap = {
     companyName: "企业名称",
@@ -412,12 +408,10 @@ class CompanyValidate extends React.Component {
         }, (res) => {
             //  校验不通过TODO
             if (res.fieldName) {
-                me.props.form.setFields({
-                    [res.fieldName]: {
-                        value: me.props.form.getFieldValue(res.fieldName),
-                        errors: [new Error(res.message)]
-                    }
-                });
+                const {
+                    form
+                } = me.props;
+                helper.focusError(form, res.fieldName, res.message);
             }
         });
     }
