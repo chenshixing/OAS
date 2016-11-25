@@ -29,7 +29,8 @@ import AgreementModal from 'COM/agreementModal/index';
 
 //  引入fetch
 import {
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 
 // 自定义验证 rule
@@ -114,12 +115,10 @@ class CompanyValidate extends Component {
         }, (res) => {
             //  校验不通过TODO
             if (res.fieldName) {
-                me.props.form.setFields({
-                    [res.fieldName]: {
-                        value: me.props.form.getFieldValue(res.fieldName),
-                        errors: [new Error(res.message)]
-                    }
-                });
+                const {
+                    form
+                } = me.props;
+                helper.focusError(form, res.fieldName, res.message);
             }
         });
     }

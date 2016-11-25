@@ -30,9 +30,13 @@ function noop() {
 }
 
 //fetch
-import {fetch} from 'UTILS';
+import {
+    fetch,
+    helper,
+    ruleType
+} from 'UTILS';
 // 自定义验证 rule
-import ruleType from 'UTILS/ruleType';
+//import ruleType from 'UTILS/ruleType';
 // 页面
 import Frame from 'COM/form/frame';
 
@@ -135,13 +139,17 @@ class Home extends React.Component {
                 this.openNotification();
                 //this.setState({visible: false});
             }, (res) => {
+                // if(res.fieldName){
+                //     this.props.form.setFields({
+                //         [res.fieldName]:{
+                //             "value":this.props.form.getFieldValue(res.fieldName),
+                //             "errors":[new Error(res.message)]
+                //         }
+                //     });
+                // }
                 if(res.fieldName){
-                    this.props.form.setFields({
-                        [res.fieldName]:{
-                            "value":this.props.form.getFieldValue(res.fieldName),
-                            "errors":[new Error(res.message)]
-                        }
-                    });
+                  const {form} = this.props;
+                  helper.focusError(form,res.fieldName,res.message);
                 }
             });
         });
