@@ -9,8 +9,7 @@ import React, {
 } from 'react';
 
 import {
-  Link,
-  History
+  Link
 } from 'react-router';
 
 // antd 组件
@@ -42,7 +41,7 @@ export default class ResultComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    this.mixins = [History];
+    
     this.state = {
       data: {
         tableColumns: [{
