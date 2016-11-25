@@ -13,6 +13,11 @@ const createForm = Form.create;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
+
+//  获取全局sysInfo
+import State from 'PAGES/Layouts/state';
+const logoutUrl = State.getState() && State.getState().sysInfo && State.getState().sysInfo.logoutUrl;
+
 // 自定义验证 rule 及 fetch 方法
 import { ruleType, fetch,helper } from 'UTILS';
 
@@ -358,7 +363,7 @@ class Reg extends React.Component {
         </FormItem>
 
         <FormItem wrapperCol={{ span: 12, offset: 7 }}>
-          <p>已有账号？ <a href="#">直接登录</a></p>
+          <p>已有账号？ <a href={logoutUrl}>直接登录</a></p>
         </FormItem>
 
 

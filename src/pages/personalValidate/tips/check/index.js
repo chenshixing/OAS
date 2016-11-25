@@ -35,35 +35,47 @@ class Check extends Component {
     }
 
     initPage(){
-        fetch('/user/getUserCheckStatus.do').then((res)=>{
-            if(res.data.userType=='1'){
-                var obj = helper.convertUserCheckStatus(res.data.checkItems);
-                console.log('convertUserCheckStatus:',obj);
-                var PerBasicInfoText='待提交';
-                var PerRealText='待认证';
-                //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
-                //系统：systemStatus 银行：bankStatus
+        fetch('/common/getLoginCheckStatus.do').then((res)=>{
+            this.state.userType=res.data.userType;
+            this.state.step=res.data.step;
+            this.state.bankCheckStatus=res.data.bankCheckStatus;
+            this.state.showName=res.data.showName;
 
-                const {PerBasicInfo,PerReal} = obj;
-                if(PerBasicInfo.systemStatus=='-1'){
-                    PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
-                }else{
-                    PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
-                }
+            fetch('/user/getUserCheckStatus.do').then((res)=>{
+                if(res.data.userType=='1'){
+                    var obj = helper.convertUserCheckStatus(res.data.checkItems);
+                    console.log('convertUserCheckStatus:',obj);
+                    var PerBasicInfoText='待提交';
+                    var PerRealText='待认证';
+                    //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
+                    //系统：systemStatus 银行：bankStatus
 
-                if(PerReal.systemStatus=='-1'){
-                    PerRealText=<span className="error-FontColor1">待认证</span>;
-                }else{
-                    PerRealText=<span className="success-FontColor1">已认证</span>;
+                    const {PerBasicInfo,PerReal} = obj;
+                    if(PerBasicInfo.systemStatus=='-1'){
+                        PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
+                    }else{
+                        PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
+                    }
+
+                    if(PerReal.systemStatus=='-1'){
+                        PerRealText=<span className="error-FontColor1">待认证</span>;
+                    }else{
+                        PerRealText=<span className="success-FontColor1">已认证</span>;
+                    }
+
+                    // this.setState({
+                    //     PerBasicInfoText:PerBasicInfoText,
+                    //     PerRealText:PerRealText,
+                    // });
+                    this.state.PerBasicInfoText=PerBasicInfoText;
+                    this.state.PerRealText=PerRealText;
+
+                    this.forceUpdate();
                 }
-                this.setState({
-                    PerBasicInfoText:PerBasicInfoText,
-                    PerRealText:PerRealText,
-                });
-            }
-        },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
-        });
+            });
+            
+        })
+        
     }
 
     //重新提交认证申请
