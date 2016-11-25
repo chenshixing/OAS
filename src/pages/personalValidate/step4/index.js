@@ -25,6 +25,9 @@ export default class PersonalValidate extends React.Component {
     constructor(props){
         super(props);
         State.bind(this);
+        this.state={
+            nextStep:''
+        };
     }
 
     componentDidMount(){
@@ -35,25 +38,19 @@ export default class PersonalValidate extends React.Component {
 
             // save data
             State.setState({
-                data: res.data
+                data: res.data,
             });
 
-            // const {step, userType, bankCheckStatus} = res.data;
-            // const type = {
-            //     "1": "personalValidate",
-            //     "2": "companyValidate"
-            // }[userType];
+            const {step, userType, bankCheckStatus} = res.data;
+            let nextStep='/personalValidate/tips/check'
+            if(step == 999 && bankCheckStatus == 1){
+                nextStep='accountManagement';
+            }
 
-            // var nextStep='';
-            // if(step == 0){ //未开始
-            //     nextStep=`${type}/step1`;
-            // } else if (step == 999 && bankCheckStatus == 1){ //已完成核身流程且审核通过
-            //     nextStep='accountManagement';
-            // } else {
-            //     nextStep=`${type}/tips/check`;
-            // }
+            this.setState({
+                nextStep
+            })
 
-            
         });
     }
 
@@ -74,7 +71,7 @@ export default class PersonalValidate extends React.Component {
                                showIcon
                         />
                         <div className="text-align-center fn-mt-30">
-                            <Button type="primary"><Link to='/personalValidate/tips/check'>返回首页</Link></Button>
+                            <Button type="primary"><Link to={this.state.nextStep}>返回首页</Link></Button>
                         </div>
                     </div>
 
