@@ -54,7 +54,16 @@ export default class RealNameAuthentication extends React.Component {
                     pathname: '/accountManagement/resetTradingPassword/step2?isCheck=1'
                 })
             }else{
-                message.error('您的实名认证未完成，请尽快完成。');
+                //message.error('您的实名认证未完成，请尽快完成。');
+                Modal.info({
+                    title: '实名认证提示',
+                    content: (
+                    <div>
+                        <p>您的实名认证未完成，请尽快完成。</p>
+                    </div>
+                    ),
+                    onOk() {},
+                });
             }
         })
 
