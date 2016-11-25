@@ -102,7 +102,7 @@ const rulesCommon = {
         }, {
             min: 9,
             max: 15,
-            message: '请输入50位以内的字符'
+            message: '请输入9-15位字符'
         }, ]
     }
 };
@@ -116,7 +116,7 @@ const rulesMultiple = {
         }, {
             min: 13,
             max: 20,
-            message: '请输入50位以内的字符'
+            message: '请输入13-20位字符'
         }, ]
     },
 };

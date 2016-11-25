@@ -4,7 +4,7 @@ import {Link} from 'react-router';
 
 // 页面组件
 import Frame from 'COM/form/frame';
-import Sms from 'BCOM/Sms/index';
+//import Sms from 'BCOM/Sms/index';
 // antd 组件
 import {
     Form,
@@ -26,6 +26,7 @@ import {fetch} from 'UTILS';
 //  全局状态codeimg
 import State from 'PAGES/redirect/state';
 const codeimg = State.getState().sysInfo.appQrcodeUrl;
+import classnames from 'classnames';
 
 // 页面身份验证
 export default class RealNameAuthentication extends React.Component {
@@ -35,7 +36,9 @@ export default class RealNameAuthentication extends React.Component {
             visible: false,
             data: this.props.data,
             isValidation: this.props.isValidation,
-            identityVisible: false
+            identityVisible: false,
+            isSendMsgDisabled:false,
+            btnSendText:'没有收到短信，重新发送',
         }
 
     }
@@ -102,6 +105,48 @@ export default class RealNameAuthentication extends React.Component {
         }
         return items[item];
     }
+    //发送身份识别码
+    sendMsg(countNum){
+        if(this.state.isSendMsgDisabled) return;
+        var that=this;
+
+        fetch('/common/pinCode.do',{
+            body:{
+                "businessType": 3,
+                "connectorType": this.props.getDesensitizeMobile.connectorType,
+                "isFirst": false
+            }
+        }).then((res)=>{
+            if(res.code=='200'){
+                message.success('身份识别码发送成功');
+                countDown(countNum);
+            }
+        });
+
+        function countDown(){
+            that.setState({
+                isSendMsgDisabled:true
+            });
+
+            var count=countNum;
+            let timer = setInterval(()=>{
+                count--;
+                if(count>0){
+                    that.setState({
+                        btnSendText:`发送成功，${count}秒后可重新发送`
+                    });
+                // store.set('counter_inPersonalValidateStep2',count);
+                }else{
+                    clearInterval(timer);
+                    // store.set('counter_inPersonalValidateStep2',0);
+                    that.setState({
+                        btnSendText:`没有收到短信，重新发送`,
+                        isSendMsgDisabled:false
+                    });
+                }
+            },1000)
+        }
+    }
 
 
 
@@ -114,41 +159,15 @@ export default class RealNameAuthentication extends React.Component {
             getDesensitizeMobile
         } = this.props;
 
-        // let smsData = {
-        //     name: getRelatedPersonInfo.realName,
-        //     identityCode: getRelatedPersonInfo.identityCode,
-        //     connectorType: getRelatedPersonInfo.connectorType
-        // };
         let smsData = {};
         smsData = {
             businesstype: 3,
             connectorType: getDesensitizeMobile.connectorType
         }
+        const sendMsgCls=classnames({
+            color_gray:this.state.isSendMsgDisabled
+        });
 
-        // 使用方式：
-        // 传入data和businesstype
-        // data : {
-        //     name: data.name,                        姓名
-        //     identityCode: data.identityCode,        身份识别码
-        //     connectorType: data.connectorType       关系人类型 （2：企业法人，3：经办人）（个人账户不用传，企业账户必须）
-        // };
-
-
-        // if(getLoginUserSimpleInfo.userType==1){
-        //     return (
-        //         smsData = {
-        //             businesstype: 3,
-        //             connectorType: getDesensitizeMobile.connectorType
-        //         }
-        //     )
-        // }else if(getLoginUserSimpleInfo.userType==2){
-        //     return (
-        //         smsData = {
-        //             businesstype: 3,
-        //             connectorType: getDesensitizeMobile.connectorType
-        //         }
-        //     )
-        // }
 
 
 
@@ -179,7 +198,8 @@ export default class RealNameAuthentication extends React.Component {
                             <p className="fn-ma-10">
                                 {/*姓名（1：经办人,2：法人，3：个人）*/}
                                 {this.loadConnectorType(this.props.getDesensitizeMobile.connectorType)}：{this.props.getDesensitizeMobile.name}，您的身份识别码已发送到手机{this.props.getDesensitizeMobile.mobile}。
-                                <Sms data={ smsData } >没有收到短信，重新发送。</Sms>
+                                {/*<Sms data={ smsData } >没有收到短信，重新发送。</Sms>*/}
+                                <a href='javascript:void(0)' onClick={this.sendMsg.bind(this,60)} className={sendMsgCls}>{this.state.btnSendText}</a>
                             </p>
                             <p>
                                 请下载实名认证APP进行人脸识别，验证成功后方可重置交易密码。
@@ -196,14 +216,6 @@ export default class RealNameAuthentication extends React.Component {
                         <p>
                             实名认证成功后页面自动跳转，如没有跳转请点击
                             <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
-                            {/*
-                                getAccountRealCheckStatus && getAccountRealCheckStatus.checkStatus==1
-                                ?
-                                <Button type="primary" onClick={this.handleRealNameComplete.bind(this)}>已完成认证</Button>
-                                :
-                                <Button type="primary" onClick={this.handleNoRealNameComplete.bind(this)}>已完成认证</Button>
-                            */}
-
                         </p>
                     </Row>
                 </Frame>

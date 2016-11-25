@@ -33,11 +33,11 @@ import {
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
 
-//  引入routerWillLeave
-import routerWillLeaveInit from 'COM/routerWillLeave';
+// //  引入routerWillLeave
+// import routerWillLeaveInit from 'COM/routerWillLeave';
 
-//  进入禁止跳转的白名单
-import banSwitchWhiteList from 'BCOM/banSwitchWhiteList';
+// //  进入禁止跳转的白名单
+// import banSwitchWhiteList from 'BCOM/banSwitchWhiteList';
 
 class DocumentUpload extends Component {
     static propTypes = {
@@ -59,7 +59,7 @@ class DocumentUpload extends Component {
             },
         }
 
-        routerWillLeaveInit(this);
+        // routerWillLeaveInit(this);
     }
 
     routerWillLeave(target) {
@@ -68,8 +68,10 @@ class DocumentUpload extends Component {
         if (banSwitchWhiteList.indexOf(nextPath) > -1) { //  白名单跳转，主要为头部和底部的链接
             return true;
         }
+        console.log(this.state.isCanLeave);
         if (!this.state.isCanLeave) {
             this.props.history.push(this.props.location.pathname);
+            return false;
         }
     }
 
