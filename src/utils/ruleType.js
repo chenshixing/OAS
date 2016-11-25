@@ -81,7 +81,7 @@ const dataType = {
         reg: {
             // 自定义 test 方法
             test: function(value) {
-                const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[_\-~\*\(\)\!@\#\$%\^\.•,&]+/];
+                const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[_\-~\*\(\)\!@\#\$%\^\.·•,&]+/];
                 let matchNum = 0;
                 regArr.map((item, index) => {
                     if (item.test(value)) {
@@ -101,7 +101,7 @@ const dataType = {
     },
     //中文、英文、可含半角标点符号•.,-_~ *()!@#$%^&
     "cn+en+str": {
-        reg: /^[\u4e00-\u9fa5_\-~\*\(\)\!@\#\$%\^\.•,&a-zA-Z]+$/,
+        reg: /^[\u4e00-\u9fa5_\-~\*\(\)\!@\#\$%\^\.·•,&a-zA-Z]+$/,
         errMsg: "中文、英文、常用字符"
     },
     //不能为今天或过去的日期(value必须为Date对象)
