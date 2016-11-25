@@ -134,7 +134,7 @@ class Home extends React.Component {
                 //console.log(res)
                 let resData = res.data
                 this.state.data.getUserServiceList.push(resData)
-                this.props.form.setFieldsValue({name: ""});
+                this.props.form.setFieldsValue({inviteCode: ""});
                 this.setState({inviteCodeValue: "", visible: false})
                 this.openNotification();
                 //this.setState({visible: false});
