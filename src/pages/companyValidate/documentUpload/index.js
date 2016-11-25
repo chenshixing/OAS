@@ -36,6 +36,9 @@ import FileUrl from 'PAGES/companyValidate/components/fileUrl';
 //  引入routerWillLeave
 import routerWillLeaveInit from 'COM/routerWillLeave';
 
+//  进入禁止跳转的白名单
+import banSwitchWhiteList from 'BCOM/banSwitchWhiteList';
+
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -59,7 +62,12 @@ class DocumentUpload extends Component {
         routerWillLeaveInit(this);
     }
 
-    routerWillLeave(e) {
+    routerWillLeave(target) {
+        let nextPath = target.pathname;
+
+        if (banSwitchWhiteList.indexOf(nextPath) > -1) { //  白名单跳转，主要为头部和底部的链接
+            return true;
+        }
         if (!this.state.isCanLeave) {
             this.props.history.push(this.props.location.pathname);
         }
