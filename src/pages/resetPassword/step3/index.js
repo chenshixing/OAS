@@ -14,7 +14,8 @@ import Frame from 'COM/form/frame';
 // 自定义验证 rule
 import {
     fetch,
-    ruleType
+    ruleType,
+    helper
 } from 'UTILS';
 
 // antd 组件
@@ -62,25 +63,14 @@ class Step3 extends React.Component {
                         }
                     });
                 }, (res) => {
-
                     if(res.fieldName){
                         const {form} = this.props;
                         if(res.fieldName=='pwd'){
-                            form.setFields({'password':{
-                                "errors":[new Error(res.message)],
-                                "value":form.getFieldValue('pwd')
-                            }});
+                            helper.focusError(form,'password',res.message);
                         }else if(res.fieldName=='conPwd'){
-                            form.setFields({'rePassword':{
-                                "errors":[new Error(res.message)],
-                                "value":form.getFieldValue('conPwd')
-                            }});
+                            helper.focusError(form,'rePassword',res.message);
                         }
                         
-                    }
-
-                    if(res.code='400'){
-                        fetch('/common/getLoginCheckStatus.do');
                     }
                 });
             }

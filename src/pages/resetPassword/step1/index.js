@@ -14,7 +14,7 @@ const Step = Steps.Step;
 const RadioGroup = Radio.Group;
 const FormItem = Form.Item;
 // fetch、 自定义验证 rule
-import {fetch,ruleType} from 'UTILS';
+import {fetch,ruleType,helper} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -55,16 +55,8 @@ class CompanyValidate extends React.Component {
                  },(res)=>{
                     if(res.fieldName){
                         const {form} = this.props;
-                        form.setFields({[res.fieldName]:{
-                            "errors":[new Error(res.message)],
-                            "value":form.getFieldValue(res.fieldName)
-                        }});
+                        helper.focusError(form,res.fieldName,res.message);
                     }
-
-                    if(res.code='400'){
-                        fetch('/common/getLoginCheckStatus.do');
-                    }
-
                  })
              }else{
                  console.log('Errors in form!!!');

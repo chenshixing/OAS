@@ -33,10 +33,6 @@ class Steps2 extends React.Component {
             this.props.history.push({
                 pathname:'/resetPassword/step2/autherized/index2'
             });
-        },(res)=>{
-            if(res.code='400'){
-                fetch('/common/getLoginCheckStatus.do');
-            }
         });
     }
 
@@ -60,10 +56,6 @@ class Steps2 extends React.Component {
                 nameText:nameText,
                 connectorType:res.data.connectorType
             });
-        },(res)=>{
-            if(res.code='400'){
-                fetch('/common/getLoginCheckStatus.do');
-            }
         });
     }
 
