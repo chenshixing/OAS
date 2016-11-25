@@ -60,7 +60,6 @@ class CompanyValidate extends React.Component {
         super(props);
         this.state = {
             loading: false,
-            display: 'block',
             visible: false,
             data: {
                 companyName: globalState.showName ? globalState.showName : "",
@@ -109,7 +108,6 @@ class CompanyValidate extends React.Component {
             }
             //  填写人的身份处理
             data.writerType = fieldsValue.writerType;
-            let display = "block";
             if (data.writerType == 1) {
                 //  委托代理人
                 fieldsValue.name = fieldsValue.client.name;
@@ -120,7 +118,6 @@ class CompanyValidate extends React.Component {
                 fieldsValue.corporationEmail = fieldsValue.corperator.email;
             } else if (data.writerType == 2) {
                 //  法定代表人TODO
-                display = "none";
                 fieldsValue.name = fieldsValue.corperator.name;
                 fieldsValue.mobile = fieldsValue.corperator.mobile;
                 fieldsValue.email = fieldsValue.corperator.email;
@@ -129,7 +126,6 @@ class CompanyValidate extends React.Component {
             delete fieldsValue.corporator;
 
             me.setState({
-                display: display,
                 data: data
             });
             me.props.form.setFieldsValue(fieldsValue);
@@ -310,13 +306,15 @@ class CompanyValidate extends React.Component {
         // 表单校验
 
         // 根据营业执照类型类型选择验证机制
+        // console.log(this.state.data.companyPaperType);
         const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         //  根据填写人身份选择验证机制
-        const rulesFill = this.state.data.writerType === 1 ? formValidation.rulesAgent : {};
+        const rulesFill = this.state.data.writerType == 1 ? formValidation.rulesAgent : {};
         // console.log(rulesFill);
         // 根据不同类型选择验证机制
         let rules = Object.assign({}, formValidation.rulesBase, rulesBusiness, rulesFill);
+        console.log(rules);
 
         const formItemLayout = {
             labelCol: {
@@ -330,8 +328,6 @@ class CompanyValidate extends React.Component {
         const {
             getFieldProps
         } = this.props.form;
-        const displayTypeCommon = this.state.data.companyPaperType == 2 ? 'block' : 'none';
-        const displayTypeMultiple = this.state.data.companyPaperType == 3 ? 'block' : 'none';
 
         return (
             <div>
@@ -364,7 +360,8 @@ class CompanyValidate extends React.Component {
 
                         </FormItem>
 
-                        <div style={{display:displayTypeCommon}}>
+                        {
+                            this.state.data.companyPaperType == 2 ?
                             <FormItem
                                 {...formItemLayout}
                                 label="营业执照注册号"
@@ -372,9 +369,7 @@ class CompanyValidate extends React.Component {
                             >
                                 <Input {...getFieldProps('registrationPaperNo',rules.registrationPaperNo)} type="text"/>
                             </FormItem>
-                        </div>
-
-                        <div style={{display:displayTypeMultiple}}>
+                            :
                             <FormItem
                                 {...formItemLayout}
                                 label="统一社会信用代码"
@@ -382,7 +377,7 @@ class CompanyValidate extends React.Component {
                             >
                                 <Input {...getFieldProps('socialCreditPaperNo',rules.socialCreditPaperNo)} type="text"/>
                             </FormItem>
-                        </div>
+                        }
 
                         <FormItem
                             {...formItemLayout}
@@ -405,7 +400,8 @@ class CompanyValidate extends React.Component {
                             </Col>
                         </FormItem>
 
-                        <div style={{display:displayTypeCommon}}>
+                        {
+                            this.state.data.companyPaperType == 2 ?
                             <FormItem
                                 {...formItemLayout}
                                 label="组织机构代码"
@@ -413,7 +409,9 @@ class CompanyValidate extends React.Component {
                             >
                                 <Input {...getFieldProps('orgInsCodePaperNo',rules.orgInsCodePaperNo)} type="text"/>
                             </FormItem>
-                        </div>
+                            :
+                            ""
+                        }
 
                         <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
                             填写人信息
@@ -456,34 +454,39 @@ class CompanyValidate extends React.Component {
 
                         </FormItem>
 
-                        <div style={{display:this.state.display}}>
-                            <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
-                                法定代表人信息
-                                <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
+                        {
+                            this.state.data.writerType == 1 ?
+                            <div>
+                                <div className="form-title fn-mb-30" style={{borderTop:'1px solid #e8e8e8'}}>
+                                    法定代表人信息
+                                    <small className="viceText-FontColor"> (请务必与法定代表人身份证明书、营业执照上的资料保持一致。)</small>
+                                </div>
+
+                                <FormItem
+                                    label="法定代表人姓名"
+                                    {...formItemLayout}
+                                    required
+                                >
+                                    <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
+                                </FormItem>
+
+                                <FormItem
+                                    label="常用手机号码"
+                                    {...formItemLayout}
+                                >
+                                    <Input {...getFieldProps('corporationMobile',rules.corporationMobile )} type="text" />
+                                </FormItem>
+
+                                <FormItem
+                                    label="联系邮箱"
+                                    {...formItemLayout}
+                                >
+                                    <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
+                                </FormItem>
                             </div>
-
-                            <FormItem
-                                label="法定代表人姓名"
-                                {...formItemLayout}
-                                required
-                            >
-                                <Input {...getFieldProps('corporationName',rules.corporationName)} type="text" />
-                            </FormItem>
-
-                            <FormItem
-                                label="常用手机号码"
-                                {...formItemLayout}
-                            >
-                                <Input {...getFieldProps('corporationMobile',rules.corporationMobile )} type="text" />
-                            </FormItem>
-
-                            <FormItem
-                                label="联系邮箱"
-                                {...formItemLayout}
-                            >
-                                <Input {...getFieldProps('corporationEmail',rules.corporationEmail)} type="text" />
-                            </FormItem>
-                        </div>
+                            :
+                            ""
+                        }
 
                         <Account ref="Account" getFieldProps={ getFieldProps }  rules = { rules } form={ this.props.form } isGetInfo = { this.props.location.query.getInfo == 1 } companyName = {this.state.data.companyName}/>
 
