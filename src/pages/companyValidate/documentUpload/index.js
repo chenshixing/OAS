@@ -85,6 +85,11 @@ class DocumentUpload extends Component {
     }
 
     _getFileList(info) {
+        // console.log(info);
+        if (!this._fileExam(info.file)) {
+            //  校验不通过则不返回false
+            return false;
+        }
         let fileList = info.fileList;
 
         // 1. 上传列表数量的限制
@@ -111,6 +116,25 @@ class DocumentUpload extends Component {
         return fileList;
     }
 
+    _fileExam(file) {
+        let {
+            name,
+            size
+        } = file;
+        let reg = new RegExp(/[.](jpg|jpeg|png|bmg)$/);
+        if (!reg.test(name)) {
+            message.error("文件格式必须为jpg、jpeg、png或bmp");
+            return false;
+        }
+
+        if (size > 10485760) { //  文件不能大于10M
+            message.error("文件大小不能超过10M");
+            return false;
+        }
+
+        return true;
+    }
+
     _warning() {
         let me = this;
         Modal.warning({
@@ -130,84 +154,42 @@ class DocumentUpload extends Component {
         });
     }
 
-    socialCreditChange(info) {
+    upLoadChange(info, dataName) {
         if (info.fileList.length > this.state.limit) {
             //  已达五张上限
             this._warning();
             return false;
         }
-
         let fList = this._getFileList(info);
+        if (!fList) {
+            return false;
+        }
         let fileList = this.state.fileList;
-        fileList.socialCredit = fList;
+        fileList[dataName] = fList;
 
         this.setState({
             fileList
         });
+    }
+
+    socialCreditChange(info) {
+        this.upLoadChange(info, "socialCredit");
     }
 
     registrationChange(info) {
-        if (info.fileList.length > this.state.limit) {
-            //  已达五张上限
-            this._warning();
-            return false;
-        }
-
-        let fList = this._getFileList(info);
-        let fileList = this.state.fileList;
-        fileList.registration = fList;
-
-        this.setState({
-            fileList
-        });
+        this.upLoadChange(info, "registration");
     }
 
     orgInsCodeChange(info) {
-        if (info.fileList.length > this.state.limit) {
-            //  已达五张上限
-            this._warning();
-            return false;
-        }
-
-        let fList = this._getFileList(info);
-        let fileList = this.state.fileList;
-        fileList.orgInsCode = fList;
-
-        this.setState({
-            fileList
-        });
+        this.upLoadChange(info, "orgInsCode");
     }
 
     identityProofChange(info) {
-        if (info.fileList.length > this.state.limit) {
-            //  已达五张上限
-            this._warning();
-            return false;
-        }
-
-        let fList = this._getFileList(info);
-        let fileList = this.state.fileList;
-        fileList.identityProof = fList;
-
-        this.setState({
-            fileList
-        });
+        this.upLoadChange(info, "identityProof");
     }
 
     deletegatePromiseLetterChange(info) {
-        if (info.fileList.length > this.state.limit) {
-            //  已达五张上限
-            this._warning();
-            return false;
-        }
-
-        let fList = this._getFileList(info);
-        let fileList = this.state.fileList;
-        fileList.deletegatePromiseLetter = fList;
-
-        this.setState({
-            fileList
-        });
+        this.upLoadChange(info, "deletegatePromiseLetter");
     }
 
     submit() {
