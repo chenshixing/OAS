@@ -5,8 +5,6 @@
 // react 相关库
 import React from 'react';
 import ReactDOM from 'react-dom';
-// 导入公共样式
-import 'ASSETS/less/main.less';
 // 自定义验证 rule
 import {
     ruleType,
@@ -64,12 +62,14 @@ class PersonalValidate extends React.Component {
                         pathname: 'personalValidate/step4'
                     });
                 }, (res) => {
-                    if(res.fieldName){
-                        const {form} = this.props;
-                        if(res.fieldName=='pfxPassword'){
-                            helper.focusError(form,'password',res.message);
-                        }else{
-                            helper.focusError(form,res.fieldName,res.message);
+                    if (res.fieldName) {
+                        const {
+                            form
+                        } = this.props;
+                        if (res.fieldName == 'pfxPassword') {
+                            helper.focusError(form, 'password', res.message);
+                        } else {
+                            helper.focusError(form, res.fieldName, res.message);
                         }
                     }
                 });
@@ -171,7 +171,7 @@ class PersonalValidate extends React.Component {
             });
         }, (res) => {
             // alert('获取协议失败，请重新获取！');
-            
+
         })
     }
 

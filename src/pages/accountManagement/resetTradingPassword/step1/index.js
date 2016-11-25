@@ -112,6 +112,7 @@ export default class Steps1 extends React.Component {
             this.state.data.getDesensitizeMobile = values[0].data
             this.forceUpdate();
         }).catch(err => {
+            message.error(err)
             throw err;
         });
     }

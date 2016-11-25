@@ -101,6 +101,7 @@ export default class BasicInformation extends React.Component {
       this.forceUpdate();
 
     }).catch(err => {
+        message.error(err)
       throw err;
     });
   }
@@ -145,6 +146,7 @@ export default class BasicInformation extends React.Component {
       this.forceUpdate();
 
     }).catch(err => {
+        message.error(err)
       throw err;
     });
   }
