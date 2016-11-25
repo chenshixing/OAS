@@ -15,7 +15,8 @@ import ruleType from 'UTILS/ruleType';
 
 
 import {
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 
 // antd 组件
@@ -82,13 +83,17 @@ class Steps2 extends React.Component {
                     //权限控制，跳转乱动枪毙
                 this.props.history.push("/accountManagement/resetTradingPassword/step3?isCheck=1");
             }, (res) => {
+                // if(res.fieldName){
+                //     this.props.form.setFields({
+                //         [res.fieldName]:{
+                //             "value":this.props.form.getFieldValue(res.fieldName),
+                //             "errors":[new Error(res.message)]
+                //         }
+                //     });
+                // }
                 if(res.fieldName){
-                    this.props.form.setFields({
-                        [res.fieldName]:{
-                            "value":this.props.form.getFieldValue(res.fieldName),
-                            "errors":[new Error(res.message)]
-                        }
-                    });
+                  const {form} = this.props;
+                  helper.focusError(form,res.fieldName,res.message);
                 }
             });
         });
