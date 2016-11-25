@@ -184,7 +184,7 @@ class InfoRow extends Component {
 
     information() {
         let informationData = this.state.data;
-        if (!informationData.passed || (data.systemStatus == 1 && data.bankStatus == 0)) {
+        if (!informationData.passed || (informationData.systemStatus == 1 && informationData.bankStatus == 0)) {
             let information = this.state.information;
             return (
                 <Col span={12}>

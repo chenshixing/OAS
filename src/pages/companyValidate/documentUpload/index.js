@@ -6,6 +6,7 @@ import React, {
 import {
     Link
 } from 'react-router';
+
 // antd 组件
 import {
     Form,
@@ -32,6 +33,9 @@ import {
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
 
+//  引入routerWillLeave
+import routerWillLeaveInit from 'COM/routerWillLeave';
+
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -40,6 +44,7 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isCanLeave: false,
             isCommon: true,
             limit: 5,
             fileList: {
@@ -49,6 +54,14 @@ class DocumentUpload extends Component {
                 identityProof: [],
                 deletegatePromiseLetter: []
             },
+        }
+
+        routerWillLeaveInit(this);
+    }
+
+    routerWillLeave(e) {
+        if (!this.state.isCanLeave) {
+            this.props.history.push(this.props.location.pathname);
         }
     }
 
@@ -148,9 +161,7 @@ class DocumentUpload extends Component {
         Modal.success({
             title: '提示',
             content: '资料修改成功。',
-            onOk() {
-                me.props.history.push('/companyValidate/tips/check');
-            },
+            onOk: me.toCheck.bind(me)
         });
     }
 
@@ -222,7 +233,8 @@ class DocumentUpload extends Component {
         return data;
     }
 
-    noEdit() {
+    toCheck() {
+        this.state.isCanLeave = true;
         this.props.history.push('/companyValidate/tips/check');
     }
 
@@ -417,7 +429,7 @@ class DocumentUpload extends Component {
                     <Row style={{ marginTop: 30 }}>
                         <Col span="12" offset="8">
                             <Button type="primary" onClick={ this.submit.bind(this) }>提交</Button>
-                            <Button type="ghost" onClick={ this.noEdit.bind(this) } className="fn-ml-20">暂不修改</Button>
+                            <Button type="ghost" onClick={ this.toCheck.bind(this) } className="fn-ml-20">暂不修改</Button>
                         </Col>
                     </Row>
 
