@@ -82,10 +82,6 @@ class Steps2 extends React.Component {
                     onOk() {},
                 });
             }
-        },(res)=>{
-            if(res.code='400'){
-                fetch('/common/getLoginCheckStatus.do');
-            }
         });
     }
 
@@ -104,10 +100,6 @@ class Steps2 extends React.Component {
             if(res.code=='200'){
                 message.success('身份识别码发送成功');
                 countDown(countNum);
-            }
-        },(res)=>{
-            if(res.code='400'){
-                fetch('/common/getLoginCheckStatus.do');
             }
         });
 
@@ -149,9 +141,6 @@ class Steps2 extends React.Component {
                 }else{
                     console.log('轮询中，未验证..');
                 }
-            },(res)=>{
-                //fetch error
-                message.error(res.message,3);
             });
         },5000);
 
@@ -177,8 +166,6 @@ class Steps2 extends React.Component {
                 nameText:nameText,
                 connectorType:res.data.connectorType
             });
-        },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
         });
     }
 

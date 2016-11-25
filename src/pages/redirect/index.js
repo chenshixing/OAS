@@ -33,7 +33,7 @@ export default class Redirect extends React.Component {
                 sysInfo: LayoutsState.getState().sysInfo
             });
 
-            setTimeout(() => {
+            //setTimeout(() => {
                 // 业务判断
                 if(step == 0){ //未开始
                     return this.props.history.push(`${type}/step1`);
@@ -42,7 +42,7 @@ export default class Redirect extends React.Component {
                 } else {
                     return this.props.history.push(`${type}/tips/check`);
                 }
-            }, 3000);
+            //}, 3000);
 
             // 业务判断
             // if(step == 999){ //已完成核身流程

@@ -10,7 +10,8 @@ import 'ASSETS/less/main.less';
 // 自定义验证 rule
 import {
     ruleType,
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
@@ -66,15 +67,9 @@ class PersonalValidate extends React.Component {
                     if(res.fieldName){
                         const {form} = this.props;
                         if(res.fieldName=='pfxPassword'){
-                            form.setFields({'password':{
-                                "errors":[new Error(res.message)],
-                                'value':form.getFieldValue('password')
-                            }});
+                            helper.focusError(form,'password',res.message);
                         }else{
-                            form.setFields({[res.fieldName]:{
-                                "errors":[new Error(res.message)],
-                                'value':form.getFieldValue(res.fieldName)
-                            }});
+                            helper.focusError(form,res.fieldName,res.message);
                         }
                     }
                 });

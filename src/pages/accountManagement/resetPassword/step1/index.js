@@ -16,7 +16,8 @@ import { Link } from 'react-router';
 
 //fetch
 import {
-    fetch
+    fetch,
+    helper
 } from 'UTILS';
 
 
@@ -65,13 +66,17 @@ class ResetPassword extends React.Component {
                     //window.location.href="/#/accountManagement/resetPassword/step2/?_k=REPLACE"
                 this.props.history.push("/accountManagement/resetPassword/step2")
             }, (res) => {
+                // if(res.fieldName){
+                //     this.props.form.setFields({
+                //         [res.fieldName]:{
+                //             "value":this.props.form.getFieldValue(res.fieldName),
+                //             "errors":[new Error(res.message)]
+                //         }
+                //     });
+                // }
                 if(res.fieldName){
-                    this.props.form.setFields({
-                        [res.fieldName]:{
-                            "value":this.props.form.getFieldValue(res.fieldName),
-                            "errors":[new Error(res.message)]
-                        }
-                    });
+                  const {form} = this.props;
+                  helper.focusError(form,res.fieldName,res.message);
                 }
             });
         });

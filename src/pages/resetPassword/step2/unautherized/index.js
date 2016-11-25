@@ -10,7 +10,7 @@ import { Alert, Steps, Button,Form,Input,message,Modal } from 'antd';
 import { Link } from 'react-router';
 const Step = Steps.Step;
 const FormItem = Form.Item;
-import {fetch,ruleType} from 'UTILS';
+import {fetch,ruleType,helper} from 'UTILS';
 // 页面组件
 import Frame from 'COM/form/frame';
 
@@ -42,22 +42,13 @@ class Steps2 extends React.Component {
                     
                     if(res.fieldName){
                         const {form} = this.props;
-                        if(res.fieldName=='smsCode'){
-                            form.setFields({'smsCode':{
-                                "errors":[new Error(res.message)],
-                                "value":form.getFieldValue('smsCode')
-                            }});
+                        if(res.fieldName=='smsAutoCode'){
+                            helper.focusError(form,'smsCode',res.message);
                         }else{
-                            form.setFields({[res.fieldName]:{
-                                "errors":[new Error(res.message)],
-                                "value":form.getFieldValue(res.fieldName)
-                            }});
+                            helper.focusError(form,res.fieldName,res.message);
                         }
                     }
 
-                    if(res.code='400'){
-                        fetch('/common/getLoginCheckStatus.do');
-                    }
                 });
             }
         });
@@ -120,10 +111,6 @@ class Steps2 extends React.Component {
                 mobile:res.data.mobile,
                 connectorType:res.data.connectorType
             });
-        },(res)=>{
-            if(res.code='400'){
-                fetch('/common/getLoginCheckStatus.do');
-            }
         });
     }
 
