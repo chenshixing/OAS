@@ -14,7 +14,7 @@ const FormItem = Form.Item;
 const InputGroup = Input.Group;
 
 // 自定义验证 rule 及 fetch 方法
-import { ruleType, fetch } from 'UTILS';
+import { ruleType, fetch,helper } from 'UTILS';
 
 import AgreementModal from 'COM/agreementModal'
 
@@ -50,10 +50,7 @@ class Reg extends React.Component {
           console.log('注册失败');
             if(res.fieldName){
               const {form} = this.props;
-              form.setFields({[res.fieldName]:{
-                "errors":[new Error(res.message)],
-                'value':form.getFieldValue(res.fieldName)
-              }});
+              helper.focusError(form,res.fieldName,res.message);
             }
         });
 

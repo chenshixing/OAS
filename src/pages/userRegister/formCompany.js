@@ -17,7 +17,7 @@ import { Link } from 'react-router';
 import AgreementModal from 'COM/agreementModal'
 
 // 自定义验证 rule 及 fetch 方法
-import { ruleType, fetch } from 'UTILS';
+import { ruleType, fetch, helper } from 'UTILS';
 
 // 页面
 class Reg extends React.Component {
@@ -47,7 +47,12 @@ class Reg extends React.Component {
             window.location.href='#/userRegister/result';
           },(res)=>{
             if(res.fieldName){
-              this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+              const {form} = this.props;
+              helper.focusError(form,res.fieldName,res.message);
+              // form.setFields({[res.fieldName]:{
+              //   "errors":[new Error(res.message)],
+              //   'value':form.getFieldValue(res.fieldName)
+              // }});
             }
           })
       }else{

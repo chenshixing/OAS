@@ -54,7 +54,11 @@ class CompanyValidate extends React.Component {
                      });
                  },(res)=>{
                     if(res.fieldName){
-                        this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                        const {form} = this.props;
+                        form.setFields({[res.fieldName]:{
+                            "errors":[new Error(res.message)],
+                            "value":form.getFieldValue(res.fieldName)
+                        }});
                     }
 
                     if(res.code='400'){

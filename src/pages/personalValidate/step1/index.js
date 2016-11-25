@@ -66,7 +66,11 @@ class PersonalValidate extends React.Component {
         },(res)=>{
         
             if(res.fieldName){
-                this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                const {form} = this.props;
+                form.setFields({[res.fieldName]:{
+                    "errors":[new Error(res.message)],
+                    'value':form.getFieldValue(res.fieldName)
+                }});
             }
             this.setState({ loading: false, visible: false });
             

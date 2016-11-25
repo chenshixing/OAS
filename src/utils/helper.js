@@ -28,6 +28,18 @@ let helper={
             o[key][level] = n.checkStatus;
         });
         return o;
+    },
+    //定位元素的错误并提示错误信息
+    /** 
+     * form  :this.props.form
+     * fieldName: 字段名 res.fieldName
+     * message:错误信息 res.message
+    */
+    focusError(form,fieldName,message){
+        form.setFields({[fieldName]:{
+            "errors":[new Error(message)],
+            "value":form.getFieldValue(fieldName)
+        }});
     }
 }
 

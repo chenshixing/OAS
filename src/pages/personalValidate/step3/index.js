@@ -64,10 +64,17 @@ class PersonalValidate extends React.Component {
                     });
                 }, (res) => {
                     if(res.fieldName){
+                        const {form} = this.props;
                         if(res.fieldName=='pfxPassword'){
-                            this.props.form.setFields({'password':{"errors":[new Error(res.message)]}});
+                            form.setFields({'password':{
+                                "errors":[new Error(res.message)],
+                                'value':form.getFieldValue('password')
+                            }});
                         }else{
-                            this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                            form.setFields({[res.fieldName]:{
+                                "errors":[new Error(res.message)],
+                                'value':form.getFieldValue(res.fieldName)
+                            }});
                         }
                     }
                 });

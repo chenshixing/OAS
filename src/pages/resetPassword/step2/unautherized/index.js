@@ -41,10 +41,17 @@ class Steps2 extends React.Component {
                 },(res)=>{
                     
                     if(res.fieldName){
+                        const {form} = this.props;
                         if(res.fieldName=='smsCode'){
-                            this.props.form.setFields({'smsCode':{"errors":[new Error(res.message)]}});
+                            form.setFields({'smsCode':{
+                                "errors":[new Error(res.message)],
+                                "value":form.getFieldValue('smsCode')
+                            }});
                         }else{
-                            this.props.form.setFields({[res.fieldName]:{"errors":[new Error(res.message)]}});
+                            form.setFields({[res.fieldName]:{
+                                "errors":[new Error(res.message)],
+                                "value":form.getFieldValue(res.fieldName)
+                            }});
                         }
                     }
 

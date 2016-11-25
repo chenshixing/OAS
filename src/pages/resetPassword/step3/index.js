@@ -64,10 +64,17 @@ class Step3 extends React.Component {
                 }, (res) => {
 
                     if(res.fieldName){
+                        const {form} = this.props;
                         if(res.fieldName=='pwd'){
-                            this.props.form.setFields({'password':{"errors":[new Error(res.message)]}});
+                            form.setFields({'password':{
+                                "errors":[new Error(res.message)],
+                                "value":form.getFieldValue('pwd')
+                            }});
                         }else if(res.fieldName=='conPwd'){
-                            this.props.form.setFields({'rePassword':{"errors":[new Error(res.message)]}});
+                            form.setFields({'rePassword':{
+                                "errors":[new Error(res.message)],
+                                "value":form.getFieldValue('conPwd')
+                            }});
                         }
                         
                     }
