@@ -302,19 +302,19 @@ class CompanyValidate extends React.Component {
     }
 
     render() {
-        // console.log("limit");
+
         // 表单校验
 
         // 根据营业执照类型类型选择验证机制
-        // console.log(this.state.data.companyPaperType);
+
         const rulesBusiness = this.state.data.companyPaperType == 2 ? formValidation.rulesCommon : formValidation.rulesMultiple;
 
         //  根据填写人身份选择验证机制
         const rulesFill = this.state.data.writerType == 1 ? formValidation.rulesAgent : {};
-        // console.log(rulesFill);
+
         // 根据不同类型选择验证机制
         let rules = Object.assign({}, formValidation.rulesBase, rulesBusiness, rulesFill);
-        console.log(rules);
+
 
         const formItemLayout = {
             labelCol: {
