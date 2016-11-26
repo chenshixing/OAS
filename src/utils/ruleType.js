@@ -57,7 +57,6 @@ const dataType = {
     },
     // 手机
     "mobile": {
-        // reg: /^13[0-9]{9}$|14[0-9]{9}$|15[0-9]{9}$|17[0-9]{9}$|18[0-9]{9}$/,
         reg: /^13[0-9]{9}$|^147[0-9]{8}$|^15[0-9]{9}$|^17(0|7)[0-9]{8}$|^18[0-9]{9}$/,
         errMsg: '手机格式不正确'
     },
@@ -77,27 +76,31 @@ const dataType = {
         errMsg: '身份证号码格式不正确'
     },
     //英文字母（区分大小写）、数字或符号组合(三选二 )
-    "password": {
-        reg: {
-            // 自定义 test 方法
-            test: function(value) {
-                const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[_\-~\*\(\)\!@\#\$%\^\.·•,&]+/];
-                let matchNum = 0;
-                regArr.map((item, index) => {
-                    if (item.test(value)) {
-                        matchNum++;
-                    }
-                });
-                let isMatch = matchNum >= 2;
-                return isMatch;
-            }
-        },
-        errMsg: '必须为英文字母（区分大小写）、数字或符号组合'
+    // "password": {
+    //     reg: {
+    //         // 自定义 test 方法
+    //         test: function(value) {
+    //             const regArr = [/[0-9]\d*/, /[A-Za-z]+/, /[_\-~\*\(\)\!@\#\$%\^\.·•,&]+/];
+    //             let matchNum = 0;
+    //             regArr.map((item, index) => {
+    //                 if (item.test(value)) {
+    //                     matchNum++;
+    //                 }
+    //             });
+    //             let isMatch = matchNum >= 2;
+    //             return isMatch;
+    //         }
+    //     },
+    //     errMsg: '必须为英文字母（区分大小写）、数字或符号组合'
+    // },
+    "password":{
+        reg: /^[a-zA-Z_\-~\*\(\)\!@\#\$%\^\.·•,&]+$|^[0-9_\-~\*\(\)\!@\#\$%\^\.·•,&]+$|^[0-9a-zA-Z]+$|^[0-9a-zA-Z_\-~\*\(\)\!@\#\$%\^\.·•,&]+$/,
+        errMsg: "必须为英文字母（区分大小写）、数字或符号组合"
     },
     //验证由数字和26个英文字母组成的字符串 4-20位
     "en+num": {
         reg: /^[A-Za-z0-9]+$/,
-        errMsg: "英文、数字"
+        errMsg: "只能输入英文、数字"
     },
     //中文、英文、可含半角标点符号•.,-_~ *()!@#$%^&
     "cn+en+str": {
