@@ -149,7 +149,7 @@ class PersonalValidate extends React.Component {
                             required
                             hasFeedback
                         >
-                            <Input placeholder="请输入身份证号码" {...getFieldProps('IdCard', rules.IdCard)} />
+                            <Input placeholder={helper.isIEbrowser() ? '' : "请输入身份证号码"} {...getFieldProps('IdCard', rules.IdCard)} />
                         </FormItem>
 
                         <FormItem

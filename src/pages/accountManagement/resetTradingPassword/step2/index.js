@@ -248,7 +248,7 @@ class Steps2 extends React.Component {
                     <Form horizontal  className="fn-mt-30">
                         <FormItem {...formItemLayout} label="设置交易密码" hasFeedback>
                             <Input
-                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母（区分大小写）、数字或符号的组合"}
                                 {...passProps}
                                 type="password"
                                 onPaste={this.noop.bind(this)}
@@ -261,10 +261,9 @@ class Steps2 extends React.Component {
                                 : null*/}
                         </FormItem>
 
-
                         <FormItem {...formItemLayout} label="确认交易密码" hasFeedback>
                             <Input
-                                placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母（区分大小写）、数字或符号的组合"}
                                 {...rePassProps}
                                 type="password"
                                 onPaste={this.noop.bind(this)}

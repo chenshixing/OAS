@@ -182,7 +182,7 @@ class ResetPassword extends React.Component {
                         <Form.Item {...props} label="新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
-                                   placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                   placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母（区分大小写）、数字或符号的组合"}
 
                                    onPaste={this.noop.bind(this)}
                                    onCopy={this.noop.bind(this)}
@@ -192,7 +192,7 @@ class ResetPassword extends React.Component {
                         <Form.Item {...props} label="确认新登录密码" hasFeedback required>
                             <Input type="password"
                                    autoComplete="off"
-                                   placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"
+                                   placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母（区分大小写）、数字或符号的组合"}
 
                                    onPaste={this.noop.bind(this)}
                                    onCopy={this.noop.bind(this)}

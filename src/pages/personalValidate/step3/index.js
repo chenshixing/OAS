@@ -226,7 +226,7 @@ class PersonalValidate extends React.Component {
                                 label="设置交易密码"
                                 required
                             >
-                                <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off"  onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" />
+                                <Input type="password" {...getFieldProps('password', rules.password)} onBlur={this.onPassWordBlur.bind(this)} autoComplete="off"  onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母、数字或符号的组合，字母区分大小写"} />
                             </FormItem>
 
                             <FormItem

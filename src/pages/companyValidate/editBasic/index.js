@@ -606,7 +606,7 @@ class CompanyValidate extends React.Component {
                             className="fn-mt-20"
                         >
                             {this.state.visible ? 
-                                <Input {...getFieldProps('pfxPassword',rules.pfxPassword)} type="password" placeholder="8-20位英文字母（区分大小写）、数字或符号的组合"/>
+                                <Input {...getFieldProps('pfxPassword',rules.pfxPassword)} type="password" placeholder={helper.isIEbrowser() ? '' : '8-20位英文字母（区分大小写）、数字或符号的组合'}/>
                                 :
                                 ""
                             }

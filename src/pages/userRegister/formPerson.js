@@ -199,7 +199,7 @@ class Reg extends React.Component {
 
   render() {
     const { getFieldProps } = this.props.form;
-
+    console.log('is ie?',helper.isIEbrowser())
     // 表单校验
     const rules = {
       realName: {
@@ -285,7 +285,7 @@ class Reg extends React.Component {
           label="登录名"
           required
         >
-          <Input placeholder="4-32个英文字母、数字" {...getFieldProps('userNo', rules.userNo)} />
+          <Input placeholder={helper.isIEbrowser() ? '' : '4-32个英文字母、数字'} {...getFieldProps('userNo', rules.userNo)} />
         </FormItem>
 
         <FormItem
@@ -293,7 +293,7 @@ class Reg extends React.Component {
           label="登录密码"
           required
         >
-          <Input type="password" autoComplete="off" onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder="8-20位英文字母、数字或符号的组合，字母区分大小写" {...getFieldProps('loginPwd', rules.loginPwd)} />
+          <Input type="password" autoComplete="off" onPaste={this.noop.bind(this)} onCopy={this.noop.bind(this)} onCut={this.noop.bind(this)} placeholder={helper.isIEbrowser() ? '' : "8-20位英文字母、数字或符号的组合，字母区分大小写"} {...getFieldProps('loginPwd', rules.loginPwd)} />
         </FormItem>
 
         <FormItem

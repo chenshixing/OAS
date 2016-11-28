@@ -228,7 +228,7 @@ class Home extends React.Component {
                                 <Row>
                                     <Col span={12} offset={6}>
                                         <FormItem {...formItemLayout} label="邀请码">
-                                            <Input {...nameProps} placeholder="请输入邀请码"/>
+                                            <Input {...nameProps} placeholder={helper.isIEbrowser() ? '' : "请输入邀请码"}/>
                                         </FormItem>
 
                                     </Col>

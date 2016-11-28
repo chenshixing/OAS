@@ -40,6 +40,17 @@ let helper={
             "errors":[new Error(message)],
             "value":form.getFieldValue(fieldName)
         }});
+    },
+    //根据ua判断是否IE浏览器
+    isIEbrowser(){
+        var userAgent = navigator.userAgent;
+        if (!!window.ActiveXObject || "ActiveXObject" in window)
+            return true;
+        else if (userAgent.indexOf("Edge") > -1) {
+            return true
+        }else {
+            return false;
+        }
     }
 }
 
