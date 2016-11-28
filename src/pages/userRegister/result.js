@@ -36,12 +36,9 @@ class RegisterResult extends React.Component{
                                showIcon
                         />
                         <div className="text-align-center fn-mt-30">
-                            <Button type="primary"> 
-                                <a className='ant-btn ant-btn-primary' href={logoutUrl}>&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                            </Button>
+                            <a className='ant-btn ant-btn-primary' href={logoutUrl}>&nbsp;&nbsp;&nbsp;&nbsp;返回登录&nbsp;&nbsp;&nbsp;&nbsp;</a>
                         </div>
                     </div>
-
 
                 </div>
             </div>
