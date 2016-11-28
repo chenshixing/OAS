@@ -20,10 +20,14 @@ class Check extends Component {
         super(props);
         const {data,sysInfo} = State.getState();
         this.state={
-            userType:data && data.userType,//从全局state中获取,用户类型，1：个人；2：企业；
-            step:data && data.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
-            bankCheckStatus:data && data.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
-            showName:data && data.showName,//显示用户名称
+            // userType:data && data.userType,//从全局state中获取,用户类型，1：个人；2：企业；
+            // step:data && data.step,//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+            // bankCheckStatus:data && data.bankCheckStatus,//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+            // showName:data && data.showName,//显示用户名称
+            userType:'',//从全局state中获取,用户类型，1：个人；2：企业；
+            step:'',//从全局state中获取,0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
+            bankCheckStatus:'',//银行审核状态，-1：审核中，0：审核不通过，1：审核通过
+            showName:'',//显示用户名称
             PerBasicInfoText:'',
             PerRealText:'',
             logoutUrl:sysInfo && sysInfo.logoutUrl
@@ -93,16 +97,12 @@ class Check extends Component {
             this.setState({
                 bankCheckStatus:-1   //审核中
             });
-        },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
         });
     }
 
     reValidata(){
         fetch('/personVerification/resetStep.do').then((res)=>{
             this.props.history.push('/personalValidate/step1');
-        },(res)=>{
-            message.error(`(${res.code})${res.message}`,3);
         });
     }
 

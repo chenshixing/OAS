@@ -67,7 +67,11 @@ class PersonalValidate extends React.Component {
         
             if(res.fieldName){
                 const {form} = this.props;
-                helper.focusError(form,res.fieldName,res.message);
+                if(res.fieldName=='cardNumber'){
+                    helper.focusError(form,'IdCard',res.message);
+                }else{
+                    helper.focusError(form,res.fieldName,res.message);
+                }
             }
             this.setState({ loading: false, visible: false });
             

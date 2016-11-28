@@ -12,7 +12,8 @@ import {
     Col,
     Icon,
     Button,
-    Table
+    Table,
+    Modal
 } from 'antd';
 
 //  业务组件
@@ -60,6 +61,24 @@ class TipsRow extends Component {
             return false;
         }
         this.loadData();
+    }
+
+    reVerify(){
+        fetch('/companyVerification/resubmitVerification').then((res)=>{
+            Modal.success({
+                title: '审核申请已提交，请耐心等待结果。',
+                content: (
+                    <div>
+                        <p>我们将尽快完成审核，结果将以短信通知您。</p>
+                        <p>如需修改信息请联系客服电话：400-106-6698。</p>
+                    </div>
+                ),
+            });
+            
+            this.props.updatePageType('check');
+        });
+
+        
     }
 
     loadData() {
@@ -122,6 +141,11 @@ class TipsRow extends Component {
                                 <InfoRow type="information" pageType={ this.state.pageType } data={ informationData } />
 
                                 <InfoRow type="account" pageType={ this.state.pageType } data={ accountData } />
+                                {this.state.pageType =='disapproval' ? <Row className="">
+                                                                            <Col span={24}>
+                                                                                <p>如确认申请资料无误，请重新申请认证，点击 <Button type="primary" onClick={this.reVerify.bind(this)} size="small">提交认证申请</Button></p>
+                                                                            </Col>
+                                                                        </Row> : null }
                             </Row>;
 
             me.setState({

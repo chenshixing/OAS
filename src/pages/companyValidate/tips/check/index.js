@@ -146,12 +146,19 @@ class Check extends Component {
             </Row>
         );
     }
+    //更新审核状态
+    updatePageType(pageType){
+        console.log('pageType',pageType);
+        this.setState({
+            pageType:pageType
+        })
+    }
 
     render() {
         return (
             <div className="tipsBox">
                 { this.headerRender() }
-                <TipsContent pageType={ this.state.pageType } isReload={ true } />
+                <TipsContent pageType={ this.state.pageType } isReload={ true } updatePageType={this.updatePageType.bind(this)} />
             </div>
         );
     }
