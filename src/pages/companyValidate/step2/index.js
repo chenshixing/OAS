@@ -104,12 +104,13 @@ class CompanyValidate extends React.Component {
     loadData() {
         let me = this;
         let data = me.state.data;
+        const time = new Date().getTime();
         //  身份实名认证
-        let p1 = fetch('/companyVerification/getCompanyInfo.do');
+        let p1 = fetch(`/companyVerification/getCompanyInfo.do?t=${time}`);
         //  企业对公账户认证
-        let p2 = fetch('/companyVerification/getConnectorInfo.do');
+        let p2 = fetch(`/companyVerification/getConnectorInfo.do?t=${time}`);
         //  企业资料补充
-        let p3 = fetch('/companyVerification/getBankAccountInfo.do');
+        let p3 = fetch(`/companyVerification/getBankAccountInfo.do?t=${time}`);
 
         Promise.all([p1, p2, p3]).then(res => {
             // console.log(res);
