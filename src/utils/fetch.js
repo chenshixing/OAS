@@ -39,7 +39,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
 
     //  添加时间戳
     url = helper.urlAddParam(url, {
-        _t: new Date / 1
+        _t: new Date() / 1
     });
 
     if (showLoading === undefined) {
