@@ -12,6 +12,11 @@ import {
     Button
 } from 'antd';
 
+//  helper
+import {
+    helper
+} from 'UTILS';
+
 /**
  * @param { String } url 异步请求地址，默认为 get 方法
  * @param { PlainObject } data 异步配置参数 [可选]
@@ -31,6 +36,11 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
         url = `/api${url}`;
     }
     //url = __DEV__ ? `/api${url}` : url;
+
+    //  添加时间戳
+    url = helper.urlAddParam(url, {
+        _t: new Date / 1
+    });
 
     if (showLoading === undefined) {
         if (typeof data === 'boolean') {
@@ -90,20 +100,20 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                     // 未登录，页面跳转到指定url登录
                     // "cas=1"是为了中转页面判断第一次登录，记录日志
 
-                if (res.code == 401) {
-                    //提醒登录
-                    message.error(`未登录，3秒后将跳到登录页面`);
-                    //res.data = res.data.replace(/\?.*/, '');
-                    //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
-                    const url = `${res.data}`;
-                    //const loginUrl = State.getState().sysInfo.loginUrl;
-                    //const url = loginUrl;
-                    setTimeout(() => {
-                        location.href = url;
-                    }, 3000);
+                    if (res.code == 401) {
+                        //提醒登录
+                        message.error(`未登录，3秒后将跳到登录页面`);
+                        //res.data = res.data.replace(/\?.*/, '');
+                        //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
+                        const url = `${res.data}`;
+                        //const loginUrl = State.getState().sysInfo.loginUrl;
+                        //const url = loginUrl;
+                        setTimeout(() => {
+                            location.href = url;
+                        }, 3000);
 
-                    return;
-                }
+                        return;
+                    }
 
                     //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                     // 处理错误

@@ -85,11 +85,11 @@ class CompanyValidate extends React.Component {
             return false;
         }
 
-        const time = new Date().getTime();
+        // const time = new Date().getTime();
         //  获取企业信息
-        let p1 = fetch(`/companyVerification/getCompanyInfo.do?t=${time}`);
+        let p1 = fetch(`/companyVerification/getCompanyInfo.do`);
         //  获取关系人信息
-        let p2 = fetch(`/companyVerification/getConnectorInfo.do?t=${time}`);
+        let p2 = fetch(`/companyVerification/getConnectorInfo.do`);
 
         Promise.all([p1, p2]).then(res => {
             let fieldsValue = Object.assign({}, res[0].data, res[1].data);
