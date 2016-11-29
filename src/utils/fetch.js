@@ -59,8 +59,8 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
         headers: {
             "Content-Type": "application/json",
             "X-Requested-With": "XMLHttpRequest",
-            //  注意：这个用于设置无缓存
-            "Cache-Control": "no-cache",
+            // //  注意：这个用于设置无缓存
+            // "Cache-Control": "no-cache",
         },
         // 设置cookies跨域
         credentials: 'include' //'same-origin'
