@@ -32,7 +32,6 @@ const rulesBase = {
     mobile: {
         rules: [{
                 required: true,
-                type: 'string',
                 message: '填写人常用手机号码不能为空'
             },
             ruleType('mobile')
@@ -87,7 +86,6 @@ const rulesCommon = {
     registrationPaperNo: {
         rules: [{
             required: true,
-            type: 'string',
             message: '营业执照注册号不能为空'
         }, {
             max: 30,
@@ -97,7 +95,6 @@ const rulesCommon = {
     orgInsCodePaperNo: {
         rules: [{
             required: true,
-            type: 'string',
             message: '组织机构代码证不能为空'
         }, {
             min: 9,
@@ -111,7 +108,6 @@ const rulesMultiple = {
     socialCreditPaperNo: {
         rules: [{
             required: true,
-            type: 'string',
             message: '统一社会信用代码不能为空'
         }, {
             min: 13,
