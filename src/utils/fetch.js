@@ -90,20 +90,20 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
                     // 未登录，页面跳转到指定url登录
                     // "cas=1"是为了中转页面判断第一次登录，记录日志
 
-                    // if(res.code == 401){
-                    //     //提醒登录
-                    //     message.error(`未登录，3秒后将跳到登录页面`);
-                    //     //res.data = res.data.replace(/\?.*/, '');
-                    //     //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
-                    //     const url = `${res.data}`;
-                    //     //const loginUrl = State.getState().sysInfo.loginUrl;
-                    //     //const url = loginUrl;
-                    //     setTimeout(() => {
-                    //         location.href = url;
-                    //     }, 3000);
+                if (res.code == 401) {
+                    //提醒登录
+                    message.error(`未登录，3秒后将跳到登录页面`);
+                    //res.data = res.data.replace(/\?.*/, '');
+                    //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
+                    const url = `${res.data}`;
+                    //const loginUrl = State.getState().sysInfo.loginUrl;
+                    //const url = loginUrl;
+                    setTimeout(() => {
+                        location.href = url;
+                    }, 3000);
 
-                    //     return;
-                    // }
+                    return;
+                }
 
                     //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
                     // 处理错误
