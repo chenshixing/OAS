@@ -7,7 +7,10 @@
 
 // 全局 loading 状态
 import State from 'PAGES/Layouts/state';
-import { message, Button } from 'antd';
+import {
+    message,
+    Button
+} from 'antd';
 
 /**
  * @param { String } url 异步请求地址，默认为 get 方法
@@ -22,19 +25,19 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
     // 代理会去掉 /api 获取数据
 
     // CORS跨域判断
-    if(__CORS__){
-        url =  `${__CORS__.slice(0, -1)}${url}`;
-    }else if(__DEV__){
-        url =  `/api${url}`;
+    if (__CORS__) {
+        url = `${__CORS__.slice(0, -1)}${url}`;
+    } else if (__DEV__) {
+        url = `/api${url}`;
     }
     //url = __DEV__ ? `/api${url}` : url;
 
-    if(showLoading === undefined){
-        if(typeof data === 'boolean'){
+    if (showLoading === undefined) {
+        if (typeof data === 'boolean') {
             // 兼容 showLoading 在第二个参数位置设置
             showLoading = data;
             data = {};
-        }else{
+        } else {
             // 默认显示loading
             showLoading = true
         }
@@ -42,7 +45,7 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
 
     // fetch 规范中只有 post 才能设置 body 属性
     // 当为 get 方法时需拼接在 url 上
-    if(data && data.body) {
+    if (data && data.body) {
 
         // 当有body传递时，强制设置为 post 方法
         data.method = 'post';
@@ -55,82 +58,84 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
         method: "get",
         headers: {
             "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
+            "X-Requested-With": "XMLHttpRequest",
+            //  注意：这个用于设置无缓存
+            "Cache-Control": "no-cache",
         },
         // 设置cookies跨域
-        credentials: 'include'//'same-origin'
+        credentials: 'include' //'same-origin'
     }, data);
 
     // 显示loading图标
     showLoading && State.showLoading && State.showLoading();
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
 
         fetch(url, data)
-                .then(res=> res.json())  // 数据接口统一为 json
-                .then(res => {
-                    // 隐藏loading图标
-                    showLoading && State.hideLoading && State.hideLoading();
+            .then(res => res.json()) // 数据接口统一为 json
+            .then(res => {
+                // 隐藏loading图标
+                showLoading && State.hideLoading && State.hideLoading();
 
-                    // 业务code特定处理
-                    if( res.code == 200 ) {
-                        resolve(res);
-                    } else {
-                        
-                        // 本地联调用到的专用登录页
-                        if(__DEV__ && (res.code == "001")){
-                            return location.href = `${location.origin}${location.pathname}#/userLogin`;
-                        }
+                // 业务code特定处理
+                if (res.code == 200) {
+                    resolve(res);
+                } else {
 
-                        // 未登录，页面跳转到指定url登录
-                        // "cas=1"是为了中转页面判断第一次登录，记录日志
-
-                        if(res.code == 401){
-                            //提醒登录
-                            message.error(`未登录，3秒后将跳到登录页面`);
-                            //res.data = res.data.replace(/\?.*/, '');
-                            //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
-                            const url = `${res.data}`;
-                            //const loginUrl = State.getState().sysInfo.loginUrl;
-                            //const url = loginUrl;
-                            setTimeout(() => {
-                                location.href = url;
-                            }, 3000);
-                            
-                            return;
-                        }
-                        
-                        //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
-                        // 处理错误
-                        reject(res);
-
-                        //  当返回code不等于200时，自定义错误处理，codeErrCallback返回false不继续往下走
-                        if(codeErrCallback && codeErrCallback(res) === false){
-                            return;
-                        }
-
-                        if(res.message && !res.fieldName){
-                             message.error(`错误提示：(${res.code})`+res.message,3);
-                        }
-
-                        // 代码提示错误
-                        if( res.code == 500 ){
-                            throw new Error(`错误代码：${res.code}, 原因：${res.message}`);
-                        }
-
-
+                    // 本地联调用到的专用登录页
+                    if (__DEV__ && (res.code == "001")) {
+                        return location.href = `${location.origin}${location.pathname}#/userLogin`;
                     }
-                })
-                .catch(err=> {
-                    // 隐藏loading图标
-                    showLoading && State.hideLoading && State.hideLoading();
-                    
-                    if(errCallback){
-                        return errCallback();
+
+                    // 未登录，页面跳转到指定url登录
+                    // "cas=1"是为了中转页面判断第一次登录，记录日志
+
+                    // if(res.code == 401){
+                    //     //提醒登录
+                    //     message.error(`未登录，3秒后将跳到登录页面`);
+                    //     //res.data = res.data.replace(/\?.*/, '');
+                    //     //const url = `${res.data}?service=${location.origin}${location.pathname}${encodeURIComponent('?cas=1')}`;
+                    //     const url = `${res.data}`;
+                    //     //const loginUrl = State.getState().sysInfo.loginUrl;
+                    //     //const url = loginUrl;
+                    //     setTimeout(() => {
+                    //         location.href = url;
+                    //     }, 3000);
+
+                    //     return;
+                    // }
+
+                    //alert(`错误代码：${res.ResultCode}, 原因：${res.Message}`)
+                    // 处理错误
+                    reject(res);
+
+                    //  当返回code不等于200时，自定义错误处理，codeErrCallback返回false不继续往下走
+                    if (codeErrCallback && codeErrCallback(res) === false) {
+                        return;
                     }
-                    message.error(`错误代码：${ err }`);
-                    console.error('Fetch Error: %s', err);
-                })
+
+                    if (res.message && !res.fieldName) {
+                        message.error(`错误提示：(${res.code})` + res.message, 3);
+                    }
+
+                    // 代码提示错误
+                    if (res.code == 500) {
+                        throw new Error(`错误代码：${res.code}, 原因：${res.message}`);
+                    }
+
+
+                }
+            })
+            .catch(err => {
+                // 隐藏loading图标
+                showLoading && State.hideLoading && State.hideLoading();
+
+                if (errCallback) {
+                    return errCallback();
+                }
+                message.error(`错误代码：${ err }`);
+                console.error('Fetch Error: %s', err);
+            })
     })
 }
 
@@ -168,4 +173,3 @@ export default (url, data, showLoading, errCallback, codeErrCallback) => {
 // 响应码：601，响应码描述：黑名单用户
 // 响应码：701，响应码描述：交易密码不正确
 // 响应码：999，响应码描述：登录超时
-
