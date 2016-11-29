@@ -112,15 +112,15 @@ class CompanyValidate extends React.Component {
             if (data.writerType == 1) {
                 //  委托代理人
                 fieldsValue.name = fieldsValue.client.name;
-                fieldsValue.mobile = fieldsValue.client.mobile;
+                fieldsValue.mobile = fieldsValue.client.mobile.toString();
                 fieldsValue.email = fieldsValue.client.email;
                 fieldsValue.corporationName = fieldsValue.corperator.name;
-                fieldsValue.corporationMobile = fieldsValue.corperator.mobile;
+                fieldsValue.corporationMobile = fieldsValue.corperator.mobile.toString();
                 fieldsValue.corporationEmail = fieldsValue.corperator.email;
             } else if (data.writerType == 2) {
                 //  法定代表人TODO
                 fieldsValue.name = fieldsValue.corperator.name;
-                fieldsValue.mobile = fieldsValue.corperator.mobile;
+                fieldsValue.mobile = fieldsValue.corperator.mobile.toString();
                 fieldsValue.email = fieldsValue.corperator.email;
             }
             delete fieldsValue.client;
