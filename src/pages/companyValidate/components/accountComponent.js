@@ -95,8 +95,9 @@ class Account extends Component {
         if (!me.props.isGetInfo) {
             return false;
         }
+        const time = new Date().getTime();
         //  获取企业对公账户信息
-        fetch('/companyVerification/getBankAccountInfo.do').then(res => {
+        fetch(`/companyVerification/getBankAccountInfo.do?t=${time}`).then(res => {
             if (res.code == 200) {
                 //  提交成功TODO
                 let fieldsValue = res.data;
