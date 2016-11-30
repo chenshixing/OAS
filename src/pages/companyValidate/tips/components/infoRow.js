@@ -222,7 +222,7 @@ class InfoRow extends Component {
         let accountValidateType = accountData.accountValidateType;
         // console.log(accountValidateType);
         if (accountValidateType === "bond") {
-            if ((accountData.systemStatus == -1 && accountData.bankStatus == -1) || (accountData.systemStatus == 0 && accountData.bankStatus == -1)) {
+            if ((accountData.systemStatus == -1 && accountData.bankStatus == -1) || (accountData.systemStatus == 0 && accountData.bankStatus == -1) || (accountData.systemStatus == 2 && accountData.bankStatus == -1)) {
                 return (
                     <Col span={12} className="tableCol">
                         <CountDown />
