@@ -63,8 +63,8 @@ class TipsRow extends Component {
         this.loadData();
     }
 
-    reVerify(){
-        fetch('/companyVerification/resubmitVerification').then((res)=>{
+    reVerify() {
+        fetch('/companyVerification/resubmitVerification.do').then((res) => {
             Modal.success({
                 title: '审核申请已提交，请耐心等待结果。',
                 content: (
@@ -74,11 +74,11 @@ class TipsRow extends Component {
                     </div>
                 ),
             });
-            
+
             this.props.updatePageType('check');
         });
 
-        
+
     }
 
     loadData() {
