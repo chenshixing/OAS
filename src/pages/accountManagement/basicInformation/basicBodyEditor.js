@@ -46,12 +46,12 @@ export default class basicBodyEditor extends React.Component {
         return items[item]
     }
     //判断完成状态
-    GetLoginCheckStatusTemplate(type,getUserCheckStatusCheckItems) {
+    GetLoginCheckStatusTemplate(type,getUserCheckStatusCheckItems,getUserCheckStatus) {
         //判断 获取登录后判断状态  银行审核状态，-1：审核中，0：审核不通过，1：审核通过
         //执行到的步骤，0：未开始，1：执行到第1步，2：执行到第2步，3：执行到第3步，4：执行到第4步，999：完成
         //如果需要对齐 <Col span={1}> 改成 <Col span={2}>。这里是故意不对齐。为了使强迫症填写资料
-        console.log("GetLoginCheckStatusTemplate=>")
-        console.log(getUserCheckStatusCheckItems)
+        console.log("getUserCheckStatus=>")
+        console.log(getUserCheckStatus)
         let iSuccess = null;
         if(globalState.data.userType==1){
 
@@ -65,21 +65,38 @@ export default class basicBodyEditor extends React.Component {
                 (getUserCheckStatusCheckItems.PerBasicInfo.systemStatus ==1)
             );
         }else if(globalState.data.userType==2){
-            iSuccess = (
-                (type.bankCheckStatus == 1)
-                &&
-                (type.step == 999)
-                &&
-                (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==1)
-                &&
-                (getUserCheckStatusCheckItems.EnOperator.systemStatus ==1)
-                &&
-                (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==1)
-                &&
-                (getUserCheckStatusCheckItems.EnPaper.systemStatus ==1)
-                &&
-                (getUserCheckStatusCheckItems.EnAccount.systemStatus ==1)
-            );
+            if(getUserCheckStatus && getUserCheckStatus.writerType==1){
+                iSuccess = (
+                    (type.bankCheckStatus == 1)
+                    &&
+                    (type.step == 999)
+                    &&
+                    (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnOperator.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnPaper.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnAccount.systemStatus ==1)
+                );
+            }else{
+                iSuccess = (
+                    (type.bankCheckStatus == 1)
+                    &&
+                    (type.step == 999)
+                    &&
+                    (getUserCheckStatusCheckItems.EnBasicInfo.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnLegalPerson.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnPaper.systemStatus ==1)
+                    &&
+                    (getUserCheckStatusCheckItems.EnAccount.systemStatus ==1)
+                );
+            }
+
         }
         let result = null;
         if (iSuccess) {
@@ -626,7 +643,7 @@ export default class basicBodyEditor extends React.Component {
         //个人用户/企业用户
         UserTypeTemplate = this.UserTypeTemplate(userType);
         //建议完成基本资料
-        GetLoginCheckStatusTemplate = this.GetLoginCheckStatusTemplate(getLoginCheckStatus,getUserCheckStatusCheckItems);
+        GetLoginCheckStatusTemplate = this.GetLoginCheckStatusTemplate(getLoginCheckStatus,getUserCheckStatusCheckItems,getUserCheckStatus);
 
         //基本信息
         basicInformationTemplate = this.basicInformationTemplate(userType,getUserCheckStatusCheckItems);
