@@ -41,7 +41,7 @@ export default class ResultComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       data: {
         tableColumns: [{
@@ -157,18 +157,21 @@ export default class ResultComponent extends React.Component {
 
   finish() {
     let me = this;
+    let stateData = me.state.data;
     fetch('/common/getLoginCheckStatus.do').then(res => {
       if (res.code == 200) {
         let data = res.data;
-        if (data.bankCheckStatus == -1) {
-          //  审核中
-          me.goToTips()
-        } else if (data.bankCheckStatus == 0) {
-          //  审核未通过 资料未提供完全
-          me.tipsShow();
-        } else if (data.bankCheckStatus == 1) {
+        if (data.bankCheckStatus == 1) {
           //  审核通过
           this.props.history.push(`accountManagement`);
+          return false;
+        }
+        if (stateData.description != "") {
+          //  资料仍然需要补充
+          me.tipsShow();
+        } else {
+          //  不需要补充资料
+          me.goToTips();
         }
       }
     });
