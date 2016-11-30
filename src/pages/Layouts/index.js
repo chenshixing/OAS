@@ -35,10 +35,12 @@ export default class Index extends React.Component{
         })
     }
     render() {
+      const userInfo = rState.getState().data;
+      const sysInfo = State.getState().sysInfo;
       return (
           <Spin spinning={this.state.loading}>
           <div className="main-frm">
-            <Header state={rState.getState()} />
+            <Header userInfo={userInfo} sysInfo={sysInfo} />
             <div className="frame-wrap-bg">
               <div className="frame-wrap">
                 {/* 主内容区 */}

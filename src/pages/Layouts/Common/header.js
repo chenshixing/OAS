@@ -14,8 +14,8 @@ export default class Header extends React.Component{
         return true;
     }
     render() {
-      const { showName } = this.props.state.data;
-      const { logoutUrl } = this.props.state.sysInfo;
+      const { showName } = this.props.userInfo;
+      const { logoutUrl } = this.props.sysInfo;
       return (
         <div className="the-main-nav-wrap">
           <div className="the-main-nav-box">
