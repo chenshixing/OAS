@@ -98,7 +98,9 @@ class Home extends React.Component {
         });
     }
     handleAddBusiness() {
-        this.setState({visible: true});
+
+        this.setState({inviteCodeValue: "", visible: true})
+        this.props.form.setFieldsValue({inviteCode: ""});
     }
     // handleSubmit2(){
     //
@@ -135,8 +137,8 @@ class Home extends React.Component {
                 //console.log(res)
                 let resData = res.data
                 this.state.data.getUserServiceList.push(resData)
-                this.props.form.setFieldsValue({inviteCode: ""});
-                this.setState({inviteCodeValue: "", visible: false})
+
+                this.setState({ visible: false})
                 this.openNotification();
                 //this.setState({visible: false});
             }, (res) => {
