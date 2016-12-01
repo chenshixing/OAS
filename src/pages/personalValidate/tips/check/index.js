@@ -38,47 +38,88 @@ class Check extends Component {
         this.initPage();
     }
 
+    
     initPage(){
-        fetch('/common/getLoginCheckStatus.do').then((res)=>{
-            this.state.userType=res.data.userType;
-            this.state.step=res.data.step;
-            this.state.bankCheckStatus=res.data.bankCheckStatus;
-            this.state.showName=res.data.showName;
+        let p1 =fetch('/common/getLoginCheckStatus.do');
+        let p2 =fetch('/user/getUserCheckStatus.do');
+        Promise.all([p1,p2]).then(values=>{
+            const res0 = values[0];
+            this.state.userType=res0.data.userType;
+            this.state.step=res0.data.step;
+            this.state.bankCheckStatus=res0.data.bankCheckStatus;
+            this.state.showName=res0.data.showName;
 
-            fetch('/user/getUserCheckStatus.do').then((res)=>{
-                if(res.data.userType=='1'){
-                    var obj = helper.convertUserCheckStatus(res.data.checkItems);
-                    console.log('convertUserCheckStatus:',obj);
-                    var PerBasicInfoText='待提交';
-                    var PerRealText='待认证';
-                    //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
-                    //系统：systemStatus 银行：bankStatus
-
-                    const {PerBasicInfo,PerReal} = obj;
-                    if(PerBasicInfo.systemStatus=='-1'){
-                        PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
-                    }else{
-                        PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
-                    }
-
-                    if(PerReal.systemStatus=='-1'){
-                        PerRealText=<span className="error-FontColor1">待认证</span>;
-                    }else{
-                        PerRealText=<span className="success-FontColor1">已认证</span>;
-                    }
-
-                    // this.setState({
-                    //     PerBasicInfoText:PerBasicInfoText,
-                    //     PerRealText:PerRealText,
-                    // });
-                    this.state.PerBasicInfoText=PerBasicInfoText;
-                    this.state.PerRealText=PerRealText;
-
-                    this.forceUpdate();
+            const res1 = values[1];
+            if(res1.data.userType=='1'){
+                var obj = helper.convertUserCheckStatus(res1.data.checkItems);
+                console.log('convertUserCheckStatus:',obj);
+                var PerBasicInfoText='待提交';
+                var PerRealText='待认证';
+                //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
+                //系统：systemStatus 银行：bankStatus
+                const {PerBasicInfo,PerReal} = obj;
+                if(PerBasicInfo.systemStatus=='-1'){
+                    PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
+                }else{
+                    PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
                 }
-            });
+
+                if(PerReal.systemStatus=='-1'){
+                    PerRealText=<span className="error-FontColor1">待认证</span>;
+                }else{
+                    PerRealText=<span className="success-FontColor1">已认证</span>;
+                }
+
+                this.state.PerBasicInfoText=PerBasicInfoText;
+                this.state.PerRealText=PerRealText;
+            }
+
+            this.forceUpdate();
+        }).catch(err=>{
+            message.error(err)
+            throw err;
+        });
+
+        // fetch('/common/getLoginCheckStatus.do').then((res)=>{
+        //     this.state.userType=res.data.userType;
+        //     this.state.step=res.data.step;
+        //     this.state.bankCheckStatus=res.data.bankCheckStatus;
+        //     this.state.showName=res.data.showName;
+
+        //     fetch('/user/getUserCheckStatus.do').then((res)=>{
+        //         if(res.data.userType=='1'){
+        //             var obj = helper.convertUserCheckStatus(res.data.checkItems);
+        //             console.log('convertUserCheckStatus:',obj);
+        //             var PerBasicInfoText='待提交';
+        //             var PerRealText='待认证';
+        //             //审核状态，-1：待审核；0:未通过；1：通过；2：审核中
+        //             //系统：systemStatus 银行：bankStatus
+
+        //             const {PerBasicInfo,PerReal} = obj;
+        //             if(PerBasicInfo.systemStatus=='-1'){
+        //                 PerBasicInfoText=<span className="error-FontColor1">待提交</span>;
+        //             }else{
+        //                 PerBasicInfoText=<span className="success-FontColor1">已提交</span>;
+        //             }
+
+        //             if(PerReal.systemStatus=='-1'){
+        //                 PerRealText=<span className="error-FontColor1">待认证</span>;
+        //             }else{
+        //                 PerRealText=<span className="success-FontColor1">已认证</span>;
+        //             }
+
+        //             // this.setState({
+        //             //     PerBasicInfoText:PerBasicInfoText,
+        //             //     PerRealText:PerRealText,
+        //             // });
+        //             this.state.PerBasicInfoText=PerBasicInfoText;
+        //             this.state.PerRealText=PerRealText;
+
+        //             this.forceUpdate();
+        //         }
+        //     });
             
-        })
+        // })
         
     }
 
@@ -107,14 +148,14 @@ class Check extends Component {
     }
 
     render() {
-        var text='';
+        var text=null;
         var reVerify=null;
         if(this.state.step!='999'){//资料未提交完成
             var nextStep=`/personalValidate/step${this.state.step}`;
             console.log('nextStep:',nextStep);
             text=(<div className="ant-col-18">
                         <h4>您好，{this.state.showName}</h4>
-                        <p>您的认证资料未填写完，请尽快完成。<Button type='primary' size='small'><Link to={nextStep}>继续填写</Link></Button></p>
+                        <p>您的认证资料未填写完，请尽快完成。<Link className='ant-btn ant-btn-primary ant-btn-sm' to={nextStep}>继续填写</Link></p>
                         <p>如需修改已提交的信息，请点击 <a href='javascript:void(0)' onClick={this.reValidata.bind(this)}>重新认证</a></p>
                   </div>);
         }else if(this.state.step=='999' && this.state.bankCheckStatus =='-1'){//资料已提交完成，审核中
@@ -132,29 +173,28 @@ class Check extends Component {
             reVerify=(<Row>如确认申请资料无误，请重新申请认证，点击 <Button type="primary" size='small' onClick={this.reVerify.bind(this)}>提交认证申请</Button></Row>);
         }
 
+
         const {PerBasicInfoText,PerRealText} = this.state;
 
         return (
             <div className="tipsBox">
+          
                 <Row className="tipsRow">
                     <div className="ant-col-3 text-align-center">
                         <Icon type="exclamation-circle" className="tipsIcon exclamation"/>
                     </div>
+                      
                         {text}
+                        
                 </Row>
+                
                 <Row className="tipsRow">
                     <Row className="infoRow">
                         <Col span={6}>个人基本资料</Col>
-                        {/*
-                            <Col span={6}><span className="success-FontColor1">{PerBasicInfoText}</span></Col>
-                        */}
                         <Col span={6}>{PerBasicInfoText}</Col>
                     </Row>
                     <Row className="infoRow">
                         <Col span={6}>实名认证</Col>
-                        {/*
-                            <Col span={6}><span className="error-FontColor1">{PerRealText}</span></Col>
-                        */}
                         <Col span={6}>{PerRealText}</Col>
                     </Row>
                     {reVerify}
@@ -162,6 +202,7 @@ class Check extends Component {
                 <Row className="tipsRow pl-50">
                     <p>如您想更换账号，请点击 <a href={this.state.logoutUrl}>重新登录</a>。</p>
                 </Row>
+                
             </div>
         );
     }
