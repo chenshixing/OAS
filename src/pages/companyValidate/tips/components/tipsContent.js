@@ -124,6 +124,7 @@ class TipsRow extends Component {
                 accountValidateType: Map.accountMap.type[accountItem.accountValidateType],
                 passed: Map.accountMap.passType[accountItem.checkStatus]
             }, checkStatus.EnAccount);
+            this.props.updateAccountPassed(accountData.passed);
 
             //  企业资料补充
             let informationData = Object.assign({}, {

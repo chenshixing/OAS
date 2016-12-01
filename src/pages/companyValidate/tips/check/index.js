@@ -51,7 +51,8 @@ class Check extends Component {
 
         this.state = {
             pageType: this._getPageType(),
-            showName: globalState.showName ? globalState.showName : ""
+            showName: globalState.showName ? globalState.showName : "",
+            accountPassed: false
         }
     }
 
@@ -124,33 +125,51 @@ class Check extends Component {
                 <Col span={3} className="text-align-center">
                     <Icon type="exclamation-circle" className="tipsIcon exclamation"/>
                 </Col>
-                <Col span={21}>
-                    <h4>{ this.state.showName }</h4>
-                    <p>请根据您的实际情况尽快完成以下未认证项，如需修改信息请联系客服电话：400-106-6698。</p>
-                </Col>
+                {   this.state.accountPassed ?
+                    <Col span={21}>
+                        <h4>{ this.state.showName }</h4>
+                        <p>账号正在审核中，我们将尽快完成审核，结果将以短信通知您。</p>
+                        <p>请尽快完成以下认证条件，如需修改信息请联系客服电话：400-106-6698。</p>
+                    </Col>
+                    :
+                    <Col span={21}>
+                        <h4>{ this.state.showName }</h4>
+                        <p>请根据您的实际情况尽快完成以下未认证项，如需修改信息请联系客服电话：400-106-6698。</p>
+                    </Col>
+                }
             </Row>
         );
     }
 
     _disapproval() {
-        return (
-            <Row className="tipsRow">
-                <Col span={3} className="text-align-center">
-                    <Icon type="cross-circle" className="tipsIcon across"/>
-                </Col>
-                <Col span={21}>
-                    <h4>{ this.state.showName }</h4>
-                    <p>您的资料审核不通过，具体原因请联系分行客户经理。</p>
-                    <p>您需要修改资料后重新提交认证申请，如有疑问请联系客服电话：400-106-6698。</p>
-                </Col>
-            </Row>
-        );
-    }
-    //更新审核状态
-    updatePageType(pageType){
-        console.log('pageType',pageType);
+            return (
+                <Row className="tipsRow">
+                    <Col span={3} className="text-align-center">
+                        <Icon type="cross-circle" className="tipsIcon across"/>
+                    </Col>
+                    <Col span={21}>
+                        <h4>{ this.state.showName }</h4>
+                        <p>您的资料审核不通过，具体原因请联系分行客户经理。</p>
+                        <p>您需要修改资料后重新提交认证申请，如有疑问请联系客服电话：400-106-6698。</p>
+                    </Col>
+                </Row>
+            );
+        }
+        //更新审核状态
+    updatePageType(pageType) {
+            console.log('pageType', pageType);
+            this.setState({
+                pageType: pageType
+            })
+        }
+        //更新对公账户状态
+    updateAccountPassed(passed) {
+        console.log('accountPassed', passed);
+        if (this.state.accountPassed == passed) {
+            return false;
+        }
         this.setState({
-            pageType:pageType
+            accountPassed: passed
         })
     }
 
@@ -158,7 +177,7 @@ class Check extends Component {
         return (
             <div className="tipsBox">
                 { this.headerRender() }
-                <TipsContent pageType={ this.state.pageType } isReload={ true } updatePageType={this.updatePageType.bind(this)} />
+                <TipsContent pageType={ this.state.pageType } isReload={ true } updatePageType={this.updatePageType.bind(this)} updateAccountPassed={this.updateAccountPassed.bind(this)}/>
             </div>
         );
     }
