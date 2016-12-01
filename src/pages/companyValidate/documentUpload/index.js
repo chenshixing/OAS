@@ -33,12 +33,6 @@ import {
 //  引入文件链接
 import FileUrl from 'PAGES/companyValidate/components/fileUrl';
 
-// //  引入routerWillLeave
-// import routerWillLeaveInit from 'COM/routerWillLeave';
-
-// //  进入禁止跳转的白名单
-// import banSwitchWhiteList from 'BCOM/banSwitchWhiteList';
-
 class DocumentUpload extends Component {
     static propTypes = {
         className: PropTypes.string,
@@ -47,7 +41,6 @@ class DocumentUpload extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isCanLeave: false,
             isCommon: true,
             limit: 5,
             fileList: {
@@ -59,20 +52,6 @@ class DocumentUpload extends Component {
             },
         }
 
-        // routerWillLeaveInit(this);
-    }
-
-    routerWillLeave(target) {
-        let nextPath = target.pathname;
-
-        if (banSwitchWhiteList.indexOf(nextPath) > -1) { //  白名单跳转，主要为头部和底部的链接
-            return true;
-        }
-        console.log(this.state.isCanLeave);
-        if (!this.state.isCanLeave) {
-            this.props.history.push(this.props.location.pathname);
-            return false;
-        }
     }
 
     componentDidMount() {
@@ -244,8 +223,8 @@ class DocumentUpload extends Component {
     }
 
     toCheck() {
-        this.state.isCanLeave = true;
-        this.props.history.push('/companyValidate/tips/check');
+        let pathName = this.props.location.query.isEditor == 1 ? "/accountManagement/basicInformation" : '/companyValidate/tips/check';
+        this.props.history.push(pathName);
     }
 
     normFile(e) {
