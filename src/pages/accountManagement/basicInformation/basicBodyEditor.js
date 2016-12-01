@@ -373,7 +373,7 @@ export default class basicBodyEditor extends React.Component {
                                 如资料有变更，请及时更新。
                             </div>
                             <div className="basic-col-4">
-                                <Link to="/companyValidate/documentUpload" className="ant-btn ant-btn-primary">
+                                <Link to="/companyValidate/documentUpload?isEditor=1" className="ant-btn ant-btn-primary">
                                     <Icon type="edit" />
                                     修改
                                 </Link>
