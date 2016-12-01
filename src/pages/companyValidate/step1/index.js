@@ -97,7 +97,7 @@ class CompanyValidate extends React.Component {
             //  企业名称处理
             data.companyName = fieldsValue.companyName;
             //  营业执照类型处理
-            data.companyPaperType = fieldsValue.companyPaperType.toString();
+            data.companyPaperType = fieldsValue.companyPaperType = fieldsValue.companyPaperType.toString();
             //  营业执照到期日处理
             if (fieldsValue.registrationExtendField2 != "长期") {
                 //  用date对象渲染数据
@@ -108,7 +108,8 @@ class CompanyValidate extends React.Component {
                 data.isLongEndTime = fieldsValue.isLongEndTime = true;
             }
             //  填写人的身份处理
-            data.writerType = fieldsValue.writerType.toString();
+            data.writerType = fieldsValue.writerType = fieldsValue.writerType.toString();
+            // console.log(fieldsValue.writerType.toString());
             if (data.writerType == 1) {
                 //  委托代理人
                 fieldsValue.name = fieldsValue.client.name;
@@ -146,17 +147,15 @@ class CompanyValidate extends React.Component {
 
     onWriterTypeChange(e) {
         console.log('radio checked', e.target.value);
-        let display = e.target.value == "1" ? "block" : "none";
-        if (this.state.display == display) {
+        let data = this.state.data;
+        if (data.writerType == e.target.value) {
             return false;
         }
-        let data = this.state.data;
         data.writerType = e.target.value;
         if (e.target.value == "2") {
             this.warning();
         }
         this.setState({
-            display: display,
             data: data
         });
     }
