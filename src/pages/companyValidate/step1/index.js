@@ -63,9 +63,9 @@ class CompanyValidate extends React.Component {
             visible: false,
             data: {
                 companyName: globalState.showName ? globalState.showName : "",
-                companyPaperType: 2,
+                companyPaperType: "2",
                 isLongEndTime: false,
-                writerType: 1
+                writerType: "1"
             }
         }
 
@@ -97,7 +97,7 @@ class CompanyValidate extends React.Component {
             //  企业名称处理
             data.companyName = fieldsValue.companyName;
             //  营业执照类型处理
-            data.companyPaperType = fieldsValue.companyPaperType;
+            data.companyPaperType = fieldsValue.companyPaperType.toString();
             //  营业执照到期日处理
             if (fieldsValue.registrationExtendField2 != "长期") {
                 //  用date对象渲染数据
@@ -108,7 +108,7 @@ class CompanyValidate extends React.Component {
                 data.isLongEndTime = fieldsValue.isLongEndTime = true;
             }
             //  填写人的身份处理
-            data.writerType = fieldsValue.writerType;
+            data.writerType = fieldsValue.writerType.toString();
             if (data.writerType == 1) {
                 //  委托代理人
                 fieldsValue.name = fieldsValue.client.name;
@@ -355,8 +355,8 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <RadioGroup {...getFieldProps('companyPaperType',{ initialValue: this.state.data.companyPaperType,onChange: this.onCompanyPaperTypeChange.bind(this) })}>
-                                <Radio value={2}>普通营业执照</Radio>
-                                <Radio value={3}>多证合一营业执照</Radio>
+                                <Radio value={"2"}>普通营业执照</Radio>
+                                <Radio value={"3"}>多证合一营业执照</Radio>
                             </RadioGroup>
 
                         </FormItem>
@@ -449,8 +449,8 @@ class CompanyValidate extends React.Component {
                             required
                         >
                             <RadioGroup {...getFieldProps('writerType',{ initialValue: this.state.data.writerType, onChange: this.onWriterTypeChange.bind(this) })}>
-                                <Radio value={1}>我是委托代理人</Radio>
-                                <Radio value={2}>我是法定代表人</Radio>
+                                <Radio value={"1"}>我是委托代理人</Radio>
+                                <Radio value={"2"}>我是法定代表人</Radio>
                             </RadioGroup>
 
                         </FormItem>
