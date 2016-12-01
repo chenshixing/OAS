@@ -119,11 +119,12 @@ class DocumentUpload extends Component {
     }
 
     _fileExam(file) {
+        // console.log(file);
         let {
             name,
             size
         } = file;
-        let reg = new RegExp(/[.](jpg|jpeg|png|bmg)$/);
+        let reg = new RegExp(/[.](jpg|jpeg|png|bmp)$/);
         if (!reg.test(name)) {
             message.error("文件格式必须为jpg、jpeg、png或bmp");
             return false;
